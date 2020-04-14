@@ -349,6 +349,7 @@ method fails-like (
 ) is test-tool {
     self!validate-matchers(%matcher);
     my $throws-like-context = $*TEST-THROWS-LIKE-CTX // CALLER::;
+    my $rc = False;
     self.subtest: $message, :instant, {
         my \suite = self.test-suite;
         suite.plan: 2;
@@ -359,14 +360,15 @@ method fails-like (
             }
         }}
         my $res = $code ~~ Callable ?? $code() !! $code.EVAL;
-        suite.isa-ok: $res, Failure, 'code returned a Failure';
+        $rc = suite.isa-ok: $res, Failure, 'code returned a Failure';
         my $*TEST-THROWS-LIKE-CTX = $throws-like-context;
-        suite.throws-like:
+        $rc &&= suite.throws-like:
             { $res.sink },
             $ex-type,
             'Failure threw when sunk',
             |%matcher;
-    }
+    };
+    $rc
 }
 
 method is-approx-calculate(
