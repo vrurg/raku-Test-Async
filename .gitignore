@@ -1,0 +1,4 @@
+.precomp/
+.test-repo/
+Test-Async-*
+*.bk

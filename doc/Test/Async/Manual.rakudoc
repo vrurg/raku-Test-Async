@@ -1,0 +1,28 @@
+=begin pod
+=head1 PREFACE
+
+This document provides general information about C<Test::Async>. Technical details are provided in corresponding
+modules.
+
+=head1 INTRODUCTION
+
+=head2 Terminology
+
+Throughout documentation the following terms are to be used:
+
+=head3 I<Test suite>
+
+This term can have two meanings:
+
+=item a collection of tests
+=item the core object reposnsible for running the tests
+
+The particular meaning is determined by a context or some other way.
+
+=head3 I<Test bundle> or just I<bundle>
+
+A module or a class implementing a set of test tools or extending/modifying the core functionality. A bundle providing
+the default set of tools is included into the core and implemented by
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>.
+
+=end pod
