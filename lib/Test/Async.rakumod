@@ -12,7 +12,13 @@ module Test::Async:ver<0.0.1> {
 }
 
 sub EXPORT(*@bundles) {
-    $*W.add_phaser($*LANG, 'END', my &phaser = { Test::Async::Hub.top-suite.done-testing });
+    $*W.add_phaser($*LANG, 'END', my &phaser = { 
+        CATCH {
+            note "===SORRY! SUIT SHUTDOWN===\n", $_;
+            exit 255;
+        }
+        Test::Async::Hub.top-suite.done-testing 
+    });
     $*W.add_object_if_no_sc(&phaser);
     @bundles = (<Base>) unless @bundles;
     my $has-reporter;
