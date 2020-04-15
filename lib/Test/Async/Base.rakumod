@@ -475,13 +475,13 @@ multi method is-deeply(Mu $got, Mu $expected, $message = '') {
     self.proclaim($result, $message)
 }
 
-method skip(Str:D $message = "", UInt:D $count = 1) is test-tool {
+method skip(Str:D $message = "", UInt:D $count = 1) is test-tool(:!skippable) {
     for ^$count {
         self.send-test: Event::Skip, $message, TRSkipped
     }
 }
 
-method skip-rest(Str:D $message = "") is test-tool {
+method skip-rest(Str:D $message = "") is test-tool(:!skippable) {
     if self.planned.defined {
         self.skip($message, self.planned);
     }
@@ -490,7 +490,7 @@ method skip-rest(Str:D $message = "") is test-tool {
     }
 }
 
-method skip-remaining(Str:D $message = "", Bool :$global?) is test-tool {
+method skip-remaining(Str:D $message = "", Bool :$global?) is test-tool(:!skippable) {
     self.send-command: Event::Cmd::SkipRemaining, $message;
     if $global {
         .skip-remaining: $message, :$global with $.parent-suite;
@@ -499,17 +499,17 @@ method skip-remaining(Str:D $message = "", Bool :$global?) is test-tool {
     self.sync-events;
 }
 
-method todo(Str:D $message, UInt:D $count = 1) is test-tool {
+method todo(Str:D $message, UInt:D $count = 1) is test-tool(:!skippable) {
     self.set-todo($message, $count);
     self.sync-events;
 }
 
-method todo-remaining(Str:D $message) is test-tool {
+method todo-remaining(Str:D $message) is test-tool(:!skippable) {
     self.set-todo($message, Inf);
     self.sync-events;
 }
 
-method bail-out(Str:D $message = "") is test-tool {
+method bail-out(Str:D $message = "") is test-tool(:!skippable) {
     self.send: Event::BailOut, :$message;
     self.sync-events;
     exit 255;
