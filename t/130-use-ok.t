@@ -3,7 +3,7 @@ use Test::Async;
 
 plan 3;
 
-use-ok "Test::Async";
+use-ok "Test::Async::Utils";
 use-ok "newline", "a pargma is use-d ok";
 
 test-flunks;
