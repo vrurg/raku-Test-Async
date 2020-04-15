@@ -76,13 +76,18 @@ method test-suite {
     $*TEST-SUITE // self.top-suite
 }
 
+my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, TSDismissed;
+
 method set-stage(TestStage:D $stage) {
     return $!stage if $!stage == $stage;
     loop {
         my $cur-stage = $!stage;
         # Prevent possible race condition when two concurrent locations are trying to set different states.
+        # States are defined by the equivalence table.
         self.throw: X::StageTransition, :from($cur-stage), :to($stage)
-            if $cur-stage > $stage;
+            if @stage-equivalence[$cur-stage] > @stage-equivalence[$stage];
+        # Do nothing if requested stage is equivalent to the current one but preceeds it.
+        return $cur-stage if $cur-stage > $stage;
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
             self.start-event-loop if $cur-stage == TSInitializing;
             return $cur-stage;
