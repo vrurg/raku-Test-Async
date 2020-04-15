@@ -306,8 +306,8 @@ method finish {
     if self.set-stage(TSFinishing) == TSInProgress {
         # Wait untils all jobs are completed.
         self.await-jobs; 
-        self.sync-events;
         self.set-stage(TSFinished);
+        self.sync-events;
         # Let all event be processed before we start analyzing the results.
         # Same as plan, done-testing must be done in the main thread.
         self.send-plan: $!tests-run unless $.planned; # If $.planned is set then the plan has been reported on start.
@@ -335,28 +335,8 @@ method tool-factory(--> Seq:D) {
         .map: -> \meth {
             my $name = meth.tool-name;
             my $meth = meth.name;
-
-            my &code = my sub (|c) {
-                my $hub = ::?CLASS.test-suite;
-                my $*TEST-CALLER = callframe(1);
-                # Don't make tests guess what is our caller's context.
-                my $*TEST-THROWS-LIKE-CTX = CALLER::;
-                if $hub.stage == TSDismissed {
-                    warn "A test tool called after done-testing at " ~ $*TEST-CALLER.gist;
-                    return;
-                }
-                $hub.set-stage(TSInProgress) if meth.readify;
-                if meth.skippable && $hub.skip-message {
-                    $hub.skip: $hub.skip-message
-                }
-                else {
-                    $hub.measure-telemetry: {
-                        $hub."$meth"(|c);
-                    }
-                }
-            };
+            my &code = my sub (|c) is raw { ::?CLASS.test-suite."$meth"(|c) };
             &code.set_name($name);
-
             "&" ~ $name => &code
         }
 }
