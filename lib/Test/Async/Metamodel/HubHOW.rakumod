@@ -31,9 +31,4 @@ method construct_suite(\hub-class) is raw {
 
 method set_suite($is-set) { $!suite = $is-set }
 method suite(\type-obj) { $!suite }
-method bundles { $bundle-classes }
-
-# method compose(Mu \obj, |c) {
-#     note "- composing hub ", obj.^name;
-#     nextsame;
-# }
+method bundles { $bundle-classes // () }
