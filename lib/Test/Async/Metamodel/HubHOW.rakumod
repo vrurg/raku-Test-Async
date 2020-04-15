@@ -14,18 +14,19 @@ method register-bundle(Mu \bundle-class) {
 }
 
 method construct_suite(\hub-class) is raw {
+    # Suite has been constructed already.
     return hub-class if hub-class.^suite;
     my $name = S/\:\:Hub$/\:\:Suit/ given hub-class.^name;
-    my \hub-constructed = ::?CLASS.new_type(:$name);
-    my \how = hub-constructed.HOW;
+    my \suite-class = ::?CLASS.new_type(:$name);
+    my \how = suite-class.HOW;
     how.set_suite(True);
     for ^nqp::elems($bundle-classes) -> $i {
         my \bundle-class = nqp::atpos($bundle-classes, $i);
-        how.add_parent(hub-constructed, bundle-class);
+        how.add_parent(suite-class, bundle-class);
     }
-    how.add_parent(hub-constructed, hub-class);
-    hub-constructed.^compose;
-    hub-constructed
+    how.add_parent(suite-class, hub-class);
+    suite-class.^compose;
+    suite-class
 }
 
 method set_suite($is-set) { $!suite = $is-set }
