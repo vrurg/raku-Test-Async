@@ -11,7 +11,7 @@ module Test::Async:ver<0.0.1> {
     }
 }
 
-sub EXPORT(*@bundles) {
+sub EXPORT(*@b) {
     $*W.add_phaser($*LANG, 'END', my &phaser = { 
         CATCH {
             note "===SORRY! SUIT SHUTDOWN===\n", $_;
@@ -20,6 +20,7 @@ sub EXPORT(*@bundles) {
         Test::Async::Hub.top-suite.done-testing 
     });
     $*W.add_object_if_no_sc(&phaser);
+    my @bundles = (Test::Async::Hub.HOW.bundles.map(*.^name), @b).flat;
     @bundles = (<Base>) unless @bundles;
     my $has-reporter;
     for Test::Async::Metamodel::HubHOW.bundles -> \bundle-class {
@@ -28,7 +29,7 @@ sub EXPORT(*@bundles) {
             last;
         }
     }
-    @bundles.unshift: 'Test::Async::Reporter::TAP' unless $has-reporter;
+    @bundles.push: 'Test::Async::Reporter::TAP' unless $has-reporter;
     for @bundles {
         my $bundle = .index('::') ?? $_ !! 'Test::Async::' ~ $_;
         require ::($bundle);
