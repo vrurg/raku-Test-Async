@@ -29,4 +29,32 @@ module X is export {
             "A plan is required in order to use $.op"
         }
     }
+
+    class NoJobId is Base {
+        has Int:D $.id is required;
+        method message {
+            "There is no job #$!id registered in the manager"
+        }
+    }
+
+    class JobInactive is Base {
+        has $.id is required;
+        method message {
+            "Job #$!id is already inactive"
+        }
+    }
+
+    class AwaitWithPostponed is Base {
+        has $.count is required;
+        method message {
+            "Cannot await for all jobs untils there're any postponed ones"
+        }
+    }
+
+    class AwaitTimeout is Base {
+        has Str:D $.what is required;
+        method message {
+            "Timeout awaiting for $!what";
+        }
+    }
 }

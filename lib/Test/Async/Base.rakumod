@@ -522,14 +522,16 @@ multi method subtest(Pair:D $subtest (Str(Any:D) :key($message), :value(&code)),
 multi method subtest(Str:D $message, Callable:D \subtests, *%plan) is hidden-from-backtrace {
     self.subtest(subtests, $message, |%plan)
 }
-multi method subtest(Callable:D \subtests, Str:D $message, Bool:D :$instant = False, *%plan) is hidden-from-backtrace
-{
-    my $jobh = self.claim-job;
+multi method subtest(Callable:D \subtests, Str:D $message, 
+                     Bool:D :$async = False, Bool:D :$instant = False, *%plan
+) is hidden-from-backtrace {
     my %profile = :code(subtests), :$message;
     my $caller = $*TEST-CALLER;
-    my $child = self.create-child: |%profile;
+    my $child = self.create-suite: |%profile;
     $child.plan: %plan if %plan;
-    self.invoke-child( $child, :$instant ).then: {
+    my $rc = Promise.new;
+    my $rc-vow = $rc.vow;
+    self.invoke-suite( $child, :$async, :$instant ).then: {
         CATCH {
             default {
                 note "===SORRY!=== .then block died in subtest with ", $_.^name,
@@ -544,12 +546,15 @@ multi method subtest(Callable:D \subtests, Str:D $message, Bool:D :$instant = Fa
         if $child.messages.elems {
             %ev-profile<child-messages> := $child.messages<>;
         }
-        self.proclaim:
+        $rc-vow.keep(
+            self.proclaim(
                 (!$child.tests-failed && (!$child.planned || $child.planned == $child.tests-run)),
                 $message,
-                %ev-profile;
-        self.release-job($jobh);
-    }
+                %ev-profile
+            )
+        );
+    };
+    $rc
 }
 
 proto method is-run(|) is test-tool {*}

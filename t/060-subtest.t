@@ -2,9 +2,10 @@ use v6;
 use Test::Async;
 
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
-plan 9, :!parallel, :!random;
+plan 11, :!parallel, :!random;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+my $job-count = test-suite.test-jobs;
 
 is-run q:to/TEST-CODE/, "basic subtest",
        plan 1;
@@ -51,17 +52,8 @@ subtest "TODO before subtest" => {
     flunk "this would be a failure without TODO";
 }
 
-subtest "Parallel subtests" => {
-    # Test will fail if we try to start more than maximum allowed jobs because some subtests won't run until a slot
-    # releases.
+sub test-async($count, :%subtest-plan) {
     my $suite = test-suite;
-    my $count = $suite.test-jobs;
-
-    my %plan-profile = skip-all => "must be 2 or more concurrent jobs allowed, $count now" if $count < 2;
-
-    plan $count + 3,
-         :parallel,
-         |%plan-profile;
 
     my atomicint $started = 0;
     my $starter = Promise.new;
@@ -83,7 +75,7 @@ subtest "Parallel subtests" => {
                 my $suite = test-suite; # Take his subtest object.
                 nok $suite.parallel, "a child suite is non-parallel by default";
                 ok $suite.is-async, "but its async status is inherited";
-            }
+            }, |%subtest-plan
     }
     my Bool $all-ready;
 
@@ -106,6 +98,37 @@ subtest "Parallel subtests" => {
 
     ok $all-completed, "all subtests completed";
     is $started, $count, "counter updated by all subtests";
+}
+
+subtest "Parallel subtests" => {
+    # Test will fail if we try to start more than maximum allowed jobs because some subtests won't run until a slot
+    # releases.
+
+    my %plan-profile = skip-all => "must be 2 or more concurrent jobs allowed, $job-count now" if $job-count < 2;
+
+    plan $job-count + 3,
+         :parallel,
+         |%plan-profile;
+
+    test-async $job-count;
+}
+
+subtest "Force async" => {
+    plan $job-count + 3, :!parallel, :!random;
+
+    test-async $job-count, :subtest-plan{ :async, :instant };
+}
+
+subtest "Threading in a subtest" => {
+    my $suite = test-suite;
+    plan $job-count;
+
+    for ^$job-count -> $id {
+        $suite.start: {
+            sleep .1.rand;
+            pass "test $id";
+        }
+    }
 }
 
 # We can't rely on the order test to determine if it was random. However low is the probability to get them ordered

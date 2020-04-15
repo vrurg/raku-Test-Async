@@ -3,6 +3,7 @@ use Test::Async::Decl;
 unit test-hub Test::Async::Hub;
 
 use Test::Async::Aggregator;
+use Test::Async::JobMgr;
 use Test::Async::Utils;
 use Test::Async::Event;
 use Test::Async::TestTool;
@@ -10,8 +11,7 @@ use Test::Async::Result;
 use Test::Async::X;
 
 also does Test::Async::Aggregator;
-
-has $.mode = TMAsync;
+also does Test::Async::JobMgr;
 
 has ::?CLASS $.parent-suite;
 
@@ -42,24 +42,15 @@ has Bool:D $.is-TODO = False;
 has Bool $.random;
 
 has atomicint $!next-test-id = 1;
-has Int:D $.tests-run = 0;
-has Int:D $.tests-failed = 0;
+has atomicint $.tests-run = 0;
+has atomicint $.tests-failed = 0;
 
 # Run children in individual threads
 has Bool $.parallel;
 # Messages collected during test code run.
 has Str:D @.messages;
-# This is where we keep postponed children. Most likely this would be done to randomize their execution.
-has ::?CLASS:D @!child-queue;
 # How many jobs can be invoked in parallel.
 has UInt:D $.test-jobs = (try { %*ENV<TEST_JOBS>.Int } || ($*KERNEL.cpu-cores - 2)) max 1;
-# List of jobs claimed by test tools. Currently these are Promises but could change in the future.
-has @!job-claims;
-has Lock:D $!claims-lock .= new;
-# A list of handles of invoked children. Currently those are Promises.
-has @!job-invocations;
-# Using slower Lock::Async because blocking Lock result in thread pool exhaust if too many children are to be invoked.
-has Lock::Async:D $!invocation-lock .= new;
 
 method new(|c) {
     # This class is already mutated into a suit
@@ -171,7 +162,7 @@ method cmd-message(+@message) {
 
 method cmd-settodo(Str:D $!TODO-message, Numeric:D $!TODO-count) { }
 
-method create-child(::?CLASS:U \suiteType = self.WHAT, *%c) {
+method create-suite(::?CLASS:U \suiteType = self.WHAT, *%c) {
     my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random;
     if my $TODO-message = self.take-TODO {
         # If a subtest falls under a todo then all its tests are todo
@@ -180,65 +171,29 @@ method create-child(::?CLASS:U \suiteType = self.WHAT, *%c) {
     suiteType.new: |%profile, |%c
 }
 
-method claim-job {
-    $!claims-lock.protect: {
-        my $claim-promise = Promise.new;
-        @!job-claims.push: $claim-promise;
-        $claim-promise.vow
+method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant = False) {
+    my $is-async = $async || ($!parallel && !$instant);
+    my $job = self.new-job: { 
+        $suite.run(:$is-async) 
+    }, :$async;
+    if $!random && $!stage == TSInProgress && !$instant {
+        self.postpone: $job;
     }
-}
-
-# Though the handle is currently just a Promise::Vow, this could change in the future.
-method release-job($claim-handle) {
-    $claim-handle.keep(True);
-}
-
-method start-job(&code) {
-    $!invocation-lock.protect: {
-        while @!job-invocations.elems >= $!test-jobs {
-            await Promise.anyof(@!job-invocations);
-            @!job-invocations = @!job-invocations.grep( { .status ~~ Planned } );
-        }
-        my $invocation-promise = start &code();
-        @!job-invocations.push: $invocation-promise;
-    }
-}
-
-method invoke-child(::?CLASS:D $suite, Bool:D :$instant = False) {
-    if $instant {
-        # note "INSTANT INVOKE of ", $suite.message;
-        $suite.run;
+    elsif $is-async {
+        self.start-job: $job;
     }
     else {
-        if $!random && $!stage == TSInProgress {
-            @!child-queue.push: $suite;
-        }
-        elsif $!parallel {
-            self.start-job: { $suite.run(:async) };
-        }
-        else {
-            $suite.run;
-        }
+        self.invoke-job: $job;
     }
     $suite.completed
 }
 
-method run(:$async) {
+method run(:$is-async) {
     # If any parent is async all its children are async too.
-    $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$async;
+    $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code();
     self.done-testing;
-}
-
-method await-children {
-    if $!random {
-        # Get randomized list of children
-        for @!child-queue.pick(+@!child-queue) -> $child {
-            self.invoke-child: $child;
-        }
-    }
-    await @!job-claims;
 }
 
 method throw(X::Base:U \exType, *%c) {
@@ -251,9 +206,9 @@ method send-command(Event::Command:U \evType, |c) {
 
 method send-test(Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
     my %profile;
-    ++$!tests-run;
+    ++⚛$!tests-run;
     if $tr == TRFailed && !($!TODO-count || $!is-TODO) {
-        ++$!tests-failed;
+        ++⚛$!tests-failed;
     }
     if my $TODO-message = self.take-TODO {
         %profile<todo> = $TODO-message;
@@ -325,12 +280,36 @@ method sync-events {
     await $synced;
 }
 
+method await-jobs {
+    if $!random {
+        # Get randomized list of children
+        for @.postponed.pick(*) -> $job {
+            self.invoke-job: $job
+        }
+        @.postponed = [];
+    }
+    my $all-done;
+    await Promise.anyof(
+        Promise.in(30).then({ note "TOUT"; cas($all-done, Any, False); }),
+        start { 
+            CATCH { note $_; exit 255 }; 
+            self.await-all-jobs; 
+            cas($all-done, Any, True); 
+        }
+    );
+    self.throw(X::AwaitTimeout, :what('all jobs')) unless $all-done;
+}
+
 method finish {
     # Only do the sequence once even if accidentally called concurrently.
     return if $!stage == TSFinishing | TSDismissed;
     if self.set-stage(TSFinishing) == TSInProgress {
+        # Wait untils all jobs are completed.
+        self.await-jobs; 
+        self.sync-events;
+        self.set-stage(TSFinished);
+        # Let all event be processed before we start analyzing the results.
         # Same as plan, done-testing must be done in the main thread.
-        self.await-children; # Wait untils all child suits are done
         self.send-plan: $!tests-run unless $.planned; # If $.planned is set then the plan has been reported on start.
         self.send: Event::DoneTesting;
         self.sync-events; # Wait until all queued events processed;
