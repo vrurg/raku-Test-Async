@@ -52,11 +52,12 @@ is-run wrap-code(q<cmp-ok "foo", '~~', /\d+/, "cmp-ok fails when no regex match"
     :out("not ok 1 - cmp-ok fails when no regex match\n# Failed test 'cmp-ok fails when no regex match'\n# at - line 1\n# expected: /\\d+/\n#      got: \"foo\"\n#  matcher: infix:<~~>\n1..1\n# You failed 1 test of 1\n");
 
 %*ENV<RAKULIB> = ~$?FILE.IO.parent(2).add('lib');
-is-run wrap-code(q<is-run 'use Test::Async; pass "code ran"', "is-run with pass", :out("ok 1 - code ran\\n1..1\\n");>),
+%*ENV<PERL6LIB> = ~$?FILE.IO.parent(2).add('lib');
+is-run wrap-code(q<is-run 'use Test::Async; pass "code ran"', "is-run with pass", :out("ok 1 - code ran\\n1..1\\n"), :err('');>),
         "we can use is-run",
-        :out("  1..2\n  ok 1 - STDOUT\n  ok 2 - Exit code\nok 1 - is-run with pass\n1..1\n");
-is-run wrap-code(q<is-run 'use Test::Async; flunk "failing test"', "is-run with pass", :exitcode(1), :out(/:s^not ok 1 \- failing test\n/);>),
+        :out("  1..3\n  ok 1 - STDOUT\n  ok 2 - STDERR\n  ok 3 - Exit code\nok 1 - is-run with pass\n1..1\n");
+is-run wrap-code(q<is-run 'use Test::Async; flunk "failing test"', "is-run with pass", :exitcode(1), :out(/:s^not ok 1 \- failing test\n/), :err('');>),
         "we can use is-run",
-        :out("  1..2\n  ok 1 - STDOUT\n  ok 2 - Exit code\nok 1 - is-run with pass\n1..1\n");
+        :out("  1..3\n  ok 1 - STDOUT\n  ok 2 - STDERR\n  ok 3 - Exit code\nok 1 - is-run with pass\n1..1\n");
 
 done-testing;

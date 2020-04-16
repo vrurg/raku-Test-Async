@@ -2,7 +2,7 @@ use v6;
 unit class Test::Async::Job;
 
 has Int:D $.id = ++$;
-has Callable:D $.code is built(:bind) is required;
+has Callable:D $.code is required;
 # async indicated if job is explictly requested to be async.
 has $.async = False;
 has Promise $.promise;

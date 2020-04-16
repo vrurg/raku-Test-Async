@@ -15,6 +15,7 @@ multi method create-event(Event:U \evType, *%c) {
     evType.new(:origin(self), |%c)
 }
 
+proto method send(Event, |) {*}
 multi method send(Event:D $ev) {
     $!ev-queue.send($ev);
 }
@@ -29,7 +30,7 @@ multi method post-event(Event:D $ev) {
     @!posted-events.push: $ev;
 }
 multi method post-event(Event:U \evType, *%c) {
-    self.port-event: evType.new(|%c)
+    self.post-event: evType.new(|%c)
 }
 
 method start-event-loop {

@@ -7,7 +7,7 @@ use Test::Async::Reporter;
 also is Test::Async::Metamodel::BundleHOW;
 
 method new_type(|) {
-    my \reporter-class = callsame;
-    reporter-class.^add_role(Test::Async::Reporter);
-    reporter-class
+    my \reporter-typeobj = callsame;
+    reporter-typeobj.^add_role(Test::Async::Reporter);
+    reporter-typeobj
 }

@@ -1,14 +1,15 @@
 use v6;
-use nqp;
 use Test::Async::Decl;
-use Test::Async::Utils;
 
 unit test-bundle Test::Async::Base;
+
+use nqp;
+use Test::Async::Utils;
 
 use MONKEY-SEE-NO-EVAL;
 use Test::Async::Event;
 
-class Event::Cmd::SetTestFlunk is Event::Command { }
+my class Event::Cmd::SetTestFlunk is Event::Command { }
 
 has Str:D $.FLUNK-message = "";
 has Numeric:D $.FLUNK-count = 0;
@@ -522,7 +523,7 @@ multi method subtest(Pair:D $subtest (Str(Any:D) :key($message), :value(&code)),
 multi method subtest(Str:D $message, Callable:D \subtests, *%plan) is hidden-from-backtrace {
     self.subtest(subtests, $message, |%plan)
 }
-multi method subtest(Callable:D \subtests, Str:D $message, 
+multi method subtest(Callable:D \subtests, Str:D $message,
                      Bool:D :$async = False, Bool:D :$instant = False, *%plan
 ) is hidden-from-backtrace {
     my %profile = :code(subtests), :$message;
@@ -686,4 +687,3 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
     # say "RETURN($message):", $tr == TRPassed;
     $tr == TRPassed
 }
-multi method send-test(::?CLASS:D: |) { nextsame }

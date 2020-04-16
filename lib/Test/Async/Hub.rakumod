@@ -21,7 +21,7 @@ has $.message;
 has &.code;
 
 # This is what we start with.
-has TestStage:D $.stage is built(False) = TSInitializing;
+has TestStage:D $!stage = TSInitializing;
 has Promise:D $.completed .= new;
 has $!completed-vow = $!completed.vow;
 has Int $.planned;
@@ -69,6 +69,8 @@ method test-suite {
 
 my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, TSDismissed;
 
+method stage { $!stage }
+
 method set-stage(TestStage:D $stage) {
     return $!stage if $!stage == $stage;
     loop {
@@ -100,7 +102,7 @@ multi method event(::?CLASS:D: Event::Report:D $ev) {
     nextsame
 }
 # Drop unprocessed events.
-multi method event(Event:D) { }
+multi method event(Event:D $ev) { }
 
 method setup-from-plan(%plan) {
     my $cur-stage = %plan<tests>:exists ?? $.set-stage(TSInProgress) !! $!stage;
@@ -173,8 +175,8 @@ method create-suite(::?CLASS:U \suiteType = self.WHAT, *%c) {
 
 method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant = False) {
     my $is-async = $async || ($!parallel && !$instant);
-    my $job = self.new-job: { 
-        $suite.run(:$is-async) 
+    my $job = self.new-job: {
+        $suite.run(:$is-async)
     }, :$async;
     if $!random && $!stage == TSInProgress && !$instant {
         self.postpone: $job;
@@ -204,7 +206,8 @@ method send-command(Event::Command:U \evType, |c) {
     self.send: evType, :args(c)
 }
 
-method send-test(Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
+proto method send-test(::?CLASS:D: Event::Test, |) {*}
+multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
     my %profile;
     ++⚛$!tests-run;
     if $tr == TRFailed && !($!TODO-count || $!is-TODO) {
@@ -276,7 +279,7 @@ method set-todo(Str:D $message, Numeric:D $count) {
 
 method sync-events {
     my $synced = Promise.new;
-    $.send-command: Event::Cmd::SyncEvents, $synced.vow;
+    self.send-command: Event::Cmd::SyncEvents, $synced.vow;
     await $synced;
 }
 
@@ -290,11 +293,11 @@ method await-jobs {
     }
     my $all-done;
     await Promise.anyof(
-        Promise.in(30).then({ note "TOUT"; cas($all-done, Any, False); }),
-        start { 
-            CATCH { note $_; exit 255 }; 
-            self.await-all-jobs; 
-            cas($all-done, Any, True); 
+        Promise.in(30).then({ cas($all-done, Any, False); }),
+        start {
+            CATCH { note $_; exit 255 };
+            self.await-all-jobs;
+            cas($all-done, Any, True);
         }
     );
     self.throw(X::AwaitTimeout, :what('all jobs')) unless $all-done;
@@ -305,7 +308,7 @@ method finish {
     return if $!stage == TSFinishing | TSDismissed;
     if self.set-stage(TSFinishing) == TSInProgress {
         # Wait untils all jobs are completed.
-        self.await-jobs; 
+        self.await-jobs;
         self.set-stage(TSFinished);
         self.sync-events;
         # Let all event be processed before we start analyzing the results.
