@@ -26,17 +26,27 @@
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
 <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#PREFACE">PREFACE</a></td></tr>
-    <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#INTRODUCTION">INTRODUCTION</a></td></tr>
+           <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#INTRODUCTION">INTRODUCTION</a></td></tr>
  <tr class="toc-level-2"><td class="toc-number">2.1</td><td class="toc-text"><a href="#Terminology">Terminology</a></td></tr>
   <tr class="toc-level-3"><td class="toc-number">2.1.1</td><td class="toc-text"><a href="#Test_suite">Test suite</a></td></tr>
      <tr class="toc-level-3"><td class="toc-number">2.1.2</td><td class="toc-text"><a href="#Test_bundle_or_just_bundle">Test bundle or just bundle</a></td></tr>
-   
+    <tr class="toc-level-3"><td class="toc-number">2.1.3</td><td class="toc-text"><a href="#Reporter">Reporter</a></td></tr>
+    <tr class="toc-level-3"><td class="toc-number">2.1.4</td><td class="toc-text"><a href="#Test_tool">Test tool</a></td></tr>
+            <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#ARCHITECTURE">ARCHITECTURE</a></td></tr>
+          <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Test_Suite_Creation">Test Suite Creation</a></td></tr>
+                                                         <tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#Job_Management">Job Management</a></td></tr>
+                  <tr class="toc-level-2"><td class="toc-number">3.3</td><td class="toc-text"><a href="#Events">Events</a></td></tr>
+           <tr class="toc-level-2"><td class="toc-number">3.4</td><td class="toc-text"><a href="#Suite_Plan_And_Lifecycle">Suite Plan And Lifecycle</a></td></tr>
+                         <tr class="toc-level-2"><td class="toc-number">3.5</td><td class="toc-text"><a href="#Test_Tools">Test Tools</a></td></tr>
+                    <tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+        
 </table>
 </nav>
 
     <div class="pod-body">
     <h1 id="PREFACE"><a class="u" href="#___top" title="go to top of document">PREFACE</a></h1>
 <p>This document provides general information about <code>Test::Async</code>. Technical details are provided in corresponding modules.</p>
+<p>General test framework use information can be found in the documentation of Raku&#39;s standard <a href="https://docs.raku.org/type/Test">Test suite</a>. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base"><code>Test::Async::Base</code></a>.md&gt; provides information about differences and additions between the standard framework and <code>Test::Async</code>.</p>
 <h1 id="INTRODUCTION"><a class="u" href="#___top" title="go to top of document">INTRODUCTION</a></h1>
 <h2 id="Terminology"><a class="u" href="#___top" title="go to top of document">Terminology</a></h2>
 <p>Throughout documentation the following terms are to be used:</p>
@@ -44,12 +54,113 @@
 <p>This term can have two meanings:</p>
 <ul><li><p>a collection of tests</p>
 </li>
-<li><p>the core object reposnsible for running the tests</p>
+<li><p>the core object responsible for running the tests</p>
 </li>
 </ul>
 <p>The particular meaning is determined by a context or some other way.</p>
 <h3 id="Test_bundle_or_just_bundle"><a class="u" href="#___top" title="go to top of document"><em>Test bundle</em> or just <em>bundle</em></a></h3>
 <p>A module or a class implementing a set of test tools or extending/modifying the core functionality. A bundle providing the default set of tools is included into the core and implemented by <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a>.</p>
+<h3 id="Reporter"><a class="u" href="#___top" title="go to top of document"><em>Reporter</em></a></h3>
+<p>A test bundle which provides reporting capabilities. For example, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md"><code>Test::Async::Reporter::TAP</code></a> implements TAP output.</p>
+<h3 id="Test_tool"><a class="u" href="#___top" title="go to top of document"><em>Test tool</em></a></h3>
+<p>This is a routine provided by a bundle to test a condition. Typical and commonly known <em>test tools</em> are <code>pass</code>, <code>flunk</code>, <code>ok</code>, <code>nok</code>, etc.</p>
+<h1 id="ARCHITECTURE"><a class="u" href="#___top" title="go to top of document">ARCHITECTURE</a></h1>
+<p>The core is built around <em>test suite</em> objects driven by events. Suites are organized with parent-child relations with a single topmost suite representing the main test compunit. Child suites are subjects of a job manager control.</p>
+<p>A typical workflow consist of the following steps:</p>
+<ul><li><p>a test suite is created</p>
+</li>
+<li><p>it&#39;s body is executed. Any invoked test tool results in one or couple events sent</p>
+</li>
+<li><p>events are taken care of by a reporter which presents a user with meaningful representation of testing outcomes</p>
+</li>
+<li><p>if a child suite created it is either invoked instantly or postponed for later depending on it&#39;s parent suite status</p>
+</li>
+<li><p>when suite is finished `done-testing` is invoked either implicitly or explicitly</p>
+</li>
+</ul>
+<h2 id="Test_Suite_Creation"><a class="u" href="#___top" title="go to top of document">Test Suite Creation</a></h2>
+<p>This is the key step to the rest of this framework functionality. Doing something like <code>test-suite.WHICH.say</code> in a suite file would result in something like <code>Test::Async::Suit|140617904553984</code>. But don&#39;t look into the sources, there is no definition of <code>Test::Async::Suite</code> class in there! It gets composed dynamically at run time depending on a particular test suite configuration. Here is what happens.</p>
+<p>The framework core is based upon <code>Test::Async::Hub</code> class. Special keywords <code>test-bundle</code> and <code>test-reporter</code> are provided to implement extension classes:</p>
+<pre class="pod-block-code">test-bundle MyBundle {
+    method my-test($got, $expected, $message) is test-tool {
+        ...
+    }
+}</pre>
+<p>When a compunit containing a <code>test-bundle</code> or a <code>test-reporter</code> declaration is loaded the corresponding extension class is registering itself with the framework. Upon completion of the test suite compilation the framework takes all registered extensions and composes <code>Test::Async::Suite</code> class using the following rules:</p>
+<ul><li><p>all classes become direct parents of <code>Test::Async::Suite</code></p>
+</li>
+<li><p><code>Test::Async::Hub</code> is always the last parent</p>
+</li>
+<li><p>extension classes are added in the order they were loaded; i.e. the latest loaded becomes the first parent of <code>Test::Async::Suite</code> in MRO order. See example <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/examples/multi-bundle.raku">examples/multi-bundle.raku</a></p>
+</li>
+</ul>
+<p><code>Test::Async::Suite</code> is then used to create the top-level suite object and all its children.</p>
+<p>This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The latter is as simple as overriding parent methods. For example, <code>Test::Async::Base</code> module uses this technique to implement <code>test-flunks</code> tool. It is doing so by intercepting test events passed in to <code>send-test</code> method of <code>Test::Async::Hub</code>. It is then inverts test outcome if necessary and does few other adjustments to a new test event profile and passes on the control to the original <code>send-test</code> to complete the task.</p>
+<p>It is important to keep in mind that the actual inheritance scheme of <code>Test::Async::Suite</code> is:</p>
+<pre class="pod-block-code">Suite -+-&gt; Bundle1
+       |
+       +-&gt; Bundle2
+       |
+       +-&gt; Hub</pre>
+<p>and not <code>Suite -&gt; Bundle1 -&gt; Bundle2 -&gt; Hub</code> because this affects how MRO method dispatching works. In the latter case all multi methods would have common `proto` and in many cases it&#39;d be sufficient for a bundle to define a since candidate for, say, event handling and the rest would have taken care of automatically by a parent class. In fact, <code>Test::Async::Base</code> requires a <code>send-test</code> method candidate with all-capture signature which redelegates to a parent using <code>nextsame</code>.</p>
+<h2 id="Job_Management"><a class="u" href="#___top" title="go to top of document">Job Management</a></h2>
+<p>The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/JobMgr"><code>Test::Async::JobMgr</code></a>.md&gt; role and L<code>Test::Async::Job</code>&gt; class representing a single job to be done. The subsystem implements the following concepts:</p>
+<ul><li><p>synchronous execution</p>
+</li>
+<li><p>asynchronous (threaded) execution</p>
+</li>
+<li><p>asynchronous job management with limited number of simultaneously executed jobs</p>
+</li>
+<li><p>postponing</p>
+</li>
+</ul>
+<p>A job is <a href="https://docs.raku.org/type/Code"><code>Code</code></a> instance accompanied with its associated attributes. Code return value is never provided directly but only via a fulfilled <a href="https://docs.raku.org/type/Promise"><code>Promise</code></a>.</p>
+<p>The way the manager works is it creates a pool (not a queue) of jobs. The order in which they&#39;re executed is defined by the user code invoking them. When a job completes the manager removes it from the pool. Though not directly manager&#39;s job, but it provides a possibility to postpone a job. In this case it is placed into a queue from where it could be picked up and invoked any time it is needed. For example, <code>Test::Async::Hub</code> is using this to invoke child suites in a random order: jobs for corresponding suites are postponed and when the main code block of the parent suite finishes it takes the postponed queue, shuffles jobs in it and invokes them in the resulting order.</p>
+<h2 id="Events"><a class="u" href="#___top" title="go to top of document">Events</a></h2>
+<p>Concurrency support in <code>Test::Async</code> is implemented event-driven management. Each suite object involves at least two threads. First is running tests, second handles events and is in charge of changing suite object internal status where this is required to prevent race conditions.</p>
+<pre class="pod-block-code">Thread#1 \
+          \
+Thread#2 --&gt; [Event Queue] -&gt; Event Handler Thread
+          /
+Thread#3 /</pre>
+<p>The method allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code.</p>
+<p>Another advantage of the events is the ease of extending the framework functionality. Look at <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Reporter/TAP"><code>Test::Async::Reporter::TAP</code></a>.md&gt;, for example. It takes the burden of reporting to user on its &#39;shoulders&#39; unloading it off the core. And it does so simply by listening to <code>Event::Test</code> kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!</p>
+<h2 id="Suite_Plan_And_Lifecycle"><a class="u" href="#___top" title="go to top of document">Suite Plan And Lifecycle</a></h2>
+<p>Suite has a number of parameters affecting it&#39;s execution. Those are:</p>
+<ul><li><p>number of tests planned</p>
+</li>
+<li><p>do child suites are invoked in parallel?</p>
+</li>
+<li><p>do child suites invoked randomly?</p>
+</li>
+<li><p>should the suite be skipped over?</p>
+</li>
+<li><p>does suite tests for a TODO feature?</p>
+</li>
+</ul>
+<p>While executed, the suite passes a few stages:</p>
+<ul><li><p><em>initialization</em></p>
+</li>
+<li><p><em>in progress</em> - tests are being ran</p>
+</li>
+<li><p><em>finishing</em> - any postponed jobs are executed</p>
+</li>
+<li><p><em>finished</em> - testing is done, suite is summing up and possibly reporting the results</p>
+</li>
+<li><p><em>dismissed</em> - all done, suit object can be dropped</p>
+</li>
+</ul>
+<p>The parameters can only be set or changed while suite is being initialized and no test tools can be invoked at and after the <em>finished</em> stage.</p>
+<p>Worth noting that <em>finishing</em> stage is basically same as <code>in progress</code> except that it indicates that the time of postponed jobs has come.</p>
+<h2 id="Test_Tools"><a class="u" href="#___top" title="go to top of document">Test Tools</a></h2>
+<p>A test tool is a method with <code>test-tool</code> trait applied. It has two properties:</p>
+<ul><li><p><code>readify</code> which defines whether invoking the tool results in suite transition from stage <em>initializing</em> into <em>in progress</em> </p>
+</li>
+<li><p><code>skippable</code> defines whether the tool can be skipped over. For example, <code>ok</code> from <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base"><code>Test::Async::Base</code></a>.md&gt; is skippable; but <code>skip</code> and the family themselves are not, as well as <code>todo</code> and few other.</p>
+</li>
+</ul>
+<h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/CookBook"><code>Test::Async::CookBook</code></a>.md&gt;, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base"><code>Test::Async::Base</code></a>.md&gt;, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Hub"><code>Test::Async::Hub</code></a>.md&gt;, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Utils"><code>Test::Async::Utils</code></a>.md&gt;</p>
 
     </div>
     
