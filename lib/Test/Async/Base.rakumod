@@ -425,7 +425,7 @@ method is-approx-calculate(
 # fail, because the computed relative tolerance is 1. For such cases, absolute
 # tolerance is better suited, so we DWIM in the no-tol version of the sub.
 proto method is-approx(|) is test-tool {*}
-multi method is-approx(Numeric $got, Numeric $expected, $desc = '') is export {
+multi method is-approx(Numeric $got, Numeric $expected, $desc = '') {
     $expected.abs < 1e-6
         ?? self.is-approx-calculate($got, $expected, 1e-5, Nil, $desc) # abs-tol
         !! self.is-approx-calculate($got, $expected, Nil, 1e-6, $desc) # rel-tol
