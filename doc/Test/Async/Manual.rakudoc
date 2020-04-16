@@ -4,6 +4,11 @@
 This document provides general information about C<Test::Async>. Technical details are provided in corresponding
 modules.
 
+General test framework use information can be found in the documentation of Raku's standard 
+L<Test suite|https://docs.raku.org/type/Test>.
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base>.md> provides
+information about differences and additions between the standard framework and C<Test::Async>.
+
 =head1 INTRODUCTION
 
 =head2 Terminology
@@ -15,7 +20,7 @@ Throughout documentation the following terms are to be used:
 This term can have two meanings:
 
 =item a collection of tests
-=item the core object reposnsible for running the tests
+=item the core object responsible for running the tests
 
 The particular meaning is determined by a context or some other way.
 
@@ -24,5 +29,161 @@ The particular meaning is determined by a context or some other way.
 A module or a class implementing a set of test tools or extending/modifying the core functionality. A bundle providing
 the default set of tools is included into the core and implemented by
 L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>.
+
+=head3 I<Reporter>
+
+A test bundle which provides reporting capabilities. For example,
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md>
+implements TAP output.
+
+=head3 I<Test tool>
+
+This is a routine provided by a bundle to test a condition. Typical and commonly known I<test tools> are C<pass>,
+C<flunk>, C<ok>, C<nok>, etc.
+
+=head1 ARCHITECTURE
+
+The core is built around I<test suite> objects driven by events. Suites are organized with parent-child relations with a
+single topmost suite representing the main test compunit. Child suites are subjects of a job manager control.
+
+A typical workflow consist of the following steps:
+
+=item a test suite is created
+=item it's body is executed. Any invoked test tool results in one or couple events sent
+=item events are taken care of by a reporter which presents a user with meaningful representation of testing outcomes
+=item if a child suite created it is either invoked instantly or postponed for later depending on it's parent suite
+status
+=item when suite is finished `done-testing` is invoked either implicitly or explicitly
+
+=head2 Test Suite Creation
+
+This is the key step to the rest of this framework functionality. Doing something like C<test-suite.WHICH.say> in a
+suite file would result in something like C<Test::Async::Suit|140617904553984>. But don't look into the sources, there
+is no definition of C<Test::Async::Suite> class in there! It gets composed dynamically at run time depending on a
+particular test suite configuration. Here is what happens.
+
+The framework core is based upon C<Test::Async::Hub> class. Special keywords C<test-bundle> and C<test-reporter> are
+provided to implement extension classes:
+
+    test-bundle MyBundle {
+        method my-test($got, $expected, $message) is test-tool {
+            ...
+        }
+    }
+
+When a compunit containing a C<test-bundle> or a C<test-reporter> declaration is loaded the corresponding extension
+class is registering itself with the framework. Upon completion of the test suite compilation the framework takes all
+registered extensions and composes C<Test::Async::Suite> class using the following rules:
+
+=item all classes become direct parents of C<Test::Async::Suite>
+=item C<Test::Async::Hub> is always the last parent
+=item extension classes are added in the order they were loaded; i.e. the latest loaded becomes the first parent of
+C<Test::Async::Suite> in MRO order. See example
+L<examples/multi-bundle.raku|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/examples/multi-bundle.raku>
+
+C<Test::Async::Suite> is then used to create the top-level suite object and all its children.
+
+This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The
+latter is as simple as overriding parent methods. For example, C<Test::Async::Base> module uses this technique to
+implement C<test-flunks> tool. It is doing so by intercepting test events passed in to C<send-test> method of
+C<Test::Async::Hub>. It is then inverts test outcome if necessary and does few other adjustments to a new test event
+profile and passes on the control to the original C<send-test> to complete the task.
+
+It is important to keep in mind that the actual inheritance scheme of C<Test::Async::Suite> is:
+
+    Suite -+-> Bundle1
+           |
+           +-> Bundle2
+           |
+           +-> Hub
+
+and not C«Suite -> Bundle1 -> Bundle2 -> Hub» because this affects how MRO method dispatching works. In the latter case
+all multi methods would have common `proto` and in many cases it'd be sufficient for a bundle to define a since
+candidate for, say, event handling and the rest would have taken care of automatically by a parent class. In fact,
+C<Test::Async::Base> requires a C<send-test> method candidate with all-capture signature which redelegates to a parent
+using C<nextsame>.
+
+=head2 Job Management
+
+The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/JobMgr>.md> role and
+LC<Test::Async::Job>> class representing a single job to be done. The subsystem implements the following concepts:
+
+=item synchronous execution
+=item asynchronous (threaded) execution
+=item asynchronous job management with limited number of simultaneously executed jobs
+=item postponing
+
+A job is L<C<Code>|https://docs.raku.org/type/Code> instance accompanied with its associated attributes. Code return
+value is never provided directly but only via a fulfilled L<C<Promise>|https://docs.raku.org/type/Promise>.
+
+The way the manager works is it creates a pool (not a queue) of jobs. The order in which they're executed is defined by
+the user code invoking them. When a job completes the manager removes it from the pool. Though not directly manager's
+job, but it provides a possibility to postpone a job. In this case it is placed into a queue from where it could be
+picked up and invoked any time it is needed. For example, C<Test::Async::Hub> is using this to invoke child suites in
+a random order: jobs for corresponding suites are postponed and when the main code block of the parent suite finishes
+it takes the postponed queue, shuffles jobs in it and invokes them in the resulting order.
+
+=head2 Events
+
+Concurrency support in C<Test::Async> is implemented event-driven management. Each suite object involves at least two
+threads. First is running tests, second handles events and is in charge of changing suite object internal status where
+this is required to prevent race conditions.
+
+    Thread#1 \
+              \
+    Thread#2 --> [Event Queue] -> Event Handler Thread
+              /
+    Thread#3 /
+
+The method allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential
+code.
+
+Another advantage of the events is the ease of extending the framework functionality. Look at
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Reporter/TAP>.md>,
+for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so
+simply by listening to C<Event::Test> kind of events. It would be as easy to implement an alternative reporter to
+get the test results be sent anywhere!
+
+=head2 Suite Plan And Lifecycle
+
+Suite has a number of parameters affecting it's execution. Those are:
+
+=item number of tests planned
+=item do child suites are invoked in parallel?
+=item do child suites invoked randomly?
+=item should the suite be skipped over?
+=item does suite tests for a TODO feature?
+
+While executed, the suite passes a few stages:
+
+=item I<initialization>
+=item I<in progress> - tests are being ran
+=item I<finishing> - any postponed jobs are executed
+=item I<finished> - testing is done, suite is summing up and possibly reporting the results
+=item I<dismissed> - all done, suit object can be dropped
+
+The parameters can only be set or changed while suite is being initialized and no test tools can be invoked at and after
+the I<finished> stage.
+
+Worth noting that I<finishing> stage is basically same as C<in progress> except that it indicates that the time of
+postponed jobs has come.
+
+=head2 Test Tools
+
+A test tool is a method with C<test-tool> trait applied. It has two properties:
+
+=item C<readify> which defines whether invoking the tool results in suite transition from stage I<initializing> into
+I<in progress> 
+=item C<skippable> defines whether the tool can be skipped over. For example, C<ok> from
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base>.md> is skippable;
+but C<skip> and the family themselves are not, as well as C<todo> and few other.
+
+=head1 SEE ALSO
+
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/CookBook>.md>,
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base>.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Hub>.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Utils>.md>
 
 =end pod

@@ -1,0 +1,64 @@
+=begin pod
+=head1 C<Test::Async> COOK BOOK
+
+Non-systematic collection of tips.
+
+=head2 Tip 1. Testing A Multithreaded Application
+
+One of the biggest reasons pushed me to implement C<Test::Async> was a need to test event flow in C<Vikna> toolkit. The
+problem with the standard C<Test> framework was the need to invoke test tool from inside a separate thread or even
+threads causing havoc to the test output when C<subtest>s are used. Similar problem could arise for any heavily threaded
+application where it is not always easy to get hold of the internal states without having direct access to them directly
+from a thread. Sure, it is technically possible to implement a communication channel which could be used to pass data 
+into the test suit main thread, etc., etc., etc.
+
+Nah, that's not how we do it! How about:
+
+    my $test-app = MyTestApp.new;
+    subtest "Threaded testing" => {
+        my $suite = test-suite;
+        $test-app.set-test-suite: $suite;
+        $test-app.test-something-threaded;
+    }
+
+and then somewhere in the C<MyTestApp> class implementation, which is presumably inherits from the base application
+class and overrides some of its method for testing, we simply do something like:
+
+    method foo($param) {
+        $.test-suite.ok: self.is-param-valid($param), "method foo got correct parameter";
+        nextsame
+    }
+
+C<test-suite> attribute is the suite object implementing our subtest, which has been set with C<set-test-suite> method.
+
+Does it look a bit over-verbose? Ok, there is another way. Our test class could start new threads using core method
+C<start> instead of the standard Raku keyword. Here is what it might look like:
+
+    my $test-app = MyTestApp.new(:test-suite(test-suite));
+    subtest "Threaded testing" => {
+        $test-app.test-something-threaded;
+    }
+
+The code in the C<MyTestApp> class can now look like this:
+
+    method new-task(&code) {
+        ...; # Whatever else should be done to start a task
+        $.test-suite.start: &code
+    }
+    method test-something-threaded {
+        self.new-task: { self.testing-task }
+    }
+
+Though it now looks even more verbose than the previous example, we should remember that some kind of boilerplate code
+would be needed anyway and our first example still have it around. It's just nor relevant and thus not included here.
+
+Back to the matter now. Eventually, this is what our C<foo> method would look like now:
+
+    use Test::Async;
+    ...
+    method foo($param) {
+        ok self.is-param-valid($param), "method foo got correct parameter";
+        nextsame
+    }
+
+=end pod
