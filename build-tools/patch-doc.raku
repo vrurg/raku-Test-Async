@@ -43,10 +43,11 @@ grammar MyPOD {
 
     proto token pod-link {*}
     multi token pod-link:sym<mod-url> {
-        'L' '<' <link-text> '|' <link-url> '>'
+        'L<' <link-text> '|' <link-url> '>'
     }
     multi token pod-link:sym<mod-only> {
-        'L' '<' <link-module> '>'
+        'L<' <link-module> '>'
+        | 'L<' <link-module> '>'
     }
 
     token link-text {
@@ -54,6 +55,10 @@ grammar MyPOD {
     }
 
     token link-module {
+          'C<' <link-module-name> '>'
+        | <link-module-name>
+    }
+    token link-module-name {
         [ <.alnum>+ ] ** 1..* % '::'
     }
 
