@@ -46,7 +46,7 @@
     <div class="pod-body">
     <h1 id="PREFACE"><a class="u" href="#___top" title="go to top of document">PREFACE</a></h1>
 <p>This document provides general information about <code>Test::Async</code>. Technical details are provided in corresponding modules.</p>
-<p>General test framework use information can be found in the documentation of Raku&#39;s standard <a href="https://docs.raku.org/type/Test">Test suite</a>. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base"><code>Test::Async::Base</code></a>.md&gt; provides information about differences and additions between the standard framework and <code>Test::Async</code>.</p>
+<p>General test framework use information can be found in the documentation of Raku&#39;s standard <a href="https://docs.raku.org/type/Test">Test suite</a>. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a> provides information about differences and additions between the standard framework and <code>Test::Async</code>.</p>
 <h1 id="INTRODUCTION"><a class="u" href="#___top" title="go to top of document">INTRODUCTION</a></h1>
 <h2 id="Terminology"><a class="u" href="#___top" title="go to top of document">Terminology</a></h2>
 <p>Throughout documentation the following terms are to be used:</p>
@@ -104,7 +104,7 @@
        +-&gt; Hub</pre>
 <p>and not <code>Suite -&gt; Bundle1 -&gt; Bundle2 -&gt; Hub</code> because this affects how MRO method dispatching works. In the latter case all multi methods would have common `proto` and in many cases it&#39;d be sufficient for a bundle to define a since candidate for, say, event handling and the rest would have taken care of automatically by a parent class. In fact, <code>Test::Async::Base</code> requires a <code>send-test</code> method candidate with all-capture signature which redelegates to a parent using <code>nextsame</code>.</p>
 <h2 id="Job_Management"><a class="u" href="#___top" title="go to top of document">Job Management</a></h2>
-<p>The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/JobMgr"><code>Test::Async::JobMgr</code></a>.md&gt; role and L<code>Test::Async::Job</code>&gt; class representing a single job to be done. The subsystem implements the following concepts:</p>
+<p>The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a> role and L<code>Test::Async::Job</code>&gt; class representing a single job to be done. The subsystem implements the following concepts:</p>
 <ul><li><p>synchronous execution</p>
 </li>
 <li><p>asynchronous (threaded) execution</p>
@@ -124,7 +124,7 @@ Thread#2 --&gt; [Event Queue] -&gt; Event Handler Thread
           /
 Thread#3 /</pre>
 <p>The method allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code.</p>
-<p>Another advantage of the events is the ease of extending the framework functionality. Look at <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Reporter/TAP"><code>Test::Async::Reporter::TAP</code></a>.md&gt;, for example. It takes the burden of reporting to user on its &#39;shoulders&#39; unloading it off the core. And it does so simply by listening to <code>Event::Test</code> kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!</p>
+<p>Another advantage of the events is the ease of extending the framework functionality. Look at <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md"><code>Test::Async::Reporter::TAP</code></a>, for example. It takes the burden of reporting to user on its &#39;shoulders&#39; unloading it off the core. And it does so simply by listening to <code>Event::Test</code> kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!</p>
 <h2 id="Suite_Plan_And_Lifecycle"><a class="u" href="#___top" title="go to top of document">Suite Plan And Lifecycle</a></h2>
 <p>Suite has a number of parameters affecting it&#39;s execution. Those are:</p>
 <ul><li><p>number of tests planned</p>
@@ -156,7 +156,7 @@ Thread#3 /</pre>
 <p>A test tool is a method with <code>test-tool</code> trait applied. It has two properties:</p>
 <ul><li><p><code>readify</code> which defines whether invoking the tool results in suite transition from stage <em>initializing</em> into <em>in progress</em> </p>
 </li>
-<li><p><code>skippable</code> defines whether the tool can be skipped over. For example, <code>ok</code> from <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base"><code>Test::Async::Base</code></a>.md&gt; is skippable; but <code>skip</code> and the family themselves are not, as well as <code>todo</code> and few other.</p>
+<li><p><code>skippable</code> defines whether the tool can be skipped over. For example, <code>ok</code> from <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a> is skippable; but <code>skip</code> and the family themselves are not, as well as <code>todo</code> and few other.</p>
 </li>
 </ul>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>

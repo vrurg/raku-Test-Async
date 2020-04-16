@@ -3,7 +3,7 @@ PREFACE
 
 This document provides general information about `Test::Async`. Technical details are provided in corresponding modules.
 
-General test framework use information can be found in the documentation of Raku's standard [Test suite](https://docs.raku.org/type/Test). [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base).md> provides information about differences and additions between the standard framework and `Test::Async`.
+General test framework use information can be found in the documentation of Raku's standard [Test suite](https://docs.raku.org/type/Test). [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) provides information about differences and additions between the standard framework and `Test::Async`.
 
 INTRODUCTION
 ============
@@ -90,7 +90,7 @@ and not `Suite -> Bundle1 -> Bundle2 -> Hub` because this affects how MRO method
 Job Management
 --------------
 
-The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/JobMgr).md> role and L`Test::Async::Job`> class representing a single job to be done. The subsystem implements the following concepts:
+The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md) role and L`Test::Async::Job`> class representing a single job to be done. The subsystem implements the following concepts:
 
   * synchronous execution
 
@@ -117,7 +117,7 @@ Concurrency support in `Test::Async` is implemented event-driven management. Eac
 
 The method allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code.
 
-Another advantage of the events is the ease of extending the framework functionality. Look at [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Reporter/TAP).md>, for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so simply by listening to `Event::Test` kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!
+Another advantage of the events is the ease of extending the framework functionality. Look at [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md), for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so simply by listening to `Event::Test` kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!
 
 Suite Plan And Lifecycle
 ------------------------
@@ -157,7 +157,7 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
 
   * `readify` which defines whether invoking the tool results in suite transition from stage *initializing* into *in progress* 
 
-  * `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base).md> is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
+  * `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
 
 SEE ALSO
 ========

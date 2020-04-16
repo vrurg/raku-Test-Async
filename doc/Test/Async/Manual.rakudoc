@@ -6,7 +6,7 @@ modules.
 
 General test framework use information can be found in the documentation of Raku's standard 
 L<Test suite|https://docs.raku.org/type/Test>.
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base>.md> provides
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md> provides
 information about differences and additions between the standard framework and C<Test::Async>.
 
 =head1 INTRODUCTION
@@ -106,7 +106,7 @@ using C<nextsame>.
 =head2 Job Management
 
 The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/JobMgr>.md> role and
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md> role and
 LC<Test::Async::Job>> class representing a single job to be done. The subsystem implements the following concepts:
 
 =item synchronous execution
@@ -140,7 +140,7 @@ The method allows to combine the best of two worlds: speed of asynchronous opera
 code.
 
 Another advantage of the events is the ease of extending the framework functionality. Look at
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Reporter/TAP>.md>,
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md>,
 for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so
 simply by listening to C<Event::Test> kind of events. It would be as easy to implement an alternative reporter to
 get the test results be sent anywhere!
@@ -176,7 +176,7 @@ A test tool is a method with C<test-tool> trait applied. It has two properties:
 =item C<readify> which defines whether invoking the tool results in suite transition from stage I<initializing> into
 I<in progress> 
 =item C<skippable> defines whether the tool can be skipped over. For example, C<ok> from
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base>.md> is skippable;
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md> is skippable;
 but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
 =head1 SEE ALSO
