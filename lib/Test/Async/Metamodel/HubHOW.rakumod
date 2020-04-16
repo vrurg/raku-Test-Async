@@ -20,9 +20,11 @@ method construct_suite(\hub-class) is raw {
     my \suite-class = ::?CLASS.new_type(:$name);
     my \how = suite-class.HOW;
     how.set_suite(True);
-    for ^nqp::elems($bundle-classes) -> $i {
-        my \bundle-class = nqp::atpos($bundle-classes, $i);
-        how.add_parent(suite-class, bundle-class);
+    if nqp::defined($bundle-classes) {
+        for ^nqp::elems($bundle-classes) -> $i {
+            my \bundle-class = nqp::atpos($bundle-classes, $i);
+            how.add_parent(suite-class, bundle-class);
+        }
     }
     how.add_parent(suite-class, hub-class);
     suite-class.^compose;
