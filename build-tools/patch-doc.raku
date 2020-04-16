@@ -85,13 +85,17 @@ class MyPOD-Actions {
         my $link-mod = $m<link-module>.made;
         my $link-path = $link-mod.subst('::', '/', :g);
         $m.make(
-            'L<' ~ $m<link-module>.made
+            'L<' ~ $m<link-module>
                 ~ '|https://github.com/vrurg/raku-Test-Async/blob/v'
                 ~ $!ver-str ~ '/docs/md/'
                 ~ $link-path ~ '.md'
                 ~ '>'
         );
         $.replaced = True;
+    }
+
+    method link-module($/) {
+        make $<link-module-name>
     }
 
     # method link-url ($m) {
