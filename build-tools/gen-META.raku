@@ -6,7 +6,7 @@ use Test::Async;
 
 my $m = META6.new(
     name           => 'Test::Async',
-    description    => 'Thread-safe testing',
+    description    => 'Thread-safe testing framework',
     version        => Test::Async.^ver,
     perl-version   => Version.new('6.d'),
     depends        => [],
