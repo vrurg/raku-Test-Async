@@ -54,3 +54,8 @@ Back to the matter now. Eventually, this is what our `foo` method would look lik
         nextsame
     }
 
+SEE ALSO
+========
+
+[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md), [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md)
+

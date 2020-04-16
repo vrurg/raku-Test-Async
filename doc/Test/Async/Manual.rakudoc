@@ -181,9 +181,9 @@ but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/CookBook>.md>,
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Base>.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Hub>.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/C<Test/Async/Utils>.md>
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md>
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md>
 
 =end pod
