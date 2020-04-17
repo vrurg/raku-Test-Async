@@ -69,12 +69,12 @@ sub EXPORT(*@b) {
 END {
     if Test::Async::Hub.has-top-suite {
         my $hub = Test::Async::Hub.top-suite;
+        Test::Async::Hub.top-suite.done-testing;
         my $exit-code = $hub.tests-failed min 254;
         unless $exit-code {
             $exit-code = 255
                 if ($hub.planned.defined && $hub.tests-run) && (($hub.planned // 0) != ($hub.tests-run // 0));
         }
-        Test::Async::Hub.top-suite.done-testing;
         exit $exit-code;
     }
 }
