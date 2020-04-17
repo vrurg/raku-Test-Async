@@ -1,13 +1,4 @@
 use v6;
-# BEGIN {
-# use Test::Async::Decl;
-# test-bundle MyTests {
-#     method is-foo is test-tool<is_foo> {
-#         note "is it foo?";
-#     }
-# }
-# }
-# use Test::Async::Reporter::TAP;
 use Test::Async;
 
 plan 5;
@@ -36,37 +27,4 @@ is-run q<flunk "test 1"; flunk "test 2";>, "exit code reflects the number of tes
         :compiler-args(@default-args),
         :exitcode(2);
 
-# plan 6,
-#     # :parallel,
-#     :random,
-#     # todo => "later!",
-#     # :skip-all("no reason"),
-#     ;
-#
-# subtest "first child" => {
-#     plan 3;
-#     # sleep 2;
-#     pass "WOW!";
-#     flunk "WOW AGAIN!";
-#     subtest "first child of the first" => {
-#         pass "YES, YES!";
-#     }
-# };
-#
-# subtest "second child" => {
-#     plan 2;
-#     # sleep 1;
-#     pass "WOW!";
-#     subtest "first child of the second" => {
-#         pass "YES, YES!";
-#     }
-# };
-#
-# skip "tst";
-# pass "YEP?";
-# # skip-rest "some check failed";
-# flunk "nope!";
-# ok (1.rand < 0.5), "flapping test";
-# diag "test\ns;sldfk sflksjfd sdf;jls df;";
-#
-# done-testing;
+done-testing;
