@@ -46,14 +46,6 @@ module Test::Async:ver<0.0.1> {
 }
 
 sub EXPORT(*@b) {
-    $*W.add_phaser($*LANG, 'END', my &phaser = {
-        CATCH {
-            note "===SORRY! SUIT SHUTDOWN===\n", $_;
-            exit 255;
-        }
-        Test::Async::Hub.top-suite.done-testing
-    });
-    $*W.add_object_if_no_sc(&phaser);
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
     @bundles = (<Base>) unless @bundles;
     my $has-reporter;
@@ -69,17 +61,20 @@ sub EXPORT(*@b) {
         require ::($bundle);
     }
     Map.new(
-        |Test::Async::Hub.top-suite.tool-factory,
+        |Test::Async::Hub.tool-factory,
         '&test-suite' => &Test::Async::test-suite,
     )
 }
 
 END {
-    my $hub = Test::Async::Hub.top-suite;
-    my $exit-code = $hub.tests-failed min 254;
-    unless $exit-code {
-        $exit-code = 255
-            if ($hub.planned.defined && $hub.tests-run) && (($hub.planned // 0) != ($hub.tests-run // 0));
+    if Test::Async::Hub.has-top-suite {
+        my $hub = Test::Async::Hub.top-suite;
+        my $exit-code = $hub.tests-failed min 254;
+        unless $exit-code {
+            $exit-code = 255
+                if ($hub.planned.defined && $hub.tests-run) && (($hub.planned // 0) != ($hub.tests-run // 0));
+        }
+        Test::Async::Hub.top-suite.done-testing;
+        exit $exit-code;
     }
-    exit $exit-code;
 }

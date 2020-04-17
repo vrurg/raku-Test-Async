@@ -54,13 +54,18 @@ has UInt:D $.test-jobs = (try { %*ENV<TEST_JOBS>.Int } || ($*KERNEL.cpu-cores - 
 
 method new(|c) {
     # This class is already mutated into a suit
-    nextsame if self.^suite;
-    self.^construct_suite.new(|c)
+    self === ::?CLASS
+        ?? self.^construct-suite.new(|c)
+        !! nextsame
 }
 
 my $singleton;
 method top-suite {
     $singleton //= ::?CLASS.new
+}
+
+method has-top-suite {
+    $singleton.defined
 }
 
 method test-suite {
@@ -333,7 +338,7 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
 
 # Returns a list of "&tool-name" => &code pairs
 method tool-factory(--> Seq:D) {
-    self.^methods
+    self.^construct-suite.^methods
         .grep(Test::Async::TestTool)
         .map: -> \meth {
             my $name = meth.tool-name;

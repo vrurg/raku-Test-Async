@@ -2,11 +2,16 @@ use v6;
 unit class Test::Async::Metamodel::HubHOW is Metamodel::ClassHOW;
 use nqp;
 use Test::Async::Metamodel::BundleClassHOW;
-has $!suite;
+my $suite;
+my $suite-class;
 
 my $bundle-typeobjs;
 my %bundles;
 method register-bundle(Mu \bundle-typeobj) {
+    if $suite {
+        warn "It is too late to register bundle " ~ bundle-typeobj.^name ~ ": suite has been constructed already";
+        return;
+    }
     my $bundle-name = bundle-typeobj.^name;
     return if %bundles{$bundle-name};
     %bundles{$bundle-name} := 1;
@@ -14,13 +19,15 @@ method register-bundle(Mu \bundle-typeobj) {
     nqp::unshift($bundle-typeobjs, bundle-typeobj);
 }
 
-method construct_suite(\hub-class) is raw {
+method construct-suite(\hub-class) is raw {
     # Suite has been constructed already.
-    return hub-class if hub-class.^suite;
+    if $suite {
+        return hub-class ~~ $suite-class ?? hub-class !! $suite-class;
+    }
     my $name = S/\:\:Hub$/\:\:Suit/ given hub-class.^name;
     my \suite-class = ::?CLASS.new_type(:$name);
     my \how = suite-class.HOW;
-    how.set_suite(True);
+    $suite = True;
     my $last-parent := hub-class;
     if nqp::defined($bundle-typeobjs) {
         for ^nqp::elems($bundle-typeobjs) -> $i {
@@ -34,10 +41,9 @@ method construct_suite(\hub-class) is raw {
         }
     }
     how.add_parent(suite-class, $last-parent);
-    suite-class.^compose;
-    suite-class
+    $suite-class := suite-class.^compose;
 }
 
-method set_suite($is-set) { $!suite = $is-set }
-method suite(\type-obj) { $!suite }
+method suite(\type-obj) { $suite }
+method suite-class(\type-obj) { self.construct_suite(type-obj) }
 method bundles { nqp::defined($bundle-typeobjs) ?? $bundle-typeobjs !! nqp::list() }
