@@ -18,6 +18,11 @@ class Event is export {
                     !! .name.substr(2) => attr-val
             }).Map
     }
+
+    method gist {
+        self.^name ~ "#" ~ $!id ~ ": orig=" ~ $!origin.WHICH
+    }
+    method Str { self.gist }
 }
 
 class Event::Report is Event {
@@ -35,6 +40,10 @@ class Event::Test is Event::Report {
     has $.caller is required;
     has @.child-messages;
     has @.comments;
+
+    method gist {
+        callsame() ~ " test-id=" ~ $!test-id
+    }
 }
 
 class Event::NOP is Event { }
