@@ -25,7 +25,7 @@ The particular meaning is determined by a context or some other way.
 
 ### *Test bundle* or just *bundle*
 
-A module or a class implementing a set of test tools or extending/modifying the core functionality. A bundle providing the default set of tools is included into the core and implemented by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md).
+A module or a role implementing a set of test tools or extending/modifying the core functionality. A bundle providing the default set of tools is included into the framework and implemented by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md).
 
 ### *Reporter*
 
@@ -38,7 +38,7 @@ This is a routine provided by a bundle to test a condition. Typical and commonly
 ARCHITECTURE
 ============
 
-The core is built around *test suite* objects driven by events. Suites are organized with parent-child relations with a single topmost suite representing the main test compunit. Child suites are subjects of a job manager control.
+The framework is built around *test suite* objects driven by events. Suites are organized with parent-child relations with a single topmost suite representing the main test compunit. Child suites are subjects of a job manager control.
 
 A typical workflow consist of the following steps:
 
@@ -55,9 +55,21 @@ A typical workflow consist of the following steps:
 Test Suite Creation
 -------------------
 
-This is the key step to the rest of this framework functionality. Doing something like `test-suite.WHICH.say` in a suite file would result in something like `Test::Async::Suit|140617904553984`. But don't look into the sources, there is no definition of `Test::Async::Suite` class in there! It gets composed dynamically at run time depending on a particular test suite configuration. Here is what happens.
+On startup the framework constructs a custom `Test::Async::Suite` class which incorporates all core functionality and extensions provided by bundles. The following code:
 
-The framework core is based upon `Test::Async::Hub` class. Special keywords `test-bundle` and `test-reporter` are provided to implement extension classes:
+    use Test::Async;
+    say test-suite.^mro(:roles).map( *.^shortname ).join(", ")
+
+results in:
+
+    Suit, Base_class, Base, TAP_class, TAP, Reporter, Hub, JobMgr, Aggregator, Any, Mu
+    1..0
+
+*Note that `:roles` named parameter is available since Rakudo compiler release 2020.01.*
+
+Next paragraphs are explaining where this output comes from.
+
+Let's start with bundles. One is created with either `test-bundle` or `test-reporter` keyword. For example:
 
     test-bundle MyBundle {
         method my-test($got, $expected, $message) is test-tool {
@@ -65,32 +77,57 @@ The framework core is based upon `Test::Async::Hub` class. Special keywords `tes
         }
     }
 
-When a compunit containing a `test-bundle` or a `test-reporter` declaration is loaded the corresponding extension class is registering itself with the framework. Upon completion of the test suite compilation the framework takes all registered extensions and composes `Test::Async::Suite` class using the following rules:
+In fact it is nothing else but a role declaration but with two important side effects:
 
-  * all classes become direct parents of `Test::Async::Suite`
+  * the role is backed by [`Test::Async::Metamodel::BundleHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleHOW.md) metaclass which subclasses `Metamodel::ParametricRoleHOW`
 
-  * `Test::Async::Hub` is always the last parent
+  * the declaration installs `ENTER` phaser on the compunit it is declared in which auto-registers the bundle with the framework core.
 
-  * extension classes are added in the order they were loaded; i.e. the latest loaded becomes the first parent of `Test::Async::Suite` in MRO order. See example [examples/multi-bundle.raku](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/examples/multi-bundle.raku)
+The second item means that this code:
 
-`Test::Async::Suite` is then used to create the top-level suite object and all its children.
+    use MyBundle;
+    use Test::Async;
+    plan 1;
+    my-test pi, 2*pi, "whatever";
 
-This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The latter is as simple as overriding parent methods. For example, `Test::Async::Base` module uses this technique to implement `test-flunks` tool. It is doing so by intercepting test events passed in to `send-test` method of `Test::Async::Hub`. It is then inverts test outcome if necessary and does few other adjustments to a new test event profile and passes on the control to the original `send-test` to complete the task.
+would just work. BTW, if one would try to dump parents and role of the suite object, as show above, he would get:
 
-It is important to keep in mind that the actual inheritance scheme of `Test::Async::Suite` is:
+    Suit, MyBundle_class, MyBundle, TAP_class, TAP, Reporter, Hub, JobMgr, Aggregator, Any, Mu
 
-    Suite -+-> Bundle1
-           |
-           +-> Bundle2
-           |
-           +-> Hub
+Becase the framework skips loading the default bundle if there is one explicitly requested by a user. Same applies for `TAP` which is the default reporter bundle and which wouldn't be loaded if the user `use`s an alternative.
 
-and not `Suite -> Bundle1 -> Bundle2 -> Hub` because this affects how MRO method dispatching works. In the latter case all multi methods would have common `proto` and in many cases it'd be sufficient for a bundle to define a since candidate for, say, event handling and the rest would have taken care of automatically by a parent class. In fact, `Test::Async::Base` requires a `send-test` method candidate with all-capture signature which redelegates to a parent using `nextsame`.
+When all bundles were loaded and registered, time comes for [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md) module to actually construct the suite class.
+
+**Note** that this is why [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md) must always be `use`d last. No bundle registered post-suite construction would be actually used.
+
+The construction algorithm could roughly be written as:
+
+  * take the `Test::Async::Hub` class as the first and the current parent
+
+  * take bundles in the order they registered and make classes of them
+
+    * class is created as an empty one with bundle role applied
+
+    * the current parent class is added as a parent
+
+    * the new bundle class is set as the current parent
+
+  * a custom `Test::Async::Suite` class created, its only parent is set to the current parent
+
+Putting this into a diagram would give us something like this for the default case:
+
+    .         Suite -> Base_class -> TAP_class -> Hub -> Any -> Mu
+    .                  |             |
+    . bundle roles:    Base          TAP
+
+See example script: [examples/multi-bundle.raku](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/examples/multi-bundle.raku)
+
+This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The latter is as simple as overriding parent methods. For example, [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) module uses this technique to implement `test-flunks` tool. It is doing so by intercepting test events passed in to `send-test` method of [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md). It is then inverts test's outcome if necessary and does few other adjustments to a new test event profile and passes on the control to the original `send-test` to complete the task.
 
 Job Management
 --------------
 
-The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md) role and L`Test::Async::Job`> class representing a single job to be done. The subsystem implements the following concepts:
+The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md) role and [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Job.md) class representing a single job to be done. The subsystem implements the following concepts:
 
   * synchronous execution
 
@@ -107,15 +144,20 @@ The way the manager works is it creates a pool (not a queue) of jobs. The order 
 Events
 ------
 
-Concurrency support in `Test::Async` is implemented event-driven management. Each suite object involves at least two threads. First is running tests, second handles events and is in charge of changing suite object internal status where this is required to prevent race conditions.
+    C<Test::Async> framework handles concurrency using event-driven flow control. Each event is an instance of a class
+    inheriting from
+    L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md> class. Events
+    are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where they're read from by a dedicated thread and
+    dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
+    themselves, the other one is for event handling.
 
-    Thread#1 \
-              \
-    Thread#2 --> [Event Queue] -> Event Handler Thread
-              /
-    Thread#3 /
+       Thread#1 \
+                 \
+       Thread#2 --> [Event Queue] -> Event Handler Thread
+                 /
+       Thread#3 /
 
-The method allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code.
+The approach allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code. In particular, it proves to be useful for object state changes like, for example, for collecting messages from child suites ran asynchronously. Because the messages are stashed in an [`Array`](https://docs.raku.org/type/Array) the procedure is prone to race condition bugs. But when the responsibility of updating the array is in hands of a single thread it greatly simplifies the task.
 
 Another advantage of the events is the ease of extending the framework functionality. Look at [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md), for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so simply by listening to `Event::Test` kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!
 
@@ -155,7 +197,7 @@ Test Tools
 
 A test tool is a method with `test-tool` trait applied. It has two properties:
 
-  * `readify` which defines whether invoking the tool results in suite transition from stage *initializing* into *in progress* 
+  * `readify` which defines whether invoking the tool results in suite transition from stage *initializing* into *in progress*
 
   * `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
 

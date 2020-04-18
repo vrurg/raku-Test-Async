@@ -1,4 +1,61 @@
 use v6;
+
+=begin pod
+=NAME 
+
+C<Test::Async::Decl> - declarations for writing new bundles
+
+=SYNOPSIS
+
+    use Test::Async::Decl;
+
+    unit test-bundle MyBundle;
+
+    method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
+        ...
+    }
+
+=DESCRIPTION
+
+This module exports declarations needed to write custom bundles for C<Test::Async> framework.
+
+=head2 C<test-bundle>
+
+Declares a bundle role backed by
+L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleHOW.md>
+metaclass.
+
+=head2 C<test-reporter>
+
+Declares a bundle role wishing to act as a reporter. Backed by
+L<C<Test::Async::Metamodel::ReporterHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/ReporterHOW.md>
+metaclass. The bundle also consumes
+L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter.md>
+role.
+
+=head2 C<test-hub>
+
+This kind of package creates a hub class which is backed by
+L<C<Test::Async::Metamodel::HubHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/HubHOW.md>
+metaclass. Barely useful for a third-party developer.
+
+=head2 C<&trait_mod:<is>(Method:D \meth, :$test-tool!)>
+
+This trait is used to declare a method in a bundle as a test tool:
+
+    method foo(...) is test-tool {
+        ...
+    }
+
+The method is then exported to user as C<&foo> routine. Internally the method is getting wrapped into a code which
+does necessary preparations for the tool to act as expected. See
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md> 
+for more details.
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod
+
 use nqp;
 use Test::Async::Metamodel::HubHOW;
 use Test::Async::Metamodel::BundleHOW;

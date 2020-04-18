@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8" />
+        <style>
+        kbd { font-family: "Droid Sans Mono", "Luxi Mono", "Inconsolata", monospace }
+        samp { font-family: "Terminus", "Courier", "Lucida Console", monospace }
+        u { text-decoration: none }
+        .nested {
+            margin-left: 3em;
+        }
+        aside, u { opacity: 0.7 }
+        a[id^="fn-"]:target { background: #ff0 }
+        </style>
+        <link rel="stylesheet" href="//design.perl6.org/perl.css">
+        
+        
+    </head>
+    <body class="pod">
+    <div id="___top"></div>
+    
+    
+    
+    <nav class="indexgroup">
+<table id="TOC">
+<caption><h2 id="TOC_Title">Table of Contents</h2></caption>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
+   <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
+                   <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#EXPORTED_CLASSES">EXPORTED CLASSES</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Class_Event">Class <code class="pod-code-inline">Event</code></a></td></tr>
+  <tr class="toc-level-3"><td class="toc-number">3.1.1</td><td class="toc-text"><a href="#Attributes">Attributes</a></td></tr>
+       <tr class="toc-level-3"><td class="toc-number">3.1.2</td><td class="toc-text"><a href="#Methods">Methods</a></td></tr>
+         <tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#Class_Event::Report">Class <code class="pod-code-inline">Event::Report</code></a></td></tr>
+     <tr class="toc-level-3"><td class="toc-number">3.2.1</td><td class="toc-text"><a href="#Attributes">Attributes</a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">3.3</td><td class="toc-text"><a href="#Class_Event::Command">Class <code class="pod-code-inline">Event::Command</code></a></td></tr>
+       <tr class="toc-level-3"><td class="toc-number">3.3.1</td><td class="toc-text"><a href="#Attributes">Attributes</a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">3.4</td><td class="toc-text"><a href="#Class_Event::Test">Class <code class="pod-code-inline">Event::Test</code></a></td></tr>
+    <tr class="toc-level-3"><td class="toc-number">3.4.1</td><td class="toc-text"><a href="#Attributes">Attributes</a></td></tr>
+                     <tr class="toc-level-2"><td class="toc-number">3.5</td><td class="toc-text"><a href="#Class_Event::Terminate">Class <code class="pod-code-inline">Event::Terminate</code></a></td></tr>
+       <tr class="toc-level-3"><td class="toc-number">3.5.1</td><td class="toc-text"><a href="#Attributes">Attributes</a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">3.6</td><td class="toc-text"><a href="#Class_Event::Telemetry">Class <code class="pod-code-inline">Event::Telemetry</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">3.7</td><td class="toc-text"><a href="#Class_Event::Plan">Class <code class="pod-code-inline">Event::Plan</code></a></td></tr>
+    <tr class="toc-level-3"><td class="toc-number">3.7.1</td><td class="toc-text"><a href="#Attributes">Attributes</a></td></tr>
+     <tr class="toc-level-2"><td class="toc-number">3.8</td><td class="toc-text"><a href="#Class_Event::Diag">Class <code class="pod-code-inline">Event::Diag</code></a></td></tr>
+         <tr class="toc-level-2"><td class="toc-number">3.9</td><td class="toc-text"><a href="#Class_Event::Ok">Class <code class="pod-code-inline">Event::Ok</code></a></td></tr>
+     <tr class="toc-level-2"><td class="toc-number">3.10</td><td class="toc-text"><a href="#Class_Event::NotOk">Class <code class="pod-code-inline">Event::NotOk</code></a></td></tr>
+     <tr class="toc-level-2"><td class="toc-number">3.11</td><td class="toc-text"><a href="#Class_Event::Skip">Class <code class="pod-code-inline">Event::Skip</code></a></td></tr>
+     <tr class="toc-level-2"><td class="toc-number">3.12</td><td class="toc-text"><a href="#Class_Event::DoneTesting">Class <code class="pod-code-inline">Event::DoneTesting</code></a></td></tr>
+     <tr class="toc-level-2"><td class="toc-number">3.13</td><td class="toc-text"><a href="#Class_Event::BailOut">Class <code class="pod-code-inline">Event::BailOut</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">3.14</td><td class="toc-text"><a href="#Command_event_classes_Event::Cmd::*">Command event classes <code class="pod-code-inline">Event::Cmd::*</code></a></td></tr>
+    <tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+      
+</table>
+</nav>
+
+    <div class="pod-body">
+    <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
+<p><code>Test::Async::Event</code> – collection of standard events</p>
+<h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
+<pre class="pod-block-code">use Test::Async::Event;
+
+test-bundle MyBundle {
+    method foo(Str:D $message) is test-tool {
+        self.send-test: Event::Ok, :$message
+    }
+}</pre>
+<section><h1>DESCRIPTION</h1>
+</section>
+<p>General information about <code>Test::Async</code> event management can be found in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>.</p>
+<p>Events are objects of classes derived from <code>Event</code> class. This module defines events used by the core. In general, all event classes can be conventionally split into the following groups:</p>
+<ul><li><p><em>informative</em> – events signalling about some state changes. Like, for example, suite termination.</p>
+</li>
+<li><p><em>reporting</em> - events bearing a message to be reported to user.</p>
+</li>
+<li><p><em>commands</em> – those which tell the core to perform an action.</p>
+</li>
+<li><p><em>tests</em> – outcomes of individual test tools.</p>
+</li>
+</ul>
+<h1 id="EXPORTED_CLASSES"><a class="u" href="#___top" title="go to top of document">EXPORTED CLASSES</a></h1>
+<h2 id="Class_Event"><a class="u" href="#___top" title="go to top of document">Class <code>Event</code></a></h2>
+<p>The base event class.</p>
+<h3 id="Attributes"><a class="u" href="#___top" title="go to top of document">Attributes</a></h3>
+<ul><li><p><code>$.origin</code> – event originating object. Defaults to the current test suite object.</p>
+</li>
+<li><p><code>Int:D $.id</code> – event id, a sequential number.</p>
+</li>
+<li><p><code>Instant:D $.time</code> – the moment when event object was created.</p>
+</li>
+</ul>
+<h3 id="Methods"><a class="u" href="#___top" title="go to top of document">Methods</a></h3>
+<ul><li><p><code>Profile</code> – returns a <a href="https://docs.raku.org/type/Map"><code>Map</code></a> suitable for passing to an event constructor. The method collects all changed public attributes of an object.</p>
+</li>
+<li><p><code>gist</code>, <code>Str</code> – stringify event object for reporting.</p>
+</li>
+</ul>
+<h2 id="Class_Event::Report"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Report</code></a></h2>
+<p>Is <code>Event</code>.</p>
+<p>Base class for events carrying a text message of any kind.</p>
+<h3 id="Attributes"><a class="u" href="#___top" title="go to top of document">Attributes</a></h3>
+<ul><li><p><code>Str:D $.message</code> – the event message</p>
+</li>
+</ul>
+<h2 id="Class_Event::Command"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Command</code></a></h2>
+<p>Is <code>Event</code>.</p>
+<p>Base class of commanding events. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a> handles them specially.</p>
+<h3 id="Attributes"><a class="u" href="#___top" title="go to top of document">Attributes</a></h3>
+<ul><li><p><code>Capture:D $.args</code> – command arguments</p>
+</li>
+</ul>
+<h2 id="Class_Event::Test"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Test</code></a></h2>
+<p>Is <code>Event::Report</code></p>
+<p>Base class for events reporting test outcomes.</p>
+<h3 id="Attributes"><a class="u" href="#___top" title="go to top of document">Attributes</a></h3>
+<ul><li><p><code>Int:D $.test-id</code>, required – test number</p>
+</li>
+<li><p><code>Str $.todo</code> – message to use if test is marked as <em>TODO</em>.</p>
+</li>
+<li><p><code>Str $.flunks</code> – message to use if test is marked as anticipated failure (see <code>test-flunks</code> in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a>.</p>
+</li>
+<li><p><code>CallFrame:D $.caller</code>, required – position in user code where the test was called. </p>
+</li>
+<li><p><code>@.child-messages</code> – messages from child suites. Each entry should be a single line ending with newline.</p>
+</li>
+<li><p><code>@.comments</code> – comments for the test. Normally expected to be reported with <code>diag</code>. Not special formatting requirements except for a recommendation for the last line not to end with a newline.</p>
+</li>
+</ul>
+<h2 id="Class_Event::Terminate"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Terminate</code></a></h2>
+<p>Is <code>Event</code>.</p>
+<p>This is the only kind of event which <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Term/Async/Aggregator.md"><code>Term::Async::Aggregator</code></a> role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event&#39;s promise.</p>
+<h3 id="Attributes"><a class="u" href="#___top" title="go to top of document">Attributes</a></h3>
+<ul><li><p><code>Promise::Vow $.completed</code>, required – a promise vow to be kept when event loop finishes processing all remaining events.</p>
+</li>
+</ul>
+<h2 id="Class_Event::Telemetry"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Telemetry</code></a></h2>
+<p>Is <code>Event</code></p>
+<p>Under development yet.</p>
+<h2 id="Class_Event::Plan"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Plan</code></a></h2>
+<p>Is <code>Event::Report</code></p>
+<p>Plan reporting event. Emitted when a suite gets to know the number of tests to be done.</p>
+<h3 id="Attributes"><a class="u" href="#___top" title="go to top of document">Attributes</a></h3>
+<ul><li><p><code>Bool $.skip</code> – suite is planned for skiping.</p>
+</li>
+<li><p><code>UInt:D $.planned</code>, required - number of tests planned.</p>
+</li>
+</ul>
+<h2 id="Class_Event::Diag"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Diag</code></a></h2>
+<p>Is <code>Event::Report</code>.</p>
+<p>Carries a diagnostics message. See <code>diag</code> in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a>.</p>
+<h2 id="Class_Event::Ok"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Ok</code></a></h2>
+<p>Is <code>Event::Test</code>.</p>
+<p>Test passed.</p>
+<h2 id="Class_Event::NotOk"><a class="u" href="#___top" title="go to top of document">Class <code>Event::NotOk</code></a></h2>
+<p>Is <code>Event::Test</code>.</p>
+<p>Test flunked.</p>
+<h2 id="Class_Event::Skip"><a class="u" href="#___top" title="go to top of document">Class <code>Event::Skip</code></a></h2>
+<p>Is <code>Event::Test</code>.</p>
+<p>Test skipped.</p>
+<h2 id="Class_Event::DoneTesting"><a class="u" href="#___top" title="go to top of document">Class <code>Event::DoneTesting</code></a></h2>
+<p>Is <code>Event::Report</code>.</p>
+<p>Emitted when testing is completely done.</p>
+<h2 id="Class_Event::BailOut"><a class="u" href="#___top" title="go to top of document">Class <code>Event::BailOut</code></a></h2>
+<p>Is <code>Event::Report</code></p>
+<p>Emitted when test suite is about to bail out.</p>
+<h2 id="Command_event_classes_Event::Cmd::*"><a class="u" href="#___top" title="go to top of document">Command event classes <code>Event::Cmd::*</code></a></h2>
+<p>A bundle of events used internally for commands. See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a> and possibly other modules. The set of command events is not standartized and subject for changes.</p>
+<h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a></p>
+<section><h1>AUTHOR</h1>
+<p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
+</section>
+
+    </div>
+    
+    
+    </body>
+</html>
+

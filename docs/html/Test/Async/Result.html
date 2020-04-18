@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8" />
+        <style>
+        kbd { font-family: "Droid Sans Mono", "Luxi Mono", "Inconsolata", monospace }
+        samp { font-family: "Terminus", "Courier", "Lucida Console", monospace }
+        u { text-decoration: none }
+        .nested {
+            margin-left: 3em;
+        }
+        aside, u { opacity: 0.7 }
+        a[id^="fn-"]:target { background: #ff0 }
+        </style>
+        <link rel="stylesheet" href="//design.perl6.org/perl.css">
+        
+        
+    </head>
+    <body class="pod">
+    <div id="___top"></div>
+    
+    
+    
+    <nav class="indexgroup">
+<table id="TOC">
+<caption><h2 id="TOC_Title">Table of Contents</h2></caption>
+        <tr class="toc-level-2"><td class="toc-number">0.1</td><td class="toc-text"><a href="#Bool:D_$.cond"><code class="pod-code-inline">Bool:D $.cond</code></a></td></tr>
+       <tr class="toc-level-2"><td class="toc-number">0.2</td><td class="toc-text"><a href="#$.fail-profile,_$.success-profile"><code class="pod-code-inline">$.fail-profile</code> , <code class="pod-code-inline">$.success-profile</code></a></td></tr>
+           <tr class="toc-level-2"><td class="toc-number">0.3</td><td class="toc-text"><a href="#event-profile()"><code class="pod-code-inline">event-profile()</code></a></td></tr>
+    <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+     
+</table>
+</nav>
+
+    <div class="pod-body">
+    <section><h1>NAME</h1>
+</section>
+<p><code>Test::Async::Result</code> - test result representation</p>
+<section><h1>SYNOPSIS</h1>
+</section>
+<pre class="pod-block-code">self.proclaim: test-result(
+                    $condition, 
+                    fail =&gt; {
+                        comments =&gt; &quot;a comment about the cause of flunk&quot;,
+                    });</pre>
+<section><h1>DESCRIPTION</h1>
+</section>
+<p>This class represents information about test outcomes.</p>
+<section><h1>ATTRIBUTES</h1>
+</section>
+<h2 id="Bool:D_$.cond"><a class="u" href="#___top" title="go to top of document"><code>Bool:D $.cond</code></a></h2>
+<p><em>True</em> if test is considered success, <em>False</em> otherwise. <strong>Note</strong> that a skipped tests is a success.</p>
+<h2 id="$.fail-profile,_$.success-profile"><a class="u" href="#___top" title="go to top of document"><code>$.fail-profile</code>, <code>$.success-profile</code></a></h2>
+<p>Profile to be used to create a new <code>Event::Test</code> object depending on <code>$.cond</code> value either <code>success-</code> or <code>fail-profile</code> is used. The most typical use of this is to add comments explaining the test outcome.</p>
+<section><h1>METHODS</h1>
+</section>
+<h2 id="event-profile()"><a class="u" href="#___top" title="go to top of document"><code>event-profile()</code></a></h2>
+<p>Returns a profile accordingly to <code>$.cond</code>.</p>
+<h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
+<p><code>test-result</code> routine from <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>.</p>
+<section><h1>AUTHOR</h1>
+<p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
+</section>
+
+    </div>
+    
+    
+    </body>
+</html>
+

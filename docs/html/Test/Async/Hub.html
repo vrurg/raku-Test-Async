@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8" />
+        <style>
+        kbd { font-family: "Droid Sans Mono", "Luxi Mono", "Inconsolata", monospace }
+        samp { font-family: "Terminus", "Courier", "Lucida Console", monospace }
+        u { text-decoration: none }
+        .nested {
+            margin-left: 3em;
+        }
+        aside, u { opacity: 0.7 }
+        a[id^="fn-"]:target { background: #ff0 }
+        </style>
+        <link rel="stylesheet" href="//design.perl6.org/perl.css">
+        
+        
+    </head>
+    <body class="pod">
+    <div id="___top"></div>
+    
+    
+    
+    <nav class="indexgroup">
+<table id="TOC">
+<caption><h2 id="TOC_Title">Table of Contents</h2></caption>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
+     <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
+  <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Command_Execution">Command Execution</a></td></tr>
+                      <tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#ATTRIBUTES">ATTRIBUTES</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">4.1</td><td class="toc-text"><a href="#parent-suite"><code class="pod-code-inline">parent-suite</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.2</td><td class="toc-text"><a href="#message"><code class="pod-code-inline">message</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.3</td><td class="toc-text"><a href="#code"><code class="pod-code-inline">code</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.4</td><td class="toc-text"><a href="#completed"><code class="pod-code-inline">completed</code></a></td></tr>
+      <tr class="toc-level-2"><td class="toc-number">4.5</td><td class="toc-text"><a href="#planned"><code class="pod-code-inline">planned</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.6</td><td class="toc-text"><a href="#skip-message"><code class="pod-code-inline">skip-message</code></a></td></tr>
+          <tr class="toc-level-2"><td class="toc-number">4.7</td><td class="toc-text"><a href="#TODO-message"><code class="pod-code-inline">TODO-message</code></a></td></tr>
+      <tr class="toc-level-2"><td class="toc-number">4.8</td><td class="toc-text"><a href="#TODO-count"><code class="pod-code-inline">TODO-count</code></a></td></tr>
+          <tr class="toc-level-2"><td class="toc-number">4.9</td><td class="toc-text"><a href="#nesting"><code class="pod-code-inline">nesting</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.10</td><td class="toc-text"><a href="#nesting-prefix"><code class="pod-code-inline">nesting-prefix</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.11</td><td class="toc-text"><a href="#is-async"><code class="pod-code-inline">is-async</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.12</td><td class="toc-text"><a href="#is-TODO"><code class="pod-code-inline">is-TODO</code></a></td></tr>
+              <tr class="toc-level-2"><td class="toc-number">4.13</td><td class="toc-text"><a href="#parallel"><code class="pod-code-inline">parallel</code></a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">4.14</td><td class="toc-text"><a href="#random"><code class="pod-code-inline">random</code></a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">4.15</td><td class="toc-text"><a href="#tests-run"><code class="pod-code-inline">tests-run</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.16</td><td class="toc-text"><a href="#tests-failed"><code class="pod-code-inline">tests-failed</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.17</td><td class="toc-text"><a href="#messages"><code class="pod-code-inline">messages</code></a></td></tr>
+      <tr class="toc-level-2"><td class="toc-number">4.18</td><td class="toc-text"><a href="#test-jobs"><code class="pod-code-inline">test-jobs</code></a></td></tr>
+        <tr class="toc-level-2"><td class="toc-number">4.19</td><td class="toc-text"><a href="#stage"><code class="pod-code-inline">stage</code></a></td></tr>
+      <tr class="toc-level-1"><td class="toc-number">5</td><td class="toc-text"><a href="#METHODS">METHODS</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">5.1</td><td class="toc-text"><a href="#new"><code class="pod-code-inline">new</code></a></td></tr>
+      <tr class="toc-level-2"><td class="toc-number">5.2</td><td class="toc-text"><a href="#top-suite()"><code class="pod-code-inline">top-suite()</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">5.3</td><td class="toc-text"><a href="#has-top-suite()"><code class="pod-code-inline">has-top-suite()</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.4</td><td class="toc-text"><a href="#set-stage(TestStage:D_$stage_-_TestStage)&gt;"><code class="pod-code-inline">set-stage(TestStage:D $stage -</code> TestStage)&gt;</a></td></tr>
+             <tr class="toc-level-2"><td class="toc-number">5.5</td><td class="toc-text"><a href="#multi_event(Event:D)"><code class="pod-code-inline">multi event(Event:D)</code></a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">5.6</td><td class="toc-text"><a href="#setup-from-plan"><code class="pod-code-inline">setup-from-plan</code></a></td></tr>
+                       <tr class="toc-level-2"><td class="toc-number">5.7</td><td class="toc-text"><a href="#multi_plan(UInt:D_$tests,_*%profile)"><code class="pod-code-inline">multi plan(UInt:D $tests, *%profile)</code></a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">5.8</td><td class="toc-text"><a href="#multi_plan(*%profile)"><code class="pod-code-inline">multi plan(*%profile)</code></a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">5.9</td><td class="toc-text"><a href="#multi_plan(%profile)"><code class="pod-code-inline">multi plan(%profile)</code></a></td></tr>
+         <tr class="toc-level-2"><td class="toc-number">5.10</td><td class="toc-text"><a href="#done-testing()"><code class="pod-code-inline">done-testing()</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.11</td><td class="toc-text"><a href="#create-suite(suiteType_=_self.WHAT,_*%c)"><code class="pod-code-inline">create-suite(suiteType = self.WHAT, *%c)</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.12</td><td class="toc-text"><a href="#invoke-suite($suite,_:$async_=_False,_:$instant_=_False)"><code class="pod-code-inline">invoke-suite($suite, :$async = False, :$instant = False)</code></a></td></tr>
+                   <tr class="toc-level-2"><td class="toc-number">5.13</td><td class="toc-text"><a href="#run(:$is-async)"><code class="pod-code-inline">run(:$is-async)</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">5.14</td><td class="toc-text"><a href="#throw(X::Base:U_\exType,_*%c)"><code class="pod-code-inline">throw(X::Base:U \exType, *%c)</code></a></td></tr>
+        <tr class="toc-level-2"><td class="toc-number">5.15</td><td class="toc-text"><a href="#send-command(Event::Command:U_\evType,_|c)"><code class="pod-code-inline">send-command(Event::Command:U \evType, |c)</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.16</td><td class="toc-text"><a href="#multi_send-test(Event::Test:U_\evType,_Str:D_$message,_TestResult:D_$test-result,_*%c_--_Bool)&gt;"><code class="pod-code-inline">multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%c --</code> Bool)&gt;</a></td></tr>
+                   <tr class="toc-level-2"><td class="toc-number">5.17</td><td class="toc-text"><a href="#send-plan(UInt:D_$planned,_:$on-start)"><code class="pod-code-inline">send-plan(UInt:D $planned, :$on-start)</code></a></td></tr>
+            <tr class="toc-level-2"><td class="toc-number">5.18</td><td class="toc-text"><a href="#normalize-message(+@message_--_Seq)&gt;"><code class="pod-code-inline">normalize-message(+@message --</code> Seq)&gt;</a></td></tr>
+          <tr class="toc-level-2"><td class="toc-number">5.19</td><td class="toc-text"><a href="#send-message(+@message)"><code class="pod-code-inline">send-message(+@message)</code></a></td></tr>
+           <tr class="toc-level-2"><td class="toc-number">5.20</td><td class="toc-text"><a href="#multi_proclaim(Test::Async::Result:D_$result,_Str:D_$message)"><code class="pod-code-inline">multi proclaim(Test::Async::Result:D $result, Str:D $message)</code></a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">5.21</td><td class="toc-text"><a href="#multi_proclaim(Bool_$cond,_Str:D_$message,_$event-profile)"><code class="pod-code-inline">multi proclaim(Bool $cond, Str:D $message, $event-profile)</code></a></td></tr>
+                <tr class="toc-level-2"><td class="toc-number">5.22</td><td class="toc-text"><a href="#next-test-id"><code class="pod-code-inline">next-test-id</code></a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">5.23</td><td class="toc-text"><a href="#take-TODO(--_Str)&gt;"><code class="pod-code-inline">take-TODO(--</code> Str)&gt;</a></td></tr>
+              <tr class="toc-level-2"><td class="toc-number">5.24</td><td class="toc-text"><a href="#set-todo(Str:D_$message,_Int:D_$count)"><code class="pod-code-inline">set-todo(Str:D $message, Int:D $count)</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.25</td><td class="toc-text"><a href="#sync-events()"><code class="pod-code-inline">sync-events()</code></a></td></tr>
+        <tr class="toc-level-2"><td class="toc-number">5.26</td><td class="toc-text"><a href="#await-jobs()"><code class="pod-code-inline">await-jobs()</code></a></td></tr>
+           <tr class="toc-level-2"><td class="toc-number">5.27</td><td class="toc-text"><a href="#finish()"><code class="pod-code-inline">finish()</code></a></td></tr>
+             <tr class="toc-level-2"><td class="toc-number">5.28</td><td class="toc-text"><a href="#measure-telemetry(&amp;code,_Capture:D_\c_=_\())"><code class="pod-code-inline">measure-telemetry(&amp;code, Capture:D \c = \())</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">5.29</td><td class="toc-text"><a href="#tool-factory(--_Seq)&gt;"><code class="pod-code-inline">tool-factory(--</code> Seq)&gt;</a></td></tr>
+      
+</table>
+</nav>
+
+    <div class="pod-body">
+    <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
+<p><code>Test::Async::Hub</code> - the core of <code>Test::Async</code> framework</p>
+<h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
+<p>if test-suite.random { say &quot;The current suite is in random mode&quot; }</p>
+<h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
+<p>See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a> for general purpose of this class.</p>
+<h2 id="Command_Execution"><a class="u" href="#___top" title="go to top of document">Command Execution</a></h2>
+<p>All events whose class derives from <code>Event::Command</code> are handled in a special manner. Class name of such event is used to form a method name. Corresponding method is then invoked with a <a href="https://docs.raku.org/type/Capture"><code>Capture</code></a> passed in event&#39;s attribute <code>$.args</code>. For example, to mark all remaining tests as skipped, event <code>Event::Cmd::SkipRemaining</code> is used. Based on the class, method <code>cmd-skipremaining</code> is invoked with a single positional string argument in <code>$.args</code> containing the skip message if the event has been created without an error.</p>
+<p>Method <code>send-command</code> is recommended to emit command messages.</p>
+<p>See method <code>set-todo</code> or <code>sync-events</code> for an example of using this interface.</p>
+<h1 id="ATTRIBUTES"><a class="u" href="#___top" title="go to top of document">ATTRIBUTES</a></h1>
+<h2 id="parent-suite"><a class="u" href="#___top" title="go to top of document"><code>parent-suite</code></a></h2>
+<p>If defined then it&#39;s the suite which invoked the current one.</p>
+<h2 id="message"><a class="u" href="#___top" title="go to top of document"><code>message</code></a></h2>
+<p>Message associated with this suite. Only makes sense for children.</p>
+<h2 id="code"><a class="u" href="#___top" title="go to top of document"><code>code</code></a></h2>
+<p>The code block associated with the suite. Undefined for the top one.</p>
+<h2 id="completed"><a class="u" href="#___top" title="go to top of document"><code>completed</code></a></h2>
+<p>A <a href="https://docs.raku.org/type/Promise"><code>Promise</code></a> instance which is fulfilled when <code>done-testing</code> is executed.</p>
+<h2 id="planned"><a class="u" href="#___top" title="go to top of document"><code>planned</code></a></h2>
+<p>The number of tests planned for this suite. Undefined if no plans were made.</p>
+<h2 id="skip-message"><a class="u" href="#___top" title="go to top of document"><code>skip-message</code></a></h2>
+<p>If suite is planned for skipping then this is the message as for <code>skip-remaining</code> tool:</p>
+<pre class="pod-block-code">subtest &quot;Conditional test&quot; =&gt; {
+    plan |($condition ?? :skip-all(&#39;makes no sens because ...&#39;) !! Empty);
+    pass &quot;dummy test&quot;;
+}</pre>
+<p>Otherwise undefined.</p>
+<p><strong>NOTE!</strong> Any examples of code in this documentation are based on the default <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a> bundle.</p>
+<h2 id="TODO-message"><a class="u" href="#___top" title="go to top of document"><code>TODO-message</code></a></h2>
+<p>If suite is planned for <em>TODO</em> then this is the message as for any of <code>todo</code> test tools.</p>
+<h2 id="TODO-count"><a class="u" href="#___top" title="go to top of document"><code>TODO-count</code></a></h2>
+<p>A number of remaining <em>TODO</em> tests:</p>
+<pre class="pod-block-code">todo &quot;To be done yet...&quot;, 3;
+pass  &quot;test 1&quot;;
+# -&gt; test-suite.TODO-count == 2 at this point
+flunk &quot;test 2&quot;;
+pass  &quot;test 3&quot;;</pre>
+<p>Could be set to <code>Inf</code> meaning all remaining tests are to be <em>TODO</em>-marked.</p>
+<h2 id="nesting"><a class="u" href="#___top" title="go to top of document"><code>nesting</code></a></h2>
+<p>How deep are we from the top suite? I.e. a child of a child of the top suite will have nesting 2.</p>
+<h2 id="nesting-prefix"><a class="u" href="#___top" title="go to top of document"><code>nesting-prefix</code></a></h2>
+<p>A string, recommended prefix to be used for indenting messages produced by the suite.</p>
+<h2 id="is-async"><a class="u" href="#___top" title="go to top of document"><code>is-async</code></a></h2>
+<p>True if the suite itself or any of its parents is invoked asynchronously.</p>
+<h2 id="is-TODO"><a class="u" href="#___top" title="go to top of document"><code>is-TODO</code></a></h2>
+<p>Indicates if the whole suite has been marked as <em>TODO</em>. This makes difference between:</p>
+<pre class="pod-block-code">todo &quot;Later...&quot;;
+subtest &quot;new feature&quot; =&gt; { ... }</pre>
+<p>and</p>
+<p>subtest &quot;new feature&quot; =&gt; { todo-remaining &quot;Later...&quot;; ... }</p>
+<p>Also <em>True</em> if <code>todo</code> parameter of plan is set to a message, which is virtually the same as prefixing the subtest with <code>todo</code>.</p>
+<h2 id="parallel"><a class="u" href="#___top" title="go to top of document"><code>parallel</code></a></h2>
+<p><em>True</em> if suite is invoking children suites asynchronously.</p>
+<h2 id="random"><a class="u" href="#___top" title="go to top of document"><code>random</code></a></h2>
+<p><em>True</em> if suite is invoking children suites in a random order.</p>
+<h2 id="tests-run"><a class="u" href="#___top" title="go to top of document"><code>tests-run</code></a></h2>
+<p>The counter of test tool invocations.</p>
+<h2 id="tests-failed"><a class="u" href="#___top" title="go to top of document"><code>tests-failed</code></a></h2>
+<p>The counter of failed test tools.</p>
+<h2 id="messages"><a class="u" href="#___top" title="go to top of document"><code>messages</code></a></h2>
+<p>An array of message lines produced by the suite and its child suites if it is an asynchronous child. I.e. if <code>is-async</code> is <em>True</em>. The messages are submitted for reporting when the suite run ends and its result is reported.</p>
+<h2 id="test-jobs"><a class="u" href="#___top" title="go to top of document"><code>test-jobs</code></a></h2>
+<p>Maximus number of concurrently running jobs allowed. Note that a <em>job</em> is anything invoked using <code>start-job</code> method of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>.</p>
+<h2 id="stage"><a class="u" href="#___top" title="go to top of document"><code>stage</code></a></h2>
+<p>The current stage of suite lifecycle. See <code>TestStage</code> enum in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>.</p>
+<h1 id="METHODS"><a class="u" href="#___top" title="go to top of document">METHODS</a></h1>
+<h2 id="new"><a class="u" href="#___top" title="go to top of document"><code>new</code></a></h2>
+<p>Creates a new instance of constructed <code>Test::Async::Suite</code> class. See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>.</p>
+<h2 id="top-suite()"><a class="u" href="#___top" title="go to top of document"><code>top-suite()</code></a></h2>
+<p>Returns a singleton – the top suite object.</p>
+<h2 id="has-top-suite()"><a class="u" href="#___top" title="go to top of document"><code>has-top-suite()</code></a></h2>
+<p>Returns <code>True</code> if the top suite singleton has been instantiated already.</p>
+<h2 id="set-stage(TestStage:D_$stage_-_TestStage)>"><a class="u" href="#___top" title="go to top of document"><code>set-stage(TestStage:D $stage -</code> TestStage)&gt;</a></h2>
+<p>Transition suite state to stage <code>$stage</code>. Throws <code>X::StageTransition</code> (<a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a>) if the transition is not possible. If transitions from <code>TSInitializing</code> to <code>TSInProgress</code> then the method also starts the event loop thread.</p>
+<p>Returns the pre-transition stage.</p>
+<h2 id="multi_event(Event:D)"><a class="u" href="#___top" title="go to top of document"><code>multi event(Event:D)</code></a></h2>
+<p>The ultimate handler of event objects. A bundle wishing to react to events must define a multi-candidate of this method:</p>
+<pre class="pod-block-code">test-bundle MyBundle {
+    multi method event(Event::Telemetry:D $ev) {
+        ...
+    }
+}</pre>
+<h2 id="setup-from-plan"><a class="u" href="#___top" title="go to top of document"><code>setup-from-plan</code></a></h2>
+<p>Setup suite parameters based on a plan profile hash. </p>
+<p>If the profile contains planned number of tests then emits plan event via method <code>send-event</code>.</p>
+<p>If the profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.</p>
+<p>The keys supported by profile are:</p>
+<ul><li><p><strong>tests</strong> - planned number of tests.</p>
+</li>
+<li><p><strong>skip-all</strong> - a string with a skip message. If set all tests are skipped as if <code>skip-remaining</code> is used.</p>
+</li>
+<li><p><strong>todo</strong> - a string with a <em>TODO</em> message. If set all tests and suite itself are marked as <em>TODO</em>.</p>
+</li>
+<li><p><strong>parallel</strong> – invoke children suites asynchronously.</p>
+</li>
+<li><p><strong>random</strong> – invoke children suites randomly.</p>
+</li>
+</ul>
+<h2 id="multi_plan(UInt:D_$tests,_*%profile)"><a class="u" href="#___top" title="go to top of document"><code>multi plan(UInt:D $tests, *%profile)</code></a></h2>
+<h2 id="multi_plan(*%profile)"><a class="u" href="#___top" title="go to top of document"><code>multi plan(*%profile)</code></a></h2>
+<h2 id="multi_plan(%profile)"><a class="u" href="#___top" title="go to top of document"><code>multi plan(%profile)</code></a></h2>
+<p>One of the only two test tools provided by the core itself. See method <code>setup-from-plan</code> for the profile keys allowed.</p>
+<p>When <code>plan</code> is invoked with positional integer parameter, this is equivalent to setting <code>tests</code> plan profile key.</p>
+<h2 id="done-testing()"><a class="u" href="#___top" title="go to top of document"><code>done-testing()</code></a></h2>
+<p>Just invokes <code>finish</code> method.</p>
+<h2 id="create-suite(suiteType_=_self.WHAT,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>create-suite(suiteType = self.WHAT, *%c)</code></a></h2>
+<p>Creates a child suite. <code>%c</code> is used to pass parameters to the suite constructor method.</p>
+<h2 id="invoke-suite($suite,_:$async_=_False,_:$instant_=_False)"><a class="u" href="#___top" title="go to top of document"><code>invoke-suite($suite, :$async = False, :$instant = False)</code></a></h2>
+<p>Invokes a suite as a new job. The invocation method chosen depending on the suite <code>parallel</code> and <code>random</code> attributes and this method parameters. The parameters take precedence over the attributes:</p>
+<ul><li><p><strong><code>$instant</code></strong> - start job instantly, ignore the value of <code>random</code>.</p>
+</li>
+<li><p><strong><code>$async</code></strong> - start job asynchronously always. If <code>random</code> is in effect then job is postponed but then would start asynchronously anyway, not matter of <code>parallel</code>.</p>
+</li>
+</ul>
+<p>Method returns completion <code>Promise</code> of the invoked suite.</p>
+<h2 id="run(:$is-async)"><a class="u" href="#___top" title="go to top of document"><code>run(:$is-async)</code></a></h2>
+<p>Execute the suite here and now. Internal implementation detail.</p>
+<h2 id="throw(X::Base:U_\exType,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>throw(X::Base:U \exType, *%c)</code></a></h2>
+<p>Throws a <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Type/Async/X.md"><code>Type::Async::X</code></a> exception. <code>%c</code> is used as exception constructor profile to which <code>hub</code> named parameter is added.</p>
+<h2 id="send-command(Event::Command:U_\evType,_|c)"><a class="u" href="#___top" title="go to top of document"><code>send-command(Event::Command:U \evType, |c)</code></a></h2>
+<p>Sends a command message event. The <code>c</code> capture is passed with the event object and is used as parameters of the command handling method.</p>
+<h2 id="multi_send-test(Event::Test:U_\evType,_Str:D_$message,_TestResult:D_$test-result,_*%c_--_Bool)>"><a class="u" href="#___top" title="go to top of document"><code>multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%c --</code> Bool)&gt;</a></h2>
+<p>Creates an event of type <code>evType</code> and emits it. This is <em>the</em> method to be used for emitting <code>Event::Test</code>.</p>
+<p>The method:</p>
+<ul><li><p>counts tests, including total runs and failures</p>
+</li>
+<li><p>marks a test as <em>TODO</em> (see <code>take-TODO</code> method)</p>
+</li>
+<li><p>sets test number</p>
+</li>
+<li><p>sets event&#39;s <code>caller</code> attribute</p>
+</li>
+</ul>
+<h2 id="send-plan(UInt:D_$planned,_:$on-start)"><a class="u" href="#___top" title="go to top of document"><code>send-plan(UInt:D $planned, :$on-start)</code></a></h2>
+<p>Emits <code>Event::Plan</code> event. If <code>$on-start</code> is <em>True</em> and suite is the topmost one with <code>skip-all</code> passed in plan profile – in other words, if topmost suite is planned for skipping; – then instead of emitting the event by standard means, hands it over directly to <code>report-event</code> method and instantly exits the program with 0 exit code.</p>
+<h2 id="normalize-message(+@message_--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>normalize-message(+@message --</code> Seq)&gt;</a></h2>
+<p>Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the <em>normal form</em> of a message. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md"><code>Test::Async::Reporter::TAP</code></a> expects children suite messages to come in normalized form.</p>
+<p><em>NOTE.</em> This form is chosen as <em>normal</em> because TAP is a line-based protocol for which a line must end with a newline.</p>
+<h2 id="send-message(+@message)"><a class="u" href="#___top" title="go to top of document"><code>send-message(+@message)</code></a></h2>
+<p>This method takes a message, normalizes it, and then choses which output channel it is to be directed to:</p>
+<p>= if suite is not the topmost one and it its <code>$.is-async</code> is <em>True</em> then message is collected in <code>@.messages</code> to be later passed to the parent suite with a test event. = otherwise the message is passed to <code>method-to-console</code> method.</p>
+<h2 id="multi_proclaim(Test::Async::Result:D_$result,_Str:D_$message)"><a class="u" href="#___top" title="go to top of document"><code>multi proclaim(Test::Async::Result:D $result, Str:D $message)</code></a></h2>
+<h2 id="multi_proclaim(Bool_$cond,_Str:D_$message,_$event-profile)"><a class="u" href="#___top" title="go to top of document"><code>multi proclaim(Bool $cond, Str:D $message, $event-profile)</code></a></h2>
+<p>This is the main method to emit a test event depending on test outcome passed in <code>$cond</code> or <code>$result.cond</code>. The method sets event <code>origin</code> to the invoking object, sets event&#39;s object <code>@.messages</code> and <code>$.nesting</code>. <code>$event-profile</code> is what the user wants to supply to <code>Event::Test</code> constructor.</p>
+<h2 id="next-test-id"><a class="u" href="#___top" title="go to top of document"><code>next-test-id</code></a></h2>
+<p>Returns the next available test number. This is the number one sees next to test outcome status:</p>
+<pre class="pod-block-code">ok 2 - message
+   ^
+   +--- this is it!</pre>
+<h2 id="take-TODO(--_Str)>"><a class="u" href="#___top" title="go to top of document"><code>take-TODO(--</code> Str)&gt;</a></h2>
+<p>If suit has a <em>TODO</em> in effect, i.e. <code>$.is-TODO</code> is <em>True</em> or <code>$!TODO-count</code> is greater than 0, then this method will return the current <code>$.TODO-message</code>. The <code>$.TODO-count</code> will be reduced if necessary.</p>
+<h2 id="set-todo(Str:D_$message,_Int:D_$count)"><a class="u" href="#___top" title="go to top of document"><code>set-todo(Str:D $message, Int:D $count)</code></a></h2>
+<p>Emits <code>Event::Cmd::SetTODO</code>.</p>
+<h2 id="sync-events()"><a class="u" href="#___top" title="go to top of document"><code>sync-events()</code></a></h2>
+<p>It&#39;s almost no-op method call with a side effect of making sure that all events emitted prior to this method call are processed. The method works by emitting <code>Event::Cmd::SyncEvents</code> with a <code>Promise::Vow</code> parameter and awaits until <code>cmd-syncevents</code> command handler keeps the vow. Because events are queued, this ensures that by the moment when the vow is kept all earlier events in the queue were pulled and handled.</p>
+<h2 id="await-jobs()"><a class="u" href="#___top" title="go to top of document"><code>await-jobs()</code></a></h2>
+<p>This method implements two tasks:</p>
+<ul><li><p>first, it pulls postponed jobs and invokes them in a random order</p>
+</li>
+<li><p>next it calls <code>await-all-jobs</code> to make sure all jobs have completed</p>
+</li>
+<li><p>if <code>await-all-jobs</code> doesn&#39;t finish in 30 seconds <code>X::AwaitTimeout</code> is thrown</p>
+</li>
+</ul>
+<h2 id="finish()"><a class="u" href="#___top" title="go to top of document"><code>finish()</code></a></h2>
+<p>This is the finalizing method. When suite ends, it invokes this method to take care of postponed jobs, report a plan if not reported at suite start (i.e. number of planned tests wasn&#39;t set), and emits <code>Event::DoneTesting</code> and <code>Event::Terminate</code>.</p>
+<p>While performing these steps the method transition from <code>TSFinishing</code> stage, to <code>TSFinished</code>, to <code>TSDismissed</code>.</p>
+<h2 id="measure-telemetry(&code,_Capture:D_\c_=_\())"><a class="u" href="#___top" title="go to top of document"><code>measure-telemetry(&amp;code, Capture:D \c = \())</code></a></h2>
+<p>This method is for the future implementation and doesn&#39;t really do anything useful now.</p>
+<h2 id="tool-factory(--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>tool-factory(--</code> Seq)&gt;</a></h2>
+<p>Produces a sequence of <code>&#39;&amp;tool-name&#39; =</code> &amp;tool-code&gt; pairs suitable for use with <code>sub EXPORT</code>. Internal implementation detail.</p>
+<section><h1>AUTHOR</h1>
+<p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
+</section>
+
+    </div>
+    
+    
+    </body>
+</html>
+
