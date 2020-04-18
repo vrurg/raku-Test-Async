@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 # use Grammar::Tracer;
 use lib 'lib';
 use Test::Async;
@@ -38,7 +38,7 @@ grammar MyPOD {
     }
 
     token pod-text {
-        .+? <?before 'L<' || [^^ '=end']>
+        .+? <?before <pod-link> || [^^ '=end']>
     }
 
     proto token pod-link {*}
@@ -47,7 +47,9 @@ grammar MyPOD {
     }
     multi token pod-link:sym<mod-only> {
         'L<' <link-module> '>'
-        | 'L<' <link-module> '>'
+    }
+    multi token pod-link:sym<raku-type> {
+        'TYPE<' <link-module> '>'
     }
 
     token link-text {
@@ -92,6 +94,13 @@ class MyPOD-Actions {
                 ~ '>'
         );
         $.replaced = True;
+    }
+
+    method pod-link:sym<raku-type>($/) {
+        my $link-mod = $<link-module>.made;
+        make 'L<C<' ~ $link-mod
+             ~ '>|https://docs.raku.org/type/' 
+             ~ $link-mod ~ '>'
     }
 
     method link-module($/) {
