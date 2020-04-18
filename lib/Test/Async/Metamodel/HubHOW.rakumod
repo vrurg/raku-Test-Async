@@ -1,4 +1,47 @@
 use v6;
+
+=begin pod
+=NAME
+
+C<Test::Async::Metamodel::HubHOW> - metaclass backing Hub/Suite classes.
+
+=DESCRIPTION
+
+This class acts as a registry for test bundle roles, and as a construction yard for the custom C<Test::Async::Suite>
+class.
+
+=methods C<register-bundle(Mu \bundle-role)>
+
+Registers bundle role for later suite class construction.
+
+=method C<construct-suite(\hub-class --> Test::Async::Suite:U)>
+
+Returns a custom C<Test::Async::Suite> class based on all test bundles registered. The construction happens only once,
+all consequent calls to the method get the same suite type object.
+
+Normally this method is to be invoked on the hub class: C<Test::Async::Hub.^construct-suite>.
+
+=method C<suite-class(\hub-class)>
+
+Convenience shortcut to C<construct-suite>
+
+=method C<suite(\obj)>
+
+Returns I<True> if suite class has been constructed already.
+
+=method C<bundles()>
+
+Returns a list of registered bundles.
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod
+
 unit class Test::Async::Metamodel::HubHOW is Metamodel::ClassHOW;
 use nqp;
 use Test::Async::Metamodel::BundleClassHOW;

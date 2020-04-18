@@ -19,10 +19,10 @@ for general purpose of this class.
 =head2 Command Execution
 
 All events whose class derives from C<Event::Command> are handled in a special manner. Class name of such event is used
-to form a method name. Corresponding method is then invoked with a L<C<Capture>|https://docs.raku.org/type/Capture> passed in event's attribute C<$.args>.
-For example, to mark all remaining tests as skipped, event C<Event::Cmd::SkipRemaining> is used. Based on the class,
-method C<cmd-skipremaining> is invoked with a single positional string argument in C<$.args> containing the skip
-message if the event has been created without an error.
+to form a method name. Corresponding method is then invoked with a L<C<Capture>|https://docs.raku.org/type/Capture>
+passed in event's attribute C<$.args>.  For example, to mark all remaining tests as skipped, event
+C<Event::Cmd::SkipRemaining> is used. Based on the class, method C<cmd-skipremaining> is invoked with a single
+positional string argument in C<$.args> containing the skip message if the event has been created without an error.
 
 Method C<send-command> is recommended to emit command messages.
 
@@ -527,7 +527,7 @@ method run(:$is-async) {
 }
 
 method throw(X::Base:U \exType, *%c) {
-    exType.new( :hub(self), |%c ).throw
+    exType.new( :suite(self), |%c ).throw
 }
 
 method send-command(Event::Command:U \evType, |c) {

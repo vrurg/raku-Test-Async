@@ -51,6 +51,11 @@ This trait is used to declare a method in a bundle as a test tool:
 
 The method is then exported to user as `&foo` routine. Internally the method is getting wrapped into a code which does necessary preparations for the tool to act as expected. See [`Test::Async::Metamodel::BundleClassHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md) for more details.
 
+SEE ALSO
+========
+
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md), [`Test::Async::Metamodel::BundleHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleHOW.md), [`Test::Async::Metamodel::BundleClassHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md), [`Test::Async::Metamodel::HubHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/HubHOW.md), [`Test::Async::Metamodel::ReporterHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/ReporterHOW.md)
+
 AUTHOR
 ======
 

@@ -480,6 +480,7 @@ method skip(Str:D $message = "", UInt:D $count = 1) is test-tool(:!skippable) {
     for ^$count {
         self.send-test: Event::Skip, $message, TRSkipped
     }
+    True
 }
 
 method skip-rest(Str:D $message = "") is test-tool(:!skippable) {

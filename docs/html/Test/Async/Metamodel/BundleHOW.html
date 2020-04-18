@@ -25,7 +25,7 @@
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
-                           <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+       <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
     
 </table>
 </nav>
@@ -33,17 +33,10 @@
     <div class="pod-body">
     <section><h1>NAME</h1>
 </section>
-<p><code>Test::Async::Reporter</code> - a reporter bundle role</p>
+<p><code>Test::Async::Metamodel::BundleHOW</code> - metaclass backing bundle roles</p>
 <section><h1>DESCRIPTION</h1>
 </section>
-<p>This role is applied to a bundle declared with <code>test-reporter</code>. Implies implementations of methods:</p>
-<ul><li><p><code>report-event(Event:D)</code> – report an event to user</p>
-</li>
-<li><p><code>indent-message(+@message, :$prefix, :$nesting, *% --</code> Array())&gt; - indent all lines in <code>@message</code> using <code>$prefix</code> by <code>$nesting</code> levels. <code>@message</code> is expected to be in normalized form (see <code>normalize-message</code> in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a>).</p>
-</li>
-<li><p><code>message-to-console(+@message)</code> – send <code>@message</code> to its final destination.</p>
-</li>
-</ul>
+<p>The only function is to register the bundle role with slang defined in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a>.</p>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
 <p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a></p>
 <section><h1>AUTHOR</h1>

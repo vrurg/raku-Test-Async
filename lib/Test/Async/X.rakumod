@@ -1,11 +1,23 @@
 use v6;
+
+=begin pod
+=NAME
+
+C<Test::Async::X> - collection of C<Test::Async> exceptions
+
+=DESCRIPTION
+
+All exceptions are based upon C<Test::Async::X> class which
+
+=end pod
+
 unit package Test::Async;
 
 module X is export {
     use Test::Async::Utils;
 
     class Base is Exception {
-        has $.hub is required;
+        has $.suite is required;
     }
 
     class BadPostEvent is Base {

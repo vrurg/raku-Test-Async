@@ -52,6 +52,14 @@ does necessary preparations for the tool to act as expected. See
 L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md> 
 for more details.
 
+=head1 SEE ALSO
+
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleHOW.md>,
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md>,
+L<C<Test::Async::Metamodel::HubHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/HubHOW.md>,
+L<C<Test::Async::Metamodel::ReporterHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/ReporterHOW.md>
+
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
 =end pod
