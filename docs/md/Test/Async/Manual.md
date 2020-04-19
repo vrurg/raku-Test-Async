@@ -69,7 +69,7 @@ results in:
 
 Next paragraphs are explaining where this output comes from.
 
-Let's start with bundles. One is created with either `test-bundle` or `test-reporter` keyword. For example:
+Let's start with bundles. One is created with either `test-bundle` or `test-reporter` keyword provided by [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md) module. For example:
 
     test-bundle MyBundle {
         method my-test($got, $expected, $message) is test-tool {
@@ -201,8 +201,18 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
 
   * `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
 
+    test-bundle Test::Foo {
+        method test-foo(...) is test-tool(:!skippable, :!readify) { ... }
+        method test-bar(...) is test-tool { ... }
+    }
+
 SEE ALSO
 ========
 
-[`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md) [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md) [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md)
+[`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md),
+
+AUTHOR
+======
+
+Vadim Belman <vrurg@cpan.org>
 

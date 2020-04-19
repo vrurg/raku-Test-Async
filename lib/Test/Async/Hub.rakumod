@@ -7,11 +7,14 @@ C<Test::Async::Hub> - the core of C<Test::Async> framework
 
 =head1 SYNOPSIS
 
-if test-suite.random {
-    say "The current suite is in random mode"
-}
+    if test-suite.random {
+        say "The current suite is in random mode"
+    }
 
 =head1 DESCRIPTION
+
+Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md>
 
 See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md>
 for general purpose of this class.
@@ -320,6 +323,17 @@ This method is for the future implementation and doesn't really do anything usef
 
 Produces a sequence of C<'&tool-name' => &tool-code> pairs suitable for use with C<sub EXPORT>. Internal implementation
 detail.
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md>,
+L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Result.md>,
+L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/TestTool.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

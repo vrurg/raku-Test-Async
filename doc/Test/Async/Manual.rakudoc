@@ -72,7 +72,9 @@ I<Note that C<:roles> named parameter is available since Rakudo compiler release
 
 Next paragraphs are explaining where this output comes from.
 
-Let's start with bundles. One is created with either C<test-bundle> or C<test-reporter> keyword. For example:
+Let's start with bundles. One is created with either C<test-bundle> or C<test-reporter> keyword provided by
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md> module. 
+For example:
 
     test-bundle MyBundle {
         method my-test($got, $expected, $message) is test-tool {
@@ -221,11 +223,21 @@ I<in progress>
 L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md> is skippable;
 but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
+    test-bundle Test::Foo {
+        method test-foo(...) is test-tool(:!skippable, :!readify) { ... }
+        method test-bar(...) is test-tool { ... }
+    }
+
 =head1 SEE ALSO
 
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md>
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md>
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md>
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md>,
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md>,
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
 
 =end pod

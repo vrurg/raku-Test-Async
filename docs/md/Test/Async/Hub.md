@@ -6,10 +6,14 @@ NAME
 SYNOPSIS
 ========
 
-if test-suite.random { say "The current suite is in random mode" }
+    if test-suite.random {
+        say "The current suite is in random mode"
+    }
 
 DESCRIPTION
 ===========
+
+Consumes [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md)
 
 See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md) for general purpose of this class.
 
@@ -345,6 +349,11 @@ This method is for the future implementation and doesn't really do anything usef
 -----------------------
 
 Produces a sequence of `'&tool-name' =` &tool-code> pairs suitable for use with `sub EXPORT`. Internal implementation detail.
+
+SEE ALSO
+========
+
+[`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md), [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Result.md), [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/TestTool.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md)
 
 AUTHOR
 ======

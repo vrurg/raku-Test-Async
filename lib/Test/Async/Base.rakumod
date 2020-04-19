@@ -1,6 +1,194 @@
 use v6;
-use Test::Async::Decl;
 
+=begin pod
+=NAME
+
+C<Test::Async::Base> – this test bundle contains all the base test tools
+
+=SYNOPSIS
+
+    use Test::Async::Base;
+    use Test::Async;
+    plan 1;
+    pass "Hello world!";
+    done-testing
+
+=DESCRIPTION
+
+This bundle is supposed to provide same test tools, as the standard Raku L<C<Test>|https://docs.raku.org/type/Test>. So that
+
+    use Test::Async;
+    plan ...;
+    ...; # Do tests
+    done-testing
+
+would be the same as:
+
+    use Test;
+    plan ...;
+    ...; # Do tests
+    done-testing
+
+For this reason this document only tells about differences between the two.
+
+Test tools resulting in either I<ok> or I<not ok> messages return either I<True> or I<False> depending on test outcome.
+C<skip> always considered to be successful and thus returns I<True>.
+
+=ATTRIBUTES
+
+=head2 C<Str:D $.FLUNK-message>
+
+The message set with C<test-flunks>.
+
+=head2 C<Numeric:D $.FLUNK-count>
+
+Number of tests expected to flunk. Reduces with each next test completing.
+
+See C<take-FLUNK>.
+
+=METHODS
+
+=head2 C<take-FLUNK(--> Str)>
+
+If C<test-flunks> is in effect then method returns its message and decreases C<$.FLUNK-count>.
+
+=head2 C<multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --> Str)>
+=head2 C<multi expected-got($expected, $got, :$gist, :$quote, *%c)>
+
+Method produces standardized I<"expected ... but got ..."> messages. 
+
+The second candidate is used for non-string values. It stringifies them using
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md> C<stringify> routine and then passes over to the first candidate for formatting alongside with
+named parameters captured in C<%c>.
+
+Named parameters:
+
+=item C<:$exp-sfx> - suffix for "expected", a string which will be inserted after it.
+=item C<:$got-sfx> – suffix for "got"
+=item C<:$gist> - enforces use of method C<gist> to stringify values
+=item C<:$quote> - enforces use of quotes around the stringified values
+
+=head2 C<cmd-settestflunk>
+
+Handler for C<Event::Cmd::SetTestFlunk> defined by this bundle.
+
+=head1 TEST TOOLS
+
+=head2 C<diag +@msg>
+
+Unlike the standard L<C<Test>|https://docs.raku.org/type/Test> C<diag>, accepts a list too allowing similar usage as with C<say> and C<note>.
+
+=head2 C<skip-remaining($message, Bool :$global?)>
+
+Skips all remaining tests in current suite. If C<$global> is set then it's the same as invoking C<skip-remaining> on
+all suite parents, including the topmost suite.
+
+=head2 C<todo-remaining(Str:D $message)>
+
+Mark all remaining tests of the current suite as I<TODO>.
+
+=head2 C<multi subtest(Pair $what, Bool:D :$async=False, Bool:D :$instant=False, *%plan)>
+=head2 C<multi subtest(Str:D $message, Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, *%plan)>
+=head2 C<multi subtest(Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, *%plan)>
+
+The default C<subtest> behaviour is no different from the one in L<C<Test>|https://docs.raku.org/type/Test>.
+The difference is that our C<subtest> could be invoked:
+
+=item asynchronously
+=item in random order with other C<subtest>s of the same nesting level
+=item randomly and asynchronously at the same time
+
+The asynchronous invocation means that a C<subtest> will be run in a new dedicated thread. The random invocation means
+that C<subtest> invocation is postponed until the suite code ends. Then all postponed subtests will be pulled and 
+invoked in a random order.
+
+It is possible to combine both async and random modes which might add even more stress to the code tested.
+
+I<Some more information about C<Test::Async> job management can be found in
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md>>
+
+The particular mode of operation is defined either by C<plan> keys C<parallel> or C<random>, or by subtest named
+parameters C<async> or C<instant>. The named parameters take precedence over plan parameters:
+
+=item if C<instant> is set then C<plan>'s C<random> is ignored
+=item if C<async> is set then C<plan>'s C<parallel> is ignored
+
+For example, let's assume that our current suite is configured for random execution of subtest. Then
+
+    subtest "foo", :instant, {
+        ...
+    }
+
+would result in the C<subtest> be invoked right away, where it's declaration is encountered, without postponing.
+Similarly, if C<parallel> plan parameter is in effect, C<:instant> will overrule it so it will run right here, right
+now!
+
+Adding C<:async> named parameter too will invoke the subtest instantly and asynchronously. And this also means that 
+a subtest invoked this way won't be counted as a job by
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md>.
+In other words, we treat C<:instant> as: I<bypass any queue, just do it here and now!>
+
+Another edge case is using C<:async> with C<random>. In this case the subtest will be postponed. But when time to invoke
+subtests comes this particular one will get his dedicated thread no matter what C<parallel> is set to.
+
+Any other named parameters passed to a C<subtest> is treated as a plan key.
+
+=head2 C<mutli is-run(Str() $code, %params, Str:D $message = "")>
+=head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>
+
+This test tool is not provided by the standard L<C<Test>|https://docs.raku.org/type/Test> framework, but in slightly different forms it is defined
+in helper modules included in 
+L<Rakudo|https://github.com/rakudo/rakudo/blob/e5ecdc4382d2739a701be7956fad52e897936fea/t/packages/Test/Helpers.pm6#L17>
+and 
+L<roast|https://github.com/Raku/roast/blob/7033b07bbbb54a301b3bfd1253e30c5e7cebdfab/packages/Test-Helpers/lib/Test/Util.pm6#L107>
+tests.
+
+C<is-run> tests C<$code> by executing it in a child compiler process. In a way, it is like doining:
+
+    # echo "$code" | rakudo -
+
+Takes the following named parameters (C<%params> from the first candidate is passed to the second candidate as a
+capture):
+
+=item C<:$in> – data to be sent to the compiler input
+=item C<:@compiler-args> – command line arguments for the compiler process
+=item C<:@args> - command line arguments for C<$code>
+=item C<:$out?> – expected standard output
+=item C<:$err?> – expected error output
+=item C<:$exitcode = 0> – expected process exit code.
+
+=head2 C<multi test-flunks(Str:D $message, Bool :$remaining?)>
+=head2 C<multi test-flunks($count)>
+=head2 C<multi test-flunks(Str $message, $count)>
+
+This test tool informs the bundle that the following tests are expected to flunk and this is exactly what we expect of
+them to do! Or we can say that it inverts next C<$count> tests results. It can be considered as a meta-tool as it
+operates over other test tools.
+
+The primary purpose is to allow testing other test tools. For example, test I<t/080-is-approx.t> uses it to make sure
+that tests are failing when they have to fail:
+
+    test-flunks 2;
+    is-approx 5, 6;
+    is-approx 5, 6, 'test desc three';
+
+Setting C<$count> to L<C<Inf>|https://docs.raku.org/type/Inf> is the same as using C<:remaining> named parameter and means: all remaining tests in the
+current suite are expected to flunk.
+
+=SEE ALSO
+
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod
+
+use Test::Async::Decl;
 unit test-bundle Test::Async::Base;
 
 use nqp;
@@ -560,11 +748,11 @@ multi method subtest(Callable:D \subtests, Str:D $message,
 }
 
 proto method is-run(|) is test-tool {*}
-multi method is-run(Str() $code, %expected, Str $message = "") {
+multi method is-run(Str() $code, %expected, Str:D $message = "") {
     self.is-run: $code, $message, |%expected
 }
 multi method is-run (
-    Str() $code, $message = "",
+    Str() $code, Str:D $message = "",
     Stringy :$in, :@compiler-args, :@args, :$out?, :$err?, :$exitcode = 0
 ) {
     my @proc-args = flat do if $*DISTRO.is-win {

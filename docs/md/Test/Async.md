@@ -28,5 +28,10 @@ The module export all test tools it finds in the top suite object. See [`Test::A
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md)
+
+AUTHOR
+======
+
+Vadim Belman <vrurg@cpan.org>
 

@@ -28,7 +28,7 @@
 <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
      <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
   <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
-    <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Command_Execution">Command Execution</a></td></tr>
+        <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Command_Execution">Command Execution</a></td></tr>
                       <tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#ATTRIBUTES">ATTRIBUTES</a></td></tr>
  <tr class="toc-level-2"><td class="toc-number">4.1</td><td class="toc-text"><a href="#parent-suite"><code class="pod-code-inline">parent-suite</code></a></td></tr>
   <tr class="toc-level-2"><td class="toc-number">4.2</td><td class="toc-text"><a href="#message"><code class="pod-code-inline">message</code></a></td></tr>
@@ -79,7 +79,8 @@
            <tr class="toc-level-2"><td class="toc-number">5.27</td><td class="toc-text"><a href="#finish()"><code class="pod-code-inline">finish()</code></a></td></tr>
              <tr class="toc-level-2"><td class="toc-number">5.28</td><td class="toc-text"><a href="#measure-telemetry(&amp;code,_Capture:D_\c_=_\())"><code class="pod-code-inline">measure-telemetry(&amp;code, Capture:D \c = \())</code></a></td></tr>
   <tr class="toc-level-2"><td class="toc-number">5.29</td><td class="toc-text"><a href="#tool-factory(--_Seq)&gt;"><code class="pod-code-inline">tool-factory(--</code> Seq)&gt;</a></td></tr>
-      
+      <tr class="toc-level-1"><td class="toc-number">6</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+                
 </table>
 </nav>
 
@@ -87,8 +88,11 @@
     <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
 <p><code>Test::Async::Hub</code> - the core of <code>Test::Async</code> framework</p>
 <h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
-<p>if test-suite.random { say &quot;The current suite is in random mode&quot; }</p>
+<pre class="pod-block-code">if test-suite.random {
+    say &quot;The current suite is in random mode&quot;
+}</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
+<p>Consumes <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a></p>
 <p>See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a> for general purpose of this class.</p>
 <h2 id="Command_Execution"><a class="u" href="#___top" title="go to top of document">Command Execution</a></h2>
 <p>All events whose class derives from <code>Event::Command</code> are handled in a special manner. Class name of such event is used to form a method name. Corresponding method is then invoked with a <a href="https://docs.raku.org/type/Capture"><code>Capture</code></a> passed in event&#39;s attribute <code>$.args</code>. For example, to mark all remaining tests as skipped, event <code>Event::Cmd::SkipRemaining</code> is used. Based on the class, method <code>cmd-skipremaining</code> is invoked with a single positional string argument in <code>$.args</code> containing the skip message if the event has been created without an error.</p>
@@ -256,6 +260,8 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 <p>This method is for the future implementation and doesn&#39;t really do anything useful now.</p>
 <h2 id="tool-factory(--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>tool-factory(--</code> Seq)&gt;</a></h2>
 <p>Produces a sequence of <code>&#39;&amp;tool-name&#39; =</code> &amp;tool-code&gt; pairs suitable for use with <code>sub EXPORT</code>. Internal implementation detail.</p>
+<h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md"><code>Test::Async::Event</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Result.md"><code>Test::Async::Result</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/TestTool.md"><code>Test::Async::TestTool</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a></p>
 <section><h1>AUTHOR</h1>
 <p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
 </section>
