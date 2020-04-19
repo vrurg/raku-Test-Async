@@ -377,6 +377,7 @@ has Bool $.parallel;
 has Str:D @.messages;
 # How many jobs can be invoked in parallel.
 has UInt:D $.test-jobs = (try { %*ENV<TEST_JOBS>.Int } || ($*KERNEL.cpu-cores - 2)) max 1;
+has $.job-timeout where Int:D | Inf = Inf;
 
 method new(|c) {
     # This class is already mutated into a suit
@@ -621,7 +622,7 @@ method await-jobs {
     }
     my $all-done;
     await Promise.anyof(
-        Promise.in(30).then({ cas($all-done, Any, False); }),
+        Promise.in($!job-timeout).then({ cas($all-done, Any, False); }),
         start {
             CATCH { note $_; exit 255 };
             self.await-all-jobs;
