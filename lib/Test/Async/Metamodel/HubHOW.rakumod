@@ -88,5 +88,5 @@ method construct-suite(\hub-class) is raw {
 }
 
 method suite(\type-obj) { $suite }
-method suite-class(\type-obj) { self.construct_suite(type-obj) }
+method suite-class(\type-obj) { self.construct-suite(type-obj) }
 method bundles { nqp::defined($bundle-typeobjs) ?? $bundle-typeobjs !! nqp::list() }
