@@ -161,7 +161,7 @@ Returns C<True> if the top suite singleton has been instantiated already.
 
 =head2 C<set-stage(TestStage:D $stage -> TestStage)>
 
-Transition suite state to stage C<$stage>. Throws C<X::StageTransition> 
+Transition suite state to stage C<$stage>. Throws C<X::StageTransition>
 (L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
 the method also starts the event loop thread.
 
@@ -179,11 +179,8 @@ The ultimate handler of event objects. A bundle wishing to react to events must 
 
 =head2 C<setup-from-plan>
 
-Setup suite parameters based on a plan profile hash. 
-
-If the profile contains planned number of tests then emits plan event via method C<send-event>.
-
-If the profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.
+Setup suite parameters based on a plan profile hash. If called when suite stage is not C<TSInitializing> then throws
+C<X::PlanTooLate>.
 
 The keys supported by profile are:
 
@@ -195,11 +192,13 @@ The keys supported by profile are:
 
 =head2 C<multi plan(UInt:D $tests, *%profile)>
 =head2 C<multi plan(*%profile)>
-=head2 C<multi plan(%profile)>
 
 One of the only  two test tools provided by the core itself. See method C<setup-from-plan> for the profile keys allowed.
 
-When C<plan> is invoked with positional integer parameter, this is equivalent to setting C<tests> plan profile key.
+When C<plan> is invoked with positional integer parameter, this is equivalent to setting C<tests> plan profile key. In
+either case, if tests are planned the method reports it by emitting `Event::Plan`.
+
+If plan profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.
 
 =head2 C<done-testing()>
 
@@ -254,7 +253,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 =head2 C<normalize-message(+@message --> Seq)>
 
 Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each
-individual line. This is the I<normal form> of a message. 
+individual line. This is the I<normal form> of a message.
 L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md>
 expects children suite messages to come in normalized form.
 
@@ -310,7 +309,7 @@ This method implements two tasks:
 =head2 C<finish()>
 
 This is the finalizing method. When suite ends, it invokes this method to take care of postponed jobs, report a plan
-if not reported at suite start (i.e. number of planned tests wasn't set), and emits C<Event::DoneTesting> and 
+if not reported at suite start (i.e. number of planned tests wasn't set), and emits C<Event::DoneTesting> and
 C<Event::Terminate>.
 
 While performing these steps the method transition from C<TSFinishing> stage, to C<TSFinished>, to C<TSDismissed>.
