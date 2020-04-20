@@ -718,7 +718,7 @@ multi method subtest(Callable:D \subtests, Str:D $message,
     my %profile = :code(subtests), :$message;
     my $caller = $*TEST-CALLER;
     my $child = self.create-suite: |%profile;
-    $child.plan: %plan if %plan;
+    $child.plan: |%plan if %plan;
     my $rc = Promise.new;
     my $rc-vow = $rc.vow;
     self.invoke-suite( $child, :$async, :$instant ).then: {

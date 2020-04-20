@@ -63,6 +63,13 @@ module X is export {
         }
     }
 
+    class PlanTooLate is Base {
+        has $.caller = $*TEST-CALLER;
+        method message {
+            "It is too late to change plan at " ~ $!caller.gist;
+        }
+    }
+
     class NoJobId is Base {
         has Int:D $.id is required;
         method message {

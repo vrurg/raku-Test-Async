@@ -450,41 +450,44 @@ multi method event(::?CLASS:D: Event::Report:D $ev) {
 method setup-from-plan(%plan) {
     my $cur-stage = %plan<tests>:exists ?? $.set-stage(TSInProgress) !! $!stage;
     if $cur-stage != TSInitializing {
-        warn "It is too late to change plan at " ~ $*TEST-CALLER.gist;
+        self.throw: X::PlanTooLate;
     }
-    else {
-        if %plan<tests> {
-            $!planned = %plan<tests>:delete;
-        }
-        if %plan<skip-all> {
-            $!skip-message = %plan<skip-all>:delete;
-        }
-        if %plan<todo> {
-            $!TODO-message = %plan<todo>:delete;
-            $!TODO-count = Inf;
-            $!is-TODO = True;
-        }
-        $!parallel = .so with %plan<parallel>:delete;
-        $!random = .so with %plan<random>:delete;
-        if $!planned {
-            self.send-plan($!planned, :on-start);
-        }
-        if %plan {
-            self.send: Event::Diag, :message("Unknown plan parameter: " ~ $_) for %plan.keys;
-        }
+    if %plan<tests> {
+        $!planned = %plan<tests>:delete;
     }
+    if %plan<skip-all> {
+        $!skip-message = %plan<skip-all>:delete;
+    }
+    if %plan<todo> {
+        $!TODO-message = %plan<todo>:delete;
+        $!TODO-count = Inf;
+        $!is-TODO = True;
+    }
+    $!parallel = .so with %plan<parallel>:delete;
+    $!random = .so with %plan<random>:delete;
 }
 
 proto method plan(|) is test-tool(:!readify) {*}
 multi method plan(UInt:D $tests, *%plan) {
-    %plan<tests> = $tests;
-    self.setup-from-plan: %plan;
+    %plan<tests> //= $tests;
+    self.plan: |%plan;
 }
 multi method plan(*%plan) {
+    CATCH {
+        when X::PlanTooLate {
+            self.send: Event::BailOut, :message(.message);
+            self.sync-events;
+            exit 255;
+        }
+        default { .rethrow }
+    }
     self.setup-from-plan: %plan;
-}
-multi method plan(%plan) {
-    self.setup-from-plan: %plan;
+    if $!planned {
+        self.send-plan($!planned, :on-start);
+    }
+    if %plan {
+        self.send: Event::Diag, :message("Unknown plan parameter: " ~ $_) for %plan.keys;
+    }
 }
 
 method done-testing() is test-tool(:!skippable) {
