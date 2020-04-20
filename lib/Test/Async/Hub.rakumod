@@ -543,7 +543,7 @@ method run(:$is-async) {
     self.done-testing;
 }
 
-method throw(X::Base:U \exType, *%c) {
+method throw(X::Base:U \exType, *%c) is hidden-from-backtrace {
     exType.new( :suite(self), |%c ).throw
 }
 
