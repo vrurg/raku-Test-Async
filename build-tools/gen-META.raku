@@ -37,7 +37,7 @@ my $m = META6.new(
         'Test::Async::Reporter::TAP'            => 'lib/Test/Async/Reporter/TAP.rakumod',
     },
     license        => 'Artistic-2.0',
-    production     => False,
+    production     => True,
 );
 
 print $m.to-json;
