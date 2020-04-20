@@ -35,7 +35,7 @@ my $awaited-ok;
 await Promise.anyof(
     Promise.in(10).then({ cas $awaited-ok, Any, False }),
     (start { $tj.await-all-jobs }).then({ cas $awaited-ok, Any, True }),
-); 
+);
 
 $awaited-ok &&= $tj.job-count == 0;
 
@@ -67,7 +67,7 @@ $awaited-ok = Nil;
 await Promise.anyof(
     Promise.in(10).then({ cas $awaited-ok, Any, False }),
     (start { $tj.await-all-jobs }).then({ cas $awaited-ok, Any, True }),
-); 
+);
 
 $awaited-ok &&= $tj.job-count == 0;
 

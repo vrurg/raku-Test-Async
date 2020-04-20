@@ -129,7 +129,7 @@ Putting this into a diagram would give us something like this for the default ca
     . bundle roles:    Base          TAP
 
 See example script: 
-L<examples/multi-bundle.raku|https://github.com/vrurg/raku-Test-Async/blob/v0.0.2/examples/multi-bundle.raku>
+L<examples/multi-bundle.raku|https://github.com/vrurg/raku-Test-Async/blob/v0.0.3/examples/multi-bundle.raku>
 
 This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The
 latter is as simple as overriding parent methods. For example, 
