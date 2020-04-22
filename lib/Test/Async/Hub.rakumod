@@ -466,7 +466,7 @@ method setup-from-plan(%plan) {
     $!random = .so with %plan<random>:delete;
 }
 
-proto method plan(|) is test-tool(:!readify) {*}
+proto method plan(|) is test-tool(:!skippable, :!readify) {*}
 multi method plan(UInt:D $tests, *%plan) {
     %plan<tests> //= $tests;
     self.plan: |%plan;
