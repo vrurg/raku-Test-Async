@@ -2,7 +2,7 @@ use v6;
 use Test::Async::Decl;
 
 =begin pod
-=NAME 
+=NAME
 
 C<Test::Async::Reporter::TAP> - TAP reporter bundle
 
@@ -19,6 +19,7 @@ also defines C<TAP-str-from-ev>.
 unit test-reporter Test::Async::Reporter::TAP;
 
 use Test::Async::Event;
+use Test::Async::Utils;
 
 has @!lines;
 
@@ -76,7 +77,7 @@ multi method TAP-str-from-ev(::?CLASS:D: Event::DoneTesting:D $ev) {
 }
 
 multi method TAP-str-from-ev(::?CLASS:D: Event::BailOut $ev) {
-    join ' ', 'Bail out!', ($ev.message if $ev.message)
+    join ' ', 'Bail out!', ($ev.message if $ev.message);
 }
 
 multi method TAP-str-from-ev(::?CLASS:D: Event::Test:D $ev, Str:D $kind,
@@ -102,9 +103,22 @@ multi method TAP-str-from-ev(::?CLASS:D: Event::Test:D $ev, Str:D $kind,
 }
 
 method report-event(Event::Report:D $ev) {
+    my $bail-out = False;
+    if $ev ~~ Event::BailOut {
+        self.set-stage(TSDismissed);
+        with self.parent-suite {
+            # Don't report bail-out, hand it over to the parent.
+            .send: Event::BailOut, :message($ev.message);
+            return;
+        }
+        else {
+            $bail-out = True;
+        }
+    }
     with self.TAP-str-from-ev($ev) {
         self.send-message: $_;
     }
+    exit 255 if $bail-out;
 }
 
 # Expects a normalized message as input
