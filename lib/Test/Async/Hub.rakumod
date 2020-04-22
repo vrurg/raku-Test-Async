@@ -681,7 +681,6 @@ method dismiss {
     if self.set-stage(TSDismissed) != TSDismissed {
         self.send: Event::Terminate, :completed($!completed-vow);
         await $!completed;
-        self.set-stage(TSDismissed);
     }
 }
 
