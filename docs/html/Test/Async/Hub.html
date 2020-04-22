@@ -93,8 +93,8 @@
     say &quot;The current suite is in random mode&quot;
 }</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
-<p>Consumes <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a></p>
-<p>See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a> for general purpose of this class.</p>
+<p>Consumes <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a></p>
+<p>See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a> for general purpose of this class.</p>
 <h2 id="Command_Execution"><a class="u" href="#___top" title="go to top of document">Command Execution</a></h2>
 <p>All events whose class derives from <code>Event::Command</code> are handled in a special manner. Class name of such event is used to form a method name. Corresponding method is then invoked with a <a href="https://docs.raku.org/type/Capture"><code>Capture</code></a> passed in event&#39;s attribute <code>$.args</code>. For example, to mark all remaining tests as skipped, event <code>Event::Cmd::SkipRemaining</code> is used. Based on the class, method <code>cmd-skipremaining</code> is invoked with a single positional string argument in <code>$.args</code> containing the skip message if the event has been created without an error.</p>
 <p>Method <code>send-command</code> is recommended to emit command messages.</p>
@@ -117,7 +117,7 @@
     pass &quot;dummy test&quot;;
 }</pre>
 <p>Otherwise undefined.</p>
-<p><strong>NOTE!</strong> Any examples of code in this documentation are based on the default <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a> bundle.</p>
+<p><strong>NOTE!</strong> Any examples of code in this documentation are based on the default <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Base.md"><code>Test::Async::Base</code></a> bundle.</p>
 <h2 id="TODO-message"><a class="u" href="#___top" title="go to top of document"><code>TODO-message</code></a></h2>
 <p>If suite is planned for <em>TODO</em> then this is the message as for any of <code>todo</code> test tools.</p>
 <h2 id="TODO-count"><a class="u" href="#___top" title="go to top of document"><code>TODO-count</code></a></h2>
@@ -152,18 +152,18 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 <h2 id="messages"><a class="u" href="#___top" title="go to top of document"><code>messages</code></a></h2>
 <p>An array of message lines produced by the suite and its child suites if it is an asynchronous child. I.e. if <code>is-async</code> is <em>True</em>. The messages are submitted for reporting when the suite run ends and its result is reported.</p>
 <h2 id="test-jobs"><a class="u" href="#___top" title="go to top of document"><code>test-jobs</code></a></h2>
-<p>Maximus number of concurrently running jobs allowed. Note that a <em>job</em> is anything invoked using <code>start-job</code> method of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>.</p>
+<p>Maximus number of concurrently running jobs allowed. Note that a <em>job</em> is anything invoked using <code>start-job</code> method of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>.</p>
 <h2 id="stage"><a class="u" href="#___top" title="go to top of document"><code>stage</code></a></h2>
-<p>The current stage of suite lifecycle. See <code>TestStage</code> enum in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>.</p>
+<p>The current stage of suite lifecycle. See <code>TestStage</code> enum in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>.</p>
 <h1 id="METHODS"><a class="u" href="#___top" title="go to top of document">METHODS</a></h1>
 <h2 id="new"><a class="u" href="#___top" title="go to top of document"><code>new</code></a></h2>
-<p>Creates a new instance of constructed <code>Test::Async::Suite</code> class. See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>.</p>
+<p>Creates a new instance of constructed <code>Test::Async::Suite</code> class. See <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>.</p>
 <h2 id="top-suite()"><a class="u" href="#___top" title="go to top of document"><code>top-suite()</code></a></h2>
 <p>Returns a singleton – the top suite object.</p>
 <h2 id="has-top-suite()"><a class="u" href="#___top" title="go to top of document"><code>has-top-suite()</code></a></h2>
 <p>Returns <code>True</code> if the top suite singleton has been instantiated already.</p>
 <h2 id="set-stage(TestStage:D_$stage_-_TestStage)>"><a class="u" href="#___top" title="go to top of document"><code>set-stage(TestStage:D $stage -</code> TestStage)&gt;</a></h2>
-<p>Transition suite state to stage <code>$stage</code>. Throws <code>X::StageTransition</code> (<a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a>) if the transition is not possible. If transitions from <code>TSInitializing</code> to <code>TSInProgress</code> then the method also starts the event loop thread.</p>
+<p>Transition suite state to stage <code>$stage</code>. Throws <code>X::StageTransition</code> (<a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a>) if the transition is not possible. If transitions from <code>TSInitializing</code> to <code>TSInProgress</code> then the method also starts the event loop thread.</p>
 <p>Returns the pre-transition stage.</p>
 <h2 id="multi_event(Event:D)"><a class="u" href="#___top" title="go to top of document"><code>multi event(Event:D)</code></a></h2>
 <p>The ultimate handler of event objects. A bundle wishing to react to events must define a multi-candidate of this method:</p>
@@ -206,7 +206,7 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 <h2 id="run(:$is-async)"><a class="u" href="#___top" title="go to top of document"><code>run(:$is-async)</code></a></h2>
 <p>Execute the suite here and now. Internal implementation detail.</p>
 <h2 id="throw(X::Base:U_\exType,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>throw(X::Base:U \exType, *%c)</code></a></h2>
-<p>Throws a <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Type/Async/X.md"><code>Type::Async::X</code></a> exception. <code>%c</code> is used as exception constructor profile to which <code>hub</code> named parameter is added.</p>
+<p>Throws a <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Type/Async/X.md"><code>Type::Async::X</code></a> exception. <code>%c</code> is used as exception constructor profile to which <code>hub</code> named parameter is added.</p>
 <h2 id="abort"><a class="u" href="#___top" title="go to top of document"><code>abort</code></a></h2>
 <p>Results in quick suite shutdown via bypassing all remaining suite code and invoking method <code>dismiss</code>.</p>
 <h2 id="send-command(Event::Command:U_\evType,_|c)"><a class="u" href="#___top" title="go to top of document"><code>send-command(Event::Command:U \evType, |c)</code></a></h2>
@@ -226,7 +226,7 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 <h2 id="send-plan(UInt:D_$planned,_:$on-start)"><a class="u" href="#___top" title="go to top of document"><code>send-plan(UInt:D $planned, :$on-start)</code></a></h2>
 <p>Emits <code>Event::Plan</code> event. If <code>$on-start</code> is <em>True</em> and suite is the topmost one with <code>skip-all</code> passed in plan profile – in other words, if topmost suite is planned for skipping; – then instead of emitting the event by standard means, hands it over directly to <code>report-event</code> method and instantly exits the program with 0 exit code.</p>
 <h2 id="normalize-message(+@message_--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>normalize-message(+@message --</code> Seq)&gt;</a></h2>
-<p>Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the <em>normal form</em> of a message. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Reporter/TAP.md"><code>Test::Async::Reporter::TAP</code></a> expects children suite messages to come in normalized form.</p>
+<p>Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the <em>normal form</em> of a message. <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Reporter/TAP.md"><code>Test::Async::Reporter::TAP</code></a> expects children suite messages to come in normalized form.</p>
 <p><em>NOTE.</em> This form is chosen as <em>normal</em> because TAP is a line-based protocol for which a line must end with a newline.</p>
 <h2 id="send-message(+@message)"><a class="u" href="#___top" title="go to top of document"><code>send-message(+@message)</code></a></h2>
 <p>This method takes a message, normalizes it, and then choses which output channel it is to be directed to:</p>
@@ -264,7 +264,7 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 <h2 id="tool-factory(--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>tool-factory(--</code> Seq)&gt;</a></h2>
 <p>Produces a sequence of <code>&#39;&amp;tool-name&#39; =</code> &amp;tool-code&gt; pairs suitable for use with <code>sub EXPORT</code>. Internal implementation detail.</p>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
-<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md"><code>Test::Async::Event</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Result.md"><code>Test::Async::Result</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/TestTool.md"><code>Test::Async::TestTool</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a></p>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Aggregator.md"><code>Test::Async::Aggregator</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Event.md"><code>Test::Async::Event</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Result.md"><code>Test::Async::Result</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/TestTool.md"><code>Test::Async::TestTool</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a></p>
 <section><h1>AUTHOR</h1>
 <p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
 </section>

@@ -67,7 +67,7 @@
 }</pre>
 <section><h1>DESCRIPTION</h1>
 </section>
-<p>This role implements job management functionality, as described in section Job Management of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>. </p>
+<p>This role implements job management functionality, as described in section Job Management of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>. </p>
 <h2 id="Implementation_Details"><a class="u" href="#___top" title="go to top of document">Implementation Details</a></h2>
 <p>All jobs are kept in unordered &quot;pool&quot; and identified either by the object representing them, or by unique numeric ID assigned to each job.</p>
 <p>Jobs are grouped into three categories:</p>
@@ -86,11 +86,11 @@
 <section><h1>METHODS</h1>
 </section>
 <h2 id="test-job()"><a class="u" href="#___top" title="go to top of document"><code>test-job()</code></a></h2>
-<p>A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See <code>$.test-jobs</code> attribute of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a>, for example.</p>
+<p>A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See <code>$.test-jobs</code> attribute of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a>, for example.</p>
 <h2 id="job-count(--_Int)>"><a class="u" href="#___top" title="go to top of document"><code>job-count(--</code> Int)&gt;</a></h2>
 <p>The total number of jobs in the job pool. Includes currently running ones.</p>
 <h2 id="new-job(Callable:D_\code,_:$async_=_False)"><a class="u" href="#___top" title="go to top of document"><code>new-job(Callable:D \code, :$async = False)</code></a></h2>
-<p>Creates a new job instance of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Job.md"><code>Test::Async::Job</code></a> for <code>code</code> parameter. <code>$async</code> is used to mark the job as explicitly asynchronous.</p>
+<p>Creates a new job instance of <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Job.md"><code>Test::Async::Job</code></a> for <code>code</code> parameter. <code>$async</code> is used to mark the job as explicitly asynchronous.</p>
 <h2 id="all-job-promises(--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>all-job-promises(--</code> Seq)&gt;</a></h2>
 <p>Returns promises of all jobs except those not invoked yet.</p>
 <h2 id="active-job-promises(--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>active-job-promises(--</code> Seq)&gt;</a></h2>
@@ -120,7 +120,7 @@
 <p>Awaits for all running jobs to complete. If there are pending ones they&#39;d be awaited too. The method returns when the job pool is emptied.</p>
 <p>Note that if the method encounters non-empty queue of postponed jobs it throws <code>X::AwaitWithPostponed</code>. This is because any exiting postponed job would likely cause the job pool to remain non-empty forever.</p>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
-<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Job.md"><code>Test::Async::Job</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a></p>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Job.md"><code>Test::Async::Job</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/X.md"><code>Test::Async::X</code></a></p>
 <section><h1>AUTHOR</h1>
 <p>Vadim Belman &lt;vrurg@lflat.org&gt;</p>
 </section>

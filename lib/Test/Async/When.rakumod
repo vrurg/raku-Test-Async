@@ -42,7 +42,7 @@ condition:
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.3/docs/md/Test/Async/Manual.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

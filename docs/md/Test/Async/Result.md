@@ -51,7 +51,7 @@ Returns a profile accordingly to `$.cond`.
 SEE ALSO
 ========
 
-`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md).
+`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Utils.md).
 
 AUTHOR
 ======
