@@ -59,11 +59,16 @@ sub EXPORT(*@b) {
         }
     }
     @bundles.push: 'Test::Async::Reporter::TAP' unless $has-reporter;
+    my @bundle_exports;
     for @bundles.grep(Str) {
         my $bundle = .index('::') ?? $_ !! 'Test::Async::' ~ $_;
         require ::($bundle);
+        if (%REQUIRE_SYMBOLS<EXPORT>:exists) && (%REQUIRE_SYMBOLS<EXPORT>.WHO<DEFAULT>:exists) {
+            @bundle_exports.append: %REQUIRE_SYMBOLS<EXPORT>.WHO<DEFAULT>.WHO.pairs;
+        }
     }
     Map.new(
+        |@bundle_exports,
         |Test::Async::Hub.tool-factory,
         '&test-suite' => &Test::Async::test-suite,
     )
