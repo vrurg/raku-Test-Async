@@ -341,6 +341,8 @@ L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md
 use Test::Async::Decl;
 unit test-hub Test::Async::Hub;
 
+my class AbortSuite does X::Control { }
+
 use Test::Async::Aggregator;
 use Test::Async::JobMgr;
 use Test::Async::Utils;
@@ -537,6 +539,13 @@ method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant 
 
 method run(:$is-async) {
     # If any parent is async all its children are async too.
+    CONTROL {
+        when AbortSuite {
+            self.dismiss;
+            return
+        }
+        default { .rethrow }
+    }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code();
@@ -546,6 +555,8 @@ method run(:$is-async) {
 method throw(X::Base:U \exType, *%c) is hidden-from-backtrace {
     exType.new( :suite(self), |%c ).throw
 }
+
+method abort { AbortSuite.new.throw }
 
 method send-command(Event::Command:U \evType, |c) {
     self.send: evType, :args(c)
@@ -661,6 +672,13 @@ method finish {
         self.send-plan: $!tests-run unless $.planned; # If $.planned is set then the plan has been reported on start.
         self.send: Event::DoneTesting;
         self.sync-events; # Wait until all queued events processed;
+        self.dismiss;
+    }
+}
+
+method dismiss {
+    return if $!stage == TSDismissed;
+    if self.set-stage(TSDismissed) != TSDismissed {
         self.send: Event::Terminate, :completed($!completed-vow);
         await $!completed;
         self.set-stage(TSDismissed);
