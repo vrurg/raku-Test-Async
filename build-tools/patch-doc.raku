@@ -53,7 +53,7 @@ grammar MyPOD {
     }
 
     token link-text {
-        <-[\|\>]>+
+        .+? <?before '|'>
     }
 
     token link-module {
@@ -65,7 +65,11 @@ grammar MyPOD {
     }
 
     token link-url {
-        $<link-prefix>=[ 'https://github.com/' .+? '/blob/v' ] <version> $<link-suffix>=[ '/' [<!before '>'> . && .]+ ]
+        $<link-prefix>=[ 'https://github.com/' <.url-char>+? '/blob/v' ] <version> $<link-suffix>=[ '/' <.url-char>+ ]
+    }
+
+    token url-char {
+        <!before '>'> . && .
     }
 
     token version {
@@ -99,7 +103,7 @@ class MyPOD-Actions {
     method pod-link:sym<raku-type>($/) {
         my $link-mod = $<link-module>.made;
         make 'L<C<' ~ $link-mod
-             ~ '>|https://docs.raku.org/type/' 
+             ~ '>|https://docs.raku.org/type/'
              ~ $link-mod ~ '>'
     }
 
@@ -107,9 +111,9 @@ class MyPOD-Actions {
         make $<link-module-name>
     }
 
-    # method link-url ($m) {
-    #     $m.make( $m<link-prefix> ~ $m<version> ~ $m<link-suffix> )
-    # }
+    method link-url ($/) {
+        make $<link-prefix> ~ $<version>.made ~ $<link-suffix>;
+    }
 
     method FALLBACK ($name, $m) {
         $m.make(
