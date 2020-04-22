@@ -97,4 +97,11 @@ module X is export {
             "Timeout awaiting for $!what";
         }
     }
+
+    class WhenCondition is Base {
+        has $.cond is required;
+        method message {
+            "Bad 'when' condition :" ~ $.cond
+        }
+    }
 }

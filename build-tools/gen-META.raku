@@ -32,6 +32,7 @@ my $m = META6.new(
         'Test::Async::Result'                    => 'lib/Test/Async/Result.rakumod',
         'Test::Async::TestTool'                  => 'lib/Test/Async/TestTool.rakumod',
         'Test::Async::Utils'                     => 'lib/Test/Async/Utils.rakumod',
+        'Test::Async::When'                      => 'lib/Test/Async/When.rakumod',
         'Test::Async::X'                         => 'lib/Test/Async/X.rakumod',
         'Test::Async::Metamodel::BundleHOW'      => 'lib/Test/Async/Metamodel/BundleHOW.rakumod',
         'Test::Async::Metamodel::BundleClassHOW' => 'lib/Test/Async/Metamodel/BundleClassHOW.rakumod',
