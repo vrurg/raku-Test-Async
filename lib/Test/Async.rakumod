@@ -45,7 +45,7 @@ L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs
 
 =end pod
 
-module Test::Async:ver<0.0.3> {
+module Test::Async:ver<0.0.4> {
     our sub test-suite {
         once require ::('Test::Async::Hub');
         $*TEST-SUITE // ::('Test::Async::Hub').top-suite

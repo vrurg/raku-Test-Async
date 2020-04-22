@@ -120,7 +120,7 @@ Putting this into a diagram would give us something like this for the default ca
     .                  |             |
     . bundle roles:    Base          TAP
 
-See example script: [examples/multi-bundle.raku](https://github.com/vrurg/raku-Test-Async/blob/v0.0.3/examples/multi-bundle.raku)
+See example script: [examples/multi-bundle.raku](https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/examples/multi-bundle.raku)
 
 This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The latter is as simple as overriding parent methods. For example, [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md) module uses this technique to implement `test-flunks` tool. It is doing so by intercepting test events passed in to `send-test` method of [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md). It is then inverts test's outcome if necessary and does few other adjustments to a new test event profile and passes on the control to the original `send-test` to complete the task.
 

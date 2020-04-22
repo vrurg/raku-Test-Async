@@ -1,51 +1,52 @@
 {
-  "description": "Thread-safe testing framework",
-  "version": "0.0.3",
-  "name": "Test::Async",
-  "source-url": "git://github.com/vrurg/raku-Test-Async.git",
-  "support": {
-    "source": "https://github.com/vrurg/raku-Test-Async.git"
+  "version": "0.0.4",
+  "production": true,
+  "perl": "6.d",
+  "provides": {
+    "Test::Async::Metamodel::HubHOW": "lib/Test/Async/Metamodel/HubHOW.rakumod",
+    "Test::Async::X": "lib/Test/Async/X.rakumod",
+    "Test::Async::Aggregator": "lib/Test/Async/Aggregator.rakumod",
+    "Test::Async::Job": "lib/Test/Async/Job.rakumod",
+    "Test::Async::Result": "lib/Test/Async/Result.rakumod",
+    "Test::Async::Hub": "lib/Test/Async/Hub.rakumod",
+    "Test::Async::Event": "lib/Test/Async/Event.rakumod",
+    "Test::Async::Metamodel::BundleClassHOW": "lib/Test/Async/Metamodel/BundleClassHOW.rakumod",
+    "Test::Async::When": "lib/Test/Async/When.rakumod",
+    "Test::Async::Metamodel::BundleHOW": "lib/Test/Async/Metamodel/BundleHOW.rakumod",
+    "Test::Async::Utils": "lib/Test/Async/Utils.rakumod",
+    "Test::Async::Base": "lib/Test/Async/Base.rakumod",
+    "Test::Async::Metamodel::ReporterHOW": "lib/Test/Async/Metamodel/ReporterHOW.rakumod",
+    "Test::Async::Reporter::TAP": "lib/Test/Async/Reporter/TAP.rakumod",
+    "Test::Async::TestTool": "lib/Test/Async/TestTool.rakumod",
+    "Test::Async::Reporter": "lib/Test/Async/Reporter.rakumod",
+    "Test::Async": "lib/Test/Async.rakumod",
+    "Test::Async::JobMgr": "lib/Test/Async/JobMgr.rakumod",
+    "Test::Async::Decl": "lib/Test/Async/Decl.rakumod"
   },
+  "test-depends": [
+  ],
+  "source-url": "git://github.com/vrurg/raku-Test-Async.git",
+  "description": "Thread-safe testing framework",
   "build-depends": [
     "META6",
     "p6doc",
     "Pod::To::Markdown"
   ],
+  "meta-version": "0",
+  "name": "Test::Async",
+  "support": {
+    "source": "https://github.com/vrurg/raku-Test-Async.git"
+  },
+  "depends": [
+  ],
+  "auth": "github:vrurg",
+  "license": "Artistic-2.0",
+  "resources": [
+  ],
   "tags": [
     "TESTING",
     "ASYNC"
   ],
-  "production": true,
-  "test-depends": [
-  ],
-  "perl": "6.d",
-  "meta-version": "0",
-  "auth": "github:vrurg",
-  "resources": [
-  ],
-  "depends": [
-  ],
-  "provides": {
-    "Test::Async::Metamodel::ReporterHOW": "lib/Test/Async/Metamodel/ReporterHOW.rakumod",
-    "Test::Async::JobMgr": "lib/Test/Async/JobMgr.rakumod",
-    "Test::Async::Event": "lib/Test/Async/Event.rakumod",
-    "Test::Async::Job": "lib/Test/Async/Job.rakumod",
-    "Test::Async::X": "lib/Test/Async/X.rakumod",
-    "Test::Async::Utils": "lib/Test/Async/Utils.rakumod",
-    "Test::Async::TestTool": "lib/Test/Async/TestTool.rakumod",
-    "Test::Async::Hub": "lib/Test/Async/Hub.rakumod",
-    "Test::Async::Base": "lib/Test/Async/Base.rakumod",
-    "Test::Async::Reporter": "lib/Test/Async/Reporter.rakumod",
-    "Test::Async": "lib/Test/Async.rakumod",
-    "Test::Async::Decl": "lib/Test/Async/Decl.rakumod",
-    "Test::Async::Reporter::TAP": "lib/Test/Async/Reporter/TAP.rakumod",
-    "Test::Async::Result": "lib/Test/Async/Result.rakumod",
-    "Test::Async::Aggregator": "lib/Test/Async/Aggregator.rakumod",
-    "Test::Async::Metamodel::BundleClassHOW": "lib/Test/Async/Metamodel/BundleClassHOW.rakumod",
-    "Test::Async::Metamodel::HubHOW": "lib/Test/Async/Metamodel/HubHOW.rakumod",
-    "Test::Async::Metamodel::BundleHOW": "lib/Test/Async/Metamodel/BundleHOW.rakumod"
-  },
-  "license": "Artistic-2.0",
   "authors": [
     "Vadim Belman <vrurg@cpan.org>"
   ]
