@@ -661,7 +661,7 @@ method await-jobs {
 
 method finish {
     # Only do the sequence once even if accidentally called concurrently.
-    return if $!stage == TSFinishing | TSDismissed;
+    return if $!stage == TSFinishing | TSFinished | TSDismissed;
     if self.set-stage(TSFinishing) == TSInProgress {
         # Wait untils all jobs are completed.
         self.await-jobs;
