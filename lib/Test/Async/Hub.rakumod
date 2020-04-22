@@ -476,9 +476,14 @@ multi method plan(UInt:D $tests, *%plan) {
 multi method plan(*%plan) {
     CATCH {
         when X::PlanTooLate {
-            self.send: Event::BailOut, :message(.message);
-            self.sync-events;
-            exit 255;
+            self.send: Event::Diag, :message("FAILURE: " ~ .message);
+            $!tests-failed = $!planned;
+            if self.parent-suite {
+                self.abort;
+            }
+            else {
+                self.finish;
+            }
         }
         default { .rethrow }
     }
