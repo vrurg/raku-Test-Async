@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8" />
+        <style>
+        kbd { font-family: "Droid Sans Mono", "Luxi Mono", "Inconsolata", monospace }
+        samp { font-family: "Terminus", "Courier", "Lucida Console", monospace }
+        u { text-decoration: none }
+        .nested {
+            margin-left: 3em;
+        }
+        aside, u { opacity: 0.7 }
+        a[id^="fn-"]:target { background: #ff0 }
+        </style>
+        <link rel="stylesheet" href="//design.perl6.org/perl.css">
+        
+        
+    </head>
+    <body class="pod">
+    <div id="___top"></div>
+    
+    
+    
+    <nav class="indexgroup">
+<table id="TOC">
+<caption><h2 id="TOC_Title">Table of Contents</h2></caption>
+                                <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+  
+</table>
+</nav>
+
+    <div class="pod-body">
+    <section><h1>NAME</h1>
+</section>
+<p><code>Test::Async::When</code> - add <code>:when</code> key to plan</p>
+<section><h1>SYNOPSIS</h1>
+</section>
+<p>Whole top suite:</p>
+<pre class="pod-block-code">use Test::Async &lt;When Base&gt;;
+plan :when(&lt;release&gt;);</pre>
+<p>Or a subtest only:</p>
+<pre class="pod-block-code">use Test::Async &lt;When Base&gt;;
+subtest &quot;Might be skipped&quot; =&gt; {
+    plan :when(
+            :all(
+                :any(&lt;release author&gt;),
+                :module&lt;Optional::Module&gt;));
+    ...
+}</pre>
+<p>}</p>
+<section><h1>DESCRIPTION</h1>
+</section>
+<p>This bundle extends <code>plan</code> with additional parameter <code>:when</code> which defines when the suite is to be actually ran. If <code>when</code> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:</p>
+<ul><li><p>a string value means a name of a testing mode enabled with an environment variable</p>
+</li>
+<li><p>a pair with keys <code>any</code> or <code>all</code> basically means that either any of it subcondition or all of them are to be fulfilled</p>
+</li>
+<li><p>a pair with <code>module</code> key tests if a module with the given name is available</p>
+</li>
+</ul>
+<p>By default the topmost condition means <code>any</code>, so that the following two statements are actually check the same condition:</p>
+<pre class="pod-block-code">plan :when&lt;release author&gt;;
+plan :when(:any&lt;release author&gt;);</pre>
+<h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.3/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a></p>
+<section><h1>AUTHOR</h1>
+<p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
+</section>
+
+    </div>
+    
+    
+    </body>
+</html>
+

@@ -21,4 +21,3 @@ AUTHOR
 ======
 
 Vadim Belman <vrurg@cpan.org>
-

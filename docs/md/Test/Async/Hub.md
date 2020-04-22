@@ -189,11 +189,7 @@ The ultimate handler of event objects. A bundle wishing to react to events must 
 `setup-from-plan`
 -----------------
 
-Setup suite parameters based on a plan profile hash. 
-
-If the profile contains planned number of tests then emits plan event via method `send-event`.
-
-If the profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.
+Setup suite parameters based on a plan profile hash. If called when suite stage is not `TSInitializing` then throws `X::PlanTooLate`.
 
 The keys supported by profile are:
 
@@ -213,12 +209,11 @@ The keys supported by profile are:
 `multi plan(*%profile)`
 -----------------------
 
-`multi plan(%profile)`
-----------------------
-
 One of the only two test tools provided by the core itself. See method `setup-from-plan` for the profile keys allowed.
 
-When `plan` is invoked with positional integer parameter, this is equivalent to setting `tests` plan profile key.
+When `plan` is invoked with positional integer parameter, this is equivalent to setting `tests` plan profile key. In either case, if tests are planned the method reports it by emitting `Event::Plan`.
+
+If plan profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.
 
 `done-testing()`
 ----------------
@@ -250,6 +245,11 @@ Execute the suite here and now. Internal implementation detail.
 -------------------------------
 
 Throws a [`Type::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Type/Async/X.md) exception. `%c` is used as exception constructor profile to which `hub` named parameter is added.
+
+`abort`
+-------
+
+Results in quick suite shutdown via bypassing all remaining suite code and invoking method `dismiss`.
 
 `send-command(Event::Command:U \evType, |c)`
 --------------------------------------------
@@ -338,7 +338,12 @@ This method implements two tasks:
 
 This is the finalizing method. When suite ends, it invokes this method to take care of postponed jobs, report a plan if not reported at suite start (i.e. number of planned tests wasn't set), and emits `Event::DoneTesting` and `Event::Terminate`.
 
-While performing these steps the method transition from `TSFinishing` stage, to `TSFinished`, to `TSDismissed`.
+While performing these steps the method transition from `TSFinishing` stage, to `TSFinished`, and then calls method `dismiss`.
+
+`dismiss`
+---------
+
+Transition suite to `TSDismissed` stage and emits `Event::Terminate`. After that it awaits for the event to be handled by the event loop.
 
 `measure-telemetry(&code, Capture:D \c = \())`
 ----------------------------------------------

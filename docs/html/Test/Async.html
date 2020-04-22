@@ -29,7 +29,7 @@
    <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
   <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
  <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Exports">Exports</a></td></tr>
- <tr class="toc-level-3"><td class="toc-number">3.1.1</td><td class="toc-text"><a href="#test-suite"><code class="pod-code-inline">test-suite</code></a></td></tr>
+     <tr class="toc-level-3"><td class="toc-number">3.1.1</td><td class="toc-text"><a href="#test-suite"><code class="pod-code-inline">test-suite</code></a></td></tr>
         <tr class="toc-level-3"><td class="toc-number">3.1.2</td><td class="toc-text"><a href="#Test_Tools">Test Tools</a></td></tr>
     <tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
       
@@ -46,6 +46,8 @@ pass &quot;Hello World!&quot;;
 done-testing;</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
 <h2 id="Exports"><a class="u" href="#___top" title="go to top of document">Exports</a></h2>
+<p>The module re-exports all symbols found in a test bundle <code>EXPORT::DEFAULT</code> package.</p>
+<p>Also exports:</p>
 <h3 id="test-suite"><a class="u" href="#___top" title="go to top of document"><code>test-suite</code></a></h3>
 <p>Return the test suite which is actual for the current context. The suite is looked up either in <code>$*TEST-SUITE</code> or via <code>Test::Async::Hub</code> <code>top-suite</code> method.</p>
 <h3 id="Test_Tools"><a class="u" href="#___top" title="go to top of document">Test Tools</a></h3>

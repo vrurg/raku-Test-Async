@@ -72,7 +72,7 @@ If `test-flunks` is in effect then method returns its message and decreases `$.F
 `multi expected-got($expected, $got, :$gist, :$quote, *%c)`
 -----------------------------------------------------------
 
-Method produces standardized *"expected ... but got ..."* messages. 
+Method produces standardized *"expected ... but got ..."* messages.
 
 The second candidate is used for non-string values. It stringifies them using [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md) `stringify` routine and then passes over to the first candidate for formatting alongside with named parameters captured in `%c`.
 

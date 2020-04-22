@@ -20,6 +20,10 @@ C<Test::Async> - base module of the framework
 
 =head2 Exports
 
+The module re-exports all symbols found in a test bundle C<EXPORT::DEFAULT> package.
+
+Also exports:
+
 =head3 C<test-suite>
 
 Return the test suite which is actual for the current context. The suite is looked up either in C<$*TEST-SUITE> or

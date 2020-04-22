@@ -17,6 +17,10 @@ DESCRIPTION
 Exports
 -------
 
+The module re-exports all symbols found in a test bundle `EXPORT::DEFAULT` package.
+
+Also exports:
+
 ### `test-suite`
 
 Return the test suite which is actual for the current context. The suite is looked up either in `$*TEST-SUITE` or via `Test::Async::Hub` `top-suite` method.

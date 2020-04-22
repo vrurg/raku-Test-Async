@@ -228,6 +228,10 @@ Execute the suite here and now. Internal implementation detail.
 Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
 is added.
 
+=head2 C<abort>
+
+Results in quick suite shutdown via bypassing all remaining suite code and invoking method C<dismiss>.
+
 =head2 C<send-command(Event::Command:U \evType, |c)>
 
 Sends a command message event. The C<c> capture is passed with the event object and is used as parameters of the command
@@ -312,7 +316,13 @@ This is the finalizing method. When suite ends, it invokes this method to take c
 if not reported at suite start (i.e. number of planned tests wasn't set), and emits C<Event::DoneTesting> and
 C<Event::Terminate>.
 
-While performing these steps the method transition from C<TSFinishing> stage, to C<TSFinished>, to C<TSDismissed>.
+While performing these steps the method transition from C<TSFinishing> stage, to C<TSFinished>, and then calls method
+C<dismiss>.
+
+=head2 C<dismiss>
+
+Transition suite to C<TSDismissed> stage and emits C<Event::Terminate>. After that it awaits for the event to be handled
+by the event loop.
 
 =head2 C<measure-telemetry(&code, Capture:D \c = \())>
 

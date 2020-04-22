@@ -55,7 +55,7 @@ If C<test-flunks> is in effect then method returns its message and decreases C<$
 =head2 C<multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --> Str)>
 =head2 C<multi expected-got($expected, $got, :$gist, :$quote, *%c)>
 
-Method produces standardized I<"expected ... but got ..."> messages. 
+Method produces standardized I<"expected ... but got ..."> messages.
 
 The second candidate is used for non-string values. It stringifies them using
 L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md> C<stringify> routine and then passes over to the first candidate for formatting alongside with
@@ -99,7 +99,7 @@ The difference is that our C<subtest> could be invoked:
 =item randomly and asynchronously at the same time
 
 The asynchronous invocation means that a C<subtest> will be run in a new dedicated thread. The random invocation means
-that C<subtest> invocation is postponed until the suite code ends. Then all postponed subtests will be pulled and 
+that C<subtest> invocation is postponed until the suite code ends. Then all postponed subtests will be pulled and
 invoked in a random order.
 
 It is possible to combine both async and random modes which might add even more stress to the code tested.
@@ -125,7 +125,7 @@ would result in the C<subtest> be invoked right away, where it's declaration is 
 Similarly, if C<parallel> plan parameter is in effect, C<:instant> will overrule it so it will run right here, right
 now!
 
-Adding C<:async> named parameter too will invoke the subtest instantly and asynchronously. And this also means that 
+Adding C<:async> named parameter too will invoke the subtest instantly and asynchronously. And this also means that
 a subtest invoked this way won't be counted as a job by
 L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md>.
 In other words, we treat C<:instant> as: I<bypass any queue, just do it here and now!>
@@ -139,9 +139,9 @@ Any other named parameters passed to a C<subtest> is treated as a plan key.
 =head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>
 
 This test tool is not provided by the standard L<C<Test>|https://docs.raku.org/type/Test> framework, but in slightly different forms it is defined
-in helper modules included in 
+in helper modules included in
 L<Rakudo|https://github.com/rakudo/rakudo/blob/e5ecdc4382d2739a701be7956fad52e897936fea/t/packages/Test/Helpers.pm6#L17>
-and 
+and
 L<roast|https://github.com/Raku/roast/blob/7033b07bbbb54a301b3bfd1253e30c5e7cebdfab/packages/Test-Helpers/lib/Test/Util.pm6#L107>
 tests.
 

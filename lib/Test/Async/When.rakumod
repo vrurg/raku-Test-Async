@@ -1,85 +1,120 @@
 use v6;
 
 =begin pod
-=end pod
+=NAME
 
-use Test::Async::Decl;
-our test-bundle Test::Async::When {
-    use Test::Async::X;
+C<Test::Async::When> - add C<:when> key to plan
 
-    has Str $.when-skip-message;
+=SYNOPSIS
 
-    my class FalseMsg {
-        has Str:D $.message is required;
-        method Bool { False }
-    }
+Whole top suite:
 
-    my proto _testcond(|) {*}
-    multi _testcond(List() :$any!) {
-        my @cond-failures;
-        for |$any -> $cond {
-            my $res = _testcond(|$cond);
-            return True if $res;
-            @cond-failures.push: $res;
-        }
-        my $message = @cond-failures == 1
-                        ?? @cond-failures.head.message
-                        !! "any(" ~ @cond-failures.map( *.message ).join(", ") ~ ")";
-        FalseMsg.new(:$message)
-    }
-    multi _testcond(List() :$all!) {
-        for |$all -> $cond {
-            my $res = _testcond(|$cond);
-            return $res unless $res;
-        }
-        True
-    }
-    multi _testcond(Str(Any:D) :$env) {
-        my $env-var = $env.ends-with('_TESTING') ?? $env !! $env.uc ~ '_TESTING';
-        return FalseMsg.new(:message('$' ~ $env-var)) unless %*ENV{$env-var}:exists;
-        True
-    }
-    multi _testcond(Str(Any:D) :$module) {
-        my $mod := ::($module);
-        if $mod ~~ Failure {
-            $mod.so;
-            my $load-failed = (Nil =:= try { require ::($module) });
-            return FalseMsg.new(:message("module(" ~ $module ~ ")")) if $load-failed;
-        }
-        True
-    }
-    multi _testcond(Stringy:D $env) {
-        _testcond(:$env)
-    }
-    multi _testcond(*%cond) {
-        # We expect only one named parameter here
-        X::WhenCondition.new(:suite($*TEST-SUITE), :cond(%cond.keys)).throw
-            if %cond;
-    }
+    use Test::Async <When Base>;
+    plan :when(<release>);
 
-    method setup-from-plan(%plan) {
-        if %plan<when>:exists {
-            my $cond := self.test-requires( |(%plan<when>:delete) );
-            unless $cond {
-                unless %plan<skip-all>:exists {
-                    %plan<skip-all> = "Unfulfilled when condition: " ~ $cond.message;
-                }
-            }
-        }
-        callsame;
-    }
+Or a subtest only:
 
-    proto method test-requires(|) is test-tool(:!skippable, :!readify) {*}
-    multi method test-requires(*@env, *%cond) {
-        _testcond(:any(@env, |%cond))
+    use Test::Async <When Base>;
+    subtest "Might be skipped" => {
+        plan :when(
+                :all(
+                    :any(<release author>),
+                    :module<Optional::Module>));
+        ...
     }
 }
 
-package EXPORT::DEFAULT {
-    # for <AUTHOR AUTOMATED EXTENDED NONINTERACTIVE RELEASE> -> $kwd {
-    #     my &tsub = sub () { &testing-env($kwd) };
-    #     my $sub-name = '&testing-' ~ $kwd.lc;
-    #     &tsub.set_name($sub-name);
-    #     ::?PACKAGE.WHO{ $sub-name } = &tsub;
-    # }
+=DESCRIPTION
+
+This bundle extends C<plan> with additional parameter C<:when> which defines when the suite is to be actually ran. If
+C<when> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:
+
+=item a string value means a name of a testing mode enabled with an environment variable
+=item a pair with keys C<any> or C<all> basically means that either any of it subcondition or all of them are to be
+fulfilled
+=item a pair with C<module> key tests if a module with the given name is available
+
+By default the topmost condition means C<any>, so that the following two statements are actually check the same
+condition:
+
+    plan :when<release author>;
+    plan :when(:any<release author>);
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.3/docs/md/Test/Async/Manual.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod
+
+use Test::Async::Decl;
+unit test-bundle Test::Async::When;
+use Test::Async::X;
+
+has Str $.when-skip-message;
+
+my class FalseMsg {
+    has Str:D $.message is required;
+    method Bool { False }
+}
+
+my proto _testcond(|) {*}
+multi _testcond(List() :$any!) {
+    my @cond-failures;
+    for |$any -> $cond {
+        my $res = _testcond(|$cond);
+        return True if $res;
+        @cond-failures.push: $res;
+    }
+    my $message = @cond-failures == 1
+                    ?? @cond-failures.head.message
+                    !! "any(" ~ @cond-failures.map( *.message ).join(", ") ~ ")";
+    FalseMsg.new(:$message)
+}
+multi _testcond(List() :$all!) {
+    for |$all -> $cond {
+        my $res = _testcond(|$cond);
+        return $res unless $res;
+    }
+    True
+}
+multi _testcond(Str(Any:D) :$env) {
+    my $env-var = $env.ends-with('_TESTING') ?? $env !! $env.uc ~ '_TESTING';
+    return FalseMsg.new(:message('$' ~ $env-var)) unless %*ENV{$env-var}:exists;
+    True
+}
+multi _testcond(Str(Any:D) :$module) {
+    my $mod := ::($module);
+    if $mod ~~ Failure {
+        $mod.so;
+        my $load-failed = (Nil =:= try { require ::($module) });
+        return FalseMsg.new(:message("module(" ~ $module ~ ")")) if $load-failed;
+    }
+    True
+}
+multi _testcond(Stringy:D $env) {
+    _testcond(:$env)
+}
+multi _testcond(*%cond) {
+    # We expect only one named parameter here
+    X::WhenCondition.new(:suite($*TEST-SUITE), :cond(%cond.keys)).throw
+        if %cond;
+}
+
+method setup-from-plan(%plan) {
+    if %plan<when>:exists {
+        my $cond := self.test-requires( |(%plan<when>:delete) );
+        unless $cond {
+            unless %plan<skip-all>:exists {
+                %plan<skip-all> = "Unfulfilled when condition: " ~ $cond.message;
+            }
+        }
+    }
+    callsame;
+}
+
+proto method test-requires(|) is test-tool(:!skippable, :!readify) {*}
+multi method test-requires(*@env, *%cond) {
+    _testcond(:any(@env, |%cond))
 }

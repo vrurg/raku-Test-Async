@@ -58,13 +58,13 @@
    <tr class="toc-level-2"><td class="toc-number">5.6</td><td class="toc-text"><a href="#setup-from-plan"><code class="pod-code-inline">setup-from-plan</code></a></td></tr>
                        <tr class="toc-level-2"><td class="toc-number">5.7</td><td class="toc-text"><a href="#multi_plan(UInt:D_$tests,_*%profile)"><code class="pod-code-inline">multi plan(UInt:D $tests, *%profile)</code></a></td></tr>
  <tr class="toc-level-2"><td class="toc-number">5.8</td><td class="toc-text"><a href="#multi_plan(*%profile)"><code class="pod-code-inline">multi plan(*%profile)</code></a></td></tr>
- <tr class="toc-level-2"><td class="toc-number">5.9</td><td class="toc-text"><a href="#multi_plan(%profile)"><code class="pod-code-inline">multi plan(%profile)</code></a></td></tr>
-         <tr class="toc-level-2"><td class="toc-number">5.10</td><td class="toc-text"><a href="#done-testing()"><code class="pod-code-inline">done-testing()</code></a></td></tr>
-    <tr class="toc-level-2"><td class="toc-number">5.11</td><td class="toc-text"><a href="#create-suite(suiteType_=_self.WHAT,_*%c)"><code class="pod-code-inline">create-suite(suiteType = self.WHAT, *%c)</code></a></td></tr>
-    <tr class="toc-level-2"><td class="toc-number">5.12</td><td class="toc-text"><a href="#invoke-suite($suite,_:$async_=_False,_:$instant_=_False)"><code class="pod-code-inline">invoke-suite($suite, :$async = False, :$instant = False)</code></a></td></tr>
-                   <tr class="toc-level-2"><td class="toc-number">5.13</td><td class="toc-text"><a href="#run(:$is-async)"><code class="pod-code-inline">run(:$is-async)</code></a></td></tr>
-  <tr class="toc-level-2"><td class="toc-number">5.14</td><td class="toc-text"><a href="#throw(X::Base:U_\exType,_*%c)"><code class="pod-code-inline">throw(X::Base:U \exType, *%c)</code></a></td></tr>
-        <tr class="toc-level-2"><td class="toc-number">5.15</td><td class="toc-text"><a href="#send-command(Event::Command:U_\evType,_|c)"><code class="pod-code-inline">send-command(Event::Command:U \evType, |c)</code></a></td></tr>
+          <tr class="toc-level-2"><td class="toc-number">5.9</td><td class="toc-text"><a href="#done-testing()"><code class="pod-code-inline">done-testing()</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.10</td><td class="toc-text"><a href="#create-suite(suiteType_=_self.WHAT,_*%c)"><code class="pod-code-inline">create-suite(suiteType = self.WHAT, *%c)</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.11</td><td class="toc-text"><a href="#invoke-suite($suite,_:$async_=_False,_:$instant_=_False)"><code class="pod-code-inline">invoke-suite($suite, :$async = False, :$instant = False)</code></a></td></tr>
+                   <tr class="toc-level-2"><td class="toc-number">5.12</td><td class="toc-text"><a href="#run(:$is-async)"><code class="pod-code-inline">run(:$is-async)</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">5.13</td><td class="toc-text"><a href="#throw(X::Base:U_\exType,_*%c)"><code class="pod-code-inline">throw(X::Base:U \exType, *%c)</code></a></td></tr>
+        <tr class="toc-level-2"><td class="toc-number">5.14</td><td class="toc-text"><a href="#abort"><code class="pod-code-inline">abort</code></a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">5.15</td><td class="toc-text"><a href="#send-command(Event::Command:U_\evType,_|c)"><code class="pod-code-inline">send-command(Event::Command:U \evType, |c)</code></a></td></tr>
     <tr class="toc-level-2"><td class="toc-number">5.16</td><td class="toc-text"><a href="#multi_send-test(Event::Test:U_\evType,_Str:D_$message,_TestResult:D_$test-result,_*%c_--_Bool)&gt;"><code class="pod-code-inline">multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%c --</code> Bool)&gt;</a></td></tr>
                    <tr class="toc-level-2"><td class="toc-number">5.17</td><td class="toc-text"><a href="#send-plan(UInt:D_$planned,_:$on-start)"><code class="pod-code-inline">send-plan(UInt:D $planned, :$on-start)</code></a></td></tr>
             <tr class="toc-level-2"><td class="toc-number">5.18</td><td class="toc-text"><a href="#normalize-message(+@message_--_Seq)&gt;"><code class="pod-code-inline">normalize-message(+@message --</code> Seq)&gt;</a></td></tr>
@@ -77,8 +77,9 @@
     <tr class="toc-level-2"><td class="toc-number">5.25</td><td class="toc-text"><a href="#sync-events()"><code class="pod-code-inline">sync-events()</code></a></td></tr>
         <tr class="toc-level-2"><td class="toc-number">5.26</td><td class="toc-text"><a href="#await-jobs()"><code class="pod-code-inline">await-jobs()</code></a></td></tr>
            <tr class="toc-level-2"><td class="toc-number">5.27</td><td class="toc-text"><a href="#finish()"><code class="pod-code-inline">finish()</code></a></td></tr>
-             <tr class="toc-level-2"><td class="toc-number">5.28</td><td class="toc-text"><a href="#measure-telemetry(&amp;code,_Capture:D_\c_=_\())"><code class="pod-code-inline">measure-telemetry(&amp;code, Capture:D \c = \())</code></a></td></tr>
-  <tr class="toc-level-2"><td class="toc-number">5.29</td><td class="toc-text"><a href="#tool-factory(--_Seq)&gt;"><code class="pod-code-inline">tool-factory(--</code> Seq)&gt;</a></td></tr>
+             <tr class="toc-level-2"><td class="toc-number">5.28</td><td class="toc-text"><a href="#dismiss"><code class="pod-code-inline">dismiss</code></a></td></tr>
+      <tr class="toc-level-2"><td class="toc-number">5.29</td><td class="toc-text"><a href="#measure-telemetry(&amp;code,_Capture:D_\c_=_\())"><code class="pod-code-inline">measure-telemetry(&amp;code, Capture:D \c = \())</code></a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">5.30</td><td class="toc-text"><a href="#tool-factory(--_Seq)&gt;"><code class="pod-code-inline">tool-factory(--</code> Seq)&gt;</a></td></tr>
       <tr class="toc-level-1"><td class="toc-number">6</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
                 
 </table>
@@ -172,9 +173,7 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
     }
 }</pre>
 <h2 id="setup-from-plan"><a class="u" href="#___top" title="go to top of document"><code>setup-from-plan</code></a></h2>
-<p>Setup suite parameters based on a plan profile hash. </p>
-<p>If the profile contains planned number of tests then emits plan event via method <code>send-event</code>.</p>
-<p>If the profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.</p>
+<p>Setup suite parameters based on a plan profile hash. If called when suite stage is not <code>TSInitializing</code> then throws <code>X::PlanTooLate</code>.</p>
 <p>The keys supported by profile are:</p>
 <ul><li><p><strong>tests</strong> - planned number of tests.</p>
 </li>
@@ -189,9 +188,9 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 </ul>
 <h2 id="multi_plan(UInt:D_$tests,_*%profile)"><a class="u" href="#___top" title="go to top of document"><code>multi plan(UInt:D $tests, *%profile)</code></a></h2>
 <h2 id="multi_plan(*%profile)"><a class="u" href="#___top" title="go to top of document"><code>multi plan(*%profile)</code></a></h2>
-<h2 id="multi_plan(%profile)"><a class="u" href="#___top" title="go to top of document"><code>multi plan(%profile)</code></a></h2>
 <p>One of the only two test tools provided by the core itself. See method <code>setup-from-plan</code> for the profile keys allowed.</p>
-<p>When <code>plan</code> is invoked with positional integer parameter, this is equivalent to setting <code>tests</code> plan profile key.</p>
+<p>When <code>plan</code> is invoked with positional integer parameter, this is equivalent to setting <code>tests</code> plan profile key. In either case, if tests are planned the method reports it by emitting `Event::Plan`.</p>
+<p>If plan profile contains unknown keys then diagnostic event with a warning is emitted for each unknwon key.</p>
 <h2 id="done-testing()"><a class="u" href="#___top" title="go to top of document"><code>done-testing()</code></a></h2>
 <p>Just invokes <code>finish</code> method.</p>
 <h2 id="create-suite(suiteType_=_self.WHAT,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>create-suite(suiteType = self.WHAT, *%c)</code></a></h2>
@@ -208,6 +207,8 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 <p>Execute the suite here and now. Internal implementation detail.</p>
 <h2 id="throw(X::Base:U_\exType,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>throw(X::Base:U \exType, *%c)</code></a></h2>
 <p>Throws a <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Type/Async/X.md"><code>Type::Async::X</code></a> exception. <code>%c</code> is used as exception constructor profile to which <code>hub</code> named parameter is added.</p>
+<h2 id="abort"><a class="u" href="#___top" title="go to top of document"><code>abort</code></a></h2>
+<p>Results in quick suite shutdown via bypassing all remaining suite code and invoking method <code>dismiss</code>.</p>
 <h2 id="send-command(Event::Command:U_\evType,_|c)"><a class="u" href="#___top" title="go to top of document"><code>send-command(Event::Command:U \evType, |c)</code></a></h2>
 <p>Sends a command message event. The <code>c</code> capture is passed with the event object and is used as parameters of the command handling method.</p>
 <h2 id="multi_send-test(Event::Test:U_\evType,_Str:D_$message,_TestResult:D_$test-result,_*%c_--_Bool)>"><a class="u" href="#___top" title="go to top of document"><code>multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%c --</code> Bool)&gt;</a></h2>
@@ -255,7 +256,9 @@ subtest &quot;new feature&quot; =&gt; { ... }</pre>
 </ul>
 <h2 id="finish()"><a class="u" href="#___top" title="go to top of document"><code>finish()</code></a></h2>
 <p>This is the finalizing method. When suite ends, it invokes this method to take care of postponed jobs, report a plan if not reported at suite start (i.e. number of planned tests wasn&#39;t set), and emits <code>Event::DoneTesting</code> and <code>Event::Terminate</code>.</p>
-<p>While performing these steps the method transition from <code>TSFinishing</code> stage, to <code>TSFinished</code>, to <code>TSDismissed</code>.</p>
+<p>While performing these steps the method transition from <code>TSFinishing</code> stage, to <code>TSFinished</code>, and then calls method <code>dismiss</code>.</p>
+<h2 id="dismiss"><a class="u" href="#___top" title="go to top of document"><code>dismiss</code></a></h2>
+<p>Transition suite to <code>TSDismissed</code> stage and emits <code>Event::Terminate</code>. After that it awaits for the event to be handled by the event loop.</p>
 <h2 id="measure-telemetry(&code,_Capture:D_\c_=_\())"><a class="u" href="#___top" title="go to top of document"><code>measure-telemetry(&amp;code, Capture:D \c = \())</code></a></h2>
 <p>This method is for the future implementation and doesn&#39;t really do anything useful now.</p>
 <h2 id="tool-factory(--_Seq)>"><a class="u" href="#___top" title="go to top of document"><code>tool-factory(--</code> Seq)&gt;</a></h2>

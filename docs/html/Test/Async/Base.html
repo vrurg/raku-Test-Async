@@ -85,7 +85,7 @@ done-testing</pre>
 <p>If <code>test-flunks</code> is in effect then method returns its message and decreases <code>$.FLUNK-count</code>.</p>
 <h2 id="multi_expected-got(Str:D_$expected,_Str:D_$got,_Str_:$exp-sfx,_Str_:$got-sfx_--_Str)>"><a class="u" href="#___top" title="go to top of document"><code>multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --</code> Str)&gt;</a></h2>
 <h2 id="multi_expected-got($expected,_$got,_:$gist,_:$quote,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>multi expected-got($expected, $got, :$gist, :$quote, *%c)</code></a></h2>
-<p>Method produces standardized <em>&quot;expected ... but got ...&quot;</em> messages. </p>
+<p>Method produces standardized <em>&quot;expected ... but got ...&quot;</em> messages.</p>
 <p>The second candidate is used for non-string values. It stringifies them using <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a> <code>stringify</code> routine and then passes over to the first candidate for formatting alongside with named parameters captured in <code>%c</code>.</p>
 <p>Named parameters:</p>
 <ul><li><p><code>:$exp-sfx</code> - suffix for &quot;expected&quot;, a string which will be inserted after it.</p>

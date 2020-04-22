@@ -73,7 +73,7 @@ I<Note that C<:roles> named parameter is available since Rakudo compiler release
 Next paragraphs are explaining where this output comes from.
 
 Let's start with bundles. One is created with either C<test-bundle> or C<test-reporter> keyword provided by
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md> module. 
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md> module.
 For example:
 
     test-bundle MyBundle {
@@ -84,7 +84,7 @@ For example:
 
 In fact it is nothing else but a role declaration but with two important side effects:
 
-=item the role is backed by 
+=item the role is backed by
 L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleHOW.md>
 metaclass which subclasses
 C<Metamodel::ParametricRoleHOW>
@@ -109,8 +109,8 @@ When all bundles were loaded and registered, time comes for
 L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md>
 module to actually construct the suite class.
 
-B<Note> that this is why 
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md> 
+B<Note> that this is why
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md>
 must always be C<use>d last. No bundle registered post-suite construction would be actually used.
 
 The construction algorithm could roughly be written as:
@@ -128,11 +128,11 @@ Putting this into a diagram would give us something like this for the default ca
     .                  |             |
     . bundle roles:    Base          TAP
 
-See example script: 
+See example script:
 L<examples/multi-bundle.raku|https://github.com/vrurg/raku-Test-Async/blob/v0.0.3/examples/multi-bundle.raku>
 
 This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The
-latter is as simple as overriding parent methods. For example, 
+latter is as simple as overriding parent methods. For example,
 L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>
 module uses this technique to
 implement C<test-flunks> tool. It is doing so by intercepting test events passed in to C<send-test> method of
@@ -144,7 +144,7 @@ profile and passes on the control to the original C<send-test> to complete the t
 
 The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by
 L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/JobMgr.md> role and
-L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Job.md> 
+L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Job.md>
 class representing a single job to be done. The subsystem implements the following concepts:
 
 =item synchronous execution
@@ -232,6 +232,7 @@ but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
 L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md>,
 L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md>,
+L<C<Test::Async::When>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/When.md>,
 L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md>,
 L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md>,
 L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md>,

@@ -209,7 +209,7 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
 SEE ALSO
 ========
 
-[`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md),
+[`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Base.md), [`Test::Async::When`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/When.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Hub.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Event.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Decl.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/X.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Utils.md),
 
 AUTHOR
 ======
