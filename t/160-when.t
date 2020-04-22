@@ -41,7 +41,8 @@ subtest "Errors" => {
 }
 
 subtest "Plan 'when' condition skips" => {
-    plan 1, :when(:any(<release network>));
+    plan 2, :when(:any(<release network>));
+    flunk "must not fail because 'when' would result in skipping this flunk";
     flunk "must not fail because 'when' would result in skipping this flunk";
 }
 
