@@ -1,7 +1,7 @@
 use v6;
 
 =begin pod
-=NAME 
+=NAME
 
 C<Test::Async::Decl> - declarations for writing new bundles
 
@@ -49,7 +49,7 @@ This trait is used to declare a method in a bundle as a test tool:
 
 The method is then exported to user as C<&foo> routine. Internally the method is getting wrapped into a code which
 does necessary preparations for the tool to act as expected. See
-L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md> 
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md>
 for more details.
 
 =head1 SEE ALSO
@@ -71,26 +71,26 @@ use Test::Async::Metamodel::ReporterHOW;
 use Test::Async::TestTool;
 
 multi trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
-    my $tool-name = meth.name;
-    my $readify = True;
-    my $skippable = True;
-    given $test-tool {
-        when Str:D {
-            $tool-name = $_;
-        }
-        when Hash:D | Pair:D {
-            $tool-name = $_ with .<name>;
-            $readify = $_ with .<readify>;
-            $skippable = $_ with .<skip> // .<skippable>;
-        }
-        default {
-            $tool-name = meth.name;
+    my %p = tool-name => meth.name, :readify, :skippable;
+    if $test-tool ~~ Str:D {
+        %p<tool-name> = $test-tool;
+    }
+    elsif $test-tool ~~ Positional | Iterable | Associative {
+        my %tt = |$test-tool;
+        for %tt.keys -> $param {
+            if $param ~~ any(<name readify skip skippable>) {
+                my $map-name = $param eq 'name' ?? 'tool-name' !! ($param eq 'skip' ?? 'skippable' !! $param);
+                %p{$map-name} = %tt{$param};
+            }
+            else {
+                die "Unknown tool-name trait parameter '$param'"
+            }
         }
     }
     meth does Test::Async::TestTool;
-    meth.set-tool-name($tool-name);
-    meth.set-readify($readify);
-    meth.set-skippable($skippable);
+    meth.set-tool-name(%p<tool-name>);
+    meth.set-readify(%p<readify>);
+    meth.set-skippable(%p<skippable>);
 }
 
 sub EXPORT {
