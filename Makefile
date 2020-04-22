@@ -132,7 +132,7 @@ $(META): $(META_BUILDER) $(MAIN_MOD)
 upload: release
 	@echo "===> Uploading to CPAN"
 	@/bin/sh -c 'read -p "Do you really want to upload to CPAN? (y/N) " answer; [ $$answer = "Y" -o $$answer = "y" ]'
-	@cpan-upload -d raku --md5 $(MOD_ARCH)
+	@cpan-upload -d Perl6 --md5 $(MOD_ARCH)
 	@echo "===> Uploaded."
 
 clean:
