@@ -19,7 +19,7 @@ C<Test::Async::JobMgr> – job management role
 =DESCRIPTION
 
 This role implements job management functionality, as described in section Job Management of
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md>. 
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md>.
 
 =head2 Implementation Details
 
@@ -54,7 +54,7 @@ The total number of jobs in the job pool. Includes currently running ones.
 
 =head2 C<new-job(Callable:D \code, :$async = False)>
 
-Creates a new job instance of L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Job.md> 
+Creates a new job instance of L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Job.md>
 for C<code> parameter. C<$async> is used to mark the job as explicitly asynchronous.
 
 =head2 C<all-job-promises(--> Seq)>
@@ -146,7 +146,7 @@ method test-jobs {...}
 
 submethod TWEAK(|) {
     # Remove any finished job from active ones.
-    $!jobs-done.Supply.tap: { 
+    $!jobs-done.Supply.tap: {
         self.release-job($_);
     };
 }

@@ -59,42 +59,71 @@ my class FalseMsg {
     method Bool { False }
 }
 
+# Takes condition, inverses it if requested so by $*TESTCOND-INV, and returns either True or FalseMsg isntance
+my sub _testcond_so(Bool(Any:D) $cond, $message) {
+    ?($cond ^^ ?$*TESTCOND-NOT) || FalseMsg.new(:$message)
+}
+
+my %not-translate = :any<all>, :all<any>;
+my proto _testcond_maybe_inv(|c) {*}
+multi _testcond_maybe_inv(Pair:D $cond) {
+    my $cond_op = $cond.key;
+    my $is-not = $*TESTCOND-NOT;
+    my $msg_op = $cond_op if $cond_op ~~ 'all' | 'any' | 'none';
+    if $cond_op eq 'none' {
+        $is-not = ! $is-not;
+        $cond_op = $is-not ?? 'all' !! 'any';
+    }
+    elsif $is-not && $cond_op eq any('all', 'any') {
+        $cond_op = $cond_op eq 'all' ?? 'any' !! 'all';
+    }
+    temp $*TESTCOND-NOT = $is-not;
+    # note "== not: ", $is-not, ", op=(", $cond.key, " => ", $cond_op, ")";
+    my $*TESTCOND-NOWRAP-MSG = False;
+    my $res = _testcond(|($cond_op => $cond.value));
+    # note "WRAP? ", $*TESTCOND-NOWRAP-MSG;
+    unless $res || $*TESTCOND-NOWRAP-MSG || !$msg_op {
+        $res = FalseMsg.new(:message($msg_op ~ "(" ~ $res.message ~ ")"));
+    }
+    $res
+}
+multi _testcond_maybe_inv(Stringy:D $alias) {
+    my $env = $alias.ends-with('_TESTING') ?? $alias !! $alias.uc ~ '_TESTING';
+    _testcond(:$env)
+}
+
 my proto _testcond(|) {*}
 multi _testcond(List() :$any!) {
     my @cond-failures;
-    for |$any -> $cond {
-        my $res = _testcond(|$cond);
+    for $any.flat -> $cond {
+        my $res = _testcond_maybe_inv($cond);
         return True if $res;
         @cond-failures.push: $res;
     }
-    my $message = @cond-failures == 1
-                    ?? @cond-failures.head.message
-                    !! "any(" ~ @cond-failures.map( *.message ).join(", ") ~ ")";
-    FalseMsg.new(:$message)
+    $*TESTCOND-NOWRAP-MSG = +@cond-failures == 1;
+    FalseMsg.new(message => @cond-failures.map( *.message ).join(", "))
 }
 multi _testcond(List() :$all!) {
-    for |$all -> $cond {
-        my $res = _testcond(|$cond);
-        return $res unless $res;
+    my $res = True;
+    for $all.flat -> $cond {
+        $res = _testcond_maybe_inv($cond);
+        last unless $res;
     }
-    True
+    # note "---- all";
+    $*TESTCOND-NOWRAP-MSG = !$*TESTCOND-NOT;
+    $res
 }
 multi _testcond(Str(Any:D) :$env) {
-    my $env-var = $env.ends-with('_TESTING') ?? $env !! $env.uc ~ '_TESTING';
-    return FalseMsg.new(:message('$' ~ $env-var)) unless %*ENV{$env-var}:exists;
-    True
+    _testcond_so( %*ENV{$env}:exists, '$' ~ $env );
 }
 multi _testcond(Str(Any:D) :$module) {
     my $mod := ::($module);
+    my $load-succeed = True;
     if $mod ~~ Failure {
         $mod.so;
-        my $load-failed = (Nil =:= try { require ::($module) });
-        return FalseMsg.new(:message("module(" ~ $module ~ ")")) if $load-failed;
+        $load-succeed = ! (Nil =:= try { require ::($module) });
     }
-    True
-}
-multi _testcond(Stringy:D $env) {
-    _testcond(:$env)
+    _testcond_so($load-succeed, "module(" ~ $module ~ ")")
 }
 multi _testcond(*%cond) {
     # We expect only one named parameter here
@@ -116,5 +145,7 @@ method setup-from-plan(%plan) {
 
 proto method test-requires(|) is test-tool(:!skippable, :!readify) {*}
 multi method test-requires(*@env, *%cond) {
+    my $*TESTCOND-NOT = False;
+    my $*TESTCOND-NOWRAP-MSG = False;
     _testcond(:any(@env, |%cond))
 }
