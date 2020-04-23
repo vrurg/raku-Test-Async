@@ -561,6 +561,13 @@ method run(:$is-async) {
         }
         default { .rethrow }
     }
+    CATCH {
+        default {
+            note "===SORRY!=== Suite '" ~ $.message ~ "':\n" ~ $_ ~ "\n" ~ $_.backtrace;
+            self.dismiss;
+            return;
+        }
+    }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code();
