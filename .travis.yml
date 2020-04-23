@@ -1,0 +1,15 @@
+os:
+  - linux
+  - osx
+language: perl6
+perl6:
+  - latest
+  - '2020.02.1'
+install:
+  - rakudobrew build zef
+  - zef install --deps-only --test-depends --/test .
+  - zef install App::Prove6 --/test
+  - rakudobrew rehash
+script:
+  - prove6 -v -l t
+sudo: false
