@@ -730,9 +730,6 @@ multi method subtest(Callable:D \subtests, Str:D $message,
             }
         }
         my %ev-profile = :$caller;
-        if $child.is-TODO {
-            %ev-profile<todo> = $child.TODO-message;
-        }
         if $child.messages.elems {
             %ev-profile<child-messages> := $child.messages<>;
         }
@@ -740,7 +737,8 @@ multi method subtest(Callable:D \subtests, Str:D $message,
             self.proclaim(
                 (!$child.tests-failed && (!$child.planned || $child.planned == $child.tests-run)),
                 $message,
-                %ev-profile
+                %ev-profile,
+                |(:todo($_) with $child.is-TODO),
             )
         );
     };

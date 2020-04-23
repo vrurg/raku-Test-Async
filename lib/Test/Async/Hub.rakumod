@@ -392,8 +392,8 @@ has Str:D $.nesting-prefix = "  ";
 # Are we an asynchronous child? Transitive, i.e. event if the suit is started synchronously by a parent but the parent
 # itself is async – this becomes true.
 has Bool:D $.is-async = False;
-# If the whole suite is TODOed
-has Bool:D $.is-TODO = False;
+# If the suite is TODOed by parent then this would be set to TODO message.
+has Str $.is-TODO;
 # Run children in random order.
 has Bool $.random;
 
@@ -477,7 +477,6 @@ method setup-from-plan(%plan) {
     if %plan<todo> {
         $!TODO-message = %plan<todo>:delete;
         $!TODO-count = Inf;
-        $!is-TODO = True;
     }
     $!parallel = .so with %plan<parallel>:delete;
     $!random = .so with %plan<random>:delete;
@@ -492,7 +491,7 @@ multi method plan(*%plan) {
     CATCH {
         when X::PlanTooLate {
             self.send: Event::Diag, :message("FAILURE: " ~ .message);
-            $!tests-failed = $!planned;
+            $!tests-failed = $!planned // 1;
             if self.parent-suite {
                 self.abort;
             }
@@ -533,9 +532,9 @@ method cmd-settodo(Str:D $!TODO-message, Numeric:D $!TODO-count) { }
 
 method create-suite(::?CLASS:D: ::?CLASS:U \suiteType = self.WHAT, *%c) {
     my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random;
-    if my $TODO-message = self.take-TODO {
+    if my $is-TODO = self.take-TODO {
         # If a subtest falls under a todo then all its tests are todo
-        %profile.append: (:$TODO-message, :is-TODO);
+        %profile.append: (:$is-TODO);
     }
     suiteType.new: |%profile, |%c
 }
@@ -598,7 +597,7 @@ proto method send-test(::?CLASS:D: Event::Test, |) {*}
 multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
     my %profile;
     ++⚛$!tests-run;
-    if $tr == TRFailed && !($!TODO-count || $!is-TODO) {
+    if $tr == TRFailed && !$!TODO-count {
         ++⚛$!tests-failed;
     }
     if my $TODO-message = self.take-TODO {
@@ -637,12 +636,14 @@ method send-message(+@message) {
 }
 
 proto method proclaim(|) {*}
-multi method proclaim(Test::Async::Result:D $result, Str:D $message) {
-    self.proclaim(.cond, $message, .event-profile) given $result;
+multi method proclaim(Test::Async::Result:D $result, Str:D $message, *%c) {
+    self.proclaim(.cond, $message, .event-profile, |%c) given $result;
 }
-multi method proclaim(Bool(Mu) $cond, Str:D $message, $event-profile = \()) {
-    my (\evType, $test-result) := $cond ?? (Event::Ok, TRPassed) !! (Event::NotOk, TRFailed);
+multi method proclaim(Bool(Mu) $cond, Str:D $message, $event-profile = \(), Str :$todo) {
+    my \evType = $cond ?? Event::Ok !! Event::NotOk;
+    my $test-result = $cond || $todo ?? TRPassed !! TRFailed;
     my %profile = :origin(self), :@!messages, :$!nesting;
+    %profile<todo> = $_ with $todo;
     self.send-test(evType, $message, $test-result, |%profile, |$event-profile);
 }
 
@@ -656,8 +657,8 @@ method next-test-id {
 }
 
 method take-TODO {
-    return Nil unless $!is-TODO || $!TODO-count > 0;
-    --$!TODO-count unless $!is-TODO;
+    return Nil unless $!TODO-count > 0;
+    --$!TODO-count;
     $!TODO-message
 }
 
