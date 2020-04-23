@@ -86,7 +86,7 @@ done-testing</pre>
 <h2 id="multi_expected-got(Str:D_$expected,_Str:D_$got,_Str_:$exp-sfx,_Str_:$got-sfx_--_Str)>"><a class="u" href="#___top" title="go to top of document"><code>multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --</code> Str)&gt;</a></h2>
 <h2 id="multi_expected-got($expected,_$got,_:$gist,_:$quote,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>multi expected-got($expected, $got, :$gist, :$quote, *%c)</code></a></h2>
 <p>Method produces standardized <em>&quot;expected ... but got ...&quot;</em> messages.</p>
-<p>The second candidate is used for non-string values. It stringifies them using <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a> <code>stringify</code> routine and then passes over to the first candidate for formatting alongside with named parameters captured in <code>%c</code>.</p>
+<p>The second candidate is used for non-string values. It stringifies them using <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a> <code>stringify</code> routine and then passes over to the first candidate for formatting alongside with named parameters captured in <code>%c</code>.</p>
 <p>Named parameters:</p>
 <ul><li><p><code>:$exp-sfx</code> - suffix for &quot;expected&quot;, a string which will be inserted after it.</p>
 </li>
@@ -119,7 +119,7 @@ done-testing</pre>
 </ul>
 <p>The asynchronous invocation means that a <code>subtest</code> will be run in a new dedicated thread. The random invocation means that <code>subtest</code> invocation is postponed until the suite code ends. Then all postponed subtests will be pulled and invoked in a random order.</p>
 <p>It is possible to combine both async and random modes which might add even more stress to the code tested.</p>
-<p><em>Some more information about <code>Test::Async</code> job management can be found in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a></em></p>
+<p><em>Some more information about <code>Test::Async</code> job management can be found in <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Hub.md"><code>Test::Async::Hub</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a></em></p>
 <p>The particular mode of operation is defined either by <code>plan</code> keys <code>parallel</code> or <code>random</code>, or by subtest named parameters <code>async</code> or <code>instant</code>. The named parameters take precedence over plan parameters:</p>
 <ul><li><p>if <code>instant</code> is set then <code>plan</code>&#39;s <code>random</code> is ignored</p>
 </li>
@@ -131,7 +131,7 @@ done-testing</pre>
     ...
 }</pre>
 <p>would result in the <code>subtest</code> be invoked right away, where it&#39;s declaration is encountered, without postponing. Similarly, if <code>parallel</code> plan parameter is in effect, <code>:instant</code> will overrule it so it will run right here, right now!</p>
-<p>Adding <code>:async</code> named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won&#39;t be counted as a job by <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>. In other words, we treat <code>:instant</code> as: <em>bypass any queue, just do it here and now!</em></p>
+<p>Adding <code>:async</code> named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won&#39;t be counted as a job by <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/JobMgr.md"><code>Test::Async::JobMgr</code></a>. In other words, we treat <code>:instant</code> as: <em>bypass any queue, just do it here and now!</em></p>
 <p>Another edge case is using <code>:async</code> with <code>random</code>. In this case the subtest will be postponed. But when time to invoke subtests comes this particular one will get his dedicated thread no matter what <code>parallel</code> is set to.</p>
 <p>Any other named parameters passed to a <code>subtest</code> is treated as a plan key.</p>
 <h2 id="mutli_is-run(Str()_$code,_%params,_Str:D_$message_=_&quot;&quot;)"><a class="u" href="#___top" title="go to top of document"><code>mutli is-run(Str() $code, %params, Str:D $message = &quot;&quot;)</code></a></h2>
@@ -165,7 +165,7 @@ is-approx 5, 6, &#39;test desc three&#39;;</pre>
 <section><h1>SEE</h1>
 <p>ALSO</p>
 </section>
-<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Event.md"><code>Test::Async::Event</code></a></p>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Decl.md"><code>Test::Async::Decl</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Utils.md"><code>Test::Async::Utils</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Event.md"><code>Test::Async::Event</code></a></p>
 <section><h1>AUTHOR</h1>
 <p>Vadim Belman &lt;vrurg@cpan.org&gt;</p>
 </section>

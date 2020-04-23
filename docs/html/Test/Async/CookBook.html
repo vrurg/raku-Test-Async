@@ -80,16 +80,16 @@ method foo($param) {
 package EXPORT::DEFAULT {
     our sub foo { &quot;exported&quot; }
 }</pre>
-<p>The reason for doing so is because a user could consume the bundle using <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async.md"><code>Test::Async</code></a> parameters:</p>
+<p>The reason for doing so is because a user could consume the bundle using <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md"><code>Test::Async</code></a> parameters:</p>
 <pre class="pod-block-code">use Test::Async &lt;MyBundle Base&gt;;
 say foo;</pre>
-<p>In this case <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async.md"><code>Test::Async</code></a> not only will export all found test tool methods but it would also fetch the symbols from <code>EXPORT::DEFAULT</code> and re-export them. Apparently, the approach allows direct consuming via <code>use</code> statement to work too:</p>
+<p>In this case <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md"><code>Test::Async</code></a> not only will export all found test tool methods but it would also fetch the symbols from <code>EXPORT::DEFAULT</code> and re-export them. Apparently, the approach allows direct consuming via <code>use</code> statement to work too:</p>
 <pre class="pod-block-code">use Test::Async::MyBundle;
 use Test::Async::Base;
 use Test::Async;
 say foo;</pre>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
-<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async.md"><code>Test::Async</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a></p>
+<p><a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md"><code>Test::Async</code></a>, <a href="https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md"><code>Test::Async::Manual</code></a></p>
 
     </div>
     
