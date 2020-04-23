@@ -724,7 +724,7 @@ multi method subtest(Callable:D \subtests, Str:D $message,
     self.invoke-suite( $child, :$async, :$instant ).then: {
         CATCH {
             default {
-                note "===SORRY!=== .then block died in subtest with ", $_.^name,
+                note "===SORRY!=== .then block died in subtest with ", $_.^name, ": ", $_,
                      "called at ", $caller;
                 exit 1;
             }
