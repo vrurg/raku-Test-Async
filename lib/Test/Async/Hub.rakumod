@@ -564,6 +564,11 @@ method run(:$is-async) {
     CATCH {
         default {
             note "===SORRY!=== Suite '" ~ $.message ~ "':\n" ~ $_ ~ "\n" ~ $_.backtrace;
+            # Report failure by having at least one failed test.
+            with $!planned {
+                $!tests-failed += $!planned - $!tests-run;
+            }
+            $!tests-failed = 1 unless $!tests-failed;
             self.dismiss;
             return;
         }
