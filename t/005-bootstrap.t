@@ -11,7 +11,7 @@ plan 12;
 %*ENV<RAKUDO_ERROR_COLOR> = 0;
 
 sub wrap-code(Str:D $code) {
-    'use lib "' ~ $?FILE.IO.parent(2).add('lib') ~ '"; use Test::Async;' ~ $code ~ '; done-testing'
+    'use lib q<' ~ $?FILE.IO.parent(2).add('lib') ~ '>; use Test::Async;' ~ $code ~ '; done-testing'
 }
 
 is-run wrap-code(q<pass "pass works">),
