@@ -755,28 +755,24 @@ multi method is-run (
     Str() $code, Str:D $message = "",
     Stringy :$in, :@compiler-args, :@args, :$out?, :$err?, :$exitcode = 0
 ) {
-    my @proc-args = flat do if $*DISTRO.is-win {
-        # $*EXECUTABLE is a batch file on Windows, that goes through cmd.exe
-        # and chokes on standard quoting. We also need to remove any newlines
-        <cmd.exe  /S /C>, $*EXECUTABLE, @compiler-args, '-e',
-        ($code,  @args).subst(:g, "\n", " ")
-    }
-    else {
-        $*EXECUTABLE, @compiler-args, '-e', $code, @args
-    }
+    self.subtest: $message, :instant, {
+        my $suite = self.test-suite;
+        $suite.plan(1 + ?$out.defined + ?$err.defined);
+        my $code-file = self.temp-file('code', $code);
+        LEAVE $code-file.IO.unlink;
 
-    with run :in, :out, :err, @proc-args {
-        $in ~~ Blob ?? .in.write: $in !! .in.print: $in if $in;
-        $ = .in.close;
-        my $proc-out      = .out.slurp: :close;
-        my $proc-err      = .err.slurp: :close;
-        my $proc-exitcode = .exitcode;
+        my @proc-args = ($*EXECUTABLE, @compiler-args, $code-file, @args).flat;
 
-        my $wanted-exitcode = $exitcode // 0;
+        with run :in, :out, :err, @proc-args {
+            $in ~~ Blob ?? .in.write: $in !! .in.print: $in if $in;
+            $ = .in.close;
+            my $proc-out      = .out.slurp: :close;
+            my $proc-err      = .err.slurp: :close;
+            my $proc-exitcode = .exitcode;
 
-        self.subtest: $message, :instant, {
-            given self.test-suite {
-                .plan(1 + ?$out.defined + ?$err.defined);
+            my $wanted-exitcode = $exitcode // 0;
+
+            given $suite {
                 .cmp-ok: $proc-out,      '~~', $out,             'STDOUT' if $out.defined;
                 .cmp-ok: $proc-err,      '~~', $err,             'STDERR' if $err.defined;
                 .cmp-ok: $proc-exitcode, '~~', $wanted-exitcode, 'Exit code';

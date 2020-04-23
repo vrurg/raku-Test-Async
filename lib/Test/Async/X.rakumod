@@ -104,4 +104,18 @@ module X is export {
             "Bad 'when' condition :" ~ $.cond
         }
     }
+
+    role FileOp is Base {
+        has Str:D $.fname is required;
+        has Str:D $.details is required;
+        method action {...}
+        method message {
+            "Can't " ~ self.action ~ " file '" ~ $!fname ~ "': " ~ $!details
+        }
+    }
+
+    class FileCreate does FileOp { method action { 'create' } }
+    class FileClose  does FileOp { method action { 'close' } }
+    class FileWrite  does FileOp { method action { 'write' } }
+    class FileRed    does FileOp { method action { 'read' } }
 }

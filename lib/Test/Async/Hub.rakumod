@@ -333,6 +333,11 @@ This method is for the future implementation and doesn't really do anything usef
 Produces a sequence of C<'&tool-name' => &tool-code> pairs suitable for use with C<sub EXPORT>. Internal implementation
 detail.
 
+=head2 C<tempfile(Str:D $base-name, $data --> Str:D)>
+
+Quickly create a temporary file and populate it with $data. Returns absolute file name. Throws
+C<X::FileCreate>/C<X::FileClose> in case of errors.
+
 =head1 SEE ALSO
 
 L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.4/docs/md/Test/Async/Aggregator.md>,
@@ -718,6 +723,23 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
         self.send: Event::Telemetry, :elapsed($et-$st)
     }
     &code(|c)
+}
+
+my atomicint $temp-count = 0;
+method temp-file(Str:D $base-name, $data) {
+    my $fname = $*TMPDIR.add(
+                    ( 'test-async',
+                      $base-name,
+                      ($*PID // Empty),
+                      (++⚛$temp-count).fmt('%06d'),
+                    ).join("-")
+                ).absolute;
+    my $fh = $fname.IO.open: :w;
+    self.throw: X::FileCreate, :$fname, :details($fh.exception.message) unless $fh.so;
+    $fh.print: $data;
+    $fh.close
+        notandthen self.throw(X::FileClose, :$fname, :details(.exception.message));
+    $fname
 }
 
 # Returns a list of "&tool-name" => &code pairs
