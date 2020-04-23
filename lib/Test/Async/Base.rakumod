@@ -721,6 +721,8 @@ multi method subtest(Callable:D \subtests, Str:D $message,
     $child.plan: |%plan if %plan;
     my $rc = Promise.new;
     my $rc-vow = $rc.vow;
+    # Dynamic variables are not passed across thread boundaries. Use a local to bypass the data for $*TEST-FLUNK-SAVE
+    my $flunk-msg = self.take-FLUNK;
     self.invoke-suite( $child, :$async, :$instant ).then: {
         CATCH {
             default {
@@ -733,6 +735,8 @@ multi method subtest(Callable:D \subtests, Str:D $message,
         if $child.messages.elems {
             %ev-profile<child-messages> := $child.messages<>;
         }
+        # Signal to send-test method that this suite has been marked as flunky.
+        my $*TEST-FLUNK-SAVE = $flunk-msg;
         $rc-vow.keep(
             self.proclaim(
                 (!$child.tests-failed && (!$child.planned || $child.planned == $child.tests-run)),
@@ -834,7 +838,7 @@ multi method expected-got(+@pos where *.elems == 2, :$gist?, :$quote?, *%c) {
 
 # Wrap the default method to invert test result when test-flunks is in effect.
 multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%profile) {
-    if (my $fmsg = self.take-FLUNK).defined {
+    if (my $fmsg = $*TEST-FLUNK-SAVE // self.take-FLUNK).defined {
         my sub fail-message($reason) {
               "NOT FLUNK: $fmsg\n"
             ~ "    Cause: Test $reason"

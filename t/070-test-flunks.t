@@ -2,7 +2,7 @@ use v6;
 use Test::Async;
 use Test::Async::Event;
 
-plan 5;
+plan 7;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
 
@@ -59,6 +59,30 @@ subtest "With false-positives" => {
                 ^^ "# NOT FLUNK: will fail\n"
                 ^^ "#     Cause: Test passed"
            /);
+}
+
+subtest "With postponed subtest" => {
+    plan 2, :random;
+
+    test-flunks "postponed subtest anticipated to flunk";
+    subtest "flunking one" => {
+        plan 1;
+        flunk "here we fail...";
+    }
+
+    pass "here we don't fail";
+}
+
+subtest "With async subtest" => {
+    plan 2, :random;
+
+    test-flunks "async subtest anticipated to flunk";
+    subtest :async, "flunking one" => {
+        plan 1;
+        flunk "here we fail...";
+    }
+
+    pass "here we don't fail";
 }
 
 done-testing;
