@@ -49,7 +49,7 @@ subtest "TODO in plan" => {
 
 todo "subtest fails";
 subtest "TODO before subtest" => {
-    flunk "this would be a failure without TODO";
+    flunk "this test fails but the subtest is TODO";
 }
 
 sub test-async($count, :%subtest-plan) {
