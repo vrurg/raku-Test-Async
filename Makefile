@@ -1,4 +1,6 @@
 
+.NOTPARALLEL:
+
 SHELL = /bin/sh
 
 MAIN_MOD=lib/Test/Async.rakumod
@@ -40,8 +42,6 @@ DOC_DEST=$(shell find lib doc \( -name '*.rakumod' -o \( -name '*.rakudoc' -and 
 
 vpath %.rakumod $(dir $(PM_SRC))
 vpath %.rakudoc $(dir $(POD_SRC))
-#vpath %.md $(MD_SUBDIRS)
-#vpath %.html $(HTML_SUBDIRS)
 
 .PHONY: all html test author-test release-test is-repo-clean build depends depends-install release meta6_mod meta \
 		archive upload clean install doc md html docs_dirs doc_ver_patch version
@@ -64,9 +64,10 @@ vpath %.rakudoc $(dir $(POD_SRC))
 
 all: release
 
-doc: docs_dirs doc_ver_patch md html
+doc: docs_dirs doc_ver_patch md
 
-docs_dirs: | $(MD_SUBDIRS) $(HTML_SUBDIRS)
+#docs_dirs: | $(MD_SUBDIRS) $(HTML_SUBDIRS)
+docs_dirs: | $(MD_SUBDIRS)
 
 $(MD_SUBDIRS) $(HTML_SUBDIRS):
 	@echo "===> mkdir" $@
