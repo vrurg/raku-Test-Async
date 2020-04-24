@@ -142,7 +142,7 @@ is-run q:to/TEST-CODE/, "sequential",
        for ^$count -> $id {
            subtest "job $id" => {
                plan 1;
-               pass "dummy";
+               pass "dummy $id";
            }
        }
        pass "this will preceede subtests";
@@ -153,9 +153,9 @@ is-run q:to/TEST-CODE/, "sequential",
        :out(
             /
                 ^"1..4\nok 1 - this will preceede subtests\n"
-                ^^"  1..1\n  ok 1 - dummy\nok 2 - job " \d \n
-                ^^"  1..1\n  ok 1 - dummy\nok 3 - job " \d \n
-                ^^"  1..1\n  ok 1 - dummy\nok 4 - job " \d \n
+                ^^"  1..1\n  ok 1 - dummy " \d "\nok 2 - job " \d \n
+                ^^"  1..1\n  ok 1 - dummy " \d "\nok 3 - job " \d \n
+                ^^"  1..1\n  ok 1 - dummy " \d "\nok 4 - job " \d \n
             /
        );
 

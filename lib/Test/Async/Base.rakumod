@@ -189,6 +189,7 @@ L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/doc
 =end pod
 
 use Test::Async::Decl;
+
 unit test-bundle Test::Async::Base;
 
 use nqp;
@@ -201,6 +202,8 @@ my class Event::Cmd::SetTestFlunk is Event::Command { }
 
 has Str:D $.FLUNK-message = "";
 has Numeric:D $.FLUNK-count = 0;
+# If set then invoked when stage transitions into TSDismissed.
+has &.dismiss-callback;
 
 method take-FLUNK {
     return Nil unless $!FLUNK-count;
@@ -715,15 +718,13 @@ multi method subtest(Str:D $message, Callable:D \subtests, *%plan) is hidden-fro
 multi method subtest(Callable:D \subtests, Str:D $message,
                      Bool:D :$async = False, Bool:D :$instant = False, *%plan
 ) is hidden-from-backtrace {
-    my %profile = :code(subtests), :$message;
-    my $caller = $*TEST-CALLER;
-    my $child = self.create-suite: |%profile;
-    $child.plan: |%plan if %plan;
-    my $rc = Promise.new;
-    my $rc-vow = $rc.vow;
-    # Dynamic variables are not passed across thread boundaries. Use a local to bypass the data for $*TEST-FLUNK-SAVE
     my $flunk-msg = self.take-FLUNK;
-    self.invoke-suite( $child, :$async, :$instant ).then: {
+    # finalize-subtest is gonna be invoked from a different callstack. Preserve the dynamic it needs.
+    my $caller = $*TEST-CALLER;
+
+    my sub finalize-subtest($subtest) {
+        # Restore the context.
+        my $*TEST-CALLER = $caller;
         CATCH {
             default {
                 note "===SORRY!=== .then block died in subtest with ", $_.^name, ": ", $_,
@@ -731,22 +732,25 @@ multi method subtest(Callable:D \subtests, Str:D $message,
                 exit 1;
             }
         }
-        my %ev-profile = :$caller;
-        if $child.messages.elems {
-            %ev-profile<child-messages> := $child.messages<>;
+        my %ev-profile; # = :$caller;
+        if $subtest.messages.elems {
+            %ev-profile<child-messages> := $subtest.messages<>;
         }
         # Signal to send-test method that this suite has been marked as flunky.
         my $*TEST-FLUNK-SAVE = $flunk-msg;
-        $rc-vow.keep(
-            self.proclaim(
-                (!$child.tests-failed && (!$child.planned || $child.planned == $child.tests-run)),
-                $message,
-                %ev-profile,
-                |(:todo($_) with $child.is-TODO),
-            )
+        self.proclaim(
+            (!$subtest.tests-failed && (!$subtest.planned || $subtest.planned == $subtest.tests-run)),
+            $message,
+            %ev-profile,
+            |(:todo($_) with $subtest.is-TODO),
         );
     };
-    $rc
+
+    my %profile = :code(subtests), :$message, :dismiss-callback(&finalize-subtest);
+    my $child = self.create-suite: |%profile, :subtest-report;
+    $child.plan: |%plan if %plan;
+
+    self.invoke-suite( $child, :$async, :$instant );
 }
 
 proto method is-run(|) is test-tool {*}
@@ -873,4 +877,11 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
     }
     # say "RETURN($message):", $tr == TRPassed;
     $tr == TRPassed
+}
+
+multi method event(Event::StageTransition:D $ev) {
+    if &!dismiss-callback && $ev.to == TSDismissed {
+        &!dismiss-callback(self);
+    }
+    nextsame;
 }
