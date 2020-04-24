@@ -20,7 +20,7 @@ This class function is to ensure that test tool methods are wrapped into common 
 
   * validates if current suite stage allows test tool invokation
 
-  * tries to transition the suite into `TSInProgress` stage if tool method object has `$.readify` set (see [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/TestTool.md)
+  * tries to transition the suite into `TSInProgress` stage if tool method object has `$.readify` set (see [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/TestTool.md)
 
   * emits `Event::Skip` if tool method has its `$.skippable` set and suite's `$.skip-message` is defined.
 
@@ -31,7 +31,7 @@ Note that wrapping doesn't replace the method object itself.
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Decl.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Decl.md)
 
 AUTHOR
 ======

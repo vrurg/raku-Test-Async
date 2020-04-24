@@ -13,10 +13,10 @@ C<Test::Async::Hub> - the core of C<Test::Async> framework
 
 =head1 DESCRIPTION
 
-Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/JobMgr.md>
+Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md>
 
-See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md>
+See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md>
 for general purpose of this class.
 
 =head2 Command Execution
@@ -65,7 +65,7 @@ If suite is planned for skipping then this is the message as for C<skip-remainin
 Otherwise undefined.
 
 B<NOTE!> Any examples of code in this documentation are based on the default
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md>
 bundle.
 
 =head2 C<TODO-message>
@@ -137,19 +137,19 @@ is I<True>. The messages are submitted for reporting when the suite run ends and
 =head2 C<test-jobs>
 
 Maximus number of concurrently running jobs allowed. Note that a I<job> is anything invoked using C<start-job> method
-of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/JobMgr.md>.
+of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md>.
 
 =head2 C<stage>
 
 The current stage of suite lifecycle. See C<TestStage> enum in
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Utils.md>.
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Utils.md>.
 
 =head1 METHODS
 
 =head2 C<new>
 
 Creates a new instance of constructed C<Test::Async::Suite> class. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md>.
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md>.
 
 =head2 C<top-suite()>
 
@@ -162,7 +162,7 @@ Returns C<True> if the top suite singleton has been instantiated already.
 =head2 C<set-stage(TestStage:D $stage -> TestStage)>
 
 Transition suite state to stage C<$stage>. Throws C<X::StageTransition>
-(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
+(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
 the method also starts the event loop thread.
 
 Returns the pre-transition stage.
@@ -225,7 +225,7 @@ Execute the suite here and now. Internal implementation detail.
 
 =head2 C<throw(X::Base:U \exType, *%c)>
 
-Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
+Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
 is added.
 
 =head2 C<abort>
@@ -258,7 +258,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 
 Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each
 individual line. This is the I<normal form> of a message.
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Reporter/TAP.md>
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Reporter/TAP.md>
 expects children suite messages to come in normalized form.
 
 I<NOTE.> This form is chosen as I<normal> because TAP is a line-based protocol for which a line must end with a newline.
@@ -340,14 +340,14 @@ C<X::FileCreate>/C<X::FileClose> in case of errors.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/JobMgr.md>,
-L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Result.md>,
-L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/TestTool.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/X.md>
+L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md>,
+L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Result.md>,
+L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/TestTool.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

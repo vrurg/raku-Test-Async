@@ -6,7 +6,7 @@ modules.
 
 General test framework use information can be found in the documentation of Raku's standard
 L<Test suite|https://docs.raku.org/type/Test>.
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md> provides
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md> provides
 information about differences and additions between the standard framework and C<Test::Async>.
 
 =head1 INTRODUCTION
@@ -28,12 +28,12 @@ The particular meaning is determined by a context or some other way.
 
 A module or a role implementing a set of test tools or extending/modifying the core functionality. A bundle providing
 the default set of tools is included into the framework and implemented by
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md>.
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md>.
 
 =head3 I<Reporter>
 
 A test bundle which provides reporting capabilities. For example,
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Reporter/TAP.md>
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Reporter/TAP.md>
 implements TAP output.
 
 =head3 I<Test tool>
@@ -73,7 +73,7 @@ I<Note that C<:roles> named parameter is available since Rakudo compiler release
 Next paragraphs are explaining where this output comes from.
 
 Let's start with bundles. One is created with either C<test-bundle> or C<test-reporter> keyword provided by
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Decl.md> module.
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Decl.md> module.
 For example:
 
     test-bundle MyBundle {
@@ -85,7 +85,7 @@ For example:
 In fact it is nothing else but a role declaration but with two important side effects:
 
 =item the role is backed by
-L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Metamodel/BundleHOW.md>
+L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Metamodel/BundleHOW.md>
 metaclass which subclasses
 C<Metamodel::ParametricRoleHOW>
 =item the declaration installs C<ENTER> phaser on the compunit it is declared in which auto-registers the bundle with
@@ -106,11 +106,11 @@ Becase the framework skips loading the default bundle if there is one explicitly
 C<TAP> which is the default reporter bundle and which wouldn't be loaded if the user C<use>s an alternative.
 
 When all bundles were loaded and registered, time comes for
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md>
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md>
 module to actually construct the suite class.
 
 B<Note> that this is why
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md>
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md>
 must always be C<use>d last. No bundle registered post-suite construction would be actually used.
 
 The construction algorithm could roughly be written as:
@@ -129,22 +129,22 @@ Putting this into a diagram would give us something like this for the default ca
     . bundle roles:    Base          TAP
 
 See example script:
-L<examples/multi-bundle.raku|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/examples/multi-bundle.raku>
+L<examples/multi-bundle.raku|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/examples/multi-bundle.raku>
 
 This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The
 latter is as simple as overriding parent methods. For example,
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md>
 module uses this technique to
 implement C<test-flunks> tool. It is doing so by intercepting test events passed in to C<send-test> method of
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Hub.md>.
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Hub.md>.
 It is then inverts test's outcome if necessary and does few other adjustments to a new test event
 profile and passes on the control to the original C<send-test> to complete the task.
 
 =head2 Job Management
 
 The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/JobMgr.md> role and
-L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Job.md>
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md> role and
+L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Job.md>
 class representing a single job to be done. The subsystem implements the following concepts:
 
 =item synchronous execution
@@ -166,7 +166,7 @@ it takes the postponed queue, shuffles jobs in it and invokes them in the result
 
  C<Test::Async> framework handles concurrency using event-driven flow control. Each event is an instance of a class
  inheriting from
- L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Event.md> class. Events
+ L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Event.md> class. Events
  are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where they're read from by a dedicated thread and
  dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
  themselves, the other one is for event handling.
@@ -184,7 +184,7 @@ procedure is prone to race condition bugs. But when the responsibility of updati
 thread it greatly simplifies the task.
 
 Another advantage of the events is the ease of extending the framework functionality. Look at
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Reporter/TAP.md>,
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Reporter/TAP.md>,
 for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so
 simply by listening to C<Event::Test> kind of events. It would be as easy to implement an alternative reporter to
 get the test results be sent anywhere!
@@ -220,7 +220,7 @@ A test tool is a method with C<test-tool> trait applied. It has two properties:
 =item C<readify> which defines whether invoking the tool results in suite transition from stage I<initializing> into
 I<in progress>
 =item C<skippable> defines whether the tool can be skipped over. For example, C<ok> from
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md> is skippable;
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md> is skippable;
 but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
     test-bundle Test::Foo {
@@ -230,14 +230,14 @@ but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/CookBook.md>,
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md>,
-L<C<Test::Async::When>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/When.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Hub.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/X.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/CookBook.md>,
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md>,
+L<C<Test::Async::When>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/When.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/X.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Utils.md>,
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

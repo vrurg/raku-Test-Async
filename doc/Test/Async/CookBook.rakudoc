@@ -73,12 +73,12 @@ package defined in your bundle file:
         our sub foo { "exported" }
     }
 
-The reason for doing so is because a user could consume the bundle using L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md> parameters:
+The reason for doing so is because a user could consume the bundle using L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md> parameters:
 
     use Test::Async <MyBundle Base>;
     say foo;
 
-In this case L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md> not only will export all found test tool methods but it would also fetch the symbols from
+In this case L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md> not only will export all found test tool methods but it would also fetch the symbols from
 C<EXPORT::DEFAULT> and re-export them. Apparently, the approach allows direct consuming via C<use> statement to work
 too:
 
@@ -89,7 +89,7 @@ too:
 
 =head1 SEE ALSO
 
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async.md>,
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md>
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md>,
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md>
 
 =end pod
