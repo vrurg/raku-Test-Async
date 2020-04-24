@@ -122,7 +122,7 @@ class MyPOD-Actions {
     }
 }
 
-sub MAIN ( Str:D $pod-file, Str :o($output)? is copy, Bool :r($replace)=False ) {
+sub patch-a-doc(Str:D $pod-file, :$output? is copy, :$replace?, :$verbose?) {
     my Bool $backup = False;
     my $src = $pod-file.IO.slurp;
     my $actions = MyPOD-Actions.new;
@@ -151,5 +151,13 @@ sub MAIN ( Str:D $pod-file, Str :o($output)? is copy, Bool :r($replace)=False ) 
         else {
             say $res.made;
         }
+        say "===> Updated versions in ", $pod-file if $verbose;
     }
+}
+
+multi MAIN ( Str:D $pod-file, Str :o($output)?, Bool :r($replace) = False, Bool :v($verbose) = False ) {
+    patch-a-doc($pod-file, :$output, :$replace);
+}
+multi MAIN (+@pod-files) {
+    @pod-files.race.map: { patch-a-doc($_, :replace, :verbose) }
 }
