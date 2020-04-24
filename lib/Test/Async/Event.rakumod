@@ -17,7 +17,7 @@ C<Test::Async::Event> – collection of standard events
 
 =DESCRIPTION
 
-General information about C<Test::Async> event management can be found in 
+General information about C<Test::Async> event management can be found in
 L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Manual.md>.
 
 Events are objects of classes derived from C<Event> class. This module defines events used by the core. In general,
@@ -60,7 +60,7 @@ Base class for events carrying a text message of any kind.
 
 Is C<Event>.
 
-Base class of commanding events. 
+Base class of commanding events.
 L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Hub.md>
 handles them specially.
 
@@ -78,12 +78,25 @@ Base class for events reporting test outcomes.
 
 =item C<Int:D $.test-id>, required – test number
 =item C<Str $.todo> – message to use if test is marked as I<TODO>.
-=item C<Str $.flunks> – message to use if test is marked as anticipated failure (see C<test-flunks> in 
+=item C<Str $.flunks> – message to use if test is marked as anticipated failure (see C<test-flunks> in
 L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.5/docs/md/Test/Async/Base.md>.
-=item C<CallFrame:D $.caller>, required – position in user code where the test was called. 
+=item C<CallFrame:D $.caller>, required – position in user code where the test was called.
 =item C<@.child-messages> – messages from child suites. Each entry should be a single line ending with newline.
 =item C<@.comments> – comments for the test. Normally expected to be reported with C<diag>. Not special formatting
 requirements except for a recommendation for the last line not to end with a newline.
+
+=head2 Class <Event::StageTransition>
+
+Emitted each time suite stage is changed.
+
+=head3 Attributes
+
+=item C<$.from> – the stage before transition
+=item C<$.to> – the stage after transition
+
+=head2 Class <Event::JobsAwaited>
+
+Emitted when all pending jobs are completed.
 
 =head2 Class C<Event::Terminate>
 
@@ -217,6 +230,12 @@ class Event::Test is Event::Report {
 class Event::Terminate is Event {
     has $.completed is required;
 }
+
+class Event::StageTransition is Event {
+    has $.from is required;
+    has $.to is required;
+}
+class Event::JobsAwaited is Event { }
 
 class Event::Cmd::Plan is Event::Command {
     has Int:D $!planned is required;

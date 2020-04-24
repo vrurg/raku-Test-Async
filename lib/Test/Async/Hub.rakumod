@@ -445,6 +445,7 @@ method set-stage(TestStage:D $stage) {
         return $cur-stage if $cur-stage > $stage;
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
             self.start-event-loop if $cur-stage == TSInitializing;
+            self.send: Event::StageTransition, :from($cur-stage), :to($stage);
             return $cur-stage;
         }
     }
@@ -690,6 +691,7 @@ method await-jobs {
         }
     );
     self.throw(X::AwaitTimeout, :what('all jobs')) unless $all-done;
+    self.send: Event::JobsAwaited;
 }
 
 method finish {
