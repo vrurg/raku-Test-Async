@@ -35,20 +35,20 @@ via C<Test::Async::Hub> C<top-suite> method.
 =head3 Test Tools
 
 The module export all test tools it finds in the top suite object. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Manual.md>
 for more details.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/CookBook.md>,
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/CookBook.md>,
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Base.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
 =end pod
 
-module Test::Async:ver<0.0.6> { }
+module Test::Async:ver<0.0.7> { }
 
 our sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;

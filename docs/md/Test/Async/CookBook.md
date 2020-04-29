@@ -93,12 +93,12 @@ Sometimes it might be useful to export a symbol or two from a bundle. The best w
         our sub foo { "exported" }
     }
 
-The reason for doing so is because a user could consume the bundle using [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md) parameters:
+The reason for doing so is because a user could consume the bundle using [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async.md) parameters:
 
     use Test::Async <MyBundle Base>;
     say foo;
 
-In this case [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md) not only will export all found test tool methods but it would also fetch the symbols from `EXPORT::DEFAULT` and re-export them. Apparently, the approach allows direct consuming via `use` statement to work too:
+In this case [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async.md) not only will export all found test tool methods but it would also fetch the symbols from `EXPORT::DEFAULT` and re-export them. Apparently, the approach allows direct consuming via `use` statement to work too:
 
     use Test::Async::MyBundle;
     use Test::Async::Base;
@@ -108,5 +108,5 @@ In this case [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.
 SEE ALSO
 ========
 
-[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md), [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md)
+[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async.md), [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Manual.md)
 

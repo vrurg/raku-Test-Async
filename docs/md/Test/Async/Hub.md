@@ -13,9 +13,9 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Consumes [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Aggregator.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md)
+Consumes [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Aggregator.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/JobMgr.md)
 
-See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md) for general purpose of this class.
+See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Manual.md) for general purpose of this class.
 
 Command Execution
 -----------------
@@ -66,7 +66,7 @@ If suite is planned for skipping then this is the message as for `skip-remaining
 
 Otherwise undefined.
 
-**NOTE!** Any examples of code in this documentation are based on the default [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Base.md) bundle.
+**NOTE!** Any examples of code in this documentation are based on the default [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Base.md) bundle.
 
 `TODO-message`
 --------------
@@ -143,12 +143,12 @@ An array of message lines produced by the suite and its child suites if it is an
 `test-jobs`
 -----------
 
-Maximus number of concurrently running jobs allowed. Note that a *job* is anything invoked using `start-job` method of [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md).
+Maximus number of concurrently running jobs allowed. Note that a *job* is anything invoked using `start-job` method of [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/JobMgr.md).
 
 `stage`
 -------
 
-The current stage of suite lifecycle. See `TestStage` enum in [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Utils.md).
+The current stage of suite lifecycle. See `TestStage` enum in [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Utils.md).
 
 METHODS
 =======
@@ -156,7 +156,7 @@ METHODS
 `new`
 -----
 
-Creates a new instance of constructed `Test::Async::Suite` class. See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Manual.md).
+Creates a new instance of constructed `Test::Async::Suite` class. See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Manual.md).
 
 `top-suite()`
 -------------
@@ -171,7 +171,7 @@ Returns `True` if the top suite singleton has been instantiated already.
 `set-stage(TestStage:D $stage -` TestStage)>
 --------------------------------------------
 
-Transition suite state to stage `$stage`. Throws `X::StageTransition` ([`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/X.md)) if the transition is not possible. If transitions from `TSInitializing` to `TSInProgress` then the method also starts the event loop thread.
+Transition suite state to stage `$stage`. Throws `X::StageTransition` ([`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/X.md)) if the transition is not possible. If transitions from `TSInitializing` to `TSInProgress` then the method also starts the event loop thread.
 
 Returns the pre-transition stage.
 
@@ -234,7 +234,7 @@ Invokes a suite as a new job. The invocation method chosen depending on the suit
 
   * **`$async`** - start job asynchronously always. If `random` is in effect then job is postponed but then would start asynchronously anyway, not matter of `parallel`.
 
-  * **`$args`** – a TYPCapture which will be used to call `$suite`'s code.
+  * **`$args`** – a [`Capture`](https://docs.raku.org/type/Capture) which will be used to call `$suite`'s code.
 
 The method returns completion `Promise` of the invoked suite.
 
@@ -246,7 +246,7 @@ Execute the suite here and now. Internal implementation detail.
 `throw(X::Base:U \exType, *%c)`
 -------------------------------
 
-Throws a [`Type::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Type/Async/X.md) exception. `%c` is used as exception constructor profile to which `hub` named parameter is added.
+Throws a [`Type::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Type/Async/X.md) exception. `%c` is used as exception constructor profile to which `hub` named parameter is added.
 
 `abort`
 -------
@@ -281,7 +281,7 @@ Emits `Event::Plan` event. If `$on-start` is *True* and suite is the topmost one
 `normalize-message(+@message --` Seq)>
 --------------------------------------
 
-Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the *normal form* of a message. [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Reporter/TAP.md) expects children suite messages to come in normalized form.
+Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the *normal form* of a message. [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Reporter/TAP.md) expects children suite messages to come in normalized form.
 
 *NOTE.* This form is chosen as *normal* because TAP is a line-based protocol for which a line must end with a newline.
 
@@ -365,7 +365,7 @@ Quickly create a temporary file and populate it with $data. Returns absolute fil
 SEE ALSO
 ========
 
-[`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Aggregator.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Decl.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Event.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/JobMgr.md), [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Result.md), [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/TestTool.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/X.md)
+[`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Aggregator.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Decl.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Event.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/JobMgr.md), [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Result.md), [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/TestTool.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/X.md)
 
 AUTHOR
 ======
