@@ -36,7 +36,7 @@ Returns a profile accordingly to C<$.cond>.
 
 =head1 SEE ALSO
 
-C<test-result> routine from L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.7/docs/md/Test/Async/Utils.md>.
+C<test-result> routine from L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.8/docs/md/Test/Async/Utils.md>.
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
