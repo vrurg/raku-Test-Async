@@ -354,6 +354,7 @@ L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md
 =end pod
 
 use Test::Async::Decl;
+
 unit test-hub Test::Async::Hub;
 
 my class AbortSuite does X::Control { }
@@ -540,10 +541,10 @@ method create-suite(::?CLASS:D: ::?CLASS:U \suiteType = self.WHAT, *%c) {
     suiteType.new: |%profile, |%c
 }
 
-method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant = False) {
+method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant = False, Capture:D :$args = \()) {
     my $is-async = $async || ($!parallel && !$instant);
     my $job = self.new-job: {
-        $suite.run(:$is-async)
+        $suite.run(:$is-async, :$args)
     }, :$async;
     if $!random && $!stage == TSInProgress && !$instant {
         self.postpone: $job;
@@ -557,7 +558,7 @@ method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant 
     $suite.completed
 }
 
-method run(:$is-async) {
+method run(:$is-async, Capture:D :$args = \()) {
     # If any parent is async all its children are async too.
     CONTROL {
         when AbortSuite {
@@ -580,7 +581,7 @@ method run(:$is-async) {
     }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
-    &!code();
+    &!code(|$args);
     self.done-testing;
 }
 
