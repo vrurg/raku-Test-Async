@@ -67,7 +67,7 @@ method construct-suite(\hub-class) is raw {
     if $suite {
         return hub-class ~~ $suite-class ?? hub-class !! $suite-class;
     }
-    my $name = S/\:\:Hub$/\:\:Suit/ given hub-class.^name;
+    my $name = S/\:\:Hub$/\:\:Suite/ given hub-class.^name;
     my \suite-class = ::?CLASS.new_type(:$name);
     my \how = suite-class.HOW;
     $suite = True;
