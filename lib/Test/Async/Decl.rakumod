@@ -130,8 +130,8 @@ sub EXPORT {
         # HOW anymore.
         method set_package(|) {
             if $*TEST-RESTORE-PACKAGE {
-                # set_how cannot be called in a sink context.
-                $_ = $*LANG.set_how('role', Metamodel::ParametricRoleHOW);
+                self.set_how('role', Metamodel::ParametricRoleHOW);
+                $*TEST-RESTORE-PACKAGE := False;
             }
             nextsame
         }
