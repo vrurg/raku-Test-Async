@@ -2,7 +2,7 @@ use v6;
 use Test::Async;
 
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
-plan 11, :!parallel, :!random;
+plan 12, :!parallel, :!random;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
 my $job-count = test-suite.test-jobs;
@@ -37,6 +37,11 @@ is-run q:to/TEST-CODE/, "sequential",
                 ^^"  1..1\n  ok 1 - subtest 2-1\nok 2 - simple 2\n"
             /
        );
+
+subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
 
 # as of when this is written, isa-ok isn't implemented yet...
 ok (my $completion = subtest "dummy" => { pass }) ~~ Promise, "subtest returns a completion Promise";
