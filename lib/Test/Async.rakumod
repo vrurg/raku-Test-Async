@@ -45,17 +45,11 @@ L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs
 
 module Test::Async:ver<0.0.6> { }
 
-sub EXPORT(*@b) {
+our sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
     @bundles = (<Base>) unless @bundles;
     my $has-reporter;
-    for Test::Async::Metamodel::HubHOW.bundles -> \bundle-class {
-        if bundle-class ~~ Test::Async::Reporter {
-            $has-reporter = True;
-            last;
-        }
-    }
-    @bundles.push: 'Test::Async::Reporter::TAP' unless $has-reporter;
+    once require ::('Test::Async::Reporter');
     my @bundle_exports;
     for @bundles.grep(Str) {
         my $bundle = .index('::') ?? $_ !! 'Test::Async::' ~ $_;
@@ -64,10 +58,19 @@ sub EXPORT(*@b) {
             @bundle_exports.append: %REQUIRE_SYMBOLS<EXPORT>.WHO<DEFAULT>.WHO.pairs;
         }
     }
+    for Test::Async::Hub.HOW.bundles -> \bundle-class {
+        if bundle-class ~~ ::('Test::Async::Reporter') {
+            $has-reporter = True;
+            last;
+        }
+    }
+    unless $has-reporter {
+        require ::('Test::Async::Reporter::TAP')
+    }
     Map.new(
         |@bundle_exports,
         |Test::Async::Hub.tool-factory,
-        '&test-suite' => &Test::Async::test-suite,
+        '&test-suite' => &Test::Async::Utils::test-suite,
     )
 }
 
