@@ -67,3 +67,8 @@ sub stringify(Mu $obj is raw --> Str:D) is export {
         // ($obj.HOW.name($obj) if nqp::can($obj.HOW, 'name'))
         // '?'
 }
+
+our sub test-suite is export {
+    require ::('Test::Async::Hub');
+    ::('Test::Async::Hub').test-suite;
+}

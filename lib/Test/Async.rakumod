@@ -1,8 +1,6 @@
 use v6;
-use Test::Async::Metamodel::HubHOW;
 use Test::Async::Hub;
-use Test::Async::Reporter;
-use Test::Async::TestTool;
+use Test::Async::Utils;
 
 =begin pod
 =head1 NAME
@@ -45,12 +43,7 @@ L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs
 
 =end pod
 
-module Test::Async:ver<0.0.6> {
-    our sub test-suite {
-        once require ::('Test::Async::Hub');
-        $*TEST-SUITE // ::('Test::Async::Hub').top-suite
-    }
-}
+module Test::Async:ver<0.0.6> { }
 
 sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
