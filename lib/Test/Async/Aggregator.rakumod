@@ -17,7 +17,7 @@ C<Test::Async::Aggregator> - event collecting and processing
         }
 
         method foo {
-            ...; 
+            ...;
             self.send: Event::My, :$data;
         }
     }

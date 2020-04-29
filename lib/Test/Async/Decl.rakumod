@@ -108,24 +108,32 @@ sub EXPORT {
             :my $*PKGDECL := 'role';
             :my $*TEST-BUNDLE-TYPE;
             :my $*LINE_NO := HLL::Compiler.lineof(self.orig(), self.from(), :cache(1));
+            :my $*TEST-RESTORE-PACKAGE := True;
             <sym><.kok>
             { $*LANG.set_how('role', Test::Async::Metamodel::BundleHOW); }
             <package_def>
             <.set_braid_from(self)>
-            { # XXX Possible problem if package_def fails - not sure if role's HOW would be restored.
-              $*LANG.set_how('role', Metamodel::ParametricRoleHOW); }
         }
         token package_declarator:sym<test-reporter> {
             :my $*OUTERPACKAGE := self.package;
             :my $*PKGDECL := 'role';
             :my $*LINE_NO := HLL::Compiler.lineof(self.orig(), self.from(), :cache(1));
             :my $*TEST-BUNDLE-TYPE;
+            :my $*TEST-RESTORE-PACKAGE := True;
             <sym><.kok>
             { $*LANG.set_how('role', Test::Async::Metamodel::ReporterHOW); }
             <package_def>
             <.set_braid_from(self)>
-            { # XXX Possible problem if package_def fails - not sure if role's HOW would be restored.
-              $*LANG.set_how('role', Metamodel::ParametricRoleHOW); }
+        }
+
+        # set_package is been called right after a package is created. At this point we don't need to override role's
+        # HOW anymore.
+        method set_package(|) {
+            if $*TEST-RESTORE-PACKAGE {
+                # set_how cannot be called in a sink context.
+                $_ = $*LANG.set_how('role', Metamodel::ParametricRoleHOW);
+            }
+            nextsame
         }
     }
 
