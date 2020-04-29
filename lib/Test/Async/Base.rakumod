@@ -133,7 +133,27 @@ In other words, we treat C<:instant> as: I<bypass any queue, just do it here and
 Another edge case is using C<:async> with C<random>. In this case the subtest will be postponed. But when time to invoke
 subtests comes this particular one will get his dedicated thread no matter what C<parallel> is set to.
 
-Any other named parameters passed to a C<subtest> is treated as a plan key.
+Any other named parameters passed to a C<subtest> are treated as plan keys.
+
+Subset topic variable is set to the backing suite object. For example, this is an excerpt from I<t/060-subtest.t>:
+
+    subtest "subtest topic" => {
+        .plan: 1;
+        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+    }
+
+The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above
+example could be written as:
+
+    Test::Async::Hub.test-suite.subtest "subtest topic" => {
+        .plan: 1;
+        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+    }
+
+and this is the way it must be used in a module. See
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md>
+and L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/CookBook.md>
+for more details.
 
 =head2 C<mutli is-run(Str() $code, %params, Str:D $message = "")>
 =head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>

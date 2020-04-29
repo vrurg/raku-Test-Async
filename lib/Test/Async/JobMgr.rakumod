@@ -57,6 +57,9 @@ The total number of jobs in the job pool. Includes currently running ones.
 Creates a new job instance of L<C<Test::Async::Job>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Job.md>
 for C<code> parameter. C<$async> is used to mark the job as explicitly asynchronous.
 
+For the C<code> assigned to the newly created job C<test-suite> will return the object on which the C<new-job> method
+was invoked.
+
 =head2 C<all-job-promises(--> Seq)>
 
 Returns promises of all jobs except those not invoked yet.
@@ -95,8 +98,8 @@ Similarly to Raku's C<start> statement, this method starts a job instantly in a 
 that a job started with this method is a subject for awaiting with C<await-all-jobs> method and is auto-removed from
 the job pool when completed.
 
-Jobs started with this method are not limited with C<test-jobs> value. Neither their're accounted by C<start-job>
-method.
+Jobs started with this method are not limited with C<test-jobs> value. Neither they're taken into account by
+C<start-job> method.
 
 =head2 C<multi invoke-job(Int:D $id --> Promise)>
 =head2 C<multi invoke-job(Test::Async::Job:D $job --> Promise)>

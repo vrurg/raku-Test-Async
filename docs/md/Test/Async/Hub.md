@@ -225,8 +225,8 @@ Just invokes `finish` method.
 
 Creates a child suite. `%c` is used to pass parameters to the suite constructor method.
 
-`invoke-suite($suite, :$async = False, :$instant = False)`
-----------------------------------------------------------
+`invoke-suite($suite, :$async = False, :$instant = False, Capture:D :$args=\())`
+--------------------------------------------------------------------------------
 
 Invokes a suite as a new job. The invocation method chosen depending on the suite `parallel` and `random` attributes and this method parameters. The parameters take precedence over the attributes:
 
@@ -234,7 +234,9 @@ Invokes a suite as a new job. The invocation method chosen depending on the suit
 
   * **`$async`** - start job asynchronously always. If `random` is in effect then job is postponed but then would start asynchronously anyway, not matter of `parallel`.
 
-Method returns completion `Promise` of the invoked suite.
+  * **`$args`** – a TYPCapture which will be used to call `$suite`'s code.
+
+The method returns completion `Promise` of the invoked suite.
 
 `run(:$is-async)`
 -----------------

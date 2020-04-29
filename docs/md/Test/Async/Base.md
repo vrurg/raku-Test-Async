@@ -150,7 +150,23 @@ Adding `:async` named parameter too will invoke the subtest instantly and asynch
 
 Another edge case is using `:async` with `random`. In this case the subtest will be postponed. But when time to invoke subtests comes this particular one will get his dedicated thread no matter what `parallel` is set to.
 
-Any other named parameters passed to a `subtest` is treated as a plan key.
+Any other named parameters passed to a `subtest` are treated as plan keys.
+
+Subset topic variable is set to the backing suite object. For example, this is an excerpt from *t/060-subtest.t*:
+
+    subtest "subtest topic" => {
+        .plan: 1;
+        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+    }
+
+The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above example could be written as:
+
+    Test::Async::Hub.test-suite.subtest "subtest topic" => {
+        .plan: 1;
+        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+    }
+
+And this is the way it must be used in a module. See [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async.md) and [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/CookBook.md) for more details.
 
 `mutli is-run(Str() $code, %params, Str:D $message = "")`
 ---------------------------------------------------------

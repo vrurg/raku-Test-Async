@@ -16,6 +16,11 @@ C<Test::Async> - base module of the framework
 
 =head1 DESCRIPTION
 
+The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but
+is not recommended for a module. See
+L<C<Test::Async::CookBook>>
+for more details.
+
 =head2 Exports
 
 The module re-exports all symbols found in a test bundle C<EXPORT::DEFAULT> package.

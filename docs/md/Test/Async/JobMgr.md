@@ -67,6 +67,8 @@ The total number of jobs in the job pool. Includes currently running ones.
 
 Creates a new job instance of [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.6/docs/md/Test/Async/Job.md) for `code` parameter. `$async` is used to mark the job as explicitly asynchronous.
 
+For the `code` assigned to the newly created job `test-suite` will return the object on which the `new-job` method was invoked.
+
 `all-job-promises(--` Seq)>
 ---------------------------
 
@@ -120,7 +122,7 @@ If there are fewer running jobs than `test-jobs` then method starts the job asyn
 
 Similarly to Raku's `start` statement, this method starts a job instantly in a new thread. The difference though is that a job started with this method is a subject for awaiting with `await-all-jobs` method and is auto-removed from the job pool when completed.
 
-Jobs started with this method are not limited with `test-jobs` value. Neither their're accounted by `start-job` method.
+Jobs started with this method are not limited with `test-jobs` value. Neither they're taken into account by `start-job` method.
 
 `multi invoke-job(Int:D $id --` Promise)>
 -----------------------------------------

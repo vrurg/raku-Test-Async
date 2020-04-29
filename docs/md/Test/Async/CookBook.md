@@ -3,17 +3,41 @@
 
 Non-systematic collection of tips.
 
+Don't Use `Test::Async` In A Module
+-----------------------------------
+
+... unless you really know what you're doing.
+
+**Note** that this section is not about creating own test bundle.
+
+[`Test::Async`](`Test::Async`) itself does some backstage work when imported with `use` or `require`. A part of this work is taking a list of registered bundles, fixing it, and building a TYPMap of exports out of it. The potential problem hides behind the word *fixing* because what it means is adding [`Test::Async::Base`](`Test::Async::Base`) into the list of registered bundles if no other bundles is registered yet; and adding [`Test::Async::Reporter::TAP`](`Test::Async::Reporter::TAP`) to the list if none of the registered bundles does [`Test::Async::Reporter`](`Test::Async::Reporter`) role. Say, if there is a module `Foo` which `use`s `Test::Async`, and there is a suite with a header like this:
+
+    use Foo;
+    use MyTests;
+    use MyReporter;
+    use Test::Async;
+
+Then we will have implicitly registered `Test::Async::Base` and `Test::Async::Reporter::TAP`. While not being a problem most of the time, this could pose a risk in some unforeseen edge cases.
+
+The recommended way is to use `Test::Async::Hub` class `test-suite` method which returns the current test :
+
+    use Test::Async::Hub;
+    sub foo {
+        my $suite = Test::Async::Hub.test-suite;
+        $suite.pass: "that's the way";
+    }
+
+Another recommended way is shown in the first example of the next section.
+
 Testing A Multithreaded Application
 -----------------------------------
 
-One of the biggest reasons pushed me to implement `Test::Async` was a need to test event flow in `Vikna` toolkit. The problem with the standard `Test` framework was the need to invoke test tool from inside a separate thread or even threads causing havoc to the test output when `subtest`s are used. Similar problem could arise for any heavily threaded application where it is not always easy to get hold of the internal states without having direct access to them directly from a thread. Sure, it is technically possible to implement a communication channel which could be used to pass data into the test suit main thread, etc., etc., etc.
+One of the biggest reasons which pushed me to implement `Test::Async` was a need to test event flow in `Vikna` toolkit. The problem with the standard `Test` framework was the need to invoke test tool from inside a separate thread or even threads causing havoc to the test output when `subtest`s are used. Similar problem could arise for any heavily threaded application where it is not always easy to get hold of the internal states without having direct access to them from within of a thread. Sure, it is technically possible to implement a communication channel which could be used to pass data into the test suit main thread, etc., etc., etc.
 
 Nah, that's not how we do it! How about:
 
-    my $test-app = MyTestApp.new;
     subtest "Threaded testing" => {
-        my $suite = test-suite;
-        $test-app.set-test-suite: $suite;
+        my $test-app = MyTestApp.new( :test-suite(test-suite) );
         $test-app.test-something-threaded;
     }
 
@@ -24,35 +48,38 @@ and then somewhere in the `MyTestApp` class implementation, which is presumably 
         nextsame
     }
 
-`test-suite` attribute is the suite object implementing our subtest, which has been set with `set-test-suite` method.
+`test-suite` attribute in this example is the suite object backing our subtest.
 
-Does it look a bit over-verbose? Ok, there is another way. Our test class could start new threads using core method `start` instead of the standard Raku keyword. Here is what it might look like:
+It is also possible not to store the suite object as an attribute. Instead, one could use [`Test::Async::JobMgr`](`Test::Async::JobMgr`) method `start` to spawn new threads. This approach has two advantages: first, it preserves the suite object, on which the method has been invoked, as the one available via `test-suite`; second, it creates an awaitable job meaning that our subtest won't finish until the job is complete:
 
-    my $test-app = MyTestApp.new(:test-suite(test-suite));
-    subtest "Threaded testing" => {
-        $test-app.test-something-threaded;
-    }
-
-The code in the `MyTestApp` class can now look like this:
-
-    method new-task(&code) {
-        ...; # Whatever else should be done to start a task
-        $.test-suite.start: &code
-    }
     method test-something-threaded {
-        self.new-task: { self.testing-task }
+        for ^10 -> $i {
+            Test::Async::Hub.test-suite.start: {
+                self.bar($i)
+            }
+        }
+    }
+    method bar($i) {
+        Test::Async::Hub.test-suite.cmp-ok: $i, "<", 10, "small enough"
     }
 
-Though it now looks even more verbose than the previous example, we should remember that some kind of boilerplate code would be needed anyway and our first example still have it around. It's just nor relevant and thus not included here.
+}
 
-Back to the matter now. Eventually, this is what our `foo` method would look like now:
+All outcomes of `cmp-ok` will be reported as part of our `subtest`.
+
+This approach provides more flexibility because it makes it possible to simultaneously test different execution branches of the same object:
 
     use Test::Async;
-    ...
-    method foo($param) {
-        ok self.is-param-valid($param), "method foo got correct parameter";
-        nextsame
+    plan 1, :parallel;
+    my $test-app = MyTestApp.new;
+    subtest "Branch 1" => {
+        $test-app.test-something-threaded1;
     }
+    subtest "Branch 2" => {
+        $test-app.test-something-threaded2;
+    }
+
+When both methods `test-something-threaded<N>` are using `test-suite.start` then both subtests will report only related test tool outcomes.
 
 Export From A Bundle
 --------------------

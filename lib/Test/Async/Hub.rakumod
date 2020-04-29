@@ -208,7 +208,7 @@ Just invokes C<finish> method.
 
 Creates a child suite. C<%c> is used to pass parameters to the suite constructor method.
 
-=head2 C<invoke-suite($suite, :$async = False, :$instant = False)>
+=head2 C<invoke-suite($suite, :$async = False, :$instant = False, Capture:D :$args=\())>
 
 Invokes a suite as a new job. The invocation method chosen depending on the suite C<parallel> and C<random> attributes
 and this method parameters. The parameters take precedence over the attributes:
@@ -216,8 +216,9 @@ and this method parameters. The parameters take precedence over the attributes:
 =item B<C<$instant>> - start job instantly, ignore the value of C<random>.
 =item B<C<$async>> - start job asynchronously always. If C<random> is in effect then job is postponed but then would
 start asynchronously anyway, not matter of C<parallel>.
+=item B<C<$args>> – a TYPE<Capture> which will be used to call C<$suite>'s code.
 
-Method returns completion C<Promise> of the invoked suite.
+The method returns completion C<Promise> of the invoked suite.
 
 =head2 C<run(:$is-async)>
 

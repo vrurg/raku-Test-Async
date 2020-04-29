@@ -14,6 +14,8 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
+The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but is not recommended for a module. See [`Test::Async::CookBook`](`Test::Async::CookBook`) for more details.
+
 Exports
 -------
 
