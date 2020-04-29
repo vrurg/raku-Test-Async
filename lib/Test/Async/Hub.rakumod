@@ -748,12 +748,13 @@ method temp-file(Str:D $base-name, $data) {
 
 # Returns a list of "&tool-name" => &code pairs
 method tool-factory(--> Seq:D) {
-    self.^construct-suite.^methods
+    (self, |self.HOW.bundles)
+        .map( |*.^methods )
         .grep(Test::Async::TestTool)
         .map: -> \meth {
             my $name = meth.tool-name;
             my $meth = meth.name;
-            my &code = my sub (|c) is raw { ::?CLASS.test-suite."$meth"(|c) };
+            my &code = my sub (|c) is raw { test-suite()."$meth"(|c) };
             &code.set_name($name);
             "&" ~ $name => &code
         }
