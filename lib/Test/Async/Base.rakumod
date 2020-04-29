@@ -194,6 +194,7 @@ unit test-bundle Test::Async::Base;
 
 use nqp;
 use Test::Async::Utils;
+use Test::Async::Hub;
 
 use MONKEY-SEE-NO-EVAL;
 use Test::Async::Event;
@@ -750,7 +751,7 @@ multi method subtest(Callable:D \subtests, Str:D $message,
     my $child = self.create-suite: |%profile, :subtest-report;
     $child.plan: |%plan if %plan;
 
-    self.invoke-suite( $child, :$async, :$instant );
+    self.invoke-suite( $child, :$async, :$instant, args => \($child) );
 }
 
 proto method is-run(|) is test-tool {*}
