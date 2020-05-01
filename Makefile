@@ -106,7 +106,7 @@ depends-install:
 	@zef --deps-only install .
 
 version: doc meta clean
-	@git add . && git commit -m 'Minor: version bump'
+#	@git add . && git commit -m 'Minor: version bump'
 
 release: build is-repo-clean release-test archive
 	@echo "===> Done releasing"
