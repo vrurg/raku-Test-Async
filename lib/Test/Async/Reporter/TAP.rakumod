@@ -35,12 +35,16 @@ multi method TAP-str-from-ev(::?CLASS:D: Event::Ok:D $ev)    { self.TAP-str-from
 
 multi method TAP-str-from-ev(::?CLASS:D: Event::NotOk:D $ev) {
     my $caller = $ev.caller;
-    my $message = $ev.message;
-    my $diag =
-        self!diag-line( $message
-                            ?? "Failed test '$message'\nat $caller.file() line $caller.line()"
-                            !! "Failed test at $caller.file() line $caller.line()");
-    self.TAP-str-from-ev: $ev, 'not ok', :message-postfix("\n" ~ $diag);
+    my %profile;
+    unless $.transparent {
+        my $message = $ev.message;
+        my $diag =
+            self!diag-line( $message
+                                ?? "Failed test '$message'\nat $caller.file() line $caller.line()"
+                                !! "Failed test at $caller.file() line $caller.line()");
+        %profile<message-postfix> = "\n" ~ $diag;
+    }
+    self.TAP-str-from-ev: $ev, 'not ok', |%profile
 }
 
 multi method TAP-str-from-ev(::?CLASS:D: Event::Skip:D $ev)  {

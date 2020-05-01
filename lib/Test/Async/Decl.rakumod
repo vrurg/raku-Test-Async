@@ -71,16 +71,16 @@ use Test::Async::Metamodel::ReporterHOW;
 use Test::Async::TestTool;
 
 multi trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
-    my %p = tool-name => meth.name, :readify, :skippable;
+    my %p = tool-name => meth.name, :readify, :skippable, :wrappable;
     if $test-tool ~~ Str:D {
         %p<tool-name> = $test-tool;
     }
     elsif $test-tool ~~ Positional | Iterable | Associative {
         my %tt = |$test-tool;
+        my %aliases = :skip<skippable>, :wrap<wrappable>, :name<tool-name>;
         for %tt.keys -> $param {
-            if $param ~~ any(<name readify skip skippable>) {
-                my $map-name = $param eq 'name' ?? 'tool-name' !! ($param eq 'skip' ?? 'skippable' !! $param);
-                %p{$map-name} = %tt{$param};
+            if $param ~~ any(<name readify skip skippable wrap wrappable>) {
+                %p{%aliases{$param} // $param} = %tt{$param};
             }
             else {
                 die "Unknown tool-name trait parameter '$param'"
@@ -88,9 +88,9 @@ multi trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
         }
     }
     meth does Test::Async::TestTool;
-    meth.set-tool-name(%p<tool-name>);
-    meth.set-readify(%p<readify>);
-    meth.set-skippable(%p<skippable>);
+    for %p.keys -> $key {
+        meth."set-$key"(%p{$key});
+    }
 }
 
 sub EXPORT {

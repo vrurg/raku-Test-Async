@@ -1,13 +1,13 @@
 use v6;
 
 =begin pod
-=NAME 
+=NAME
 
 C<Test::Async::TestTool> - role consumed by test tool methods
 
 =DESCRIPTION
 
-This role is applied by C<test-tool> trait to a test tool method. 
+This role is applied by C<test-tool> trait to a test tool method.
 
 =ATTRIBUTES
 
@@ -58,7 +58,9 @@ unit role Test::Async::TestTool;
 has $.tool-name;
 has Bool:D $.readify = True;
 has Bool:D $.skippable = True;
+has Bool:D $.wrappable = True;
 
 method set-tool-name(Str:D $!tool-name)    { }
-method set-readify(Bool:D $!readify) { }
+method set-readify(Bool:D $!readify)       { }
 method set-skippable(Bool:D $!skippable)   { }
+method set-wrappable(Bool:D $!wrappable)   { }

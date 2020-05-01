@@ -64,9 +64,8 @@ module X is export {
     }
 
     class PlanTooLate is Base {
-        has $.caller = $*TEST-CALLER;
         method message {
-            "It is too late to change plan at " ~ $!caller.gist;
+            "It is too late to change plan at " ~ $.suite.tool-caller.gist;
         }
     }
 
@@ -117,5 +116,11 @@ module X is export {
     class FileCreate does FileOp { method action { 'create' } }
     class FileClose  does FileOp { method action { 'close' } }
     class FileWrite  does FileOp { method action { 'write' } }
-    class FileRed    does FileOp { method action { 'read' } }
+    class FileRead    does FileOp { method action { 'read' } }
+
+    class TransparentWithoutParent {
+        method message {
+            "Transparent attribute is set but the suite doesn't have a parent"
+        }
+    }
 }

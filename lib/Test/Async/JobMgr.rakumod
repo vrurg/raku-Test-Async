@@ -131,6 +131,8 @@ unit role Test::Async::JobMgr;
 use Test::Async::Job;
 use Test::Async::X;
 
+has $!job-mgr-initialized;
+
 has @.postponed;
 has Lock:D $!postponed-lock .= new;
 
@@ -147,9 +149,10 @@ has Lock::Async:D $!active-lock .= new;
 
 method test-jobs {...}
 
-submethod TWEAK(|) {
+method job-mgr-init {
+    return if cas($!job-mgr-initialized, Any, True);
     # Remove any finished job from active ones.
-    $!jobs-done.Supply.tap: {
+    $!jobs-done.Supply.act: {
         self.release-job($_);
     };
 }
@@ -159,6 +162,7 @@ method job-count {
 }
 
 method new-job(Callable:D $code is raw, :$async = False) {
+    self.job-mgr-init unless $!job-mgr-initialized;
     my $job = Test::Async::Job.new:
                 :$async,
                 code => {
@@ -236,7 +240,8 @@ multi method start-job(Test::Async::Job:D $job) {
         }
     }
     await $request-promise;
-    (self.start: $job).then: {
+    self.start($job).then: {
+        CATCH { default { note "Can't stop job: " ~ $_ ~ $_.backtrace; exit 255; } };
         self!stop-job($job);
     }
 }
@@ -261,6 +266,7 @@ multi method invoke-job(Int:D $id) {
 
 multi method invoke-job(Test::Async::Job:D $job) {
     ( $job.async ?? $job.start !! $job.invoke ).then: {
+        CATCH { default { note "Job done report failed: ", $_, ~$_.backtrace; exit 255 } }
         $!jobs-done.send: $job;
         .result
     }

@@ -1,11 +1,16 @@
 use v6;
-use Test::Async;
+use Test::Async <Base>;
 
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
-plan 12, :!parallel, :!random;
+plan 14, :!parallel, :!random;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
 my $job-count = test-suite.test-jobs;
+
+# Catch the simplest errors here.
+subtest "Simple" => {
+    pass "simple";
+}
 
 is-run q:to/TEST-CODE/, "basic subtest",
        plan 1;
@@ -35,6 +40,23 @@ is-run q:to/TEST-CODE/, "sequential",
             /
                 ^"1..2\n  ok 1 - subtest 1-1\n  1..1\nok 1 - simple 1\n"
                 ^^"  1..1\n  ok 1 - subtest 2-1\nok 2 - simple 2\n"
+            /
+       );
+
+is-run q:to/TEST-CODE/, "hidden subtest",
+       use Test::SubBundle;
+       use Test::Async <Base>;
+       plan 1;
+       test-hidden-subtest;
+       TEST-CODE
+       :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
+       :exitcode(1),
+       :err(''),
+       :out(
+            /
+                ^"1..1\n  1..1\n  not ok 1 - must report test-hidden-subtest CallFrame\n"
+                "  # You failed 1 test of 1\nnot ok 1 - hidden\n"
+                "# Failed test 'hidden'\n# at " .*? " line 4"
             /
        );
 

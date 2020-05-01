@@ -508,9 +508,9 @@ method !validate-matchers(%matcher) {
 method throws-like($code where Callable:D | Str:D, $ex_type, Str:D $message = "did we throws-like $ex_type.^name()?", *%matcher) is test-tool {
     self!validate-matchers(%matcher);
     # Don't guess our caller context, know it!
-    my $caller-context = $*TEST-THROWS-LIKE-CTX // CALLER::;
+    my $caller-context = $.caller-ctx // CALLER::;
     my $rc = False;
-    self.subtest: $message, :instant, {
+    self.subtest: $message, :instant, :hidden, :!async, {
         my \suite = self.test-suite;
         suite.plan: 2 + %matcher.keys.elems;
         my $msg;
@@ -561,9 +561,9 @@ method fails-like (
     $code where Callable:D | Str:D, $ex-type, Str:D $message = "did we fails-like $ex-type.^name()?", *%matcher
 ) is test-tool {
     self!validate-matchers(%matcher);
-    my $throws-like-context = $*TEST-THROWS-LIKE-CTX // CALLER::;
+    my $throws-like-context = $.caller-ctx // CALLER::;
     my $rc = False;
-    self.subtest: $message, :instant, {
+    self.subtest: $message, :instant, :hidden, :!async, {
         my \suite = self.test-suite;
         suite.plan: 2;
         CATCH { default {
@@ -574,7 +574,6 @@ method fails-like (
         }}
         my $res = $code ~~ Callable ?? $code() !! $code.EVAL;
         $rc = suite.isa-ok: $res, Failure, 'code returned a Failure';
-        my $*TEST-THROWS-LIKE-CTX = $throws-like-context;
         $rc &&= suite.throws-like:
             { $res.sink },
             $ex-type,
@@ -729,23 +728,24 @@ method bail-out(Str:D $message = "") is test-tool(:!skippable) {
     exit 255;
 }
 
-proto method subtest(|) is test-tool {*}
+proto method subtest(|) is test-tool(:!wrap) {*}
 multi method subtest(Pair:D $subtest (Str(Any:D) :key($message), :value(&code)), *%plan) is hidden-from-backtrace {
     self.subtest(&code, $message, |%plan);
 }
 multi method subtest(Str:D $message, Callable:D \subtests, *%plan) is hidden-from-backtrace {
     self.subtest(subtests, $message, |%plan)
 }
-multi method subtest(Callable:D \subtests, Str:D $message,
-                     Bool:D :$async = False, Bool:D :$instant = False, *%plan
-) is hidden-from-backtrace {
+multi method subtest( Callable:D \subtests,
+                      Str:D $message,
+                      Bool:D :$async = False,
+                      Bool:D :$instant = False,
+                      Bool:D :$hidden = False,
+                      *%plan ) is hidden-from-backtrace
+{
     my $flunk-msg = self.take-FLUNK;
-    # finalize-subtest is gonna be invoked from a different callstack. Preserve the dynamic it needs.
-    my $caller = $*TEST-CALLER;
 
     my sub finalize-subtest($subtest) {
-        # Restore the context.
-        my $*TEST-CALLER = $caller;
+        my $caller = $subtest.suite-caller;
         CATCH {
             default {
                 note "===SORRY!=== .then block died in subtest with ", $_.^name, ": ", $_,
@@ -753,7 +753,7 @@ multi method subtest(Callable:D \subtests, Str:D $message,
                 exit 1;
             }
         }
-        my %ev-profile; # = :$caller;
+        my %ev-profile = :$caller;
         if $subtest.messages.elems {
             %ev-profile<child-messages> := $subtest.messages<>;
         }
@@ -767,8 +767,22 @@ multi method subtest(Callable:D \subtests, Str:D $message,
         );
     };
 
-    my %profile = :code(subtests), :$message, :dismiss-callback(&finalize-subtest);
+    my %profile = :code(subtests),
+                  :$message,
+                  :dismiss-callback(&finalize-subtest),
+                  :transparent($hidden);
     my $child = self.create-suite: |%profile, :subtest-report;
+    self.locate-tool-caller(2) unless $hidden;
+    if self.stage >= TSFinished {
+        warn "A subtest found after done-testing at " ~ $child.tool-caller.gist;
+        return;
+    }
+    self.set-stage(TSInProgress);
+    if $.skip-message {
+        self.send-test: Event::Skip, $.skip-message, TRSkipped;
+        return True
+    }
+
     $child.plan: |%plan if %plan;
 
     self.invoke-suite( $child, :$async, :$instant, args => \($child) );
@@ -780,10 +794,9 @@ multi method is-run(Str() $code, %expected, Str:D $message = "") {
 }
 multi method is-run (
     Str() $code, Str:D $message = "",
-    Stringy :$in, :@compiler-args, :@args, :$out?, :$err?, :$exitcode = 0
+    Stringy :$in, :@compiler-args, :@args, :$out?, :$err?, :$exitcode = 0, :$async = False
 ) {
-    self.subtest: $message, :instant, {
-        my $suite = self.test-suite;
+    self.subtest: $message, :instant, :hidden, :$async, -> $suite {
         $suite.plan(1 + ?$out.defined + ?$err.defined);
         my $code-file = self.temp-file('code', $code);
         LEAVE $code-file.IO.unlink;

@@ -371,6 +371,8 @@ use Test::Async::X;
 also does Test::Async::Aggregator;
 also does Test::Async::JobMgr;
 
+my subset CALLER-CTX of Any where Stash:D | PseudoStash:D;
+
 has ::?CLASS $.parent-suite;
 
 # Message associated with this suite. Only makes sense for children.
@@ -390,6 +392,13 @@ has Numeric:D $.TODO-count = 0;
 # How far away our hub from the top one?
 has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
+# Where the last test-tool has been invoked
+has CallFrame $.tool-caller;
+# Caller frame Stash/PseudoStash
+has CALLER-CTX $.caller-ctx;
+# If true the suite will report it's parent tool-caller attribute.
+has Bool:D $.transparent = False;
+has CallFrame $.suite-caller;
 
 # Are we an asynchronous child? Transitive, i.e. event if the suit is started synchronously by a parent but the parent
 # itself is async – this becomes true.
@@ -416,6 +425,19 @@ method new(|c) {
     self === ::?CLASS
         ?? self.^construct-suite.new(|c)
         !! nextsame
+}
+
+submethod TWEAK(|) {
+    $!suite-caller = .tool-caller with $!parent-suite;
+    if $!transparent {
+        with $!parent-suite {
+            $!tool-caller = .tool-caller;
+            $!caller-ctx = .caller-ctx;
+        }
+        else {
+            self.throw: X::TransparentWithoutParent
+        }
+    }
 }
 
 my $singleton;
@@ -450,6 +472,17 @@ method set-stage(TestStage:D $stage) {
             self.send: Event::StageTransition, :from($cur-stage), :to($stage);
             return $cur-stage;
         }
+    }
+}
+
+method set-tool-caller(CallFrame:D $caller) {
+    $!tool-caller = $caller unless $!transparent;
+    $!tool-caller
+}
+
+method set-caller-ctx(CALLER-CTX $ctx) {
+    unless $!transparent {
+        $!caller-ctx = $ctx;
     }
 }
 
@@ -534,7 +567,8 @@ method cmd-message(+@message) {
 method cmd-settodo(Str:D $!TODO-message, Numeric:D $!TODO-count) { }
 
 method create-suite(::?CLASS:D: ::?CLASS:U \suiteType = self.WHAT, *%c) {
-    my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random;
+    my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random,
+                  :$!transparent;
     if my $is-TODO = self.take-TODO {
         # If a subtest falls under a todo then all its tests are todo
         %profile.append: (:$is-TODO);
@@ -607,7 +641,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
         %profile<todo> = $TODO-message;
     }
     %profile<test-id> = self.next-test-id;
-    %profile<caller> = $*TEST-CALLER;
+    %profile<caller> = $.tool-caller;
     self.send: evType, :$message, |%profile, |%c;
     $tr == TRPassed
 }
@@ -728,6 +762,19 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
         self.send: Event::Telemetry, :elapsed($et-$st)
     }
     &code(|c)
+}
+
+# Determine the caller and the context.
+# Don't make tests guessing what is our caller's context.
+method locate-tool-caller(Int:D $pre-skip) {
+    my $skip-frames = 1;
+    my $ctx = CALLER::;
+    while $skip-frames < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
+        ++$skip-frames;
+        $ctx = $ctx<CALLER>.WHO;
+    }
+    $!tool-caller = callframe($skip-frames);
+    $!caller-ctx = $ctx;
 }
 
 my atomicint $temp-count = 0;
