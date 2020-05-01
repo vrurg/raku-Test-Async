@@ -31,6 +31,11 @@ the tool method. Without C<$.skippable> reset to I<False> a line like:
 
 would result in a single skip event which is counted as a test run. Our plan will fail because of 2 missing skip events.
 
+=head2 C<Bool:D $.wrappable>
+
+Resetting this flag to I<False> would result in test tool method would be left intact by
+L<C<Test::Async::Metamodel::BundleClassHOW>>.
+
 =METHODS
 
 =head2 C<set-tool-name(Str:D $name)>
@@ -45,10 +50,14 @@ Sets C<$.readify>
 
 Sets C<$.skippable>
 
+=head2 C<set-wrappable(Bool:D $wrappable)>
+
+Sets C<$.wrappable>
+
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.8/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.8/docs/md/Test/Async/Decl.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Decl.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

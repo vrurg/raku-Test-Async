@@ -10,7 +10,7 @@ DESCRIPTION
 
 
 
-This role is applied by `test-tool` trait to a test tool method. 
+This role is applied by `test-tool` trait to a test tool method.
 
 ATTRIBUTES
 ==========
@@ -36,6 +36,11 @@ This flag indicates that this test tool could be skipped. A typical example of a
 
 would result in a single skip event which is counted as a test run. Our plan will fail because of 2 missing skip events.
 
+`Bool:D $.wrappable`
+--------------------
+
+Resetting this flag to *False* would result in test tool method would be left intact by [`Test::Async::Metamodel::BundleClassHOW`](`Test::Async::Metamodel::BundleClassHOW`).
+
 METHODS
 =======
 
@@ -56,10 +61,15 @@ Sets `$.readify`
 
 Sets `$.skippable`
 
+`set-wrappable(Bool:D $wrappable)`
+----------------------------------
+
+Sets `$.wrappable`
+
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.8/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.8/docs/md/Test/Async/Decl.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Decl.md)
 
 AUTHOR
 ======
