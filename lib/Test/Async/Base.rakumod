@@ -228,7 +228,7 @@ that tests are failing when they have to fail:
 Setting C<$count> to L<C<Inf>|https://docs.raku.org/type/Inf> is the same as using C<:remaining> named parameter and means: all remaining tests in the
 current suite are expected to flunk.
 
-=SEE ALSO
+=head1 SEE ALSO
 
 L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Manual.md>,
 L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Decl.md>,

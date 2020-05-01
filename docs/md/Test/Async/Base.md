@@ -239,10 +239,8 @@ The primary purpose is to allow testing other test tools. For example, test *t/0
 
 Setting `$count` to [`Inf`](https://docs.raku.org/type/Inf) is the same as using `:remaining` named parameter and means: all remaining tests in the current suite are expected to flunk.
 
-SEE
-===
-
-ALSO
+SEE ALSO
+========
 
 [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Decl.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Utils.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Event.md)
 
