@@ -34,7 +34,7 @@ would result in a single skip event which is counted as a test run. Our plan wil
 =head2 C<Bool:D $.wrappable>
 
 Resetting this flag to I<False> would result in test tool method would be left intact by
-L<C<Test::Async::Metamodel::BundleClassHOW>>.
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Metamodel/BundleClassHOW.md>.
 
 =METHODS
 

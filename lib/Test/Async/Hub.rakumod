@@ -108,7 +108,7 @@ If defined then this is the context in which the last test tool has been invoked
 
 A flag. If I<True> then this suite will have its C<tool-caller> and C<caller-ctx> attributes set to the same values,
 as in parent's suite object. C<subtest> implementation by
-L<C<Test::Async::Base>>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Base.md>
 uses this to implement C<:hidden> mode of operation.
 
 This attribute is propagated to child suites instantiated using C<create-suite> method.

@@ -22,7 +22,7 @@ Wrapping doesn't replace the method object itself.
 
 If test tool method object has its C<wrappable> attribute set to I<False> then wrapping doesn't take place. In this case
 the method must take care of all necessary preparations itself. See implementation of C<subtest> by
-L<C<Test::Async::Base>> for example.
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Base.md> for example.
 
 =head1 SEE ALSO
 

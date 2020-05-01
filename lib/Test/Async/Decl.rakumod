@@ -60,7 +60,7 @@ The following named parameters are accepted by the trait:
 =item C<wrappable> aka C<wrap>
 
 They correspond to same-named attributes of
-L<C<Test::Async::TestTool>>.
+L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/TestTool.md>.
 By default C<skippable>, C<readify>, and C<wrappable> are set to I<True>. Thus it rather makes sense to negate them, as
 shown in the L<#SYNOPSIS>.
 

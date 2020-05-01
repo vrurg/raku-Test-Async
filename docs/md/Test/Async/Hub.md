@@ -114,7 +114,7 @@ If defined then this is the context in which the last test tool has been invoked
 `transparent`
 -------------
 
-A flag. If *True* then this suite will have its `tool-caller` and `caller-ctx` attributes set to the same values, as in parent's suite object. `subtest` implementation by [`Test::Async::Base`](`Test::Async::Base`) uses this to implement `:hidden` mode of operation.
+A flag. If *True* then this suite will have its `tool-caller` and `caller-ctx` attributes set to the same values, as in parent's suite object. `subtest` implementation by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Base.md) uses this to implement `:hidden` mode of operation.
 
 This attribute is propagated to child suites instantiated using `create-suite` method.
 

@@ -14,7 +14,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but is not recommended for a module. See [`Test::Async::CookBook`](`Test::Async::CookBook`) for more details.
+The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but is not recommended for a module. See [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/CookBook.md) for more details.
 
 Exports
 -------

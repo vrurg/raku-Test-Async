@@ -61,7 +61,7 @@ The following named parameters are accepted by the trait:
 
   * `wrappable` aka `wrap`
 
-They correspond to same-named attributes of [`Test::Async::TestTool`](`Test::Async::TestTool`). By default `skippable`, `readify`, and `wrappable` are set to *True*. Thus it rather makes sense to negate them, as shown in the [SYNOPSIS](#SYNOPSIS).
+They correspond to same-named attributes of [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/TestTool.md). By default `skippable`, `readify`, and `wrappable` are set to *True*. Thus it rather makes sense to negate them, as shown in the [SYNOPSIS](#SYNOPSIS).
 
 SEE ALSO
 ========

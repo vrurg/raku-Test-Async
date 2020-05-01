@@ -24,7 +24,7 @@ This class purpose is to ensure that test tool methods are wrapped into common b
 
 Wrapping doesn't replace the method object itself.
 
-If test tool method object has its `wrappable` attribute set to *False* then wrapping doesn't take place. In this case the method must take care of all necessary preparations itself. See implementation of `subtest` by [`Test::Async::Base`](`Test::Async::Base`) for example.
+If test tool method object has its `wrappable` attribute set to *False* then wrapping doesn't take place. In this case the method must take care of all necessary preparations itself. See implementation of `subtest` by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.9/docs/md/Test/Async/Base.md) for example.
 
 SEE ALSO
 ========
