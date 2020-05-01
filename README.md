@@ -46,5 +46,5 @@ It is also possible to combine both *parallel* and *random* modes of operation.
 READ MORE
 =========
 
-[Test::Async::Manual](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md), [Test::Async](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md),
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](`Test::Async::CookBook`), [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.1/docs/md/Test/Async.md), [`Test::Async::Base`](`Test::Async::Base`)
 
