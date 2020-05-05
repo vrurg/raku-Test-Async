@@ -128,6 +128,8 @@ Mark all remaining tests of the current suite as *TODO*.
 
 A `subtest` could also kind of hide itself behind another test tool.
 
+`subtest` returns a [`Promise`](https://docs.raku.org/type/Promise) kept with *True* or *False* depending on `subtest` pass/flunk status.
+
 ### Invocation modes of `subtest`
 
 The asynchronous invocation means that a `subtest` will be run in a new dedicated thread. The random invocation means that `subtest` invocation is postponed until the suite code ends. Then all postponed subtests will be pulled and invoked in a random order.

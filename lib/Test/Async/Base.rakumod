@@ -100,6 +100,9 @@ what is described in L<C<Test>|https://docs.raku.org/type/Test#sub_subtest>. But
 
 A C<subtest> could also kind of hide itself behind another test tool.
 
+C<subtest> returns a L<C<Promise>|https://docs.raku.org/type/Promise> kept with I<True> or I<False> depending on
+C<subtest> pass/flunk status.
+
 =head3 Invocation modes of C<subtest>
 
 The asynchronous invocation means that a C<subtest> will be run in a new dedicated thread. The random invocation means

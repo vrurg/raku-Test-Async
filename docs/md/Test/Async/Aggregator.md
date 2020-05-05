@@ -47,6 +47,9 @@ METHODS
 
 Starts a thread where it listens for new events on the queue and dispatches them.
 
+`create-event(Event:U \evType, %profile)`
+-----------------------------------------
+
 `create-event(Event:U \evType, *%profile)`
 ------------------------------------------
 

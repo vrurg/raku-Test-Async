@@ -48,6 +48,7 @@ fulfills the vow supplied with the event object and terminates event loop C<reac
 
 Starts a thread where it listens for new events on the queue and dispatches them.
 
+=head2 C<create-event(Event:U \evType, %profile)>
 =head2 C<create-event(Event:U \evType, *%profile)>
 
 Create a new event instance from event class C<evType>. C<%profile> is used as event constructor profile. Method sets
