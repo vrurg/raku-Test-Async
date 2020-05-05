@@ -38,7 +38,7 @@ grammar MyPOD {
     }
 
     token pod-text {
-        .+? <?before <pod-link> || [^^ '=end']>
+        .+? <?before 'L<' || [^^ '=end']>
     }
 
     proto token pod-link {*}
