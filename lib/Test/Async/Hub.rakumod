@@ -783,8 +783,10 @@ method finish {
 method dismiss {
     return if $!stage == TSDismissed;
     if self.set-stage(TSDismissed) != TSDismissed {
-        self.send: Event::Terminate, :completed($!completed-vow);
-        await $!completed;
+        my $term-ev = self.create-event: Event::Terminate;
+        self.send: $term-ev;
+        await $term-ev.terminated;
+        $!completed-vow.keep((!$!planned || $!tests-run == $!planned) && !$!tests-failed);
     }
 }
 

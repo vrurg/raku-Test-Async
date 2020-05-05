@@ -228,7 +228,7 @@ class Event::Test is Event::Report {
 }
 
 class Event::Terminate is Event {
-    has $.completed is required;
+    has Promise:D $.terminated .= new;
 }
 
 class Event::StageTransition is Event {

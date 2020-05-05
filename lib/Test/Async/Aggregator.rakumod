@@ -147,7 +147,7 @@ method !dispatch-event(Event:D $ev) {
         }
     }
     with $term-event {
-        .completed.keep(True);
+        .terminated.keep(True);
         done;
     }
 }
