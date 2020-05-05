@@ -2,7 +2,7 @@ use v6;
 use Test::Async <Base>;
 
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
-plan 14, :!parallel, :!random;
+plan 15, :!parallel, :!random;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
 my $job-count = test-suite.test-jobs;
@@ -156,6 +156,32 @@ subtest "Threading in a subtest" => {
             pass "test $id";
         }
     }
+}
+
+subtest "Subtest returns" => {
+    plan 8;
+    my $sres = await subtest "passing subtest" => {
+        plan 1;
+        pass "just pass";
+    };
+    ok $sres, "successfull subtest returns a Promise kept with True";
+    $sres = await subtest "no plan but passing" => {
+        pass "pass 1";
+        pass "pass 2";
+    }
+    ok $sres, "successfull subtest with no plan still returns a Promise kept with True";
+    test-flunks;
+    $sres = await subtest "flunking subtest" => {
+        plan 1;
+        flunk "just flunk";
+    }
+    nok $sres, "flunking subtest returns a Promise kept with False";
+    test-flunks;
+    $sres = await subtest "bad plan subtest" => {
+        plan 2;
+        pass "single pass";
+    }
+    nok $sres, "bad plan subtest returns a Promise kept with False";
 }
 
 # We can't rely on the order test to determine if it was random. However low is the probability to get them ordered
