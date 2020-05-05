@@ -90,7 +90,11 @@ proto method event(Event, |) {*}
 # Drop unprocessed events.
 multi method event(Event:D $ev) { }
 
+proto method create-event(Event:U, |) {*}
 multi method create-event(Event:U \evType, %c) {
+    evType.new(:origin(self), |%c)
+}
+multi method create-event(Event:U \evType, *%c) {
     evType.new(:origin(self), |%c)
 }
 
