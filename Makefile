@@ -74,8 +74,8 @@ $(MD_SUBDIRS) $(HTML_SUBDIRS):
 	@mkdir -p $@
 
 doc_ver_patch:
-	@echo "===> Updating version in docs"
-	@./build-tools/patch-doc.raku doc/Test/Async/README.rakudoc $(DOC_SRC)
+	@echo "===> Updating documentation sources"
+	@raku ./build-tools/patch-doc.raku doc/Test/Async/README.rakudoc $(DOC_SRC)
 
 md: ./README.md $(addprefix $(MD_DIR)/,$(patsubst %.rakudoc,%.md,$(patsubst %.rakumod,%.md,$(DOC_DEST))))
 

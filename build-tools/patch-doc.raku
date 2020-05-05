@@ -38,7 +38,7 @@ grammar MyPOD {
     }
 
     token pod-text {
-        .+? <?before 'L<' || [^^ '=end']>
+        .+? <?before [[L | TYPE] '<'] || [^^ '=end']>
     }
 
     proto token pod-link {*}
@@ -104,7 +104,8 @@ class MyPOD-Actions {
         my $link-mod = $<link-module>.made;
         make 'L<C<' ~ $link-mod
              ~ '>|https://docs.raku.org/type/'
-             ~ $link-mod ~ '>'
+             ~ $link-mod ~ '>';
+        $.replaced = True;
     }
 
     method link-module($/) {
@@ -151,7 +152,7 @@ sub patch-a-doc(Str:D $pod-file, :$output? is copy, :$replace?, :$verbose?) {
         else {
             say $res.made;
         }
-        say "===> Updated versions in ", $pod-file if $verbose;
+        say "===> Updated ", $pod-file if $verbose;
     }
 }
 
