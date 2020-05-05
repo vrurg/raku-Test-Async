@@ -312,7 +312,7 @@ proto method is(|) is test-tool {*}
 multi method is(Mu $got, Mu:U $expected, $message = "") {
     my $result;
     my $got-str;
-    if $got.defined {
+    with $got {
         $result = False;
     }
     else {
@@ -334,7 +334,7 @@ multi method is(Mu $got, Mu:U $expected, $message = "") {
 multi method is(Mu $got, Mu:D $expected, $message = "") {
     my $result;
     my ($exp-str, $got-str);
-    if $got.defined {
+    with $got {
         $result = nqp::if(
                     nqp::eqaddr($expected.WHAT, Mu),
                     nqp::eqaddr($got.WHAT, Mu),
@@ -372,7 +372,7 @@ multi method is(Mu $got, Mu:D $expected, $message = "") {
 proto method isnt(|) is test-tool {*}
 multi method isnt(Mu $got, Mu:U $expected, $message = "") {
     my $result;
-    if $got.defined {
+    with $got {
         self.proclaim(True, $message);
         return;
     }
@@ -393,7 +393,7 @@ multi method isnt(Mu $got, Mu:U $expected, $message = "") {
 
 multi method isnt(Mu $got, Mu:D $expected, $message = "") {
     my $result;
-    unless $got.defined {
+    without $got {
         self.proclaim(True, $message);
         return;
     }
@@ -624,11 +624,11 @@ method is-approx-calculate(
 {
     my Bool    ($abs-tol-ok, $rel-tol-ok) = True, True;
     my Numeric ($abs-tol-got, $rel-tol-got);
-    if $abs-tol.defined {
+    with $abs-tol {
         $abs-tol-got = abs($got - $expected);
         $abs-tol-ok = $abs-tol-got <= $abs-tol;
     }
-    if $rel-tol.defined {
+    with $rel-tol {
         if max($got.abs, $expected.abs) -> $max {
             $rel-tol-got = abs($got - $expected) / $max;
             $rel-tol-ok = $rel-tol-got <= $rel-tol;
@@ -726,7 +726,7 @@ method skip(Str:D $message = "", UInt:D $count = 1) is test-tool(:!skippable) {
 }
 
 method skip-rest(Str:D $message = "") is test-tool(:!skippable) {
-    if self.planned.defined {
+    with self.planned {
         self.skip($message, self.planned);
     }
     else {
@@ -907,7 +907,7 @@ multi method expected-got(+@pos where *.elems == 2, :$gist?, :$quote?, *%c) {
 
 # Wrap the default method to invert test result when test-flunks is in effect.
 multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%profile) {
-    if (my $fmsg = $*TEST-FLUNK-SAVE // self.take-FLUNK).defined {
+    with (my $fmsg = $*TEST-FLUNK-SAVE // self.take-FLUNK) {
         my sub fail-message($reason) {
               "NOT FLUNK: $fmsg\n"
             ~ "    Cause: Test $reason"
