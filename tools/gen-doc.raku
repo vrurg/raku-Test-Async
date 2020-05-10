@@ -213,6 +213,7 @@ sub gen-doc(+@pod-files, :$base, :$output, :$force, :%into) {
             }
         }
     }
+    $wm.shutdown;
     await $wm;
 }
 
