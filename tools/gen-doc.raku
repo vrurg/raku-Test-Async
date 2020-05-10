@@ -2,6 +2,9 @@
 # use Grammar::Tracer;
 use lib 'lib';
 use Test::Async;
+use Async::Workers;
+
+my $VERBOSE = False;
 
 grammar MyPOD {
     token TOP {
@@ -123,7 +126,8 @@ class MyPOD-Actions {
     }
 }
 
-sub patch-a-doc(Str:D $pod-file, :$output? is copy, :$replace?, :$verbose?) {
+sub patch-a-doc(Str:D $pod-file, :$force? --> Str) {
+    say "===> Updating ", $pod-file if $VERBOSE;
     my Bool $backup = False;
     my $src = $pod-file.IO.slurp;
     my $actions = MyPOD-Actions.new;
@@ -131,11 +135,7 @@ sub patch-a-doc(Str:D $pod-file, :$output? is copy, :$replace?, :$verbose?) {
 
     die "Failed to parse the source" unless $res;
 
-    if $actions.replaced {
-        if !$output and $replace {
-            $backup = True;
-            $output = $pod-file;
-        }
+    if $force || $actions.replaced {
 
         if $backup {
             my $idx = 0;
@@ -146,19 +146,85 @@ sub patch-a-doc(Str:D $pod-file, :$output? is copy, :$replace?, :$verbose?) {
             $pod-file.IO.rename( $bak-file );
         }
 
-        if $output {
-            $output.IO.spurt( $res.made );
+        $pod-file.IO.spurt( $res.made );
+        say "===> Updated ", $pod-file;
+    }
+    $pod-file
+}
+
+my $mdl = Lock.new;
+sub make-dest($src is copy, $base is copy, $fmt, :$output) {
+    $mdl.protect: {
+        if $VERBOSE {
+            $src = $src.IO.absolute;
+            $base = $base.IO.absolute;
+            my @d = $*SPEC.splitdir($src.IO.relative($base))[1 ..*];
+            note "___ from $src base:$base ---> ", ~$src.IO.relative($base);
+            note ">>>> [$fmt] ", @d.join(", "), " ---> ", my $res = $*SPEC.catdir('docs', $fmt,
+            |$*SPEC.splitdir($src.IO.relative($base))[1 ..*]);
+            note "!!! $src --- ", $res.IO.extension($fmt);
         }
-        else {
-            say $res.made;
-        }
-        say "===> Updated ", $pod-file if $verbose;
+        ($output || $*SPEC.catdir('docs', $fmt, |$*SPEC.splitdir($src.IO.relative($base))[1 ..*])).IO.extension($fmt);
     }
 }
 
-multi MAIN ( Str:D $pod-file, Str :o($output)?, Bool :r($replace) = False, Bool :v($verbose) = False ) {
-    patch-a-doc($pod-file, :$output, :$replace);
+sub invoke-raku($src, $dst, $fmt) {
+    my $dfh = $dst.IO.open(:w);
+    my @cmd = ~$*EXECUTABLE, '-Ilib', '--doc=' ~ $fmt, $src;
+    say @cmd.join(" "), ' >', ~$dst if $VERBOSE;
+    my $p = run |@cmd, :out($dst.IO.open(:w));
 }
-multi MAIN (+@pod-files) {
-    @pod-files.race.map: { patch-a-doc($_, :replace, :verbose) }
+
+proto gen-fmt(Str:D, $, $, *%) {*}
+multi gen-fmt('md', $src, $base, :$output) {
+    my $md-dest = make-dest($src, $base, 'md', :$output);
+    if !$md-dest.e || $src.IO.modified > $md-dest.modified {
+        say "===> Generating ",
+            |($VERBOSE ?? $src ~ " --> " !! Empty),
+            ~$md-dest;
+        invoke-raku $src, $md-dest, 'Markdown';
+    }
+}
+multi gen-fmt('html', $src, $base, :$output) {
+    my $html-dest = make-dest($src, $base, 'html', :$output);
+    if !$html-dest.e || ($src.IO.modified > $html-dest.modified) {
+        say "===> Generating ", ~$html-dest;
+        invoke-raku $src, $html-dest, 'HTML';
+    }
+}
+
+sub gen-doc(+@pod-files, :$base, :$output, :$force, :%into) {
+    my $wm = Async::Workers.new(:max-workers($*KERNEL.cpu-cores));
+    for @pod-files -> $pod-file {
+        say "??? $pod-file" if $VERBOSE;
+        $wm.do-async: {
+            CATCH { note $_; note ~.bt; exit 1; }
+            patch-a-doc($pod-file, :$force);
+            for %into.keys -> $fmt {
+                next unless %into{$fmt};
+                $wm.do-async: {
+                    gen-fmt $fmt, $pod-file, $base, :$output;
+                    CATCH {
+                        note $_;
+                        note ~.bt;
+                        exit 1;
+                    }
+                }
+            }
+        }
+    }
+    await $wm;
+}
+
+multi MAIN (Str:D $pod-file, Str() :$base = $*CWD, Str :o(:output($output))?,
+            Bool :v(:verbose($verbose)) = False, Bool :f(:force($force)) = False,
+            Bool :$md = False, Bool :$html = False ) {
+    $VERBOSE = $verbose;
+    gen-doc($pod-file, :$output, :$base, :into{ :$md, :$html });
+}
+multi MAIN (+@pod-files, Str() :$base = $*CWD, Bool :v(:verbose($verbose)) = False, Bool :f(:force($force)) = False,
+            Bool :$md = False, Bool :$html = False) {
+    $VERBOSE = $verbose;
+    my @psorted = @pod-files.race.map( { [$_, .IO.s] } ).sort({ @^b[1] cmp @^a[1] }).map({.[0]});
+    gen-doc(@psorted, :$force, :$base, :into{ :$md, :$html });
 }

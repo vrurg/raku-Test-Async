@@ -9,10 +9,10 @@ MOD_NAME_PFX=Test-Async
 MOD_DISTRO=$(MOD_NAME_PFX)-$(MOD_VER)
 MOD_ARCH=$(MOD_DISTRO).tar.gz
 META=META6.json
-META_BUILDER=./build-tools/gen-META.raku
+META_BUILDER=./tools/gen-META.raku
 
 PROVE_CMD=prove6
-PROVE_FLAGS=-l -I ./build-tools/lib
+PROVE_FLAGS=-l -I ./tools/lib
 TEST_DIRS=t
 PROVE=$(PROVE_CMD) $(PROVE_FLAGS) $(TEST_DIRS)
 
@@ -44,27 +44,27 @@ vpath %.rakumod $(dir $(PM_SRC))
 vpath %.rakudoc $(dir $(POD_SRC))
 
 .PHONY: all html test author-test release-test is-repo-clean build depends depends-install release meta6_mod meta \
-		archive upload clean install doc md html docs_dirs doc_ver_patch version
+		archive upload clean install doc md html docs_dirs doc_gen version
 
-%.md $(addsuffix /%.md,$(MD_SUBDIRS)):: %.rakumod
-	@echo "===> Generating" $@ "of" $<
-	@raku -I lib --doc=Markdown $< >$@
-
-%.md $(addsuffix /%.md,$(MD_SUBDIRS)):: %.rakudoc
-	@echo "===> Generating" $@ "of" $<
-	@raku -I lib --doc=Markdown $< >$@
-
-%.html $(addsuffix /%.html,$(HTML_SUBDIRS)):: %.rakumod
-	@echo "===> Generating" $@ "of" $<
-	@raku -I lib --doc=HTML $< >$@
-
-%.html $(addsuffix /%.html,$(HTML_SUBDIRS)):: %.rakudoc
-	@echo "===> Generating" $@ "of" $<
-	@raku -I lib --doc=HTML $< >$@
+#%.md $(addsuffix /%.md,$(MD_SUBDIRS)):: %.rakumod
+#	@echo "===> Generating" $@ "of" $<
+#	@raku -I lib --doc=Markdown $< >$@
+#
+#%.md $(addsuffix /%.md,$(MD_SUBDIRS)):: %.rakudoc
+#	@echo "===> Generating" $@ "of" $<
+#	@raku -I lib --doc=Markdown $< >$@
+#
+#%.html $(addsuffix /%.html,$(HTML_SUBDIRS)):: %.rakumod
+#	@echo "===> Generating" $@ "of" $<
+#	@raku -I lib --doc=HTML $< >$@
+#
+#%.html $(addsuffix /%.html,$(HTML_SUBDIRS)):: %.rakudoc
+#	@echo "===> Generating" $@ "of" $<
+#	@raku -I lib --doc=HTML $< >$@
 
 all: release
 
-doc: docs_dirs doc_ver_patch md
+doc: docs_dirs doc_gen
 
 #docs_dirs: | $(MD_SUBDIRS) $(HTML_SUBDIRS)
 docs_dirs: | $(MD_SUBDIRS)
@@ -73,13 +73,14 @@ $(MD_SUBDIRS) $(HTML_SUBDIRS):
 	@echo "===> mkdir" $@
 	@mkdir -p $@
 
-doc_ver_patch:
+doc_gen:
 	@echo "===> Updating documentation sources"
-	@raku ./build-tools/patch-doc.raku doc/Test/Async/README.rakudoc $(DOC_SRC)
+	@raku ./tools/gen-doc.raku -md $(DOC_SRC)
+	@raku ./tools/gen-doc.raku -md -o=./README.md doc/Test/Async/README.rakudoc
 
-md: ./README.md $(addprefix $(MD_DIR)/,$(patsubst %.rakudoc,%.md,$(patsubst %.rakumod,%.md,$(DOC_DEST))))
+#md: ./README.md $(addprefix $(MD_DIR)/,$(patsubst %.rakudoc,%.md,$(patsubst %.rakumod,%.md,$(DOC_DEST))))
 
-html: $(addprefix $(HTML_DIR)/,$(patsubst %.rakudoc,%.html,$(patsubst %.rakumod,%.html,$(DOC_DEST))))
+#html: $(addprefix $(HTML_DIR)/,$(patsubst %.rakudoc,%.html,$(patsubst %.rakumod,%.html,$(DOC_DEST))))
 
 test:
 	@echo "===> Testing"
