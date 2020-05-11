@@ -33,7 +33,7 @@ Here is the key features provided:
 
   * support of threaded user code
 
-The SYNOPSYS section provides an example where two subtests would be started in parallel, each in its own thread. This allows to achieve two goals: speed up big test suits by splitting them in smaller chunks; and testing testing for possible concurrency problems in tested code.
+The SYNOPSYS section provides an example where two subtests would be started in parallel, each in its own thread. This allows to achieve two goals: speed up big test suits by splitting them in smaller chunks; and testing for possible concurrency problems in tested code.
 
 With
 

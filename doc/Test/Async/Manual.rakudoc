@@ -49,9 +49,9 @@ single topmost suite representing the main test compunit. Child suites are subje
 A typical workflow consist of the following steps:
 
 =item a test suite is created
-=item it's body is executed. Any invoked test tool results in one or couple events sent
+=item its body is executed. Any invoked test tool results in one or couple events sent
 =item events are taken care of by a reporter which presents a user with meaningful representation of testing outcomes
-=item if a child suite created it is either invoked instantly or postponed for later depending on it's parent suite
+=item if a child suite created it is either invoked instantly or postponed for later depending on its parent suite
 status
 =item when suite is finished `done-testing` is invoked either implicitly or explicitly
 
@@ -191,7 +191,7 @@ get the test results be sent anywhere!
 
 =head2 Suite Plan And Lifecycle
 
-Suite has a number of parameters affecting it's execution. Those are:
+Suite has a number of parameters affecting its execution. Those are:
 
 =item number of tests planned
 =item do child suites are invoked in parallel?
