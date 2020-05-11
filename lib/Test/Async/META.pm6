@@ -1,13 +1,9 @@
-#!/usr/bin/env raku
-
-use lib <lib>;
+unit module Test::Async::META;
 use META6;
-use Test::Async;
 
-my $m = META6.new(
+our sub META6 {
     name           => 'Test::Async',
     description    => 'Thread-safe testing framework',
-    version        => Test::Async.^ver,
     perl-version   => Version.new('6.d'),
     depends        => [],
     # test-depends   => <Test::META>,
@@ -15,10 +11,10 @@ my $m = META6.new(
     tags           => <TESTING ASYNC>,
     authors        => ['Vadim Belman <vrurg@cpan.org>'],
     auth           => 'github:vrurg',
-    source-url     => 'git://github.com/vrurg/raku-Test-Async.git',
+    source-url     => 'https://github.com/vrurg/raku-Test-Async.git',
     support        => META6::Support.new(
         source          => 'https://github.com/vrurg/raku-Test-Async.git',
-    ),
+        ),
     provides => {
         'Test::Async'                            => 'lib/Test/Async.rakumod',
         'Test::Async::Aggregator'                => 'lib/Test/Async/Aggregator.rakumod',
@@ -42,10 +38,4 @@ my $m = META6.new(
     },
     license        => 'Artistic-2.0',
     production     => True,
-);
-
-print $m.to-json;
-
-#my $m = META6.new(file => './META6.json');
-#$m<version description> = v0.0.2, 'Work with Perl 6 META files even better';
-#spurt('./META6.json', $m.to-json);
+}
