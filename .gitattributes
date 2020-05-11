@@ -1,2 +1,6 @@
 lib/Test/Async/META.pm6 export-ignore
+.circleci/* export-ignore
+build-tools/* export-ignore
 Makefile export-ignore
+.travis.yml export-ignore
+.gitignore export-ignore
