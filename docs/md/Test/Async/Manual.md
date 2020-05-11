@@ -44,11 +44,11 @@ A typical workflow consist of the following steps:
 
   * a test suite is created
 
-  * it's body is executed. Any invoked test tool results in one or couple events sent
+  * its body is executed. Any invoked test tool results in one or couple events sent
 
   * events are taken care of by a reporter which presents a user with meaningful representation of testing outcomes
 
-  * if a child suite created it is either invoked instantly or postponed for later depending on it's parent suite status
+  * if a child suite created it is either invoked instantly or postponed for later depending on its parent suite status
 
   * when suite is finished `done-testing` is invoked either implicitly or explicitly
 
@@ -164,7 +164,7 @@ Another advantage of the events is the ease of extending the framework functiona
 Suite Plan And Lifecycle
 ------------------------
 
-Suite has a number of parameters affecting it's execution. Those are:
+Suite has a number of parameters affecting its execution. Those are:
 
   * number of tests planned
 
