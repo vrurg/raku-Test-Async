@@ -782,7 +782,7 @@ multi method subtest( Callable:D \subtests,
         my $caller = $subtest.suite-caller;
         CATCH {
             default {
-                note "===SORRY!=== .then block died in subtest with ", $_.^name, ": ", $_,
+                note "===SORRY!=== subtest(", $subtest.message, ") finalization died with ", $_.^name, ": ", $_,
                      "called at ", $caller;
                 exit 1;
             }
