@@ -805,8 +805,8 @@ multi method subtest( Callable:D \subtests,
                   :$message,
                   :dismiss-callback(&finalize-subtest),
                   :transparent($hidden);
-    my $child = self.create-suite: |%profile, :subtest-report;
     self.locate-tool-caller(2) unless $hidden;
+    my $child = self.create-suite: |%profile, :subtest-report;
     if self.stage >= TSFinished {
         warn "A subtest found after done-testing at " ~ $child.tool-caller.gist;
         return;
