@@ -18,7 +18,7 @@ C<Test::Async::Event> – collection of standard events
 =DESCRIPTION
 
 General information about C<Test::Async> event management can be found in
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Manual.md>.
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Manual.md>.
 
 Events are objects of classes derived from C<Event> class. This module defines events used by the core. In general,
 all event classes can be conventionally split into the following groups:
@@ -61,7 +61,7 @@ Base class for events carrying a text message of any kind.
 Is C<Event>.
 
 Base class of commanding events.
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Hub.md>
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Hub.md>
 handles them specially.
 
 =head3 Attributes
@@ -79,7 +79,7 @@ Base class for events reporting test outcomes.
 =item C<Int:D $.test-id>, required – test number
 =item C<Str $.todo> – message to use if test is marked as I<TODO>.
 =item C<Str $.flunks> – message to use if test is marked as anticipated failure (see C<test-flunks> in
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Base.md>.
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Base.md>.
 =item C<CallFrame:D $.caller>, required – position in user code where the test was called.
 =item C<@.child-messages> – messages from child suites. Each entry should be a single line ending with newline.
 =item C<@.comments> – comments for the test. Normally expected to be reported with C<diag>. Not special formatting
@@ -103,7 +103,7 @@ Emitted when all pending jobs are completed.
 Is C<Event>.
 
 This is the only kind of event which
-L<C<Term::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Term/Async/Aggregator.md>
+L<C<Term::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Term/Async/Aggregator.md>
 role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately.
 Then it fulfills event's promise.
 
@@ -133,7 +133,7 @@ Plan reporting event. Emitted when a suite gets to know the number of tests to b
 
 Is C<Event::Report>.
 
-Carries a diagnostics message. See C<diag> in L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Base.md>.
+Carries a diagnostics message. See C<diag> in L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Base.md>.
 
 =head2 Class C<Event::Ok>
 
@@ -167,14 +167,14 @@ Emitted when test suite is about to bail out.
 
 =head2 Command event classes C<Event::Cmd::*>
 
-A bundle of events used internally for commands. See L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Hub.md> and possibly other modules. The set of
+A bundle of events used internally for commands. See L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Hub.md> and possibly other modules. The set of
 command events is not standartized and subject for changes.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.10/docs/md/Test/Async/Hub.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Hub.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
