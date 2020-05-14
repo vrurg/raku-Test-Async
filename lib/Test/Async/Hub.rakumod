@@ -650,7 +650,7 @@ method run(:$is-async, Capture:D :$args = \()) {
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code(|$args);
-    self.done-testing;
+    self.finish;
 }
 
 method throw(X::Base:U \exType, *%c) is hidden-from-backtrace {
