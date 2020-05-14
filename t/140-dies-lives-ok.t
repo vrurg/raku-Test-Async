@@ -14,6 +14,4 @@ lives-ok { die "dying on purpose" }, "lives-ok flunks on dying code";
 eval-dies-ok 'my $foo = 42', "eval-dies-ok flunks on surviving code";
 eval-lives-ok 'die "die in EVAL"', "eval-lives-ok flunks on dying code";
 
-say %*ENV.keys.join(", ");
-
 done-testing;
