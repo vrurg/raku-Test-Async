@@ -637,7 +637,7 @@ method run(:$is-async, Capture:D :$args = \()) {
     }
     CATCH {
         default {
-            note "===SORRY!=== Suite '" ~ $.message ~ "':\n" ~ $_ ~ "\n" ~ $_.backtrace;
+            note "===SORRY!=== Suite '" ~ $.message ~ "', ", $.suite-caller.gist, ":\n" ~ $_ ~ "\n" ~ $_.backtrace;
             # Report failure by having at least one failed test.
             with $!planned {
                 $!tests-failed += $!planned - $!tests-run;
