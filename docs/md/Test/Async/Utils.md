@@ -35,7 +35,7 @@ EXPORTED ROUTINES
 `test-result(Bool $cond, :$fail, :$success --` Test::Async::Result)>
 --------------------------------------------------------------------
 
-Creates a [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Result.md) object using the provided parameters. `$fail` and `$success` are shortcut names for corresponding `-profile` attributes of `Test::Async::Result` class.
+Creates a [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Result.md) object using the provided parameters. `$fail` and `$success` are shortcut names for corresponding `-profile` attributes of `Test::Async::Result` class.
 
 `stringify(Mu \obj --` Str:D)>
 ------------------------------

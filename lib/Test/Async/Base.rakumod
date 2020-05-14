@@ -58,7 +58,7 @@ If C<test-flunks> is in effect then method returns its message and decreases C<$
 Method produces standardized I<"expected ... but got ..."> messages.
 
 The second candidate is used for non-string values. It stringifies them using
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Utils.md> C<stringify> routine and then passes over to the first candidate for formatting alongside with
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Utils.md> C<stringify> routine and then passes over to the first candidate for formatting alongside with
 named parameters captured in C<%c>.
 
 Named parameters:
@@ -112,9 +112,9 @@ invoked in a random order.
 It is possible to combine both async and random modes which might add even more stress to the code tested.
 
 I<Some more information about C<Test::Async> job management can be found in
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Hub.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/JobMgr.md>>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/JobMgr.md>>
 
 The particular mode of operation is defined either by C<plan> keys C<parallel> or C<random>, or by subtest named
 parameters C<async> or C<instant>. The named parameters take precedence over plan parameters:
@@ -134,7 +134,7 @@ now!
 
 Adding C<:async> named parameter too will invoke the subtest instantly and asynchronously. And this also means that
 a subtest invoked this way won't be counted as a job by
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/JobMgr.md>.
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/JobMgr.md>.
 In other words, we treat C<:instant> as: I<bypass any queue, just do it here and now!>
 
 Another edge case is using C<:async> with C<random>. In this case the subtest will be postponed. But when time to invoke
@@ -158,8 +158,8 @@ example could be written as:
     }
 
 and this is the way it must be used in a module. See
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async.md>
-and L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/CookBook.md>
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async.md>
+and L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/CookBook.md>
 for more details.
 
 =head3 Hidden C<subtest>
@@ -168,7 +168,7 @@ C<:hidden> named parameter doesn't change how a subtest runs but rather how it r
 to be integral part of test tool method which invoked it. It means two things:
 
 =item flunked test tools called by subtest code won't report their location (file and line)
-(I<implemented by L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Reporter/TAP.md> and might not be supported by 3rd party reporters>)
+(I<implemented by L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Reporter/TAP.md> and might not be supported by 3rd party reporters>)
 =item flunked subtest would report location of the test tool method which invoked it
 
 The primary purpose of this mode is to provide means of implementing compound test tools. I.e. tools which consist of
@@ -233,10 +233,10 @@ current suite are expected to flunk.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

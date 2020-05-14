@@ -39,7 +39,7 @@ would result in a single skip event which is counted as a test run. Our plan wil
 `Bool:D $.wrappable`
 --------------------
 
-Resetting this flag to *False* would result in test tool method would be left intact by [`Test::Async::Metamodel::BundleClassHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Metamodel/BundleClassHOW.md).
+Resetting this flag to *False* would result in test tool method would be left intact by [`Test::Async::Metamodel::BundleClassHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Metamodel/BundleClassHOW.md).
 
 METHODS
 =======
@@ -69,7 +69,7 @@ Sets `$.wrappable`
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Decl.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Decl.md)
 
 AUTHOR
 ======
