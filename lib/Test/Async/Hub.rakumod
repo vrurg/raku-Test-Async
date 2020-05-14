@@ -803,10 +803,27 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
 # Don't make tests guessing what is our caller's context.
 method locate-tool-caller(Int:D $pre-skip) {
     my $skip-frames = 1;
+    my $found;
     my $ctx = CALLER::;
-    while $skip-frames < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
-        ++$skip-frames;
-        $ctx = $ctx<CALLER>.WHO;
+    my $bt = Backtrace.new;
+    my Int:D $iidx = $bt.next-interesting-index(:!name);
+    CATCH {
+        default {
+            note $_, ~.backtrace.full;
+            exit 1;
+        }
+    }
+    until $found {
+        while $skip-frames < $iidx {
+            ++$skip-frames;
+            $ctx = $ctx<CALLER>.WHO;
+        }
+        if $skip-frames < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
+            $iidx = $bt.next-interesting-index($iidx, :!name);
+        }
+        else {
+            $found = True;
+        }
     }
     $!tool-caller = callframe($skip-frames);
     $!caller-ctx = $ctx;
