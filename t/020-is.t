@@ -1,6 +1,5 @@
 use v6;
 use Test::Async;
-# use Test;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
 

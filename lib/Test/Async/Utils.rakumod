@@ -25,13 +25,11 @@ Test outcome codes: C<TRPassed>, C<TRFailed>, C<TRSkipped>
 
 =head1 EXPORTED ROUTINES
 
-=head2 C<test-result(Bool $cond, Associative :$fail, Associative :$success --> Test::Async::Result)>
+=head2 C<test-result(Bool $cond, :$fail, :$success --> Test::Async::Result)>
 
 Creates a L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/docs/md/Test/Async/Result.md>
 object using the provided parameters. C<$fail> and C<$success> are shortcut names for corresponding C<-profile>
-attributes of C<Test::Async::Result> class. Note that prior to storing the profiles in the object all values of
-the first-level keys are getting de-containerized to get any L<C<Positional>|https://docs.raku.org/type/Positional>
-attributes of C<Event> objects initialized properly.
+attributes of C<Test::Async::Result> class.
 
 =head2 C<stringify(Mu \obj --> Str:D)>
 
@@ -56,7 +54,7 @@ sub test-result(Bool(Mu) $cond, *%c) is export {
     my %profile;
     for <fail success> {
         next unless %c{$_};
-        %profile{$_ ~ "-profile"} = %c{$_}.map({ .key => .value<> }).Capture;
+        %profile{$_ ~ "-profile"} = %c{$_};
     }
     Test::Async::Result.new: :$cond, |%profile
 }

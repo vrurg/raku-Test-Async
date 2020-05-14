@@ -291,7 +291,7 @@ method isa-ok(Mu $got, Mu $expected, Str:D $message = "Is a '{$expected.^name}' 
     self.proclaim:
         test-result(
             $got.isa($expected),
-            fail => {
+            fail => -> {
                 comments => self.expected-got($expected, $got)
             }),
         $message
@@ -329,9 +329,9 @@ multi method is(Mu $got, Mu:U $expected, $message = "") {
     }
     self.proclaim:
             test-result($result,
-                        fail => %(
+                        fail => -> {
                             comments => self.expected-got($expected, $got, :gist)
-                        )),
+                        }),
             $message;
 }
 multi method is(Mu $got, Mu:D $expected, $message = "") {
@@ -366,9 +366,9 @@ multi method is(Mu $got, Mu:D $expected, $message = "") {
     }
     self.proclaim:
         test-result($result,
-                    fail => %(
+                    fail => -> {
                         comments => self.expected-got($exp-str, $got-str)
-                    )),
+                    }),
         $message;
 }
 
@@ -388,9 +388,9 @@ multi method isnt(Mu $got, Mu:U $expected, $message = "") {
                     $expected !=== $got));
     self.proclaim:
         test-result($result,
-                    fail => %(
+                    fail => -> {
                         comments => self.expected-got($expected, $got, :quote)
-                    )),
+                    }),
         $message;
 }
 
@@ -403,9 +403,9 @@ multi method isnt(Mu $got, Mu:D $expected, $message = "") {
     $result = $got ne $expected;
     self.proclaim:
         test-result($result,
-                    fail => %(
+                    fail => -> {
                         comments => self.expected-got($expected, $got, :quote)
-                    )),
+                    }),
         $message;
 }
 
@@ -428,21 +428,21 @@ method cmp-ok(Mu $got is raw, $op, Mu $expected is raw, $message ='') is test-to
     if $matcher {
         $result = test-result(
                     $matcher($got, $expected),
-                    fail => %(
+                    fail => -> {
                         comments => self.expected-got($expected.raku, $got.raku)
                                     ~ "\n matcher: " ~ ($matcher.?name || $matcher.^name)
-                    ));
+                    });
     }
     else {
         $result =
             test-result(False,
-                        fail => %(
+                        fail => -> {
                             comments =>
                                 ("Could not use '$op.raku()' as a comparator."
                                 ~ (' If you are trying to use a meta operator, pass it as a ',
                                    "Callable instead of a string: \&[$op]"
                                         unless nqp::istype($op, Callable)))
-                        ));
+                        });
     }
     self.proclaim: $result, $message;
 }
@@ -451,7 +451,7 @@ method like(Str() $got, Regex:D $expected, Str $message = "text matches {$expect
     self.proclaim:
         test-result(
             $got ~~ $expected,
-            fail => {
+            fail => -> {
                 comments => self.expected-got($expected, $got, :exp-sfx('a match with'))
             }
         ),
@@ -462,7 +462,7 @@ method unlike(Str() $got, Regex:D $expected, Str $message = "text matches {$expe
     self.proclaim:
         test-result(
             ! ($got ~~ $expected),
-            fail => {
+            fail => -> {
                 comments => self.expected-got($expected, $got, :exp-sfx("no match with"))
             }
         ),
@@ -503,7 +503,7 @@ method lives-ok(Callable $code, Str:D $message = "code anticipated to die") is t
     self.proclaim:
         test-result(
             $lives,
-            fail => {
+            fail => -> {
                 comments => ($! ?? "Error: " ~ $! !! Empty),
             }
         ),
@@ -525,7 +525,7 @@ method eval-lives-ok(Str() $code, Str:D $message = "EVAL'ed code anticipated to 
     self.proclaim:
         test-result(
             !$ex.defined,
-            fail => {
+            fail => -> {
                 comments => ($ex ?? "Error: " ~ $ex !! Empty),
             }
         ), $message;
@@ -571,7 +571,7 @@ method throws-like($code where Callable:D | Str:D, $ex_type, Str:D $message = "d
                         suite.proclaim:
                             test-result(
                                 $ok,
-                                fail => { comments => self.expected-got($v, $got), }
+                                fail => -> { comments => self.expected-got($v, $got) }
                             ),
                             ".$k matches $v.gist()"
                     }
@@ -645,7 +645,7 @@ method is-approx-calculate(
 
     my $result = test-result(
                     $abs-tol-ok && $rel-tol-ok,
-                    fail => %(
+                    fail => -> {
                         "comments" => (
                               "    expected approximately: $expected\n"
                             ~ "                       got: $got",
@@ -658,7 +658,7 @@ method is-approx-calculate(
                             !!   "maximum relative tolerance: $rel-tol\n"
                                ~ "actual relative difference: $rel-tol-got"
                         ),
-                    )
+                    }
     );
     # note "RESULT? ", $result.fail-profile.raku;
     self.proclaim($result, $message);
@@ -715,9 +715,9 @@ multi method is-deeply(Mu $got, Seq:D $expected, $message = '') {
 multi method is-deeply(Mu $got, Mu $expected, $message = '') {
     my $result = test-result
                     $got eqv $expected,
-                    fail => %(
+                    fail => -> {
                         comments => self.expected-got($expected, $got),
-                    );
+                    };
     self.proclaim($result, $message)
 }
 
