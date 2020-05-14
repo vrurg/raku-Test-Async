@@ -13,6 +13,7 @@ META=META6.json
 BUILD_TOOLD_DIR=./build-tools
 META_BUILDER=$(BUILD_TOOLD_DIR)/gen-META.raku
 DOC_BUILDER=$(BUILD_TOOLD_DIR)/gen-doc.raku
+DOC_BUILD_ARGS=--module=$(MAIN_MOD)
 
 PROVE_CMD=prove6
 PROVE_FLAGS=-l
@@ -88,8 +89,8 @@ $(MD_SUBDIRS) $(HTML_SUBDIRS):
 
 doc_gen: $(DOC_BUILDER)
 	@echo "===> Updating documentation sources"
-	@raku $(DOC_BUILDER) --md $(DOC_SRC)
-	@raku $(DOC_BUILDER) --md --output=./README.md doc/Test/Async/README.rakudoc
+	@raku $(DOC_BUILDER) $(DOC_BUILD_ARGS) --md $(DOC_SRC)
+	@raku $(DOC_BUILDER) $(DOC_BUILD_ARGS) --md --output=./README.md doc/Test/Async/README.rakudoc
 
 
 #md: ./README.md $(addprefix $(MD_DIR)/,$(patsubst %.rakudoc,%.md,$(patsubst %.rakumod,%.md,$(DOC_DEST))))
