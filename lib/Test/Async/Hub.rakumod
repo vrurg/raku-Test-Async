@@ -426,12 +426,12 @@ has Numeric:D $.TODO-count = 0;
 has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
 # Where the last test-tool has been invoked
-has CallFrame $.tool-caller;
+has CallFrame $.tool-caller where *.defined;
 # Caller frame Stash/PseudoStash
 has CALLER-CTX $.caller-ctx;
 # If true the suite will report it's parent tool-caller attribute.
 has Bool:D $.transparent = False;
-has CallFrame $.suite-caller;
+has CallFrame $.suite-caller where *.defined;
 
 # Are we an asynchronous child? Transitive, i.e. event if the suit is started synchronously by a parent but the parent
 # itself is async – this becomes true.
@@ -461,7 +461,13 @@ method new(|c) {
 }
 
 submethod TWEAK(|) {
-    $!suite-caller = .tool-caller with $!parent-suite;
+    with $!parent-suite {
+        $!suite-caller = .tool-caller;
+    }
+    else {
+        self.locate-tool-caller(3);
+        $!suite-caller = $!tool-caller;
+    }
     if $!transparent {
         with $!parent-suite {
             $!tool-caller = .tool-caller;
