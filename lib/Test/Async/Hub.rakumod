@@ -679,7 +679,6 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
     if my $TODO-message = self.take-TODO {
         %profile<todo> = $TODO-message;
     }
-    %profile<test-id> = self.next-test-id;
     %profile<caller> = $.tool-caller;
     self.send: evType, :$message, |%profile, |%c;
     $tr == TRPassed

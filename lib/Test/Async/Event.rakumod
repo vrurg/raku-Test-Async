@@ -76,7 +76,6 @@ Base class for events reporting test outcomes.
 
 =head3 Attributes
 
-=item C<Int:D $.test-id>, required – test number
 =item C<Str $.todo> – message to use if test is marked as I<TODO>.
 =item C<Str $.flunks> – message to use if test is marked as anticipated failure (see C<test-flunks> in
 L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Base.md>.
@@ -215,16 +214,11 @@ class Event::Command is Event {
 }
 
 class Event::Test is Event::Report {
-    has Int:D $.test-id is required;
     has Str $.todo;
     has Str $.flunks;
     has CallFrame:D $.caller is required;
     has @.child-messages;
     has @.comments;
-
-    method gist {
-        callsame() ~ " test-id=" ~ $!test-id
-    }
 }
 
 class Event::Terminate is Event {

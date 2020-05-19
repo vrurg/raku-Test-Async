@@ -103,7 +103,7 @@ multi method TAP-str-from-ev(::?CLASS:D: Event::Test:D $ev, Str:D $kind,
                   ~ $ev.message.split(qw<\\ #>).map({ ++$ % 2 ?? $_ !! "\\" ~ $_ })
                   ~ $TODO
                   ~ $message-postfix;
-    $prepend ~ $kind ~ " " ~ $ev.test-id ~ " - " ~ $message ~ $comment;
+    $prepend ~ $kind ~ " " ~ self.next-test-id ~ " - " ~ $message ~ $comment;
 }
 
 method report-event(Event::Report:D $ev) {
