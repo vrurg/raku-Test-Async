@@ -769,12 +769,12 @@ method await-jobs {
     self.send: Event::JobsAwaited;
 }
 
-method finish {
+method finish(:$now = False) {
     # Only do the sequence once even if accidentally called concurrently.
     return if $!stage == TSFinishing | TSFinished | TSDismissed;
     if self.set-stage(TSFinishing) == TSInProgress {
         # Wait untils all jobs are completed.
-        self.await-jobs;
+        self.await-jobs unless $now;
         self.set-stage(TSFinished);
         self.sync-events;
         # Let all event be processed before we start analyzing the results.
