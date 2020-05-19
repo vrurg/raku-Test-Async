@@ -16,7 +16,7 @@ This class purpose is to ensure that test tool methods are wrapped into common b
 
   * validates if current suite stage allows test tool invokation
 
-  * tries to transition the suite into `TSInProgress` stage if tool method object has `$.readify` set (see [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/TestTool.md)
+  * tries to transition the suite into `TSInProgress` stage if tool method object has `$.readify` set (see [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.13/docs/md/Test/Async/TestTool.md)
 
   * emits `Event::Skip` if tool method has its `$.skippable` set and suite's `$.skip-message` is defined.
 
@@ -24,12 +24,12 @@ This class purpose is to ensure that test tool methods are wrapped into common b
 
 Wrapping doesn't replace the method object itself.
 
-If test tool method object has its `wrappable` attribute set to *False* then wrapping doesn't take place. In this case the method must take care of all necessary preparations itself. See implementation of `subtest` by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Base.md) for example.
+If test tool method object has its `wrappable` attribute set to *False* then wrapping doesn't take place. In this case the method must take care of all necessary preparations itself. See implementation of `subtest` by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.13/docs/md/Test/Async/Base.md) for example.
 
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.12/docs/md/Test/Async/Decl.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.13/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.13/docs/md/Test/Async/Decl.md)
 
 AUTHOR
 ======
