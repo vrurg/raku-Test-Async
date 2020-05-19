@@ -101,13 +101,17 @@ test:
 	@echo "===> Testing"
 	@$(PROVE)
 
+stresstest:
+	@echo "===> Stress Testing"
+	@STRESS_TESTING=1 $(PROVE)
+
 author-test:
 	@echo "===> Author testing"
 	@AUTHOR_TESTING=1 $(PROVE)
 
 release-test:
 	@echo "===> Release testing"
-	@RELEASE_TESTING=1 $(PROVE)
+	@RELEASE_TESTING=1 STRESS_TESTING=1 $(PROVE)
 
 is-repo-clean:
 	@git diff-index --quiet HEAD || (echo "*ERROR* Repository is not clean, commit your changes first!"; exit 1)
