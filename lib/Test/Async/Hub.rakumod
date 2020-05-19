@@ -218,6 +218,8 @@ The keys supported by profile are:
 =item B<todo> - a string with a I<TODO> message. If set all tests and suite itself are marked as I<TODO>.
 =item B<parallel> – invoke children suites asynchronously.
 =item B<random> – invoke children suites randomly.
+=item B<test-jobs> - set the maximum number of concurrent jobs allowed. See C<$.test-jobs>.
+=item B<job-timeout> - set the timeout awaiting for jobs to complete. See C<$.job-timeout>.
 
 =head2 C<multi plan(UInt:D $tests, *%profile)>
 =head2 C<multi plan(*%profile)>
@@ -340,7 +342,7 @@ This method implements two tasks:
 =item next it calls C<await-all-jobs> to make sure all jobs have completed
 =item if C<await-all-jobs> doesn't finish in 30 seconds C<X::AwaitTimeout> is thrown
 
-=head2 C<finish()>
+=head2 C<finish(:$now = False)>
 
 This is the finalizing method. When suite ends, it invokes this method to take care of postponed jobs, report a plan
 if not reported at suite start (i.e. number of planned tests wasn't set), and emits C<Event::DoneTesting> and
@@ -348,6 +350,9 @@ C<Event::Terminate>.
 
 While performing these steps the method transition from C<TSFinishing> stage, to C<TSFinished>, and then calls method
 C<dismiss>.
+
+With C<:now> the method ignores any postponed job and proceeds as if none were started. This is a kind of an emergency
+hatch for cases where we have good reasons to suspect a stuck job.
 
 =head2 C<dismiss>
 
@@ -553,6 +558,8 @@ method setup-from-plan(%plan) {
         $!TODO-message = %plan<todo>:delete;
         $!TODO-count = Inf;
     }
+    $!test-jobs = $_ with %plan<test-jobs>:delete;
+    $!job-timeout = $_ with %plan<job-timeout>:delete;
     $!parallel = .so with %plan<parallel>:delete;
     $!random = .so with %plan<random>:delete;
 }
