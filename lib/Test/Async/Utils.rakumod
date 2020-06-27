@@ -27,7 +27,7 @@ Test outcome codes: C<TRPassed>, C<TRFailed>, C<TRSkipped>
 
 =head2 C<test-result(Bool $cond, :$fail, :$success --> Test::Async::Result)>
 
-Creates a L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.13/docs/md/Test/Async/Result.md>
+Creates a L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Result.md>
 object using the provided parameters. C<$fail> and C<$success> are shortcut names for corresponding C<-profile>
 attributes of C<Test::Async::Result> class.
 
