@@ -130,7 +130,7 @@ method !dispatch-event(Event:D $ev) {
     my $*TEST-ASYNC-EV-OWNER = self;
     CATCH {
         note "===EVENT HANDLING=== ", $_, ~$_.backtrace;
-        exit 1;
+        exit 255;
     }
     self.post-event: self.?filter-event($ev) // $ev;
     my $term-event;
