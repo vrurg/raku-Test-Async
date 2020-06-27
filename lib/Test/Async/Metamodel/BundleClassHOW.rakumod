@@ -56,7 +56,7 @@ method !wrap-test-tools(Mu \type-obj) {
                 return;
             }
             self.set-stage(TSInProgress) if &meth.readify;
-            if &meth.skippable && $.skip-message {
+            if &meth.skippable && $.skip-message.defined {
                 self.send-test: Event::Skip, $.skip-message, TRSkipped;
                 True
             }

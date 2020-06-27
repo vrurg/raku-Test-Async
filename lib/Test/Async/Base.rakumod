@@ -812,7 +812,7 @@ multi method subtest( Callable:D \subtests,
         return;
     }
     self.set-stage(TSInProgress);
-    if $.skip-message {
+    if $.skip-message.defined {
         self.send-test: Event::Skip, $.skip-message, TRSkipped;
         return True
     }

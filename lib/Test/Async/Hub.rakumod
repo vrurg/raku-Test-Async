@@ -694,7 +694,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
 method send-plan(UInt:D $planned, :$on-start) {
     # say "send plan of $planned, on start? ", ?$on-start;
     # say "skip message: “{$!skip-message || '*none*'}”";
-    if $on-start && !$!parent-suite && $!skip-message {
+    if $on-start && !$!parent-suite && $!skip-message.defined {
         self.report-event: Event::Plan.new( :origin(self), :skip, :message($!skip-message), :planned(0) );
         exit 0;
     }
