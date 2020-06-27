@@ -138,8 +138,8 @@ method !dispatch-event(Event:D $ev) {
         my $event = @!posted-events.shift;
         if $event ~~ Event::Terminate {
             # Pull in any possibly remaining events.
-            while $!ev-queue.poll {
-                self.post-event: self.?filter-event($_) // $_;
+            while $!ev-queue.poll -> $rev {
+                self.post-event: self.?filter-event($rev) // $rev;
             }
             $term-event = $event;
         }
