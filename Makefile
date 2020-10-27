@@ -16,7 +16,8 @@ DOC_BUILDER=$(BUILD_TOOLD_DIR)/gen-doc.raku
 DOC_BUILD_ARGS=--module=$(MAIN_MOD)
 
 PROVE_CMD=prove6
-PROVE_FLAGS=-l
+PROVE_JOBS=$(shell raku -e 'say $$*KERNEL.cpu-cores')
+PROVE_FLAGS=-l -j $(PROVE_JOBS)
 TEST_DIRS=t
 PROVE=$(PROVE_CMD) $(PROVE_FLAGS) $(TEST_DIRS)
 
