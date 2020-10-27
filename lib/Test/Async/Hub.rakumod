@@ -497,6 +497,15 @@ method test-suite {
     $*TEST-SUITE // self.top-suite
 }
 
+method dbg(**@s) {
+    if $*TEST-ASYNC-DEBUG {
+        note @s.join
+                .split( /\n/ )
+                .map( {'#' ~ $_} )
+                .join("\n");
+    }
+}
+
 my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, TSDismissed;
 
 method stage { $!stage }
@@ -819,12 +828,6 @@ method locate-tool-caller(Int:D $pre-skip) {
     my $ctx = CALLER::;
     my $bt = Backtrace.new;
     my Int:D $iidx = $bt.next-interesting-index(:!name);
-    CATCH {
-        default {
-            note $_, ~.backtrace.full;
-            exit 1;
-        }
-    }
     until $found {
         while $skip-frames < $iidx {
             ++$skip-frames;
