@@ -92,8 +92,8 @@ sub test-async($count, :%subtest-plan) {
             subtest "job $id" => {
                 plan 4;
                 # Sync with the parent suite.
-                $subtest-ready.keep($id);
                 is $started, 0, "no concurrent subtests really started yet";
+                $subtest-ready.keep($id);
                 await $starter;
                 ++⚛$started;
                 pass "subtest $id started";

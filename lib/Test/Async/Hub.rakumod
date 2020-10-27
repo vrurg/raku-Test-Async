@@ -823,25 +823,21 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
 # Determine the caller and the context.
 # Don't make tests guessing what is our caller's context.
 method locate-tool-caller(Int:D $pre-skip) {
-    my $skip-frames = 1;
     my $found;
     my $ctx = CALLER::;
-    my $bt = Backtrace.new;
-    my Int:D $iidx = $bt.next-interesting-index(:!name);
-    until $found {
-        while $skip-frames < $iidx {
-            ++$skip-frames;
-            $ctx = $ctx<CALLER>.WHO;
-        }
-        if $skip-frames < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
-            $iidx = $bt.next-interesting-index($iidx, :!name);
-        }
-        else {
+    my Int:D $idx = 0;
+    while !$found && $ctx {
+        unless $idx < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
             $found = True;
+            last;
         }
+        ++$idx;
+        $ctx = $ctx<CALLER>.WHO;
     }
-    $!tool-caller = callframe($skip-frames);
-    $!caller-ctx = $ctx;
+    if $found {
+        $!tool-caller = callframe($idx + 1);
+        $!caller-ctx = $ctx;
+    }
 }
 
 my atomicint $temp-count = 0;
