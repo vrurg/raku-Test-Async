@@ -148,6 +148,8 @@ has %!active-jobs;
 has Lock::Async:D $!active-lock .= new;
 
 method test-jobs {...}
+method fatality(Int:D $?) {...}
+method x-sorry(Exception:D) {...}
 
 method job-mgr-init {
     return if cas($!job-mgr-initialized, Any, True);
@@ -168,8 +170,8 @@ method new-job(Callable:D $code is raw, :$async = False) {
                 code => {
                     my $*TEST-SUITE = self;
                     CATCH {
-                        note "===SORRY! JOB #", $job.id, " DIED=== ", $_;
-                        exit 255;
+                        self.x-sorry($_, :comment("JOB #" ~ $job.id ~ " DIED"));
+                        self.fatality
                     }
                     $code()
                 };
@@ -212,6 +214,8 @@ multi method postpone(Test::Async::Job:D $job) {
 }
 
 method job-by-id(Int:D $id) {
+    $!idx-lock.lock;
+    LEAVE $!idx-lock.unlock;
     %!job-idx{$id} // self.throw(X::NoJobId, :$id);
 }
 
@@ -240,10 +244,15 @@ multi method start-job(Test::Async::Job:D $job) {
         }
     }
     await $request-promise;
-    self.start($job).then: {
-        CATCH { default { note "Can't stop job: " ~ $_ ~ $_.backtrace; exit 255; } };
+    my $jpromise = self.start($job);
+    $jpromise.then: {
+        CATCH {
+            self.x-sorry: $_, :comment("Can't stop job #" ~ $job.id);
+            self.fatality
+        }
         self!stop-job($job);
     }
+    $jpromise
 }
 
 method !stop-job(Test::Async::Job:D $job) {
@@ -264,12 +273,18 @@ multi method invoke-job(Int:D $id) {
     self.invoke-job: self.job-by-id($id);
 }
 
-multi method invoke-job(Test::Async::Job:D $job) {
-    ( $job.async ?? $job.start !! $job.invoke ).then: {
-        CATCH { default { note "Job done report failed: ", $_, ~$_.backtrace; exit 255 } }
-        $!jobs-done.send: $job;
-        .result
+method !report-job-done($job) {
+    CATCH {
+        self.x-sorry: $_, :comment("Job #" ~ $job.id ~ ": failed reporting done status");
+        self.fatality;
     }
+    $!jobs-done.send: $job;
+}
+
+multi method invoke-job(Test::Async::Job:D $job) {
+    my $jpromise = $job.async ?? $job.start !! $job.invoke;
+    $jpromise.then: { self!report-job-done($job) };
+    $jpromise
 }
 
 # Async start job instantly. Must not be evaded as it takes responsibility of removing completed jobs from the index.
@@ -283,18 +298,19 @@ multi method start(Callable:D \code) {
 }
 
 multi method start(Test::Async::Job:D $job) {
-    $job.start.then: {
-        $!jobs-done.send: $job;
-        .result
-    }
+    my $jpromise = $job.start;
+    $jpromise.then: { self!report-job-done($job) };
+    $jpromise
 }
 
 method await-all-jobs {
     $!postponed-lock.protect: {
         self.throw: X::AwaitWithPostponed, :count(+@!postponed) if @!postponed;
     }
-    repeat {
+    while True {
         my @p = self.all-job-promises;
-        await Promise.allof(@p) if @p;
-    } while %!job-idx;
+        last unless +@p;
+        # self.?trace-out: "AWAIT ALL JOBS COUNT: ", +@p;
+        await Promise.allof(@p) if +@p;
+    }
 }

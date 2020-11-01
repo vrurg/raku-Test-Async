@@ -44,7 +44,7 @@ use nqp;
 use Test::Async::Result;
 
 enum TestMode   is export <TMAsync TMSequential TMRandom>;
-enum TestStage  is export «TSInitializing TSInProgress TSFinishing TSFinished TSDismissed»;
+enum TestStage  is export «TSInitializing TSInProgress TSFinishing TSFinished TSDismissed TSFatality»;
 # This is used to inform send-test what statistics counter it must update.
 # We cannot rely on event type for this because custom bundles could define their own events.
 enum TestResult is export <TRFailed TRPassed TRSkipped>;

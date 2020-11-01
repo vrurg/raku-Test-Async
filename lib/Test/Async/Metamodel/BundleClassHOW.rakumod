@@ -47,6 +47,9 @@ method !wrap-test-tools(Mu \type-obj) {
 
         # Test tool boilerplate wrapper.
         my &wrap := my method (|) is hidden-from-backtrace is raw {
+            # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
+            return if self.in-fatality;
+
             my \capture = nqp::usecapture();
 
             self.locate-tool-caller(2);

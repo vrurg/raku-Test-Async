@@ -249,7 +249,7 @@ and this method parameters. The parameters take precedence over the attributes:
 start asynchronously anyway, not matter of C<parallel>.
 =item B<C<$args>> – a L<C<Capture>|https://docs.raku.org/type/Capture> which will be used to call C<$suite>'s code.
 
-The method returns completion C<Promise> of the invoked suite.
+The method returns job C<Promise> of the invoked suite.
 
 =head2 C<run(:$is-async)>
 
@@ -413,8 +413,11 @@ my subset CALLER-CTX of Any where Stash:D | PseudoStash:D;
 
 has ::?CLASS $.parent-suite;
 
+my atomicint $next-id = 0;
+has Int:D $.id = $next-id⚛++;
+
 # Message associated with this suite. Only makes sense for children.
-has $.message;
+has Str $.message = "TOP SUITE " ~ $*PROGRAM-NAME;
 # Test code block we will invoke.
 has &.code;
 
@@ -449,6 +452,7 @@ has Bool $.random;
 has atomicint $!next-test-id = 1;
 has atomicint $.tests-run = 0;
 has atomicint $.tests-failed = 0;
+has Int $.exit-code;
 
 # Run children in individual threads
 has Bool $.parallel;
@@ -456,7 +460,10 @@ has Bool $.parallel;
 has Str:D @.messages;
 # How many jobs can be invoked in parallel.
 has UInt:D $.test-jobs = (try { %*ENV<TEST_JOBS>.Int } || ($*KERNEL.cpu-cores - 2)) max 1;
-has $.job-timeout where Int:D | Inf = Inf;
+has $.job-timeout where Int:D | Inf = (%*ENV<TEST_ASYNC_JOB_TIMEOUT> || Inf).Num;
+
+# Debug attributes
+has Bool $.trace-mode is rw = ? %*ENV<TEST_ASYNC_TRACING>;  # Tracing writes into output-<id>.trace file
 
 method new(|c) {
     # This class is already mutated into a suit
@@ -468,6 +475,7 @@ method new(|c) {
 submethod TWEAK(|) {
     with $!parent-suite {
         $!suite-caller = .tool-caller;
+        $!trace-mode = .trace-mode;
     }
     else {
         self.locate-tool-caller(3);
@@ -497,16 +505,7 @@ method test-suite {
     $*TEST-SUITE // self.top-suite
 }
 
-method dbg(**@s) {
-    if $*TEST-ASYNC-DEBUG {
-        note @s.join
-                .split( /\n/ )
-                .map( {'#' ~ $_} )
-                .join("\n");
-    }
-}
-
-my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, TSDismissed;
+my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, TSDismissed, TSDismissed;
 
 method stage { $!stage }
 
@@ -522,7 +521,8 @@ method set-stage(TestStage:D $stage) {
         return $cur-stage if $cur-stage > $stage;
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
             self.start-event-loop if $cur-stage == TSInitializing;
-            self.send: Event::StageTransition, :from($cur-stage), :to($stage);
+            # Don't panic if the event queue is non-functional.
+            self.try-send: Event::StageTransition, :from($cur-stage), :to($stage);
             return $cur-stage;
         }
     }
@@ -610,16 +610,23 @@ method cmd-skipremaining(Str:D $message) {
 }
 
 method cmd-syncevents($vow) {
+    # self.trace-out: "SYNCING EVENTS ON VOW ", $vow.WHICH;
     $vow.keep(True);
 }
 
 # Accepts normalized message
 method cmd-message(+@message) {
-    # say "++ COLLECTED: <<", @message.join("//"), ">>";
+    # self.trace-out: "Collecting a message: ", @message.raku;
     @!messages.append: @message;
+    # self.trace-out: "! Message collected !";
 }
 
 method cmd-settodo(Str:D $!TODO-message, Numeric:D $!TODO-count) { }
+
+method cmd-bailout(Int:D $exit-code) {
+    # note "@@@ BAILING OUT WITH rc==", $exit-code;
+    exit $exit-code // $!exit-code // 255;
+}
 
 method create-suite(::?CLASS:D: ::?CLASS:U \suiteType = self.WHAT, *%c) {
     my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random,
@@ -636,6 +643,7 @@ method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant 
     my $job = self.new-job: {
         $suite.run(:$is-async, :$args)
     }, :$async;
+    # self.trace-out: "SUITE #", $suite.id, " «", $suite.message, "» JOB ID: ", $job.id;
     if $!random && $!stage == TSInProgress && !$instant {
         self.postpone: $job;
     }
@@ -650,6 +658,7 @@ method invoke-suite(::?CLASS:D $suite, Bool:D :$async = False, Bool:D :$instant 
 
 method run(:$is-async, Capture:D :$args = \()) {
     # If any parent is async all its children are async too.
+    # self.trace-out: "Run suite ", $.id.fmt('%5d'), " «", $.message, "»";
     CONTROL {
         when AbortSuite {
             self.dismiss;
@@ -659,19 +668,18 @@ method run(:$is-async, Capture:D :$args = \()) {
     }
     CATCH {
         default {
-            note "===SORRY!=== Suite '" ~ $.message ~ "', ", $.suite-caller.gist, ":\n" ~ $_ ~ "\n" ~ $_.backtrace;
+            self.x-sorry: $_;
             # Report failure by having at least one failed test.
             with $!planned {
                 $!tests-failed += $!planned - $!tests-run;
             }
-            $!tests-failed = 1 unless $!tests-failed;
-            self.dismiss;
-            return;
+            self.fatality
         }
     }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code(|$args);
+    # note "SUITE -> FINISH";
     self.finish;
 }
 
@@ -717,8 +725,8 @@ method normalize-message(@message) {
 
 method send-message(+@message) {
     my @msg = self.normalize-message(@message);
-    if $!parent-suite && $!is-async {
-        # Collect the message if weo're an async child
+    if $!parent-suite {
+        # Collect the message if we're a child
         self.send-command: Event::Cmd::Message, @msg;
     }
     else {
@@ -771,22 +779,42 @@ method await-jobs {
         }
         @.postponed = [];
     }
-    my $all-done;
+    # Use a dummy class because with Any in $all-done cas() sometimes fails to update the scalar.
+    my class NotDoneYet { }
+    my $all-done = NotDoneYet;
+    start {
+        # self.trace-out: ">>> REPORTER";
+        CATCH { note ">>> REPORTER THROWN: ", .message, "\n", .backtrace.Str; .rethrow }
+        while True {
+            last if ⚛$all-done;
+            # self.trace-out: ">>> CURRENT JOBS, {$!active-count} active: ", %!job-idx.values.map(*.id).join(", ");
+            sleep 5;
+            # self.trace-out: ">>> REPEAT";
+        }
+    }
+    # self.trace-out: ">>> AWAIT JOBS TIMEOUT: ", $!job-timeout;
     await Promise.anyof(
-        Promise.in($!job-timeout).then({ cas($all-done, Any, False); }),
+        Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False); }),
         start {
-            CATCH { note $_; exit 255 };
+            CATCH {
+                self.x-sorry($_);
+                self.fatality;
+                .rethrow
+            };
             self.await-all-jobs;
-            cas($all-done, Any, True);
+            cas($all-done, NotDoneYet, True);
         }
     );
-    self.throw(X::AwaitTimeout, :what('all jobs')) unless $all-done;
+    # self.trace-out: ">>> JOBS AWAIT DONE: ", $all-done;
+    unless $all-done {
+        self.throw(X::AwaitTimeout, :what('all jobs'))
+    }
     self.send: Event::JobsAwaited;
 }
 
 method finish(:$now = False) {
     # Only do the sequence once even if accidentally called concurrently.
-    return if $!stage == TSFinishing | TSFinished | TSDismissed;
+    return if $!stage == TSFinishing | TSFinished | TSDismissed | TSFatality;
     if self.set-stage(TSFinishing) == TSInProgress {
         # Wait untils all jobs are completed.
         self.await-jobs unless $now;
@@ -811,11 +839,12 @@ method dismiss {
     }
 }
 
+# TODO This method is more of a stub and needs more thinking over and re-implementing.
 method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is raw {
     my $st = now;
     LEAVE {
         my $et = now;
-        self.send: Event::Telemetry, :elapsed($et-$st)
+        self.try-send: Event::Telemetry, :elapsed($et-$st)
     }
     &code(|c)
 }
@@ -869,4 +898,52 @@ method tool-factory(--> Seq:D) {
             &code.set_name($name);
             "&" ~ $name => &code
         }
+}
+
+method in-fatality(Bool:D :$local = False) {
+    ⚛$!stage == TSFatality
+    || (
+        !$local
+        && $.parent-suite
+        && $.parent-suite.in-fatality(:$local)
+    )
+}
+
+method fatality(Int:D $!exit-code = 255) {
+    self.set-stage(TSFatality);
+    $!tests-failed = 1 unless $!tests-failed;
+    with $.parent-suite {
+        .fatality($!exit-code)
+    }
+    else {
+        if $!ev-queue.closed.status ~~ Planned {
+            self.send-command: Event::Cmd::BailOut, $!exit-code
+        }
+        else {
+            exit $!exit-code
+        }
+    }
+}
+
+method x-sorry(Exception:D $ex, :$comment) {
+    note "===SORRY!=== Suite #" ~ $.id ~ " '" ~ $.message ~ "', ", $.suite-caller.gist, ":\n"
+        ~ ($ex ~~ Test::Async::X::Base
+                ?? ("thrown by suite #" ~ $ex.suite.id ~ " '" ~ $ex.suite.message ~ "', " ~ $ex.suite.suite-caller.gist ~ "\n").indent(2)
+                !! "")
+        ~ ($comment ?? ($comment ~ "\n").indent(2) !! "")
+        ~ ("[" ~ $ex.^name ~ "] " ~ $ex.message ~ "\n" ~ $ex.backtrace).indent(4)
+}
+
+# Implementation detail, for use with a wrapper script I use for parallelized testing.
+method trace-out(**@out) {
+    return unless $.trace-mode || $*TEST-ASYNC-TRACING;
+    my $out-file = "output-" ~ (%*ENV<TEST_PARALLEL_ID> // $*PID) ~ ".trace";
+    my $traceh = $out-file.IO.open: :a, :out-buffer(0);
+    LEAVE { .close with $traceh };
+    my $lines = @out.map(*.gist)
+                    .join
+                    .split(/\n/)
+                    .map({ sprintf "[%5d:%8d] %s\n", $.id, $*PID, $_ })
+                    .join;
+    $traceh.print: $lines;
 }

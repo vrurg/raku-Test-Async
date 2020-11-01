@@ -57,7 +57,8 @@ L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs
 
 unit class Test::Async::Job;
 
-has Int:D $.id = ++$;
+my atomicint $next-id = 0;
+has Int:D $.id = $next-id⚛++;
 has Callable:D $.code is required;
 # async indicated if job is explictly requested to be async.
 has $.async = False;
@@ -69,6 +70,10 @@ method start {
 
 method invoke {
     my $vow = ($!promise = Promise.new).vow;
+    CATCH {
+        $vow.break: $_;
+        .rethrow
+    }
     $vow.keep: $!code();
     $!promise
 }

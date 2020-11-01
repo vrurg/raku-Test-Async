@@ -4,10 +4,43 @@ use Test::Bootstrap;
 use Test::Async::JobMgr;
 use Test::Async::Job;
 
-plan 4;
+plan 10;
+
+{ # See if Test::Async::Job handles it's promise if job code throws.
+    my $value = 1.rand;
+    my $job = Test::Async::Job.new(
+        code => -> { $value }
+    );
+
+    $job.invoke;
+    ok ($job.promise.status ~~ Kept), "job promise is kept when its code is done ok";
+    ok $job.promise.result == $value, "job promise result is its code return value";
+
+}
+
+{ # See if Test::Async::Job handles it's promise if job code throws.
+    my class TAsync::X::OkiDoki is Exception { }
+    my $job = Test::Async::Job.new(
+        code => -> {
+            TAsync::X::OkiDoki.new.throw;
+        }
+    );
+
+    try $job.invoke;
+    ok ($job.promise.status ~~ Broken), "job promise is broken when its code throws";
+    ok $job.promise.cause ~~ TAsync::X::OkiDoki, "job promise cause is the exception thrown";
+}
 
 my class TestJobs does Test::Async::JobMgr {
     has $.test-jobs = 4;
+
+    method fatality(Int:D $exit-code = 255) {
+        die "Unexpected fatality, exit code " ~ $exit-code
+    }
+
+    method x-sorry(Exception:D $ex, :$comment) {
+        $ex.rethrow
+    }
 }
 
 my $tj = TestJobs.new;
@@ -31,15 +64,15 @@ await Promise.anyof(
 $starter.keep(True);
 ok $max-reached, "all concurrent jobs started";
 
-my $awaited-ok;
+my class NotDone {};
+my $awaited-ok = NotDone;
 await Promise.anyof(
-    Promise.in(10).then({ cas $awaited-ok, Any, False }),
-    (start { $tj.await-all-jobs }).then({ cas $awaited-ok, Any, True }),
+    Promise.in(10).then({ cas $awaited-ok, NotDone, False }),
+    (start { $tj.await-all-jobs }).then({ cas $awaited-ok, NotDone, True }),
 );
 
-$awaited-ok &&= $tj.job-count == 0;
-
 ok $awaited-ok, "all started threads completed";
+ok $tj.job-count == 0, "no remaining jobs left";
 
 $tj = TestJobs.new;
 
@@ -63,14 +96,13 @@ await Promise.anyof(
 
 ok !$over-use, "never had more than max allowed number of jobs";
 
-$awaited-ok = Nil;
+$awaited-ok = NotDone;
 await Promise.anyof(
-    Promise.in(10).then({ cas $awaited-ok, Any, False }),
-    (start { $tj.await-all-jobs }).then({ cas $awaited-ok, Any, True }),
+    Promise.in(10).then({ cas $awaited-ok, NotDone, False }),
+    (start { $tj.await-all-jobs }).then({ cas $awaited-ok, NotDone, .status ~~ Kept }),
 );
 
-$awaited-ok &&= $tj.job-count == 0;
-
 ok $awaited-ok, "all started jobs completed";
+ok $tj.job-count == 0, "no remaining jobs left";
 
 done-testing;

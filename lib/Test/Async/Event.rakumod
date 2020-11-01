@@ -200,17 +200,30 @@ class Event is export {
     }
 
     method gist {
-        self.^name ~ "#" ~ $!id ~ ": orig=" ~ $!origin.WHICH
+        self.^name ~ "#" ~ $!id ~ ": orig='" ~ ($!origin.message // '*no message*') ~ "'"
     }
     method Str { self.gist }
 }
 
 class Event::Report is Event {
     has Str:D $.message = "";
+
+    method gist {
+        my $pfx =         "           ";
+        callsame() ~ "\n" ~ "  message: " ~ (
+            $.message.split(/\n/)
+                     .map({ $pfx ~ $_ })
+                     .join("\n")
+        )
+    }
 }
 
 class Event::Command is Event {
     has Capture:D $.args is required;
+
+    method gist {
+        callsame() ~ "\n  args: " ~ $.args.gist
+    }
 }
 
 class Event::Test is Event::Report {
@@ -228,6 +241,9 @@ class Event::Terminate is Event {
 class Event::StageTransition is Event {
     has $.from is required;
     has $.to is required;
+    method gist {
+        callsame() ~ " " ~ $.from ~ " -> " ~ $.to
+    }
 }
 class Event::JobsAwaited is Event { }
 
@@ -240,6 +256,7 @@ class Event::Cmd::SetTODO       is Event::Command { }
 class Event::Cmd::SyncEvents    is Event::Command { }
 # Add a message into suite output. For a child it might mean collecting the message for postponed reporting.
 class Event::Cmd::Message       is Event::Command { }
+class Event::Cmd::BailOut       is Event::Command { }
 
 class Event::Telemetry is Event {
     has Duration:D $.elapsed is required;
@@ -248,6 +265,10 @@ class Event::Telemetry is Event {
 class Event::Plan is Event::Report {
     has Bool $.skip;
     has UInt:D $.planned is required;
+
+    method gist {
+        callsame() ~ "\n  planned: " ~ $.planned;
+    }
 }
 class Event::Diag is Event::Report { }
 class Event::Ok is Event::Test { }

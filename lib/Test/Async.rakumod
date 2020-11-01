@@ -82,8 +82,9 @@ our sub EXPORT(*@b) {
 END {
     if Test::Async::Hub.has-top-suite {
         my $suite = Test::Async::Hub.top-suite;
+        # $suite.trace-out: "# ___ Test::Async END phaser, has top-suite";
         Test::Async::Hub.top-suite.done-testing;
-        my $exit-code = $suite.tests-failed min 254;
+        my $exit-code = $suite.exit-code // ($suite.tests-failed min 254);
         unless $exit-code {
             $exit-code = 255
                 if ($suite.planned.defined && $suite.tests-run) && (($suite.planned // 0) != ($suite.tests-run // 0));

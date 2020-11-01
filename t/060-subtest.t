@@ -1,4 +1,7 @@
 use v6;
+BEGIN {
+    $*SCHEDULER = ThreadPoolScheduler.new: :max_threads(3000);
+}
 use Test::Async <Base>;
 
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
@@ -102,16 +105,17 @@ sub test-async($count, :%subtest-plan) {
                 my $suite = test-suite; # Take his subtest object.
                 nok $suite.parallel, "a child suite is non-parallel by default";
                 ok $suite.is-async, "but its async status is inherited";
-            }, |%subtest-plan
+            }, |%subtest-plan, :hidden
     }
-    my Bool $all-ready;
 
     # Await for concurrent subtests to start and prepare.
+    my Bool $all-ready;
     await Promise.anyof(
         Promise.in(30).then({ cas $all-ready, Bool, False }),
         Promise.allof(@subtests-ready).then({ cas $all-ready, Bool, True }),
     ) unless $suite.skip-message;
 
+    ok $all-ready.defined, "internal test insurance: readiness flag is been set";
     ok $all-ready, "all subtests are ready and waiting";
 
     $starter.keep(True);
@@ -123,6 +127,7 @@ sub test-async($count, :%subtest-plan) {
         Promise.allof(@subtests-complete).then({ cas $all-completed, Bool, True }),
     ) unless $suite.skip-message;
 
+    ok $all-completed.defined, "internal test insurance: completion flag is been set";
     ok $all-completed, "all subtests completed";
     is $started, $count, "counter updated by all subtests";
 }
@@ -133,7 +138,7 @@ subtest "Parallel subtests" => {
 
     my %plan-profile = skip-all => "must be 2 or more concurrent jobs allowed, $job-count now" if $job-count < 2;
 
-    plan $job-count + 3,
+    plan $job-count + 5,
          :parallel,
          |%plan-profile;
 
@@ -141,7 +146,7 @@ subtest "Parallel subtests" => {
 }
 
 subtest "Force async" => {
-    plan $job-count + 3, :!parallel, :!random;
+    plan $job-count + 5, :!parallel, :!random;
 
     test-async $job-count, :subtest-plan{ :async, :instant };
 }
@@ -188,7 +193,7 @@ subtest "Subtest returns" => {
 # straight, it is no 0. Let's not write intentionally flapping test!
 # What we can do though is conisder a side effect of the randomization: all subtests will be ran last when the test body
 # execution is over.
-is-run q:to/TEST-CODE/, "sequential",
+is-run q:to/TEST-CODE/, "randomized",
        my $count = 3;
        plan $count + 1, :random;
 

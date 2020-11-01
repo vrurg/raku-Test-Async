@@ -207,9 +207,10 @@ Takes the following named parameters (C<%params> from the first candidate is pas
 capture):
 
 =item C<:$in> – data to be sent to the compiler input
+=item C<:$out?> – expected standard output
+=item C<:%env = %*ENV> - environment to be passed to the child process
 =item C<:@compiler-args> – command line arguments for the compiler process
 =item C<:@args> - command line arguments for C<$code>
-=item C<:$out?> – expected standard output
 =item C<:$err?> – expected error output
 =item C<:$exitcode = 0> – expected process exit code.
 
@@ -759,6 +760,7 @@ method todo-remaining(Str:D $message) is test-tool(:!skippable) {
 method bail-out(Str:D $message = "") is test-tool(:!skippable) {
     self.send: Event::BailOut, :$message;
     self.sync-events;
+    self.fatality;
     exit 255;
 }
 
@@ -782,9 +784,9 @@ multi method subtest( Callable:D \subtests,
         my $caller = $subtest.suite-caller;
         CATCH {
             default {
-                note "===SORRY!=== subtest(", $subtest.message, ") finalization died with ", $_.^name, ": ", $_,
-                     "called at ", $caller;
-                exit 1;
+                # self.trace-out: "! Finalization died with ", .^name, ":\n", .message, "\n", .backtrace.Str;
+                self.x-sorry: $_, :comment("Finalization block died");
+                .rethrow
             }
         }
         my %ev-profile = :$caller;
@@ -828,7 +830,7 @@ multi method is-run(Str() $code, %expected, Str:D $message = "") {
 }
 multi method is-run (
     Str() $code, Str:D $message = "",
-    Stringy :$in, :@compiler-args, :@args, :$out?, :$err?, :$exitcode = 0, :$async = False
+    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False
 ) {
     self.subtest: $message, :instant, :hidden, :$async, -> $suite {
         $suite.plan(1 + ?$out.defined + ?$err.defined);
@@ -837,7 +839,7 @@ multi method is-run (
 
         my @proc-args = ($*EXECUTABLE, @compiler-args, $code-file, @args).flat;
 
-        with run :in, :out, :err, @proc-args {
+        with run :in, :out, :err, @proc-args, :%env {
             $in ~~ Blob ?? .in.write: $in !! .in.print: $in if $in;
             $ = .in.close;
             my $proc-out      = .out.slurp: :close;

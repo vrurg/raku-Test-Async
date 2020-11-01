@@ -135,5 +135,7 @@ method indent-message(+@message, Str:D :$prefix = $.nesting-prefix, Int:D :$nest
 # Excpects a normalized message as input. A message is considered as a whole. Thus, to guarantee atomic output
 # operation, it is safer to join it into a single string.
 method message-to-console(+@message) {
-    print ($.nesting ?? self.indent-message(@message, :$.nesting) !! @message).join;
+    my $out-str = ($.nesting ?? self.indent-message(@message, :$.nesting) !! @message).join;
+    # self.trace-out: ">>> MESSSAGE from [" ~ self.id.fmt('%5d') ~ "]\n", $out-str, "\n>>> END OF MESSAGE\n";
+    print $out-str;
 }
