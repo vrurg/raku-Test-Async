@@ -79,7 +79,7 @@ Pushes an event into the local buffer. If event type is supplied then it gets in
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Manual.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Event.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Utils.md), [`Test::Asynx::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Asynx/X.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Manual.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Event.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Utils.md), [`Test::Asynx::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Asynx/X.md)
 
 AUTHOR
 ======

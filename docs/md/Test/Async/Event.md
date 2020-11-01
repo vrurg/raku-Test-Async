@@ -19,7 +19,7 @@ DESCRIPTION
 
 
 
-General information about `Test::Async` event management can be found in [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Manual.md).
+General information about `Test::Async` event management can be found in [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Manual.md).
 
 Events are objects of classes derived from `Event` class. This module defines events used by the core. In general, all event classes can be conventionally split into the following groups:
 
@@ -69,7 +69,7 @@ Class `Event::Command`
 
 Is `Event`.
 
-Base class of commanding events. [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Hub.md) handles them specially.
+Base class of commanding events. [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Hub.md) handles them specially.
 
 ### Attributes
 
@@ -86,7 +86,7 @@ Base class for events reporting test outcomes.
 
   * `Str $.todo` – message to use if test is marked as *TODO*.
 
-  * `Str $.flunks` – message to use if test is marked as anticipated failure (see `test-flunks` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Base.md).
+  * `Str $.flunks` – message to use if test is marked as anticipated failure (see `test-flunks` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Base.md).
 
   * `CallFrame:D $.caller`, required – position in user code where the test was called.
 
@@ -115,7 +115,7 @@ Class `Event::Terminate`
 
 Is `Event`.
 
-This is the only kind of event which [`Term::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Term/Async/Aggregator.md) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
+This is the only kind of event which [`Term::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Term/Async/Aggregator.md) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
 
 ### Attributes
 
@@ -146,7 +146,7 @@ Class `Event::Diag`
 
 Is `Event::Report`.
 
-Carries a diagnostics message. See `diag` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Base.md).
+Carries a diagnostics message. See `diag` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Base.md).
 
 Class `Event::Ok`
 -----------------
@@ -186,12 +186,12 @@ Emitted when test suite is about to bail out.
 Command event classes `Event::Cmd::*`
 -------------------------------------
 
-A bundle of events used internally for commands. See [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Hub.md) and possibly other modules. The set of command events is not standartized and subject for changes.
+A bundle of events used internally for commands. See [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Hub.md) and possibly other modules. The set of command events is not standartized and subject for changes.
 
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Manual.md), [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Aggregator.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.14/docs/md/Test/Async/Hub.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Manual.md), [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Aggregator.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Hub.md)
 
 AUTHOR
 ======

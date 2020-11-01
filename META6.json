@@ -34,6 +34,7 @@
     "Test::Async::When": "lib/Test/Async/When.rakumod",
     "Test::Async::X": "lib/Test/Async/X.rakumod"
   },
+  "raku": null,
   "resources": [
   ],
   "source-url": "https://github.com/vrurg/raku-Test-Async.git",
@@ -46,5 +47,5 @@
   ],
   "test-depends": [
   ],
-  "version": "0.0.14"
+  "version": "0.0.15"
 }
