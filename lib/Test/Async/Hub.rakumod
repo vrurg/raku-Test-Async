@@ -782,16 +782,6 @@ method await-jobs {
     # Use a dummy class because with Any in $all-done cas() sometimes fails to update the scalar.
     my class NotDoneYet { }
     my $all-done = NotDoneYet;
-    start {
-        # self.trace-out: ">>> REPORTER";
-        CATCH { note ">>> REPORTER THROWN: ", .message, "\n", .backtrace.Str; .rethrow }
-        while True {
-            last if ⚛$all-done;
-            # self.trace-out: ">>> CURRENT JOBS, {$!active-count} active: ", %!job-idx.values.map(*.id).join(", ");
-            sleep 5;
-            # self.trace-out: ">>> REPEAT";
-        }
-    }
     # self.trace-out: ">>> AWAIT JOBS TIMEOUT: ", $!job-timeout;
     await Promise.anyof(
         Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False); }),
@@ -937,7 +927,7 @@ method x-sorry(Exception:D $ex, :$comment) {
 # Implementation detail, for use with a wrapper script I use for parallelized testing.
 method trace-out(**@out) {
     return unless $.trace-mode || $*TEST-ASYNC-TRACING;
-    my $out-file = "output-" ~ (%*ENV<TEST_PARALLEL_ID> // $*PID) ~ ".trace";
+    my $out-file = "TestAsync-" ~ (%*ENV<TEST_PARALLEL_ID> // $*PID) ~ ".trace";
     my $traceh = $out-file.IO.open: :a, :out-buffer(0);
     LEAVE { .close with $traceh };
     my $lines = @out.map(*.gist)
