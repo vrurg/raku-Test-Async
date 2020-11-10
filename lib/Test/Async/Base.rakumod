@@ -288,10 +288,13 @@ method nok(Mu $cond, Str:D $message = "") is test-tool {
     self.proclaim: !$cond, $message
 }
 
-method isa-ok(Mu $got, Mu $expected, Str:D $message = "Is a '{$expected.^name}' type object") is test-tool {
+proto method isa-ok(Mu, Mu, Str:D) is test-tool {*}
+multi method isa-ok(Mu $got, Mu $expected, Str:D $message = "Is a '{$expected.^name}' type object") {
     self.proclaim:
         test-result(
-            $got.isa($expected),
+            ($expected ~~ Str:D
+                ?? $got.isa($expected)
+                !! nqp::istype($got, $expected.WHAT)),
             fail => -> {
                 comments => self.expected-got($expected, $got)
             }),
