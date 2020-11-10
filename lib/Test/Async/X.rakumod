@@ -9,7 +9,7 @@ C<Test::Async::X> - collection of C<Test::Async> exceptions
 
 All exceptions are based upon C<Test::Async::X> class. The class has and requires a single attribute C<$.suite> which
 points at the suite object which thrown the exception. The recommended method C<throw> of
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Hub.md>
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Hub.md>
 sets the attribute automatically.
 
 =head1 EXPORTED EXCEPTIONS
@@ -31,9 +31,9 @@ sets the attribute automatically.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Hub.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.15/docs/md/Test/Async/Utils.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Utils.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
