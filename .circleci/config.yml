@@ -20,6 +20,6 @@ jobs:
       - run:
           name: test 
           command: |
-              /usr/local/share/perl6/site/bin/prove6 -v -l t
+            /root/bin/share/perl6/site/bin/prove6 -v -l t
 
 
