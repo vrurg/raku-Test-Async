@@ -5,6 +5,7 @@ our sub META6 {
     name           => 'Test::Async',
     description    => 'Thread-safe testing framework',
     perl-version   => Version.new('6.d'),
+    raku-version   => Version.new('6.d'),
     depends        => [],
     # test-depends   => <Test::META>,
     # build-depends  => <META6 p6doc Pod::To::Markdown>,
