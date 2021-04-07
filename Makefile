@@ -117,7 +117,11 @@ release-test:
 is-repo-clean:
 	@git diff-index --quiet HEAD || (echo "*ERROR* Repository is not clean, commit your changes first!"; exit 1)
 
-build: depends doc
+build: depends doc checkbuild
+
+checkbuild:
+	@echo "===> Check build integrity"
+	@fez --auth-mismatch-error checkbuild
 
 depends: meta depends-install
 
@@ -154,10 +158,9 @@ $(META): $(META_BUILDER) $(MAIN_MOD_FILE)
 	@rm $(META).out
 
 upload: release
-	@echo "===> Uploading to CPAN"
-	@/bin/sh -c 'read -p "Do you really want to upload to CPAN? (y/N) " answer; [ $$answer = "Y" -o $$answer = "y" ]'
-	@cpan-upload -d Perl6 --md5 $(MOD_ARCH)
-	@echo "===> Uploaded."
+	@echo "===> Uploading to the ecosystem"
+	@/bin/sh -c 'read -p "Do you really want to upload the module? (y/N) " answer; [ $$answer = "Y" -o $$answer = "y" ]'
+	@fez upload
 
 clean:
 	@echo "===> Cleaning " $(CLEAN_FILES) $(CLEAN_DIRS)
