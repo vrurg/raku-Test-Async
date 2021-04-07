@@ -10,7 +10,7 @@ subtest "can-ok basics" => {
     can-ok 42, "Str";
 
     test-flunks;
-    can-ok Num, "NFKD";
+    can-ok Num, "make-it-long-and-impossible-method-name";
 }
 
 done-testing;
