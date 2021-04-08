@@ -69,7 +69,7 @@ Deconting of the values is done to solve some cases of improper initialization o
 SEE ALSO
 ========
 
-`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Utils.md).
+`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Utils.md).
 
 AUTHOR
 ======

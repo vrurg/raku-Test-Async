@@ -74,7 +74,7 @@ If `test-flunks` is in effect then method returns its message and decreases `$.F
 
 Method produces standardized *"expected ... but got ..."* messages.
 
-The second candidate is used for non-string values. It stringifies them using [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Utils.md) `stringify` routine and then passes over to the first candidate for formatting alongside with named parameters captured in `%c`.
+The second candidate is used for non-string values. It stringifies them using [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Utils.md) `stringify` routine and then passes over to the first candidate for formatting alongside with named parameters captured in `%c`.
 
 Named parameters:
 
@@ -136,7 +136,7 @@ The asynchronous invocation means that a `subtest` will be run in a new dedicate
 
 It is possible to combine both async and random modes which might add even more stress to the code tested.
 
-*Some more information about `Test::Async` job management can be found in [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Manual.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Hub.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/JobMgr.md)*
+*Some more information about `Test::Async` job management can be found in [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Manual.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Hub.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md)*
 
 The particular mode of operation is defined either by `plan` keys `parallel` or `random`, or by subtest named parameters `async` or `instant`. The named parameters take precedence over plan parameters:
 
@@ -152,7 +152,7 @@ For example, let's assume that our current suite is configured for random execut
 
 would result in the `subtest` be invoked right away, where it's declaration is encountered, without postponing. Similarly, if `parallel` plan parameter is in effect, `:instant` will overrule it so it will run right here, right now!
 
-Adding `:async` named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won't be counted as a job by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/JobMgr.md). In other words, we treat `:instant` as: *bypass any queue, just do it here and now!*
+Adding `:async` named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won't be counted as a job by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md). In other words, we treat `:instant` as: *bypass any queue, just do it here and now!*
 
 Another edge case is using `:async` with `random`. In this case the subtest will be postponed. But when time to invoke subtests comes this particular one will get his dedicated thread no matter what `parallel` is set to.
 
@@ -172,13 +172,13 @@ The example is the recommended mode of operation when a subtest is invoked in a 
         .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
     }
 
-and this is the way it must be used in a module. See [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async.md) and [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/CookBook.md) for more details.
+and this is the way it must be used in a module. See [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async.md) and [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/CookBook.md) for more details.
 
 ### Hidden `subtest`
 
 `:hidden` named parameter doesn't change how a subtest runs but rather how it reports itself. A hidden subtest pretends to be integral part of test tool method which invoked it. It means two things:
 
-  * flunked test tools called by subtest code won't report their location (file and line) (*implemented by [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Reporter/TAP.md) and might not be supported by 3rd party reporters*)
+  * flunked test tools called by subtest code won't report their location (file and line) (*implemented by [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Reporter/TAP.md) and might not be supported by 3rd party reporters*)
 
   * flunked subtest would report location of the test tool method which invoked it
 
@@ -246,7 +246,7 @@ Setting `$count` to [`Inf`](https://docs.raku.org/type/Inf) is the same as using
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Decl.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Utils.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.16/docs/md/Test/Async/Event.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Manual.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Decl.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Utils.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Event.md)
 
 AUTHOR
 ======
