@@ -24,6 +24,7 @@ our sub META6 {
         'Test::Async::Event'                     => 'lib/Test/Async/Event.rakumod',
         'Test::Async::Job'                       => 'lib/Test/Async/Job.rakumod',
         'Test::Async::JobMgr'                    => 'lib/Test/Async/JobMgr.rakumod',
+        'Test::Async::META'                      => 'lib/Test/Async/META.rakumod',
         'Test::Async::Hub'                       => 'lib/Test/Async/Hub.rakumod',
         'Test::Async::Reporter'                  => 'lib/Test/Async/Reporter.rakumod',
         'Test::Async::Result'                    => 'lib/Test/Async/Result.rakumod',

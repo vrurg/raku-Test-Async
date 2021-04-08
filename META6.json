@@ -22,6 +22,7 @@
     "Test::Async::Hub": "lib/Test/Async/Hub.rakumod",
     "Test::Async::Job": "lib/Test/Async/Job.rakumod",
     "Test::Async::JobMgr": "lib/Test/Async/JobMgr.rakumod",
+    "Test::Async::META": "lib/Test/Async/META.rakumod",
     "Test::Async::Metamodel::BundleClassHOW": "lib/Test/Async/Metamodel/BundleClassHOW.rakumod",
     "Test::Async::Metamodel::BundleHOW": "lib/Test/Async/Metamodel/BundleHOW.rakumod",
     "Test::Async::Metamodel::HubHOW": "lib/Test/Async/Metamodel/HubHOW.rakumod",
