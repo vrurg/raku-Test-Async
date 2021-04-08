@@ -11,7 +11,7 @@ our sub META6 {
     # build-depends  => <META6 p6doc Pod::To::Markdown>,
     tags           => <TESTING ASYNC>,
     authors        => ['Vadim Belman <vrurg@cpan.org>'],
-    auth           => 'github:vrurg',
+    auth           => 'zef:vrurg',
     source-url     => 'https://github.com/vrurg/raku-Test-Async.git',
     support        => META6::Support.new(
         source          => 'https://github.com/vrurg/raku-Test-Async.git',

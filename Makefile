@@ -4,7 +4,9 @@
 SHELL = /bin/sh
 
 export MAIN_MOD=Test::Async
+META_MOD=$(MAIN_MOD)::META
 MAIN_MOD_FILE=$(addprefix lib/,$(addsuffix .rakumod,$(subst ::,/,$(MAIN_MOD))))
+META_MOD_FILE=$(addprefix lib/,$(addsuffix .rakumod,$(subst ::,/,$(META_MOD))))
 MOD_VER:=$(shell raku -Ilib -e 'use $(MAIN_MOD); $(MAIN_MOD).^ver.say')
 MOD_NAME_PFX=$(subst ::,-,$(MAIN_MOD))
 MOD_DISTRO=$(MOD_NAME_PFX)-$(MOD_VER)
@@ -152,7 +154,7 @@ $(MOD_ARCH): $(DIST_FILES)
 	@git push -f --tags
 	@git archive --prefix="$(MOD_DISTRO)/" -o $(MOD_ARCH) $(MOD_VER)
 
-$(META): $(META_BUILDER) $(MAIN_MOD_FILE)
+$(META): $(META_BUILDER) $(MAIN_MOD_FILE) $(META_MOD_FILE)
 	@echo "===> Generating $(META)"
 	@$(META_BUILDER) $(MAIN_MOD) >$(META).out && cp $(META).out $(META)
 	@rm $(META).out
