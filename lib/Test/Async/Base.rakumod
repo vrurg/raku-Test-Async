@@ -784,6 +784,7 @@ multi method subtest( Callable:D \subtests,
     my $flunk-msg = self.take-FLUNK;
 
     my sub finalize-subtest($subtest) {
+        self.diag: "Subtest: ", $subtest.message unless $subtest.transparent;
         my $caller = $subtest.suite-caller;
         CATCH {
             default {

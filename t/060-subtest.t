@@ -24,7 +24,7 @@ is-run q:to/TEST-CODE/, "basic subtest",
        :compiler-args(@default-args),
        :exitcode(0),
        :err(''),
-       :out(/^"1..1\n  ok 1 - subtest 1\n  1..1\nok 1 - simple\n"/);
+       :out(/^"1..1\n# Subtest: simple\n  ok 1 - subtest 1\n  1..1\nok 1 - simple\n"/);
 
 is-run q:to/TEST-CODE/, "sequential",
        plan 2;
@@ -41,8 +41,8 @@ is-run q:to/TEST-CODE/, "sequential",
        :err(''),
        :out(
             /
-                ^"1..2\n  ok 1 - subtest 1-1\n  1..1\nok 1 - simple 1\n"
-                ^^"  1..1\n  ok 1 - subtest 2-1\nok 2 - simple 2\n"
+                ^"1..2\n# Subtest: simple 1\n  ok 1 - subtest 1-1\n  1..1\nok 1 - simple 1\n"
+                ^^"# Subtest: simple 2\n  1..1\n  ok 1 - subtest 2-1\nok 2 - simple 2\n"
             /
        );
 
@@ -211,8 +211,11 @@ is-run q:to/TEST-CODE/, "randomized",
        :out(
             /
                 ^"1..4\nok 1 - this will preceede subtests\n"
+                ^^"# Subtest: job " \d \n
                 ^^"  1..1\n  ok 1 - dummy " \d "\nok 2 - job " \d \n
+                ^^"# Subtest: job " \d \n
                 ^^"  1..1\n  ok 1 - dummy " \d "\nok 3 - job " \d \n
+                ^^"# Subtest: job " \d \n
                 ^^"  1..1\n  ok 1 - dummy " \d "\nok 4 - job " \d \n
             /
        );
