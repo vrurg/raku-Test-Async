@@ -90,9 +90,12 @@ multi method TAP-str-from-ev(::?CLASS:D: Event::Test:D $ev, Str:D $kind,
     my $prepend = "";
     my $comment = "";
     # say "< FROM EVENT ", $ev.^name, " -- “{$ev.message}”";
+    if $ev.pre-comments {
+        $prepend ~= self!diag-line($ev.pre-comments.join("\n")) ~ "\n";
+    }
     if $ev.child-messages.elems {
         # Event source is a child, take its collected messages and nest them with spaces.
-        $prepend = self.indent-message($ev.child-messages).join;
+        $prepend ~= self.indent-message($ev.child-messages).join;
     }
     if $ev.comments {
         # note "IN TAP: ", $ev.comments.raku;

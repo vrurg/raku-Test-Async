@@ -784,7 +784,6 @@ multi method subtest( Callable:D \subtests,
     my $flunk-msg = self.take-FLUNK;
 
     my sub finalize-subtest($subtest) {
-        self.diag: "Subtest: ", $subtest.message unless $subtest.transparent;
         my $caller = $subtest.suite-caller;
         CATCH {
             default {
@@ -796,6 +795,9 @@ multi method subtest( Callable:D \subtests,
         my %ev-profile = :$caller;
         if $subtest.messages.elems {
             %ev-profile<child-messages> := $subtest.messages<>;
+        }
+        unless $subtest.transparent {
+            %ev-profile<pre-comments> := ["Subtest: " ~ $subtest.message ];
         }
         # Signal to send-test method that this suite has been marked as flunky.
         my $*TEST-FLUNK-SAVE = $flunk-msg;

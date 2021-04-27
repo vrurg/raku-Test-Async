@@ -82,6 +82,7 @@ L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/doc
 =item C<CallFrame:D $.caller>, required – position in user code where the test was called.
 =item C<@.child-messages> – messages from child suites. Each entry should be a single line ending with newline.
 =item C<@.comments> – comments for the test. Normally expected to be reported with C<diag>. Not special formatting
+=item C<@.pre-comments> - similar to the above, but these will preceed the main test message
 requirements except for a recommendation for the last line not to end with a newline.
 
 =head2 Class <Event::StageTransition>
