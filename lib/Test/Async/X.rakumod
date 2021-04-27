@@ -130,4 +130,17 @@ module X is export {
             "Transparent attribute is set but the suite doesn't have a parent"
         }
     }
+
+    class EmptyToolStack is Base {
+        has Str:D $.op is required;
+        method message {
+            "Operation '" ~ $!op ~ "' attempted on empty tool call stack"
+        }
+    }
+
+    class NoToolCaller is Base {
+        method message {
+            "Cannot locate test tool caller"
+        }
+    }
 }
