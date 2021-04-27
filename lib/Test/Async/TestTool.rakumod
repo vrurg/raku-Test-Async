@@ -16,11 +16,11 @@ This role is applied by C<test-tool> trait to a test tool method.
 Contains the name which must be used for exporting a test tool routine. Makes sense if method must be named differently
 from what is provided for the user.
 
-=head2 C<Bool:D $.readify>
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.readify>
 
 This flag is indicating if test tool must cause it's suite object to transition from C<TSInitializing> stage.
 
-=head2 C<Bool:D $.skippable>
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.skippable>
 
 This flag indicates that this test tool could be skipped. A typical example of a non-skippable tool is the C<skip>
 itself, or C<todo> tool family. The importance of this nuance stems from the fact that when C<skip-remaining> tool is in
@@ -31,10 +31,18 @@ the tool method. Without C<$.skippable> reset to I<False> a line like:
 
 would result in a single skip event which is counted as a test run. Our plan will fail because of 2 missing skip events.
 
-=head2 C<Bool:D $.wrappable>
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.wrappable>
 
 Resetting this flag to I<False> would result in test tool method would be left intact by
 L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Metamodel/BundleClassHOW.md>.
+
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.anchoring>
+
+Marks a test tool as an I<anchoring> one. See
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Manual.md>
+Call Location And Anchoring section for more details.
+
+I<False> by default.
 
 =METHODS
 
@@ -68,8 +76,10 @@ has $.tool-name;
 has Bool:D $.readify = True;
 has Bool:D $.skippable = True;
 has Bool:D $.wrappable = True;
+has Bool:D $.anchoring = False;
 
 method set-tool-name(Str:D $!tool-name)    { }
 method set-readify(Bool:D $!readify)       { }
 method set-skippable(Bool:D $!skippable)   { }
 method set-wrappable(Bool:D $!wrappable)   { }
+method set-anchoring(Bool:D $!anchoring)   { }
