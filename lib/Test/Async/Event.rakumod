@@ -230,6 +230,7 @@ class Event::Test is Event::Report {
     has Str $.todo;
     has Str $.flunks;
     has CallFrame:D $.caller is required;
+    has @.pre-comments;
     has @.child-messages;
     has @.comments;
 }
