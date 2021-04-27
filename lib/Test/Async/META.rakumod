@@ -1,8 +1,11 @@
 unit module Test::Async::META;
 use META6;
+use Test::Async;
 
 our sub META6 {
     name           => 'Test::Async',
+    version        => Test::Async.^ver,
+    api            => Test::Async.^api,
     description    => 'Thread-safe testing framework',
     perl-version   => Version.new('6.d'),
     raku-version   => Version.new('6.d'),
@@ -39,5 +42,5 @@ our sub META6 {
         'Test::Async::Reporter::TAP'             => 'lib/Test/Async/Reporter/TAP.rakumod',
     },
     license        => 'Artistic-2.0',
-    production     => True,
+    production     => False,
 }

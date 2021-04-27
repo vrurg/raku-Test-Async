@@ -14,20 +14,21 @@ sets the attribute automatically.
 
 =head1 EXPORTED EXCEPTIONS
 
-=item C<X::AwaitTimeout>
-=item C<X::AwaitWithPostponed>
-=item C<X::BadPostEvent>
-=item C<X::JobInactive>
-=item C<X::NoJobId>
-=item C<X::PlanRequired>
-=item C<X::StageTransition>
-=item C<X::WhenCondition>
-=item C<X::FileOp>
-=item2 C<X::FileCreate>
-=item2 C<X::FileClose>
-=item2 C<X::FileWrite>
-=item2 C<X::FileRead>
-=item C<X::TransparentWithoutParent>
+=item C<Test::Async::X::AwaitTimeout>
+=item C<Test::Async::X::AwaitWithPostponed>
+=item C<Test::Async::X::BadPostEvent>
+=item C<Test::Async::X::JobInactive>
+=item C<Test::Async::X::NoJobId>
+=item C<Test::Async::X::NoToolCaller>
+=item C<Test::Async::X::PlanRequired>
+=item C<Test::Async::X::StageTransition>
+=item C<Test::Async::X::WhenCondition>
+=item C<Test::Async::X::TransparentWithoutParent>
+=item C<Test::Async::X::FileOp>
+=item2 C<Test::Async::X::FileCreate>
+=item2 C<Test::Async::X::FileClose>
+=item2 C<Test::Async::X::FileWrite>
+=item2 C<Test::Async::X::FileRead>
 
 =head1 SEE ALSO
 
@@ -72,7 +73,7 @@ module X is export {
 
     class PlanTooLate is Base {
         method message {
-            "It is too late to change plan at " ~ $.suite.tool-caller.gist;
+            "It is too late to change plan at " ~ $.suite.tool-caller.frame.gist;
         }
     }
 

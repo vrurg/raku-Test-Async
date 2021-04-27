@@ -413,6 +413,13 @@ my subset CALLER-CTX of Any where Stash:D | PseudoStash:D;
 
 has ::?CLASS $.parent-suite;
 
+class ToolCallerCtx {
+    has CallFrame:D $.frame is required;
+    has CALLER-CTX $.stash is required;
+    # If anchored then for any nested too call locate-tool-caller will return the anchored location.
+    has Bool:D $.anchored = False;
+}
+
 my atomicint $next-id = 0;
 has Int:D $.id = $next-id⚛++;
 
@@ -433,13 +440,11 @@ has Numeric:D $.TODO-count = 0;
 # How far away our hub from the top one?
 has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
-# Where the last test-tool has been invoked
-has CallFrame $.tool-caller where *.defined;
-# Caller frame Stash/PseudoStash
-has CALLER-CTX $.caller-ctx;
+# Stack to test tools invoked
+has ToolCallerCtx:D @.tool-stack;
 # If true the suite will report it's parent tool-caller attribute.
 has Bool:D $.transparent = False;
-has CallFrame $.suite-caller where *.defined;
+has ToolCallerCtx $.suite-caller where *.defined;
 
 # Are we an asynchronous child? Transitive, i.e. event if the suit is started synchronously by a parent but the parent
 # itself is async – this becomes true.
@@ -474,17 +479,18 @@ method new(|c) {
 
 submethod TWEAK(|) {
     with $!parent-suite {
-        $!suite-caller = .tool-caller;
+        $!suite-caller = $_ with .tool-caller;
         $!trace-mode = .trace-mode;
+        $!transparent ||= .transparent;
     }
     else {
-        self.locate-tool-caller(3);
-        $!suite-caller = $!tool-caller;
+        $!suite-caller = self.locate-tool-caller(2);
     }
     if $!transparent {
         with $!parent-suite {
-            $!tool-caller = .tool-caller;
-            $!caller-ctx = .caller-ctx;
+            # If a hidden subtest invoked directly under its parent subtest then the tool stack is empty and the tool
+            # which created us is the parent suite itself.
+            $!suite-caller = .tool-caller // .suite-caller;
         }
         else {
             self.throw: X::TransparentWithoutParent
@@ -525,17 +531,6 @@ method set-stage(TestStage:D $stage) {
             self.try-send: Event::StageTransition, :from($cur-stage), :to($stage);
             return $cur-stage;
         }
-    }
-}
-
-method set-tool-caller(CallFrame:D $caller) {
-    $!tool-caller = $caller unless $!transparent;
-    $!tool-caller
-}
-
-method set-caller-ctx(CALLER-CTX $ctx) {
-    unless $!transparent {
-        $!caller-ctx = $ctx;
     }
 }
 
@@ -715,7 +710,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
     if my $TODO-message = self.take-TODO {
         %profile<todo> = $TODO-message;
     }
-    %profile<caller> = $.tool-caller;
+    %profile<caller> = (self.tool-caller // $.suite-caller).frame;
     self.send: evType, :$message, |%profile, |%c;
     $tr == TRPassed
 }
@@ -851,24 +846,49 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
     &code(|c)
 }
 
+method push-tool-caller(ToolCallerCtx:D $ctx) {
+    @!tool-stack.push: $ctx
+}
+
+method pop-tool-caller(--> ToolCallerCtx:D) {
+    fail X::EmptyToolStack.new(:suite(self), :op<pop>)
+        unless +@!tool-stack;
+    @!tool-stack.pop
+}
+
+proto method anchor(::?CLASS:D: |) {*}
+multi method anchor(::?CLASS:D: &code) {
+    self.anchor: 2, &code
+}
+multi method anchor(::?CLASS:D: Int:D $pre-skip, &code) {
+    self.push-tool-caller: self.locate-tool-caller($pre-skip + 1, :anchored);
+    LEAVE self.pop-tool-caller;
+    &code()
+}
+
 # Determine the caller and the context.
 # Don't make tests guessing what is our caller's context.
-method locate-tool-caller(Int:D $pre-skip) {
-    my $found;
+method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCallerCtx:D) {
+    if (my $anch = (self.tool-caller // $!suite-caller)) andthen .anchored {
+        return $anch;
+    }
+    return $!suite-caller if $!transparent;
     my $ctx = CALLER::;
     my Int:D $idx = 0;
-    while !$found && $ctx {
+    while $ctx {
+        # Skip as many frames as requested + own frame
         unless $idx < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
-            $found = True;
-            last;
+            return ToolCallerCtx.new: :frame(callframe($idx + 1)), :stash($ctx), :$anchored;
         }
         ++$idx;
-        $ctx = $ctx<CALLER>.WHO;
+        $ctx = $ctx<CALLER>.WHO<LEXICAL>.WHO;
     }
-    if $found {
-        $!tool-caller = callframe($idx + 1);
-        $!caller-ctx = $ctx;
-    }
+    fail X::NoToolCaller.new(:suite(self));
+}
+
+method tool-caller(--> ToolCallerCtx:D) {
+    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@!tool-stack;
+    @!tool-stack[*-1]
 }
 
 my atomicint $temp-count = 0;
@@ -928,9 +948,15 @@ method fatality(Int:D $!exit-code = 255) {
 }
 
 method x-sorry(Exception:D $ex, :$comment) {
-    note "===SORRY!=== Suite #" ~ $.id ~ " '" ~ $.message ~ "', ", $.suite-caller.gist, ":\n"
+    note "===SORRY!=== Suite #" ~ $.id ~ " '" ~ $.message ~ "', ", $.suite-caller.frame.gist, ":\n"
         ~ ($ex ~~ Test::Async::X::Base
-                ?? ("thrown by suite #" ~ $ex.suite.id ~ " '" ~ $ex.suite.message ~ "', " ~ $ex.suite.suite-caller.gist ~ "\n").indent(2)
+                ?? ("thrown by suite #"
+                    ~ $ex.suite.id
+                    ~ " '"
+                    ~ $ex.suite.message
+                    ~ "', "
+                    ~ $ex.suite.suite-caller.frame.gist
+                    ~ "\n").indent(2)
                 !! "")
         ~ ($comment ?? ($comment ~ "\n").indent(2) !! "")
         ~ ("[" ~ $ex.^name ~ "] " ~ $ex.message ~ "\n" ~ $ex.backtrace).indent(4)

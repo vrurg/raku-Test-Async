@@ -42,7 +42,6 @@ use Test::Async::TestTool;
 method !wrap-test-tools(Mu \type-obj) {
     for type-obj.^methods.grep(Test::Async::TestTool) -> &meth is raw {
         next unless &meth.wrappable;
-        my $name = &meth.tool-name;
         my \meth-do = nqp::getattr(&meth, Code, '$!do');
 
         # Test tool boilerplate wrapper.
@@ -52,22 +51,25 @@ method !wrap-test-tools(Mu \type-obj) {
 
             my \capture = nqp::usecapture();
 
-            self.locate-tool-caller(2);
+            self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
 
             if self.stage >= TSFinished {
-                warn "A test tool called after done-testing at " ~ $.tool-caller.gist;
+                warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
                 return;
             }
             self.set-stage(TSInProgress) if &meth.readify;
+            my $rc;
             if &meth.skippable && $.skip-message.defined {
                 self.send-test: Event::Skip, $.skip-message, TRSkipped;
-                True
+                $rc = True;
             }
             else {
                 self.measure-telemetry: {
-                    nqp::invokewithcapture(meth-do, capture)
+                    $rc = nqp::invokewithcapture(meth-do, capture)
                 }
             }
+            self.pop-tool-caller;
+            $rc
         };
 
         &wrap.set_name(&meth.name);

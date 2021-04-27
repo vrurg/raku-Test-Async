@@ -514,18 +514,20 @@ method lives-ok(Callable $code, Str:D $message = "code anticipated to die") is t
         $message;
 }
 
-method !eval-exception($code) {
-    try { EVAL $code }
+method !eval-exception($code, $context) {
+    try { EVAL $code, :$context }
     $!
 }
 
 method eval-dies-ok(Str() $code, Str:D $message = "EVAL'ed code anticipated to die") is test-tool {
-    my $ex = self!eval-exception($code);
+    my $context = $.tool-caller.stash // CALLER::;
+    my $ex = self!eval-exception($code, $context);
     self.proclaim: $ex.defined, $message;
 }
 
 method eval-lives-ok(Str() $code, Str:D $message = "EVAL'ed code anticipated to die") is test-tool {
-    my $ex = self!eval-exception($code);
+    my $context = $.tool-caller.stash // CALLER::;
+    my $ex = self!eval-exception($code, $context);
     self.proclaim:
         test-result(
             !$ex.defined,
@@ -546,7 +548,7 @@ method !validate-matchers(%matcher) {
 method throws-like($code where Callable:D | Str:D, $ex_type, Str:D $message = "did we throws-like $ex_type.^name()?", *%matcher) is test-tool {
     self!validate-matchers(%matcher);
     # Don't guess our caller context, know it!
-    my $caller-context = $.caller-ctx // CALLER::;
+    my $caller-context = $.tool-caller.stash // CALLER::;
     my $rc = False;
     self.subtest: $message, :instant, :hidden, :!async, {
         my \suite = self.test-suite;
@@ -599,7 +601,7 @@ method fails-like (
     $code where Callable:D | Str:D, $ex-type, Str:D $message = "did we fails-like $ex-type.^name()?", *%matcher
 ) is test-tool {
     self!validate-matchers(%matcher);
-    my $throws-like-context = $.caller-ctx // CALLER::;
+    my $throws-like-context = $.tool-caller.stash // CALLER::;
     my $rc = False;
     self.subtest: $message, :instant, :hidden, :!async, {
         my \suite = self.test-suite;
@@ -734,7 +736,7 @@ method skip(Str:D $message = "", UInt:D $count = 1) is test-tool(:!skippable) {
 
 method skip-rest(Str:D $message = "") is test-tool(:!skippable) {
     with self.planned {
-        self.skip($message, self.planned);
+        self.skip($message, self.planned - $.tests-run);
     }
     else {
         self.throw: X::PlanRequired, :op<skip-rest>
@@ -781,10 +783,22 @@ multi method subtest( Callable:D \subtests,
                       Bool:D :$hidden = False,
                       *%plan ) is hidden-from-backtrace
 {
+    my $subtest-ctx = self.locate-tool-caller(1);
+
+    if self.stage >= TSFinished {
+        warn "A subtest found after done-testing at " ~ $subtest-ctx.frame.gist;
+        return;
+    }
+    self.set-stage(TSInProgress);
+    if $.skip-message.defined {
+        self.send-test: Event::Skip, $.skip-message, TRSkipped;
+        return True
+    }
+
     my $flunk-msg = self.take-FLUNK;
 
     my sub finalize-subtest($subtest) {
-        my $caller = $subtest.suite-caller;
+        my $caller = $subtest.suite-caller.frame;
         CATCH {
             default {
                 # self.trace-out: "! Finalization died with ", .^name, ":\n", .message, "\n", .backtrace.Str;
@@ -813,19 +827,14 @@ multi method subtest( Callable:D \subtests,
                   :$message,
                   :dismiss-callback(&finalize-subtest),
                   :transparent($hidden);
-    self.locate-tool-caller(2) unless $hidden;
+    # Provide the child suite with right context.
+    self.push-tool-caller: $subtest-ctx unless $hidden;
     my $child = self.create-suite: |%profile, :subtest-report;
-    if self.stage >= TSFinished {
-        warn "A subtest found after done-testing at " ~ $child.tool-caller.gist;
-        return;
-    }
-    self.set-stage(TSInProgress);
-    if $.skip-message.defined {
-        self.send-test: Event::Skip, $.skip-message, TRSkipped;
-        return True
-    }
-
     $child.plan: |%plan if %plan;
+    # Remove tool call entry from the stack because the child suite already has it and it might be run asynchronously or
+    # randomly.
+    self.pop-tool-caller unless $hidden;
+
 
     self.invoke-suite( $child, :$async, :$instant, args => \($child) );
 }
