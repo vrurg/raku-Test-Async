@@ -605,6 +605,18 @@ method done-testing() is test-tool(:!skippable) {
     self.finish;
 }
 
+method abort-testing() is test-tool(:!skippable) {
+    self.finish;
+    if $!nesting {
+        # A child suite can be aborted
+        self.abort;
+    }
+    else {
+        # The top suite must gracefully exit to shell
+        exit;
+    }
+}
+
 method cmd-skipremaining(Str:D $message) {
     $!skip-message = $message;
 }
