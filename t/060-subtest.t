@@ -2,10 +2,12 @@ use v6;
 BEGIN {
     $*SCHEDULER = ThreadPoolScheduler.new: :max_threads(3000);
 }
+use lib $?FILE.IO.parent(1).add('lib/060-subtest/lib');
+use Test::SubBundle;
 use Test::Async <Base>;
 
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
-plan 15, :!parallel, :!random;
+plan 19, :!parallel, :!random;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
 my $job-count = test-suite.test-jobs;
@@ -47,11 +49,11 @@ is-run q:to/TEST-CODE/, "sequential",
        );
 
 is-run q:to/TEST-CODE/, "hidden subtest",
-       use Test::SubBundle;
-       use Test::Async <Base>;
-       plan 1;
-       test-hidden-subtest;
-       TEST-CODE
+           use Test::SubBundle;
+           use Test::Async <Base>;
+           plan 1;
+           test-hidden-subtest;
+           TEST-CODE
        :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
        :exitcode(1),
        :err(''),
@@ -61,6 +63,58 @@ is-run q:to/TEST-CODE/, "hidden subtest",
                 "  # You failed 1 test of 1\nnot ok 1 - hidden\n"
                 "# Failed test 'hidden'\n# at " .*? " line 4"
             /
+       );
+
+is-run q:to/TEST-CODE/, "hidden from hidden subtest",
+           use Test::SubBundle;
+           use Test::Async <Base>;
+           plan 1;
+           test-hidden-in-hidden;
+           TEST-CODE
+       :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
+       :exitcode(1),
+       :err(''),
+       :out(
+       /
+       ^"1..1\n    1..1\n    not ok 1 - must report test-hidden-in-hidden CallFrame\n"
+       "    # You failed 1 test of 1\n  not ok 1 - hidden\n"
+       .*
+       "# Failed test 'hidden in hidden'\n# at " .*? " line 4"
+       /
+       );
+
+is-run q:to/TEST-CODE/, "a tool with anchor",
+            use Test::SubBundle;
+            use Test::Async <Base>;
+            plan 1;
+            test-tool-with-anchor
+            TEST-CODE
+       :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
+       :exitcode(1),
+       :err(''),
+       :out(
+       /
+       ^"1..1\n  1..1\n  not ok 1 - must report test-tool-with-anchor CallFrame\n"
+       "  # You failed 1 test of 1\nnot ok 1 - hidden\n"
+       "# Failed test 'hidden'\n# at " .*? " line 4"
+       /
+       );
+
+is-run q:to/TEST-CODE/, "a wrappable anchoring tool",
+            use Test::SubBundle;
+            use Test::Async <Base>;
+            plan 1;
+            test-tool-anchoring
+            TEST-CODE
+       :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
+       :exitcode(1),
+       :err(''),
+       :out(
+       /
+       ^"1..1\n  1..1\n  not ok 1 - must report test-tool-anchoring CallFrame\n"
+       "  # You failed 1 test of 1\nnot ok 1 - hidden\n"
+       "# Failed test 'hidden'\n# at " .*? " line 4"
+       /
        );
 
 subtest "subtest topic" => {
@@ -92,7 +146,7 @@ sub test-async($count, :%subtest-plan) {
     for ^$count -> $id {
         @subtests-ready.push: my $subtest-ready = Promise.new;
         @subtests-complete.push:
-            subtest "job $id" => {
+            subtest "job $id", |%subtest-plan, :hidden, {
                 plan 4;
                 # Sync with the parent suite.
                 is $started, 0, "no concurrent subtests really started yet";
@@ -102,10 +156,11 @@ sub test-async($count, :%subtest-plan) {
                 pass "subtest $id started";
 
                 # Test for our internal status
-                my $suite = test-suite; # Take his subtest object.
+                my $suite = test-suite;
+                # Take his subtest object.
                 nok $suite.parallel, "a child suite is non-parallel by default";
                 ok $suite.is-async, "but its async status is inherited";
-            }, |%subtest-plan, :hidden
+            }
     }
 
     # Await for concurrent subtests to start and prepare.
@@ -189,6 +244,15 @@ subtest "Subtest returns" => {
     nok $sres, "bad plan subtest returns a Promise kept with False";
 }
 
+# abort-testing must only affect it's immediate parent suite. This subtest must not affect other tests in this file.
+subtest "Subtest aborts" => {
+    plan 2;
+    pass "one test passes";
+    skip-rest "pretend of some kind of no-go condition";
+    abort-testing;
+    flunk "flunk must never be reached after abort-testing";
+}
+
 # We can't rely on the order test to determine if it was random. However low is the probability to get them ordered
 # straight, it is no 0. Let's not write intentionally flapping test!
 # What we can do though is conisder a side effect of the randomization: all subtests will be ran last when the test body
@@ -219,5 +283,4 @@ is-run q:to/TEST-CODE/, "randomized",
                 ^^"  1..1\n  ok 1 - dummy " \d "\nok 4 - job " \d \n
             /
        );
-
 done-testing;

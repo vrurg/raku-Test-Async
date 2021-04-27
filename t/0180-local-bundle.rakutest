@@ -1,0 +1,17 @@
+use v6;
+
+# Make sure we can declare local test-bundle for the purposes of current test-suite.
+    use Test::Async::Decl;
+    test-bundle MyLocalBundle {
+        method test-local-tool is test-tool {
+            self.pass: "locally declared bundle exports a test tool";
+        }
+    }
+
+use Test::Async <Base>;
+
+plan 1;
+
+test-local-tool;
+
+done-testing;
