@@ -20,7 +20,12 @@ L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/doc
 =end pod
 
 unit class Test::Async::Metamodel::BundleHOW is Metamodel::ParametricRoleHOW;
+use Test::Async::Metamodel::HubHOW;
 
 method new_type(|) {
-    $*TEST-BUNDLE-TYPE := callsame
+    $*TEST-BUNDLE-TYPE := callsame;
+    unless $*W && $*W.is_precompilation_mode {
+        Test::Async::Metamodel::HubHOW.register-bundle: $*TEST-BUNDLE-TYPE;
+    }
+    $*TEST-BUNDLE-TYPE
 }
