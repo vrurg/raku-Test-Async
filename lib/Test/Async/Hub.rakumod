@@ -496,8 +496,6 @@ has Numeric:D $.TODO-count = 0;
 # How far away our hub from the top one?
 has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
-# Stack to test tools invoked
-has ToolCallerCtx:D @.tool-stack;
 # If true the suite will report it's parent tool-caller attribute.
 has Bool:D $.transparent = False;
 has ToolCallerCtx $.suite-caller where *.defined;
@@ -556,6 +554,8 @@ submethod TWEAK(|) {
 
 my $singleton;
 method top-suite {
+    # Tool call stack
+    PROCESS::<@TEST-TOOL-STACK> = [];
     $singleton //= ::?CLASS.new
 }
 
@@ -903,13 +903,13 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
 }
 
 method push-tool-caller(ToolCallerCtx:D $ctx) {
-    @!tool-stack.push: $ctx
+    @*TEST-TOOL-STACK.push: $ctx
 }
 
 method pop-tool-caller(--> ToolCallerCtx:D) {
     fail X::EmptyToolStack.new(:suite(self), :op<pop>)
-        unless +@!tool-stack;
-    @!tool-stack.pop
+        unless +@*TEST-TOOL-STACK;
+    @*TEST-TOOL-STACK.pop
 }
 
 proto method anchor(::?CLASS:D: |) {*}
@@ -943,8 +943,8 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
 }
 
 method tool-caller(--> ToolCallerCtx:D) {
-    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@!tool-stack;
-    @!tool-stack[*-1]
+    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
+    @*TEST-TOOL-STACK[*-1]
 }
 
 my atomicint $temp-count = 0;
