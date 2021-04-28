@@ -232,7 +232,7 @@ but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
 Whenever a test fails C<Test::Async> tries to provide the most useful information about where exactly the failure
 happened. For this purpose it keeps track of test tool call location. The information is recorded in a
-L<C<Test::Async::Hub::TollCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/TollCallerCtx.md>
+L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/ToolCallerCtx.md>
 record and stored on a
 L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub.md>
 tool call stack. See C<@.tool-stack> attribute of the class.

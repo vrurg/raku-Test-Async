@@ -209,7 +209,7 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
 Call Location And Anchoring
 ---------------------------
 
-Whenever a test fails `Test::Async` tries to provide the most useful information about where exactly the failure happened. For this purpose it keeps track of test tool call location. The information is recorded in a [`Test::Async::Hub::TollCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/TollCallerCtx.md) record and stored on a [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub.md) tool call stack. See `@.tool-stack` attribute of the class.
+Whenever a test fails `Test::Async` tries to provide the most useful information about where exactly the failure happened. For this purpose it keeps track of test tool call location. The information is recorded in a [`Test::Async::Hub::ToolCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/ToolCallerCtx.md) record and stored on a [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub.md) tool call stack. See `@.tool-stack` attribute of the class.
 
 Normally the location is determined by `locate-tool-caller` method of the [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub.md) class and points at the exact location of where a tool was used. But sometimes this information may not be really useful. For example, imagine a compound test tool which combines a few checks into a single call. Something like:
 
