@@ -53,33 +53,33 @@ The base event class.
 EVENT SUBCLASSES
 ================
 
-  * [`Event::BailOut`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/BailOut.md).
+  * [`Event::BailOut`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/BailOut.md)
 
-  * [`Event::Command`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Command.md).
+  * [`Event::Command`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Command.md)
 
-  * [`Event::Diag`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Diag.md).
+  * [`Event::Diag`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Diag.md)
 
-  * [`Event::DoneTesting`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/DoneTesting.md).
+  * [`Event::DoneTesting`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/DoneTesting.md)
 
-  * [`Event::JobsAwaited`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/JobsAwaited.md).
+  * [`Event::JobsAwaited`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/JobsAwaited.md)
 
-  * [`Event::NotOk`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/NotOk.md).
+  * [`Event::NotOk`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/NotOk.md)
 
-  * [`Event::Ok`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Ok.md).
+  * [`Event::Ok`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Ok.md)
 
-  * [`Event::Plan`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Plan.md).
+  * [`Event::Plan`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Plan.md)
 
-  * [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md).
+  * [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md)
 
-  * [`Event::Skip`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Skip.md).
+  * [`Event::Skip`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Skip.md)
 
-  * [`Event::StageTransition`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/StageTransition.md).
+  * [`Event::StageTransition`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/StageTransition.md)
 
-  * [`Event::Telemetry`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Telemetry.md).
+  * [`Event::Telemetry`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Telemetry.md)
 
-  * [`Event::Terminate`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Terminate.md).
+  * [`Event::Terminate`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Terminate.md)
 
-  * [`Event::Test`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Test.md).
+  * [`Event::Test`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Test.md)
 
 Command event classes `Event::Cmd::*`
 -------------------------------------

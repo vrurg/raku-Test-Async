@@ -46,20 +46,20 @@ method collects all changed public attributes of an object.
 
 =head1 EVENT SUBCLASSES
 
-=item L<C<Event::BailOut>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/BailOut.md>.
-=item L<C<Event::Command>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Command.md>.
-=item L<C<Event::Diag>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Diag.md>.
-=item L<C<Event::DoneTesting>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/DoneTesting.md>.
-=item L<C<Event::JobsAwaited>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/JobsAwaited.md>.
-=item L<C<Event::NotOk>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/NotOk.md>.
-=item L<C<Event::Ok>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Ok.md>.
-=item L<C<Event::Plan>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Plan.md>.
-=item L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md>.
-=item L<C<Event::Skip>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Skip.md>.
-=item L<C<Event::StageTransition>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/StageTransition.md>.
-=item L<C<Event::Telemetry>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Telemetry.md>.
-=item L<C<Event::Terminate>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Terminate.md>.
-=item L<C<Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Test.md>.
+=item L<C<Event::BailOut>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/BailOut.md>
+=item L<C<Event::Command>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Command.md>
+=item L<C<Event::Diag>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Diag.md>
+=item L<C<Event::DoneTesting>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/DoneTesting.md>
+=item L<C<Event::JobsAwaited>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/JobsAwaited.md>
+=item L<C<Event::NotOk>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/NotOk.md>
+=item L<C<Event::Ok>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Ok.md>
+=item L<C<Event::Plan>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Plan.md>
+=item L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md>
+=item L<C<Event::Skip>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Skip.md>
+=item L<C<Event::StageTransition>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/StageTransition.md>
+=item L<C<Event::Telemetry>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Telemetry.md>
+=item L<C<Event::Terminate>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Terminate.md>
+=item L<C<Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Test.md>
 
 =head2 Command event classes C<Event::Cmd::*>
 
