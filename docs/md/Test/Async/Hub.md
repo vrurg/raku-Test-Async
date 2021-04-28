@@ -13,9 +13,9 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Consumes [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Aggregator.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md)
+Consumes [`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Aggregator.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/JobMgr.md)
 
-See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Manual.md) for general purpose of this class.
+See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Manual.md) for general purpose of this class.
 
 Command Execution
 -----------------
@@ -66,7 +66,7 @@ If suite is planned for skipping then this is the message as for `skip-remaining
 
 Otherwise undefined.
 
-**NOTE!** Any examples of code in this documentation are based on the default [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Base.md) bundle.
+**NOTE!** Any examples of code in this documentation are based on the default [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Base.md) bundle.
 
 `TODO-message`
 --------------
@@ -96,27 +96,22 @@ How deep are we from the top suite? I.e. a child of a child of the top suite wil
 
 A string, recommended prefix to be used for indenting messages produced by the suite.
 
-`tool-caller`
--------------
+`tool-stack`
+------------
 
-An instance of `CallFrame`. If defined then it's where the last test tool has been invoked.
+An array of [`Test::Async::Hub::ToolCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/ToolCallerCtx.md) instances representing test tools call stack. I.e. if a tool invokes another tool the stack would have at least two entries.
 
 `suite-caller`
 --------------
 
-Similar to `test-tool` above but it's where the suite itself was invoked.
-
-`caller-ctx`
-------------
-
-If defined then this is the context in which the last test tool has been invoked.
+An instance of [`Test::Async::Hub::ToolCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/ToolCallerCtx.md). Keeps information about the location where the suite was created.
 
 `transparent`
 -------------
 
-A flag. If *True* then this suite will have its `tool-caller` and `caller-ctx` attributes set to the same values, as in parent's suite object. `subtest` implementation by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Base.md) uses this to implement `:hidden` mode of operation.
+A flag. If *True* then this suite will have its call location set to the where it's enclosing test tool or suite are called. `subtest` implementation by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Base.md) uses this for `:hidden` mode of operation.
 
-This attribute is propagated to child suites instantiated using `create-suite` method.
+This attribute is propagated to child suites instantiated using `create-suite` method. In other words, nested suites of a transparent one will all be transparent by default.
 
 `is-async`
 ----------
@@ -165,12 +160,12 @@ An array of message lines produced by the suite and its child suites if it is an
 `test-jobs`
 -----------
 
-Maximus number of concurrently running jobs allowed. Note that a *job* is anything invoked using `start-job` method of [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md).
+Maximus number of concurrently running jobs allowed. Note that a *job* is anything invoked using `start-job` method of [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/JobMgr.md).
 
 `stage`
 -------
 
-The current stage of suite lifecycle. See `TestStage` enum in [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Utils.md).
+The current stage of suite lifecycle. See `TestStage` enum in [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Utils.md).
 
 METHODS
 =======
@@ -178,7 +173,7 @@ METHODS
 `new`
 -----
 
-Creates a new instance of constructed `Test::Async::Suite` class. See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Manual.md).
+Creates a new instance of constructed `Test::Async::Suite` class. See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Manual.md).
 
 `top-suite()`
 -------------
@@ -193,19 +188,9 @@ Returns `True` if the top suite singleton has been instantiated already.
 `set-stage(TestStage:D $stage -` TestStage)>
 --------------------------------------------
 
-Transition suite state to stage `$stage`. Throws `X::StageTransition` ([`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/X.md)) if the transition is not possible. If transitions from `TSInitializing` to `TSInProgress` then the method also starts the event loop thread.
+Transition suite state to stage `$stage`. Throws `X::StageTransition` ([`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/X.md)) if the transition is not possible. If transitions from `TSInitializing` to `TSInProgress` then the method also starts the event loop thread.
 
 Returns the pre-transition stage.
-
-`set-tool-caller(CallFrame:D $caller)`
---------------------------------------
-
-Sets `tool-caller` attribute.
-
-`set-caller-ctx($ctx)`
-----------------------
-
-Sets `caller-ctx` attribute. `$ctx` could be a `Stash` or a `PseudoStash`.
 
 `multi event(Event:D)`
 ----------------------
@@ -256,6 +241,33 @@ If plan profile contains unknown keys then diagnostic event with a warning is em
 
 Just invokes `finish` method.
 
+`abort-testing()`
+-----------------
+
+Similar to `done-testing` but also interrupts current test suite. If it happens to be the `top-suite` then exits.
+
+This tool is helpful to avoid constructs like:
+
+    if !ok($my-check-result, "...") {
+        skip-rest "other tests make no sense now";
+    }
+    else {
+        ... # Do all other tests
+    }
+
+Such approach could be especially annoying if *other tests* also have a case where failure must skip remaining tests. Instead one can do:
+
+    if !ok($my-check-result, "...") {
+        skip-rest "other tests make no sense now";
+        abort-testing
+    }
+    ... # Do more tests
+    if !ok($my-other-check, "...") {
+        skip-rest "makes no sense to proceed";
+        abort-testing
+    }
+    ... # Do the rest
+
 `create-suite(suiteType = self.WHAT, *%c)`
 ------------------------------------------
 
@@ -282,7 +294,7 @@ Execute the suite here and now. Internal implementation detail.
 `throw(X::Base:U \exType, *%c)`
 -------------------------------
 
-Throws a [`Type::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Type/Async/X.md) exception. `%c` is used as exception constructor profile to which `hub` named parameter is added.
+Throws a [`Type::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Type/Async/X.md) exception. `%c` is used as exception constructor profile to which `hub` named parameter is added.
 
 `abort`
 -------
@@ -317,7 +329,7 @@ Emits `Event::Plan` event. If `$on-start` is *True* and suite is the topmost one
 `normalize-message(+@message --` Seq)>
 --------------------------------------
 
-Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the *normal form* of a message. [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Reporter/TAP.md) expects children suite messages to come in normalized form.
+Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the *normal form* of a message. [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Reporter/TAP.md) expects children suite messages to come in normalized form.
 
 *NOTE.* This form is chosen as *normal* because TAP is a line-based protocol for which a line must end with a newline.
 
@@ -395,10 +407,40 @@ This method is for the future implementation and doesn't really do anything usef
 
 Produces a sequence of `'&tool-name' =` &tool-code> pairs suitable for use with `sub EXPORT`. Internal implementation detail.
 
-`locate-tool-caller(Int:D $pre-skip)`
--------------------------------------
+`locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored --` ToolCallerCtx:D)>
+----------------------------------------------------------------------------
 
-Finds the context in which the current test tool is invoked. Sets `tool-caller` and `caller-ctx` attributes.
+Finds the context in which the current test tool is invoked and returns a [`Test::Async::Hub::ToolCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub/ToolCallerCtx.md) instance or a [`Failure`](https://docs.raku.org/type/Failure) in case of an error.
+
+`$pre-skip` defines the number of frames to be skipped before the method starts looking for the real call location. The value must be relative to the frame where the method is called.
+
+### `push-tool-caller(ToolCallerCtx:D $ctx)`
+
+Pushes a new call location on `@.tool-stack`.
+
+### `pop-tool-caller(--` ToolCallerCtx:D)>
+
+Pops a call location from `@.tool-stack`. Returns [`Failure`](https://docs.raku.org/type/Failure) if the stack is empty.
+
+`tool-caller(--` ToolCallerCtx:D)>
+----------------------------------
+
+Returns the topmost call location on the tool call stack or a [`Failure`](https://docs.raku.org/type/Failure) if the stack is empty.
+
+`anchor(&code)`, `anchor(Int:D $pre-skip, &code)`
+-------------------------------------------------
+
+This method sets anchor location (see [`Type::Async::Manual`](https://modules.raku.org/dist/Type::Async::Manual) Call Location And Anchoring section) for all nested test suits or calls to test tools, done within `&code`. For example:
+
+    method my-compound-tool(...) is test-tool(:!wrap) {
+        self.anchor: {
+            subtest "compound subtest", :hidden, {
+                my-other-compound-tool(...);
+            }
+        }
+    }
+
+In the example the subtest and any nested tools/suits used by `my-other-compound-tool` will report the location where `my-compound-tool` is called.
 
 `temp-file(Str:D $base-name, $data --` Str:D)>
 ----------------------------------------------
@@ -408,7 +450,7 @@ Quickly create a temporary file and populate it with $data. Returns absolute fil
 SEE ALSO
 ========
 
-[`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Aggregator.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Decl.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Event.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md), [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Result.md), [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/TestTool.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/X.md)
+[`Test::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Aggregator.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Decl.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md), [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/JobMgr.md), [`Test::Async::Result`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Result.md), [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/TestTool.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/X.md)
 
 AUTHOR
 ======

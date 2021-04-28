@@ -10,7 +10,7 @@ DESCRIPTION
 
 
 
-Class defines a job entry for [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md).
+Class defines a job entry for [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/JobMgr.md).
 
 ATTRIBUTES
 ==========
@@ -65,7 +65,7 @@ Starts job instantly in the current thread.
 SEE ALSO
 ========
 
-[`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/JobMgr.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.17/docs/md/Test/Async/Hub.md)
+[`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/JobMgr.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub.md)
 
 AUTHOR
 ======

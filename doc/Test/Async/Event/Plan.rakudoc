@@ -1,0 +1,19 @@
+
+=begin pod
+=head1 Class C<Event::Plan>
+
+Is L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md>.
+
+Plan reporting event. Emitted when a suite gets to know the number of tests to be done.
+
+=head2 Attributes
+
+=item L<C<Bool>|https://docs.raku.org/type/Bool> C<$.skip> – suite is planned for skiping.
+=item L<C<UInt:D>|https://docs.raku.org/type/UInt> C<$.planned>, required - number of tests planned.
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+=end pod

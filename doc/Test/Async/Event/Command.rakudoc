@@ -1,0 +1,20 @@
+
+=begin pod
+=head1 Class C<Event::Command>
+
+Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md>
+
+Base class of commanding events.
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Hub.md>
+handles them specially.
+
+=head2 Attributes
+
+=item L<C<Capture:D>|https://docs.raku.org/type/Capture> C<$.args> – command arguments
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+=end pod
