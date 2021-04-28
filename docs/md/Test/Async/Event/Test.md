@@ -1,7 +1,7 @@
 Class `Event::Test`
 ===================
 
-Is [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md).
+Is [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event/Report.md).
 
 Base class for events reporting test outcomes.
 
@@ -9,7 +9,7 @@ Base class for events reporting test outcomes.
 
   * `Str $.todo` – message to use if test is marked as *TODO*.
 
-  * `Str $.flunks` – message to use if test is marked as anticipated failure (see `test-flunks` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Base.md).
+  * `Str $.flunks` – message to use if test is marked as anticipated failure (see `test-flunks` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Base.md).
 
   * `CallFrame:D $.caller`, required – position in user code where the test was called.
 
@@ -22,7 +22,7 @@ Base class for events reporting test outcomes.
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md), [`Test::Async::Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md)
+[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event.md), [`Test::Async::Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event/Report.md)
 
 AUTHOR
 ======

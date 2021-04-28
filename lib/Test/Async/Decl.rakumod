@@ -22,21 +22,21 @@ This module exports declarations needed to write custom bundles for C<Test::Asyn
 =head2 C<test-bundle>
 
 Declares a bundle role backed by
-L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/BundleHOW.md>
+L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/BundleHOW.md>
 metaclass.
 
 =head2 C<test-reporter>
 
 Declares a bundle role wishing to act as a reporter. Backed by
-L<C<Test::Async::Metamodel::ReporterHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/ReporterHOW.md>
+L<C<Test::Async::Metamodel::ReporterHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/ReporterHOW.md>
 metaclass. The bundle also consumes
-L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Reporter.md>
+L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Reporter.md>
 role.
 
 =head2 C<test-hub>
 
 This kind of package creates a hub class which is backed by
-L<C<Test::Async::Metamodel::HubHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/HubHOW.md>
+L<C<Test::Async::Metamodel::HubHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/HubHOW.md>
 metaclass. Barely useful for a third-party developer.
 
 =head2 C<&trait_mod:<is>(Method:D \meth, :$test-tool!)>
@@ -49,7 +49,7 @@ This trait is used to declare a method in a bundle as a test tool:
 
 The method is then exported to user as C<&foo> routine. Internally the method is getting wrapped into a code which
 does necessary preparations for the tool to act as expected. See
-L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/BundleClassHOW.md>
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/BundleClassHOW.md>
 for more details.
 
 The following named parameters are accepted by the trait:
@@ -60,17 +60,17 @@ The following named parameters are accepted by the trait:
 =item C<wrappable> aka C<wrap>
 
 They correspond to same-named attributes of
-L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/TestTool.md>.
+L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/TestTool.md>.
 By default C<skippable>, C<readify>, and C<wrappable> are set to I<True>. Thus it rather makes sense to negate them, as
 shown in the L<#SYNOPSIS>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/BundleHOW.md>,
-L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/BundleClassHOW.md>,
-L<C<Test::Async::Metamodel::HubHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/HubHOW.md>,
-L<C<Test::Async::Metamodel::ReporterHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Metamodel/ReporterHOW.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Metamodel::BundleHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/BundleHOW.md>,
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/BundleClassHOW.md>,
+L<C<Test::Async::Metamodel::HubHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/HubHOW.md>,
+L<C<Test::Async::Metamodel::ReporterHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Metamodel/ReporterHOW.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
