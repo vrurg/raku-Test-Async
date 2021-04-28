@@ -125,7 +125,7 @@ build: depends doc checkbuild
 
 checkbuild:
 	@echo "===> Check build integrity"
-	@fez --auth-mismatch-error checkbuild
+	-@fez --auth-mismatch-error checkbuild
 
 depends: meta depends-install
 
