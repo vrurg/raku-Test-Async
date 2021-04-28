@@ -70,10 +70,10 @@ B<Note!> The method can only be used within the event loop thread. If called out
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/X.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

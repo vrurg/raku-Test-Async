@@ -1,7 +1,7 @@
 Class `Event::Plan`
 ===================
 
-Is [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event/Report.md).
+Is [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event/Report.md).
 
 Plan reporting event. Emitted when a suite gets to know the number of tests to be done.
 
@@ -15,7 +15,7 @@ Attributes
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md)
 
 AUTHOR
 ======

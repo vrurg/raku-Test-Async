@@ -2,13 +2,13 @@
 =begin pod
 =head1 Class <Event::JobsAwaited>
 
-Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md>
+Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md>
 
 Emitted when all pending jobs are completed.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.0.900/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod
