@@ -264,17 +264,18 @@ subtest "Subtest aborts" => {
 # What we can do though is conisder a side effect of the randomization: all subtests will be ran last when the test body
 # execution is over.
 is-run q:to/TEST-CODE/, "randomized",
-       my $count = 3;
-       plan $count + 1, :random;
+           my $count = 3;
+           plan $count + 1, :random;
 
-       for ^$count -> $id {
-           subtest "job $id" => {
-               plan 1;
-               pass "dummy $id";
+           for ^$count -> $id {
+               subtest "job $id" => {
+                   plan 1;
+                   pass "dummy $id";
+               }
            }
-       }
-       pass "this will preceede subtests";
-       TEST-CODE
+           pass "this will preceede subtests";
+           TEST-CODE
+       :async,
        :compiler-args(@default-args),
        :exitcode(0),
        :err(''),

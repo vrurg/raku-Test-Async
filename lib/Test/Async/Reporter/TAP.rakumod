@@ -131,7 +131,6 @@ method report-event(Event::Report:D $ev) {
 # Expects a normalized message as input
 method indent-message(+@message, Str:D :$prefix = $.nesting-prefix, Int:D :$nesting = 1 --> Seq:D) {
     my $pfx = $prefix x $nesting;
-    # say ">indent by $nesting with “$prefix”";
     @message.map( $pfx ~ * )
 }
 

@@ -92,13 +92,6 @@ How deep are we from the top suite? I.e. a child of a child of the top suite wil
 
 A string, recommended prefix to be used for indenting messages produced by the suite.
 
-=head2 C<tool-stack>
-
-An array of
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Hub/ToolCallerCtx.md>
-instances representing test tools call stack. I.e. if a tool invokes another tool the stack would have at least
-two entries.
-
 =head2 C<suite-caller>
 
 An instance of
@@ -329,7 +322,7 @@ later passed to the parent suite with a test event.
 
 This is the main method to emit a test event depending on test outcome passed in C<$cond> or C<$result.cond>. The method
 sets event C<origin> to the invoking object, sets event's object C<@.messages> and C<$.nesting>. C<$event-profile> is
-what the user wants to supply to C<Event::Test> constructor.
+what the user wants to pass to C<Event::Test> constructor.
 
 =head2 C<next-test-id>
 
@@ -400,11 +393,11 @@ The value must be relative to the frame where the method is called.
 
 =head3 C<push-tool-caller(ToolCallerCtx:D $ctx)>
 
-Pushes a new call location on C<@.tool-stack>.
+Pushes a new call location on tool call stack.
 
 =head3 C<pop-tool-caller(--> ToolCallerCtx:D)>
 
-Pops a call location from C<@.tool-stack>. Returns L<C<Failure>|https://docs.raku.org/type/Failure> if the stack is empty.
+Pops a call location from tool call stack. Returns L<C<Failure>|https://docs.raku.org/type/Failure> if the stack is empty.
 
 =head2 C<tool-caller(--> ToolCallerCtx:D)>
 
@@ -492,7 +485,7 @@ has Int $.planned;
 # A message set with skip-rest
 has Str $.skip-message;
 has Str:D $.TODO-message = "";
-has Numeric:D $.TODO-count = 0;
+has Numeric:D $.TODO-count where Inf | Int:D = 0;
 # How far away our hub from the top one?
 has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
@@ -694,9 +687,9 @@ method cmd-bailout(Int:D $exit-code) {
 method create-suite(::?CLASS:D: ::?CLASS:U \suiteType = self.WHAT, *%c) {
     my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random,
                   :$!transparent;
-    if my $is-TODO = self.take-TODO {
+    with self.take-TODO {
         # If a subtest falls under a todo then all its tests are todo
-        %profile.append: (:$is-TODO);
+        %profile<is-TODO> = $_;
     }
     suiteType.new: |%profile, |%c
 }
@@ -758,16 +751,26 @@ method send-command(Event::Command:U \evType, |c) {
 
 proto method send-test(::?CLASS:D: Event::Test, |) {*}
 multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
+    self.send-test(evType, $message, $tr, %c)
+}
+multi method send-test(::?CLASS:D: Event::Test:U \evType,
+                       Str:D $message,
+                       TestResult:D $tr,
+                       %ev-profile,
+                       Bool :$bypass-todo,
+                       )
+{
     my %profile;
     ++⚛$!tests-run;
-    if $tr == TRFailed && !$!TODO-count {
+    unless $bypass-todo {
+        %profile<todo> = $_ with self.take-TODO;
+    }
+    if $tr == TRFailed && !(%profile<todo> || %ev-profile<todo>) {
         ++⚛$!tests-failed;
     }
-    if my $TODO-message = self.take-TODO {
-        %profile<todo> = $TODO-message;
-    }
-    %profile<caller> = (self.tool-caller // $.suite-caller).frame;
-    self.send: evType, :$message, |%profile, |%c;
+    %profile<caller> = (self.tool-caller // $.suite-caller).frame
+        unless %ev-profile<caller>;
+    self.send: evType, :$message, |%profile, |%ev-profile;
     $tr == TRPassed
 }
 
@@ -801,12 +804,14 @@ proto method proclaim(|) {*}
 multi method proclaim(Test::Async::Result:D $result, Str:D $message, *%c) {
     self.proclaim(.cond, $message, .event-profile, |%c) given $result;
 }
-multi method proclaim(Bool(Mu) $cond, Str:D $message, $event-profile = \(), Str :$todo) {
+multi method proclaim(Bool(Mu) $cond, Str:D $message, %ev-profile?, *%c) {
     my \evType = $cond ?? Event::Ok !! Event::NotOk;
-    my $test-result = $cond || $todo ?? TRPassed !! TRFailed;
-    my %profile = :origin(self), :@!messages, :$!nesting;
-    %profile<todo> = $_ with $todo;
-    self.send-test(evType, $message, $test-result, |%profile, |$event-profile);
+    my %profile = :origin(self),
+                  :@!messages,
+                  :$!nesting,
+                  |%ev-profile;
+    my $test-result = $cond || %profile<todo> ?? TRPassed !! TRFailed;
+    self.send-test: evType, $message, $test-result, %profile, |%c
 }
 
 method next-test-id {
@@ -818,13 +823,17 @@ method next-test-id {
     }
 }
 
-method take-TODO {
-    return Nil unless $!TODO-count > 0;
-    --$!TODO-count;
-    $!TODO-message
+method take-TODO(::?CLASS:D: --> Str) {
+    my $todo-msg := Nil;
+    cas $!TODO-count, {
+        $_ > 0
+            ?? do { $todo-msg := $!TODO-message; $_ - 1 }
+            !! $_
+    };
+    $todo-msg
 }
 
-method set-todo(Str:D $message, Numeric:D $count) {
+method set-todo(::?CLASS:D: Str:D $message, Numeric:D $count) {
     self.send-command: Event::Cmd::SetTODO, $message, $count;
 }
 

@@ -806,7 +806,7 @@ multi method subtest( Callable:D \subtests,
                 .rethrow
             }
         }
-        my %ev-profile = :$caller;
+        my %ev-profile = :$caller, |(:todo($_) with $subtest.is-TODO);
         if $subtest.messages.elems {
             %ev-profile<child-messages> := $subtest.messages<>;
         }
@@ -819,7 +819,7 @@ multi method subtest( Callable:D \subtests,
             (!$subtest.tests-failed && (!$subtest.planned || $subtest.planned == $subtest.tests-run)),
             $message,
             %ev-profile,
-            |(:todo($_) with $subtest.is-TODO),
+            :bypass-todo
         );
     };
 
@@ -927,14 +927,18 @@ multi method expected-got(+@pos where *.elems == 2, :$gist?, :$quote?, *%c) {
 
 # Wrap the default method to invert test result when test-flunks is in effect.
 multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%profile) {
+    self.send-test: evType, $message, $tr, %profile;
+}
+multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, %ev-profile, *%c) {
     with (my $fmsg = $*TEST-FLUNK-SAVE // self.take-FLUNK) {
+        my %profile = %ev-profile;
         my sub fail-message($reason) {
               "NOT FLUNK: $fmsg\n"
             ~ "    Cause: Test $reason"
         }
         my $evType := evType;
         my $test-result;
-        my @comments = %profile<comments> || [];
+        my @comments = %profile<comments> //= [];
         given evType {
             when Event::NotOk {
                 @comments.unshift: 'FLUNK - ' ~ $fmsg;
@@ -955,7 +959,8 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
                 $test-result = TRFailed;
             }
         }
-        callwith( $evType, $message, $test-result, |%profile, :@comments );
+        %profile<comments> = @comments;
+        callwith($evType, $message, $test-result, %profile, |%c);
     }
     else {
         callsame
@@ -964,7 +969,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
     $tr == TRPassed
 }
 
-multi method event(Event::StageTransition:D $ev) {
+multi method event(::?CLASS:D: Event::StageTransition:D $ev) {
     if &!dismiss-callback && $ev.to == TSDismissed {
         &!dismiss-callback(self);
     }
