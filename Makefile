@@ -106,7 +106,7 @@ test:
 	@echo "===> Testing"
 	@$(PROVE)
 
-stresstest:
+stress-test:
 	@echo "===> Stress Testing"
 	@STRESS_TESTING=1 $(PROVE)
 
