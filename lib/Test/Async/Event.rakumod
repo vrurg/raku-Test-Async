@@ -131,6 +131,10 @@ class Event::Test is Event::Report {
     has @.pre-comments;
     has @.child-messages;
     has @.comments;
+    method new(*%p) {
+        # Decont all profile values to get array attributes properly initialized
+        nextwith |%p.map({ .key => .value<> }).Map.Capture
+    }
 }
 
 class Event::Terminate is Event {
