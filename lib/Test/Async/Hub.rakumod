@@ -283,14 +283,15 @@ Results in quick suite shutdown via bypassing all remaining suite code and invok
 Sends a command message event. The C<c> capture is passed with the event object and is used as parameters of the command
 handling method.
 
-=head2 C<multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%c --> Bool)>
+=head2 C<multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%event-profile --> Bool:D)>
+=head2 C<multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, %event-profile, Bool :$bypass-todo --> Bool:D)>
 
 Creates an event of type C<evType> and emits it. This is I<the> method to be used for emitting C<Event::Test>.
 
-The method:
+`send-test` does the following:
 
 =item counts tests, including total runs and failures
-=item marks a test as I<TODO> (see C<take-TODO> method)
+=item marks a test as I<TODO> unless `:bypass-todo` argument is given (see C<take-TODO> method)
 =item sets test number
 =item sets event's C<caller> attribute
 
@@ -317,12 +318,12 @@ This method takes a message, normalizes it, and then choses which output channel
 later passed to the parent suite with a test event.
 = otherwise the message is passed to C<method-to-console> method.
 
-=head2 C<multi proclaim(Test::Async::Result:D $result, Str:D $message)>
-=head2 C<multi proclaim(Bool $cond, Str:D $message, $event-profile)>
+=head2 C<multi proclaim(Test::Async::Result:D $result, Str:D $message, *%c --> Bool:D)>
+=head2 C<multi proclaim(Bool $cond, Str:D $message, %event-profile, *%c --> Bool:D)>
 
 This is the main method to emit a test event depending on test outcome passed in C<$cond> or C<$result.cond>. The method
-sets event C<origin> to the invoking object, sets event's object C<@.messages> and C<$.nesting>. C<$event-profile> is
-what the user wants to pass to C<Event::Test> constructor.
+sets event C<origin> to the invoking object, sets event's object C<@.messages> and C<$.nesting>. C<%event-profile> is
+what the user wants to pass to C<Event::Test> constructor. C<%c> capture is bypassed to `send-test` method as-is.
 
 =head2 C<next-test-id>
 
@@ -750,7 +751,7 @@ method send-command(Event::Command:U \evType, |c) {
 }
 
 proto method send-test(::?CLASS:D: Event::Test, |) {*}
-multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
+multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c --> Bool:D) {
     self.send-test(evType, $message, $tr, %c)
 }
 multi method send-test(::?CLASS:D: Event::Test:U \evType,
@@ -758,7 +759,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType,
                        TestResult:D $tr,
                        %ev-profile,
                        Bool :$bypass-todo,
-                       )
+                       --> Bool:D)
 {
     my %profile;
     ++⚛$!tests-run;
@@ -800,11 +801,11 @@ method send-message(+@message) {
     }
 }
 
-proto method proclaim(|) {*}
-multi method proclaim(Test::Async::Result:D $result, Str:D $message, *%c) {
+proto method proclaim(::?CLASS:D: |) {*}
+multi method proclaim(::?CLASS:D: Test::Async::Result:D $result, Str:D $message, *%c --> Bool:D) {
     self.proclaim(.cond, $message, .event-profile, |%c) given $result;
 }
-multi method proclaim(Bool(Mu) $cond, Str:D $message, %ev-profile?, *%c) {
+multi method proclaim(::?CLASS:D: Bool(Mu) $cond, Str:D $message, %ev-profile?, *%c --> Bool:D) {
     my \evType = $cond ?? Event::Ok !! Event::NotOk;
     my %profile = :origin(self),
                   :@!messages,

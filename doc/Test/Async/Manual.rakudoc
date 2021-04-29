@@ -13,7 +13,7 @@ information about differences and additions between the standard framework and C
 
 =head2 Terminology
 
-Throughout documentation the following terms are to be used:
+Throughout C<Test::Async> documentation the following terms are to be used:
 
 =head3 I<Test suite>
 
@@ -233,9 +233,9 @@ but C<skip> and the family themselves are not, as well as C<todo> and few other.
 Whenever a test fails C<Test::Async> tries to provide the most useful information about where exactly the failure
 happened. For this purpose it keeps track of test tool call location. The information is recorded in a
 L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Hub/ToolCallerCtx.md>
-record and stored on a
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Hub.md>
-tool call stack. See C<@.tool-stack> attribute of the class.
+record and stored on a tool call stack which kept in a per-job
+(L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/JobMgr.md>)
+dynamic variable.
 
 Normally the location is determined by C<locate-tool-caller> method of the
 L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Hub.md>
@@ -276,7 +276,7 @@ C<anchor> method to use within C<:!wrappable> tools.
 
 Another important detail to remember when we consider call location and anchoring are test tools utilizing
 L<C<EVAL>|https://docs.raku.org/routine/EVAL> routine.
-For example, we can mention C<eval-dies-ok>
+For example, we can mention C<eval-lives-ok>
 from L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Base.md>. By doing something like:
 
     subtest "Contextual" => {
