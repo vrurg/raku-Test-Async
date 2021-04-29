@@ -1,5 +1,5 @@
 {
-  "api": 0.1,
+  "api": "0.1.1",
   "auth": "zef:vrurg",
   "authors": [
     "Vadim Belman <vrurg@cpan.org>"
@@ -13,7 +13,7 @@
   "meta-version": "0",
   "name": "Test::Async",
   "perl": "6.d",
-  "production": false,
+  "production": true,
   "provides": {
     "Test::Async": "lib/Test/Async.rakumod",
     "Test::Async::Aggregator": "lib/Test/Async/Aggregator.rakumod",
@@ -49,5 +49,5 @@
   ],
   "test-depends": [
   ],
-  "version": "0.1.900"
+  "version": "0.1.901"
 }

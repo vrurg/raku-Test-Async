@@ -11,7 +11,7 @@ C<Test::Async::Reporter::TAP> - TAP reporter bundle
 Maps events into TAP output.
 
 The class is implementation detail. In addition to methods required by
-L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Reporter.md>,
+L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter.md>,
 also defines C<TAP-str-from-ev>.
 
 =end pod
@@ -131,7 +131,6 @@ method report-event(Event::Report:D $ev) {
 # Expects a normalized message as input
 method indent-message(+@message, Str:D :$prefix = $.nesting-prefix, Int:D :$nesting = 1 --> Seq:D) {
     my $pfx = $prefix x $nesting;
-    # say ">indent by $nesting with “$prefix”";
     @message.map( $pfx ~ * )
 }
 

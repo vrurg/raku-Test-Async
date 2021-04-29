@@ -106,7 +106,7 @@ test:
 	@echo "===> Testing"
 	@$(PROVE)
 
-stresstest:
+stress-test:
 	@echo "===> Stress Testing"
 	@STRESS_TESTING=1 $(PROVE)
 
@@ -125,7 +125,7 @@ build: depends doc checkbuild
 
 checkbuild:
 	@echo "===> Check build integrity"
-	-@fez --auth-mismatch-error checkbuild
+	@fez --auth-mismatch-error checkbuild
 
 depends: meta depends-install
 

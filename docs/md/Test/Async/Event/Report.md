@@ -1,7 +1,7 @@
 Class `Event::Report`
 =====================
 
-Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md)
+Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md)
 
 Base class for events carrying a text message of any kind.
 
@@ -13,7 +13,7 @@ Attributes
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md)
 
 AUTHOR
 ======

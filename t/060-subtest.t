@@ -18,26 +18,28 @@ subtest "Simple" => {
 }
 
 is-run q:to/TEST-CODE/, "basic subtest",
-       plan 1;
-       subtest "simple" => {
-           pass "subtest 1";
-       };
-       TEST-CODE
+           plan 1;
+           subtest "simple" => {
+               pass "subtest 1";
+           };
+           TEST-CODE
+       :async,
        :compiler-args(@default-args),
        :exitcode(0),
        :err(''),
        :out(/^"1..1\n# Subtest: simple\n  ok 1 - subtest 1\n  1..1\nok 1 - simple\n"/);
 
 is-run q:to/TEST-CODE/, "sequential",
-       plan 2;
-       subtest "simple 1" => {
-           pass "subtest 1-1";
-       };
-       subtest "simple 2" => {
-           plan 1;
-           pass "subtest 2-1";
-       };
-       TEST-CODE
+           plan 2;
+           subtest "simple 1" => {
+               pass "subtest 1-1";
+           };
+           subtest "simple 2" => {
+               plan 1;
+               pass "subtest 2-1";
+           };
+           TEST-CODE
+       :async,
        :compiler-args(@default-args),
        :exitcode(0),
        :err(''),
@@ -54,6 +56,7 @@ is-run q:to/TEST-CODE/, "hidden subtest",
            plan 1;
            test-hidden-subtest;
            TEST-CODE
+       :async,
        :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
        :exitcode(1),
        :err(''),
@@ -71,6 +74,7 @@ is-run q:to/TEST-CODE/, "hidden from hidden subtest",
            plan 1;
            test-hidden-in-hidden;
            TEST-CODE
+       :async,
        :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
        :exitcode(1),
        :err(''),
@@ -89,6 +93,7 @@ is-run q:to/TEST-CODE/, "a tool with anchor",
             plan 1;
             test-tool-with-anchor
             TEST-CODE
+       :async,
        :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
        :exitcode(1),
        :err(''),
@@ -106,6 +111,7 @@ is-run q:to/TEST-CODE/, "a wrappable anchoring tool",
             plan 1;
             test-tool-anchoring
             TEST-CODE
+       :async,
        :compiler-args(@default-args[0], '-I' ~ $?FILE.IO.parent(1).add('lib/060-subtest/lib')),
        :exitcode(1),
        :err(''),
@@ -258,17 +264,18 @@ subtest "Subtest aborts" => {
 # What we can do though is conisder a side effect of the randomization: all subtests will be ran last when the test body
 # execution is over.
 is-run q:to/TEST-CODE/, "randomized",
-       my $count = 3;
-       plan $count + 1, :random;
+           my $count = 3;
+           plan $count + 1, :random;
 
-       for ^$count -> $id {
-           subtest "job $id" => {
-               plan 1;
-               pass "dummy $id";
+           for ^$count -> $id {
+               subtest "job $id" => {
+                   plan 1;
+                   pass "dummy $id";
+               }
            }
-       }
-       pass "this will preceede subtests";
-       TEST-CODE
+           pass "this will preceede subtests";
+           TEST-CODE
+       :async,
        :compiler-args(@default-args),
        :exitcode(0),
        :err(''),

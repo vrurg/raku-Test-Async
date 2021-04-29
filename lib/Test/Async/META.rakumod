@@ -42,5 +42,5 @@ our sub META6 {
         'Test::Async::Reporter::TAP'             => 'lib/Test/Async/Reporter/TAP.rakumod',
     },
     license        => 'Artistic-2.0',
-    production     => False,
+    production     => True,
 }

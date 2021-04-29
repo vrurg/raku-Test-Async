@@ -38,7 +38,7 @@ ATTRIBUTES
 
 Profiles to be used to create a new `Event::Test` object. Depending on `$.cond` value either `success-` or `fail-profile` is used. The most typical use of this is to add comments explaining the test outcome.
 
-A profile attribute can be made lazy if assigned with a code object:
+A profile attribute can be made lazy if set to a code object:
 
     my $tr = test-result($condition, fail => -> { comments => self.expected-got($expected, $got) });
 
@@ -49,10 +49,10 @@ METHODS
 
 
 
-`event-profile(--` Capture:D)>
-------------------------------
+`event-profile(--` Hash:D)>
+---------------------------
 
-Returns a profile accordingly to `$.cond`.
+Returns a profile in accordance to `$.cond` value.
 
 The profile capture is built the following way:
 
@@ -60,16 +60,10 @@ The profile capture is built the following way:
 
   * profile is coerced into a hash
 
-  * all hash values are deconted
-
-  * the result is coerced into [`Capture`](https://docs.raku.org/type/Capture)
-
-Deconting of the values is done to solve some cases of improper initialization of `Event` attributes.
-
 SEE ALSO
 ========
 
-`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Utils.md).
+`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md).
 
 AUTHOR
 ======

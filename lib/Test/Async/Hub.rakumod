@@ -13,10 +13,10 @@ C<Test::Async::Hub> - the core of C<Test::Async> framework
 
 =head1 DESCRIPTION
 
-Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/JobMgr.md>
+Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>
 
-See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Manual.md>
+See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>
 for general purpose of this class.
 
 =head2 Command Execution
@@ -65,7 +65,7 @@ If suite is planned for skipping then this is the message as for C<skip-remainin
 Otherwise undefined.
 
 B<NOTE!> Any examples of code in this documentation are based on the default
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md>
 bundle.
 
 =head2 C<TODO-message>
@@ -92,24 +92,17 @@ How deep are we from the top suite? I.e. a child of a child of the top suite wil
 
 A string, recommended prefix to be used for indenting messages produced by the suite.
 
-=head2 C<tool-stack>
-
-An array of
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Hub/ToolCallerCtx.md>
-instances representing test tools call stack. I.e. if a tool invokes another tool the stack would have at least
-two entries.
-
 =head2 C<suite-caller>
 
 An instance of
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Hub/ToolCallerCtx.md>.
+L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub/ToolCallerCtx.md>.
 Keeps information about the location where the suite was created.
 
 =head2 C<transparent>
 
 A flag. If I<True> then this suite will have its call location set to the where it's enclosing test tool or suite
 are called. C<subtest> implementation by
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md>
 uses this for C<:hidden> mode of operation.
 
 This attribute is propagated to child suites instantiated using C<create-suite> method. In other words, nested
@@ -160,19 +153,19 @@ is I<True>. The messages are submitted for reporting when the suite run ends and
 =head2 C<test-jobs>
 
 Maximus number of concurrently running jobs allowed. Note that a I<job> is anything invoked using C<start-job> method
-of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/JobMgr.md>.
+of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>.
 
 =head2 C<stage>
 
 The current stage of suite lifecycle. See C<TestStage> enum in
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Utils.md>.
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md>.
 
 =head1 METHODS
 
 =head2 C<new>
 
 Creates a new instance of constructed C<Test::Async::Suite> class. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Manual.md>.
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>.
 
 =head2 C<top-suite()>
 
@@ -185,7 +178,7 @@ Returns C<True> if the top suite singleton has been instantiated already.
 =head2 C<set-stage(TestStage:D $stage -> TestStage)>
 
 Transition suite state to stage C<$stage>. Throws C<X::StageTransition>
-(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
+(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
 the method also starts the event loop thread.
 
 Returns the pre-transition stage.
@@ -278,7 +271,7 @@ Execute the suite here and now. Internal implementation detail.
 
 =head2 C<throw(X::Base:U \exType, *%c)>
 
-Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
+Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
 is added.
 
 =head2 C<abort>
@@ -290,14 +283,15 @@ Results in quick suite shutdown via bypassing all remaining suite code and invok
 Sends a command message event. The C<c> capture is passed with the event object and is used as parameters of the command
 handling method.
 
-=head2 C<multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%c --> Bool)>
+=head2 C<multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, *%event-profile --> Bool:D)>
+=head2 C<multi send-test(Event::Test:U \evType, Str:D $message, TestResult:D $test-result, %event-profile, Bool :$bypass-todo --> Bool:D)>
 
 Creates an event of type C<evType> and emits it. This is I<the> method to be used for emitting C<Event::Test>.
 
-The method:
+`send-test` does the following:
 
 =item counts tests, including total runs and failures
-=item marks a test as I<TODO> (see C<take-TODO> method)
+=item marks a test as I<TODO> unless `:bypass-todo` argument is given (see C<take-TODO> method)
 =item sets test number
 =item sets event's C<caller> attribute
 
@@ -311,7 +305,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 
 Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each
 individual line. This is the I<normal form> of a message.
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Reporter/TAP.md>
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md>
 expects children suite messages to come in normalized form.
 
 I<NOTE.> This form is chosen as I<normal> because TAP is a line-based protocol for which a line must end with a newline.
@@ -324,12 +318,12 @@ This method takes a message, normalizes it, and then choses which output channel
 later passed to the parent suite with a test event.
 = otherwise the message is passed to C<method-to-console> method.
 
-=head2 C<multi proclaim(Test::Async::Result:D $result, Str:D $message)>
-=head2 C<multi proclaim(Bool $cond, Str:D $message, $event-profile)>
+=head2 C<multi proclaim(Test::Async::Result:D $result, Str:D $message, *%c --> Bool:D)>
+=head2 C<multi proclaim(Bool $cond, Str:D $message, %event-profile, *%c --> Bool:D)>
 
 This is the main method to emit a test event depending on test outcome passed in C<$cond> or C<$result.cond>. The method
-sets event C<origin> to the invoking object, sets event's object C<@.messages> and C<$.nesting>. C<$event-profile> is
-what the user wants to supply to C<Event::Test> constructor.
+sets event C<origin> to the invoking object, sets event's object C<@.messages> and C<$.nesting>. C<%event-profile> is
+what the user wants to pass to C<Event::Test> constructor. C<%c> capture is bypassed to `send-test` method as-is.
 
 =head2 C<next-test-id>
 
@@ -392,7 +386,7 @@ detail.
 =head2 C<locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored --> ToolCallerCtx:D)>
 
 Finds the context in which the current test tool is invoked and returns a
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Hub/ToolCallerCtx.md>
+L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub/ToolCallerCtx.md>
 instance or a L<C<Failure>|https://docs.raku.org/type/Failure> in case of an error.
 
 C<$pre-skip> defines the number of frames to be skipped before the method starts looking for the real call location.
@@ -400,11 +394,11 @@ The value must be relative to the frame where the method is called.
 
 =head3 C<push-tool-caller(ToolCallerCtx:D $ctx)>
 
-Pushes a new call location on C<@.tool-stack>.
+Pushes a new call location on tool call stack.
 
 =head3 C<pop-tool-caller(--> ToolCallerCtx:D)>
 
-Pops a call location from C<@.tool-stack>. Returns L<C<Failure>|https://docs.raku.org/type/Failure> if the stack is empty.
+Pops a call location from tool call stack. Returns L<C<Failure>|https://docs.raku.org/type/Failure> if the stack is empty.
 
 =head2 C<tool-caller(--> ToolCallerCtx:D)>
 
@@ -435,14 +429,14 @@ C<X::FileCreate>/C<X::FileClose> in case of errors.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/JobMgr.md>,
-L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Result.md>,
-L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/TestTool.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.900/docs/md/Test/Async/X.md>
+L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>,
+L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Result.md>,
+L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/TestTool.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
@@ -492,12 +486,10 @@ has Int $.planned;
 # A message set with skip-rest
 has Str $.skip-message;
 has Str:D $.TODO-message = "";
-has Numeric:D $.TODO-count = 0;
+has Numeric:D $.TODO-count where Inf | Int:D = 0;
 # How far away our hub from the top one?
 has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
-# Stack to test tools invoked
-has ToolCallerCtx:D @.tool-stack;
 # If true the suite will report it's parent tool-caller attribute.
 has Bool:D $.transparent = False;
 has ToolCallerCtx $.suite-caller where *.defined;
@@ -556,6 +548,8 @@ submethod TWEAK(|) {
 
 my $singleton;
 method top-suite {
+    # Tool call stack
+    PROCESS::<@TEST-TOOL-STACK> = [];
     $singleton //= ::?CLASS.new
 }
 
@@ -694,9 +688,9 @@ method cmd-bailout(Int:D $exit-code) {
 method create-suite(::?CLASS:D: ::?CLASS:U \suiteType = self.WHAT, *%c) {
     my %profile = :parent-suite(self), :nesting($!nesting + 1), :$!random,
                   :$!transparent;
-    if my $is-TODO = self.take-TODO {
+    with self.take-TODO {
         # If a subtest falls under a todo then all its tests are todo
-        %profile.append: (:$is-TODO);
+        %profile<is-TODO> = $_;
     }
     suiteType.new: |%profile, |%c
 }
@@ -757,17 +751,27 @@ method send-command(Event::Command:U \evType, |c) {
 }
 
 proto method send-test(::?CLASS:D: Event::Test, |) {*}
-multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c) {
+multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestResult:D $tr, *%c --> Bool:D) {
+    self.send-test(evType, $message, $tr, %c)
+}
+multi method send-test(::?CLASS:D: Event::Test:U \evType,
+                       Str:D $message,
+                       TestResult:D $tr,
+                       %ev-profile,
+                       Bool :$bypass-todo,
+                       --> Bool:D)
+{
     my %profile;
     ++⚛$!tests-run;
-    if $tr == TRFailed && !$!TODO-count {
+    unless $bypass-todo {
+        %profile<todo> = $_ with self.take-TODO;
+    }
+    if $tr == TRFailed && !(%profile<todo> || %ev-profile<todo>) {
         ++⚛$!tests-failed;
     }
-    if my $TODO-message = self.take-TODO {
-        %profile<todo> = $TODO-message;
-    }
-    %profile<caller> = (self.tool-caller // $.suite-caller).frame;
-    self.send: evType, :$message, |%profile, |%c;
+    %profile<caller> = (self.tool-caller // $.suite-caller).frame
+        unless %ev-profile<caller>;
+    self.send: evType, :$message, |%profile, |%ev-profile;
     $tr == TRPassed
 }
 
@@ -797,16 +801,18 @@ method send-message(+@message) {
     }
 }
 
-proto method proclaim(|) {*}
-multi method proclaim(Test::Async::Result:D $result, Str:D $message, *%c) {
+proto method proclaim(::?CLASS:D: |) {*}
+multi method proclaim(::?CLASS:D: Test::Async::Result:D $result, Str:D $message, *%c --> Bool:D) {
     self.proclaim(.cond, $message, .event-profile, |%c) given $result;
 }
-multi method proclaim(Bool(Mu) $cond, Str:D $message, $event-profile = \(), Str :$todo) {
+multi method proclaim(::?CLASS:D: Bool(Mu) $cond, Str:D $message, %ev-profile?, *%c --> Bool:D) {
     my \evType = $cond ?? Event::Ok !! Event::NotOk;
-    my $test-result = $cond || $todo ?? TRPassed !! TRFailed;
-    my %profile = :origin(self), :@!messages, :$!nesting;
-    %profile<todo> = $_ with $todo;
-    self.send-test(evType, $message, $test-result, |%profile, |$event-profile);
+    my %profile = :origin(self),
+                  :@!messages,
+                  :$!nesting,
+                  |%ev-profile;
+    my $test-result = $cond || %profile<todo> ?? TRPassed !! TRFailed;
+    self.send-test: evType, $message, $test-result, %profile, |%c
 }
 
 method next-test-id {
@@ -818,13 +824,17 @@ method next-test-id {
     }
 }
 
-method take-TODO {
-    return Nil unless $!TODO-count > 0;
-    --$!TODO-count;
-    $!TODO-message
+method take-TODO(::?CLASS:D: --> Str) {
+    my $todo-msg := Nil;
+    cas $!TODO-count, {
+        $_ > 0
+            ?? do { $todo-msg := $!TODO-message; $_ - 1 }
+            !! $_
+    };
+    $todo-msg
 }
 
-method set-todo(Str:D $message, Numeric:D $count) {
+method set-todo(::?CLASS:D: Str:D $message, Numeric:D $count) {
     self.send-command: Event::Cmd::SetTODO, $message, $count;
 }
 
@@ -903,13 +913,13 @@ method measure-telemetry(&code, Capture:D \c = \()) is hidden-from-backtrace is 
 }
 
 method push-tool-caller(ToolCallerCtx:D $ctx) {
-    @!tool-stack.push: $ctx
+    @*TEST-TOOL-STACK.push: $ctx
 }
 
 method pop-tool-caller(--> ToolCallerCtx:D) {
     fail X::EmptyToolStack.new(:suite(self), :op<pop>)
-        unless +@!tool-stack;
-    @!tool-stack.pop
+        unless +@*TEST-TOOL-STACK;
+    @*TEST-TOOL-STACK.pop
 }
 
 proto method anchor(::?CLASS:D: |) {*}
@@ -943,8 +953,8 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
 }
 
 method tool-caller(--> ToolCallerCtx:D) {
-    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@!tool-stack;
-    @!tool-stack[*-1]
+    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
+    @*TEST-TOOL-STACK[*-1]
 }
 
 my atomicint $temp-count = 0;
