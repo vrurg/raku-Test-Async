@@ -3,6 +3,13 @@ CHANGELOG
 
 
 
+v0.1.1
+------
+
+  * Fixed a tool call stack race condition
+
+  * Fixed a todo+subtest race condition and extra todo count consumption
+
 v0.1.0
 ------
 

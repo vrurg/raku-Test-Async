@@ -2,6 +2,11 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.1.1
+
+=item Fixed a tool call stack race condition
+=item Fixed a todo+subtest race condition and extra todo count consumption
+
 =head2 v0.1.0
 
 =item Implemented tool call stack and tool anchoring
