@@ -2,14 +2,14 @@
 =begin pod
 =head1 Class C<Event::Diag>
 
-Is L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event/Report.md>.
+Is L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event/Report.md>.
 
 Carries a diagnostics message. See C<diag> in
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Base.md>.
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Base.md>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod

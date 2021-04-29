@@ -2,7 +2,7 @@
 =begin pod
 =head1 Class C<Event::StageTransition>
 
-Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event.md>
+Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event.md>
 
 Emitted each time suite stage is changed.
 
@@ -13,7 +13,7 @@ Emitted each time suite stage is changed.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod

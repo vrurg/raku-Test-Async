@@ -14,7 +14,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but is not recommended for a module. See [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/CookBook.md) for more details.
+The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but is not recommended for a module. See [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/CookBook.md) for more details.
 
 Exports
 -------
@@ -29,12 +29,12 @@ Return the test suite which is actual for the current context. The suite is look
 
 ### Test Tools
 
-The module exports all test tools it finds in the top suite object. See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Manual.md) for more details.
+The module exports all test tools it finds in the top suite object. See [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md) for more details.
 
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Base.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Base.md)
 
 AUTHOR
 ======

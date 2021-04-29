@@ -13,7 +13,7 @@ Keeps information about where a tool was invoked and what is the role of the inv
 =head3 L<C<CallFrame:D>|https://docs.raku.org/type/CallFrame> C<$.frame>
 
 Required. L<C<CallFrame>|https://docs.raku.org/type/CallFrame> of where the tool/suite was invoked. Note that this would not necessarily point at the immediate
-caller. See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Manual.md> Call Location And Anchoring section for more information.
+caller. See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md> Call Location And Anchoring section for more information.
 
 =head3 L<C<Stash:D>|https://docs.raku.org/type/Stash> | L<C<PseudoStash:D>|https://docs.raku.org/type/PseudoStash> C<$.stash>
 
@@ -22,13 +22,13 @@ Required. C<.WHO> of the C<$.frame> location namespace.
 =head3 L<C<Bool>|https://docs.raku.org/type/Bool> C<$.anchored>
 
 Defines whether the location record is an anchored one. See the corresponding section in
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Manual.md>.
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Hub.md>,
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.0/docs/md/Test/Async/Manual.md>
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
