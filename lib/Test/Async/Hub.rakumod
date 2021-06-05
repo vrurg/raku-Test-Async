@@ -459,16 +459,7 @@ use Test::Async::X;
 also does Test::Async::Aggregator;
 also does Test::Async::JobMgr;
 
-my subset CALLER-CTX of Any where Stash:D | PseudoStash:D;
-
 has ::?CLASS $.parent-suite;
-
-class ToolCallerCtx {
-    has CallFrame:D $.frame is required;
-    has CALLER-CTX $.stash is required;
-    # If anchored then for any nested too call locate-tool-caller will return the anchored location.
-    has Bool:D $.anchored = False;
-}
 
 my atomicint $next-id = 0;
 has Int:D $.id = $next-id⚛++;
@@ -769,7 +760,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType,
     if $tr == TRFailed && !(%profile<todo> || %ev-profile<todo>) {
         ++⚛$!tests-failed;
     }
-    %profile<caller> = (self.tool-caller // $.suite-caller).frame
+    %profile<caller> = self.tool-caller // $.suite-caller
         unless %ev-profile<caller>;
     self.send: evType, :$message, |%profile, |%ev-profile;
     $tr == TRPassed

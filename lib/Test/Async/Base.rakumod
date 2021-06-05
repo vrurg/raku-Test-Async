@@ -798,7 +798,7 @@ multi method subtest( Callable:D \subtests,
     my $flunk-msg = self.take-FLUNK;
 
     my sub finalize-subtest($subtest) {
-        my $caller = $subtest.suite-caller.frame;
+        my $caller = $subtest.suite-caller;
         CATCH {
             default {
                 # self.trace-out: "! Finalization died with ", .^name, ":\n", .message, "\n", .backtrace.Str;

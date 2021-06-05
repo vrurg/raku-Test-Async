@@ -34,7 +34,7 @@ proto method TAP-str-from-ev(::?CLASS:D: Event::Report:D, | --> Str) {*}
 multi method TAP-str-from-ev(::?CLASS:D: Event::Ok:D $ev)    { self.TAP-str-from-ev($ev, <ok>) }
 
 multi method TAP-str-from-ev(::?CLASS:D: Event::NotOk:D $ev) {
-    my $caller = $ev.caller;
+    my $caller = $ev.caller.frame;
     my %profile;
     unless $.transparent {
         my $message = $ev.message;
