@@ -34,12 +34,12 @@ would result in a single skip event which is counted as a test run. Our plan wil
 =head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.wrappable>
 
 Resetting this flag to I<False> would result in test tool method would be left intact by
-L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Metamodel/BundleClassHOW.md>.
+L<C<Test::Async::Metamodel::BundleClassHOW>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Metamodel/BundleClassHOW.md>.
 
 =head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.anchoring>
 
 Marks a test tool as an I<anchoring> one. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Manual.md>
 Call Location And Anchoring section for more details.
 
 I<False> by default.
@@ -64,8 +64,8 @@ Sets C<$.wrappable>
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Decl.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Decl.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

@@ -2,6 +2,10 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.1.2
+
+=item Fixed a rare bug causing C<throws-like> to throw itself.
+
 =head2 v0.1.1
 
 =item Fixed a tool call stack race condition
@@ -10,9 +14,9 @@
 =head2 v0.1.0
 
 =item Implemented tool call stack and tool anchoring
-    (L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Manual.md>)
+    (L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Manual.md>)
 =item Added support for pre-comments, or header comments, to
-    L<C<Test::Async::Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event/Test.md>
+    L<C<Test::Async::Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Event/Test.md>
 =item Added a header to the output of non-hiddent subtests, similar to
     L<a Rakudo request ticket|https://github.com/rakudo/rakudo/issues/4266>
 =item Implemented auto-registration for inline C<test-bundle> declarations

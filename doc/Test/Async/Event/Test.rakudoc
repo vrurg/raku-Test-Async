@@ -2,7 +2,7 @@
 =begin pod
 =head1 Class C<Event::Test>
 
-Is L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event/Report.md>.
+Is L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Event/Report.md>.
 
 Base class for events reporting test outcomes.
 
@@ -10,7 +10,7 @@ Base class for events reporting test outcomes.
 
 =item C<Str $.todo> – message to use if test is marked as I<TODO>.
 =item C<Str $.flunks> – message to use if test is marked as anticipated failure (see C<test-flunks> in
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Base.md>.
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Base.md>.
 =item C<CallFrame:D $.caller>, required – position in user code where the test was called.
 =item C<@.child-messages> – messages from child suites. Each entry should be a single line ending with newline.
 =item C<@.comments> – comments for the test. Normally expected to be reported with C<diag>. Not special formatting
@@ -19,8 +19,8 @@ requirements except for a recommendation for the last line not to end with a new
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.1/docs/md/Test/Async/Event/Report.md>
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Event/Report.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod
