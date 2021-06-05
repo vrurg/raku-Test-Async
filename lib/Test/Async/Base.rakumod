@@ -568,8 +568,8 @@ method throws-like($code where Callable:D | Str:D, $ex_type, Str:D $message = "d
                 suite.pass: $msg;
                 $rc = True;
                 my $type_ok = $_ ~~ $ex_type;
-                suite.ok: $type_ok, "right exception type ($ex_type.^name())";
                 if $type_ok {
+                    suite.pass: "right exception type ($ex_type.^name())";
                     for %matcher.kv -> $k, $v {
                         my $got is default(Nil) = $_."$k"();
                         my $ok = $got ~~ $v;
@@ -583,9 +583,9 @@ method throws-like($code where Callable:D | Str:D, $ex_type, Str:D $message = "d
                     }
                 } else {
                     suite.send-test(
-                        Event::Skip,
+                        Event::NotOk,
                         'wrong exception type',
-                        TRSkipped,
+                        TRFailed,
                         comments => (self.expected-got($ex_type.^name, $_.^name),
                                      "Exception message: " ~ .message)
                     );

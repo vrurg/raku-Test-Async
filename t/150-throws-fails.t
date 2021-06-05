@@ -3,13 +3,29 @@ use Test::Async;
 
 plan 2;
 
+my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+
 my class X::TestError is Exception {
     has Str:D $.foo is required;
     has Int $.bar;
 }
 
 subtest "throws-like basics" => {
-    plan 4;
+    plan 5;
+
+    # Test for a bug where throws-like were dying on wrong exception if no matchers were used.
+    is-run q:to/TESTCODE/,
+            test-flunks "deliberate failure"; # Make sure the exit code is 0
+            throws-like { (my class X::WrongException is Exception { method message {"irrelevant"} }).new.throw },
+                        X::AdHoc;
+            TESTCODE
+        "throws-like without matchers doesn't die on fail",
+        :exitcode(0),
+        :out(/'code dies' .* 'wrong exception type' .* 'expected: X::AdHoc' .* 'got: X::WrongException'/),
+        :err(""),
+        :compiler-args(@default-args),
+        :async;
+
     ok throws-like(
             { X::TestError.new(:foo("a data")).throw; },
             X::TestError,
