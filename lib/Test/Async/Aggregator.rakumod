@@ -153,7 +153,7 @@ method start-event-loop {
                 }
             }
             CATCH {
-                CATCH { note "EXCEPTION HANDLING IN EVENT LOOP DIED WITH: ", .message, "\n", .backtrace.Str.indent(4) }
+                CATCH { note "EXCEPTION HANDLING IN EVENT LOOP DIED WITH: ", .message, "\n", .backtrace.Str.indent(2) }
                 # self.trace-out: "===EVENT HANDLING=== ", $_, ~$_.backtrace;
                 self.x-sorry: $_, :comment("In event handling.");
                 my $drop-ev = $ev;
