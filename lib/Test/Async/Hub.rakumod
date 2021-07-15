@@ -777,7 +777,7 @@ method send-plan(UInt:D $planned, :$on-start) {
 }
 
 # Normal message form is a list of lines ending with newline.
-method normalize-message(@message) {
+method normalize-message(+@message) {
     @message.join.split("\n").map(* ~ "\n")
 }
 
