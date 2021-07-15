@@ -9,7 +9,7 @@ our sub META6 {
     description    => 'Thread-safe testing framework',
     perl-version   => Version.new('6.d'),
     raku-version   => Version.new('6.d'),
-    depends        => [],
+    depends        => [ 'META6' ],
     # test-depends   => <Test::META>,
     # build-depends  => <META6 p6doc Pod::To::Markdown>,
     tags           => <TESTING ASYNC>,
