@@ -721,7 +721,7 @@ method run(:$is-async, Capture:D :$args = \()) {
             with $!planned {
                 $!tests-failed += $!planned - $!tests-run;
             }
-            self.fatality
+            self.fatality(exception => $_)
         }
     }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
@@ -852,7 +852,7 @@ method await-jobs {
         start {
             CATCH {
                 self.x-sorry($_);
-                self.fatality;
+                self.fatality(exception => $_);
                 .rethrow
             };
             self.await-all-jobs;

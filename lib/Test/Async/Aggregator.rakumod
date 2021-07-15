@@ -162,7 +162,7 @@ method start-event-loop {
                     $drop-ev = $!ev-queue.poll;
                 } while $drop-ev;
                 $!ev-queue.fail($_);
-                self.fatality;
+                self.fatality(exception => $_, :event-queue);
             }
             self!dispatch-event($ev);
             # self.trace-out: "<!! DISPATCHED EV: [" ~ self.id.fmt('%5d') ~ "] " ~ $ev.^name ~ "#" ~ $ev.id;
