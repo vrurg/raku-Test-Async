@@ -995,7 +995,7 @@ method fatality(Int:D $!exit-code = 255) {
         .fatality($!exit-code)
     }
     else {
-        if $!ev-queue.closed.status ~~ Planned {
+        if self.event-queue-is-active {
             self.send-command: Event::Cmd::BailOut, $!exit-code
         }
         else {

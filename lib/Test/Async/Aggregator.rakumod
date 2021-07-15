@@ -170,6 +170,10 @@ method start-event-loop {
     }
 }
 
+method event-queue-is-active(--> Bool:D) {
+    $!ev-queue.closed.status ~~ Planned
+}
+
 method !dispatch-event(Event:D $ev) {
     my $*TEST-ASYNC-EV-OWNER = self;
     self.post-event: self.?filter-event($ev) // $ev;
