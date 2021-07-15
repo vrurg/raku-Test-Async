@@ -146,6 +146,7 @@ class Event::Terminate is Event {
 class Event::StageTransition is Event {
     has $.from is required;
     has $.to is required;
+    has %.params; # May contain some additional details about the transition
     method gist {
         callsame() ~ " " ~ $.from ~ " -> " ~ $.to
     }

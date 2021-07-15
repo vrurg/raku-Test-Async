@@ -556,7 +556,7 @@ my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, 
 
 method stage { $!stage }
 
-method set-stage(TestStage:D $stage) {
+method set-stage(TestStage:D $stage, :%params = {}) {
     return $!stage if $!stage == $stage;
     loop {
         my $cur-stage = $!stage;
@@ -569,7 +569,7 @@ method set-stage(TestStage:D $stage) {
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
             self.start-event-loop if $cur-stage == TSInitializing;
             # Don't panic if the event queue is non-functional.
-            self.try-send: Event::StageTransition, :from($cur-stage), :to($stage);
+            self.try-send: Event::StageTransition, :from($cur-stage), :to($stage), :%params;
             return $cur-stage;
         }
     }
