@@ -303,7 +303,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 
 =head2 C<normalize-message(+@message --> Seq)>
 
-Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each
+Takes a free-form message possibly passed in in many chunks, splits it into lines and appends a new line to each
 individual line. This is the I<normal form> of a message.
 L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Reporter/TAP.md>
 expects children suite messages to come in normalized form.
@@ -873,8 +873,8 @@ method finish(:$now = False) {
         # Wait untils all jobs are completed.
         self.await-jobs unless $now;
         self.set-stage(TSFinished);
+        # Let all events be processed before we start analyzing the results.
         self.sync-events;
-        # Let all event be processed before we start analyzing the results.
         # Same as plan, done-testing must be done in the main thread.
         self.send-plan: $!tests-run unless $.planned; # If $.planned is set then the plan has been reported on start.
         self.send: Event::DoneTesting;

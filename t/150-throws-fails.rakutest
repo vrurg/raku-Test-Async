@@ -36,13 +36,11 @@ subtest "throws-like basics" => {
         "successfull throws-like returns True";
 
     test-flunks "anticipated failure", 1;
-    my $rc = throws-like(
-            { X::TestError.new(:foo("a data"), :bar(42)).throw; },
-            X::TestError,
-            "custom exception throw with failing matcher",
-            :foo(/data/),
-            :bar(13)
-        );
+    my $rc = throws-like( { X::TestError.new(:foo("a data"), :bar(42)).throw; },
+                          X::TestError,
+                          "custom exception throw with failing matcher",
+                          :foo(/data/),
+                          :bar(13) );
     nok $rc, "failed throws-like returns False";
 }
 
