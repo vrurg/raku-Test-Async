@@ -260,6 +260,7 @@ has Str:D $.FLUNK-message = "";
 has Numeric:D $.FLUNK-count = 0;
 # If set then invoked when stage transitions into TSDismissed.
 has &.dismiss-callback;
+has &.fatality-callback;
 
 method take-FLUNK {
     return Nil unless $!FLUNK-count;
@@ -579,7 +580,7 @@ method throws-like($code where Callable:D | Str:D, $ex_type, Str:D $message = "d
                                 $ok,
                                 fail => -> { comments => self.expected-got($v, $got) }
                             ),
-                            ".$k matches $v.gist()"
+                            ".$k " ~ ($v ~~ Code ?? "passes validation" !! "matches " ~ $v.gist())
                     }
                 } else {
                     suite.send-test(
@@ -797,8 +798,18 @@ multi method subtest( Callable:D \subtests,
 
     my $flunk-msg = self.take-FLUNK;
 
+    my sub send-proclaim($subtest, Bool:D $cond, %profile) {
+        my %ev-profile = |%profile, :caller($subtest.suite-caller);
+        if $subtest.messages.elems {
+            %ev-profile<child-messages> := $subtest.messages<>;
+        }
+        unless $subtest.transparent {
+            %ev-profile<pre-comments> := ["Subtest: " ~ $subtest.message ];
+        }
+        self.proclaim($cond, $message, %ev-profile, :bypass-todo);
+    }
+
     my sub finalize-subtest($subtest) {
-        my $caller = $subtest.suite-caller;
         CATCH {
             default {
                 # self.trace-out: "! Finalization died with ", .^name, ":\n", .message, "\n", .backtrace.Str;
@@ -806,26 +817,39 @@ multi method subtest( Callable:D \subtests,
                 .rethrow
             }
         }
-        my %ev-profile = :$caller, |(:todo($_) with $subtest.is-TODO);
-        if $subtest.messages.elems {
-            %ev-profile<child-messages> := $subtest.messages<>;
-        }
-        unless $subtest.transparent {
-            %ev-profile<pre-comments> := ["Subtest: " ~ $subtest.message ];
-        }
+        my %ev-profile = |(:todo($_) with $subtest.is-TODO);
         # Signal to send-test method that this suite has been marked as flunky.
         my $*TEST-FLUNK-SAVE = $flunk-msg;
-        self.proclaim(
-            (!$subtest.tests-failed && (!$subtest.planned || $subtest.planned == $subtest.tests-run)),
-            $message,
-            %ev-profile,
-            :bypass-todo
-        );
+        send-proclaim( $subtest,
+                       (!$subtest.tests-failed && (!$subtest.planned || $subtest.planned == $subtest.tests-run)),
+                       %ev-profile);
     };
+
+    my sub finalize-on-exception($subtest, :$exception, :$event-queue) {
+        # Only process test body generated exceptions, skip if the event loop thread thrown or event queue is closed
+        # for one reason or another.
+        return False unless $exception && !$event-queue && $subtest.event-queue-is-active;
+        CATCH {
+            default {
+                self.x-sorry: $_, :comment("Fatality callback died");
+                .rethrow
+            }
+        }
+        # When reacting to a fatal termination TODO and flunk statuses must be ignored because they must only be
+        # respected for non-passing test, not for dying ones.
+        $subtest.send: Event::Diag,  message => "===SORRY!=== Subtest died with "
+                                                              ~ $exception.^name ~ ":\n"
+                                                              ~ ($exception.message ~ "\n"
+                                                              ~ $exception.backtrace).indent(2);
+        $subtest.sync-events;
+        send-proclaim($subtest, False, %());
+        True
+    }
 
     my %profile = :code(subtests),
                   :$message,
                   :dismiss-callback(&finalize-subtest),
+                  :fatality-callback(&finalize-on-exception),
                   :transparent($hidden);
     # Provide the child suite with right context.
     self.push-tool-caller: $subtest-ctx unless $hidden;
@@ -834,7 +858,6 @@ multi method subtest( Callable:D \subtests,
     # Remove tool call entry from the stack because the child suite already has it and it might be run asynchronously or
     # randomly.
     self.pop-tool-caller unless $hidden;
-
 
     self.invoke-suite( $child, :$async, :$instant, args => \($child) );
 }
@@ -973,5 +996,12 @@ multi method event(::?CLASS:D: Event::StageTransition:D $ev) {
     if &!dismiss-callback && $ev.to == TSDismissed {
         &!dismiss-callback(self);
     }
-    nextsame;
+    nextsame
+}
+
+method fatality($?, *%p) {
+    if &!fatality-callback {
+        return if &!fatality-callback(self, |%p);
+    }
+    nextsame
 }
