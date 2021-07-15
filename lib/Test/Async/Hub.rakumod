@@ -716,7 +716,6 @@ method run(:$is-async, Capture:D :$args = \()) {
     }
     CATCH {
         default {
-            self.x-sorry: $_;
             # Report failure by having at least one failed test.
             with $!planned {
                 $!tests-failed += $!planned - $!tests-run;
@@ -851,7 +850,6 @@ method await-jobs {
         Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False); }),
         start {
             CATCH {
-                self.x-sorry($_);
                 self.fatality(exception => $_);
                 .rethrow
             };
@@ -988,11 +986,16 @@ method in-fatality(Bool:D :$local = False) {
     )
 }
 
-method fatality(Int:D $!exit-code = 255) {
-    self.set-stage(TSFatality);
+method fatality(Int:D $!exit-code = 255, Exception :$exception) {
+    my %params;
+    with $exception {
+        self.x-sorry: $_;
+        %params<exception> = $_;
+    }
+    self.set-stage(TSFatality, :%params);
     $!tests-failed = 1 unless $!tests-failed;
     with $.parent-suite {
-        .fatality($!exit-code)
+        .fatality($!exit-code, :$exception)
     }
     else {
         if self.event-queue-is-active {
