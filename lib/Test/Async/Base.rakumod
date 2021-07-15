@@ -840,13 +840,13 @@ multi method subtest( Callable:D \subtests,
 }
 
 proto method is-run(|) is test-tool {*}
-multi method is-run(Str() $code, %expected, Str:D $message = "") {
+multi method is-run(Str:D() $code, %expected, Str:D $message = "") {
     self.is-run: $code, $message, |%expected
 }
 multi method is-run (
-    Str() $code, Str:D $message = "",
-    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False
-) {
+    Str:D() $code, Str:D $message = "",
+    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False )
+{
     self.subtest: $message, :instant, :hidden, :$async, -> $suite {
         $suite.plan(1 + ?$out.defined + ?$err.defined);
         my $code-file = self.temp-file('code', $code);
