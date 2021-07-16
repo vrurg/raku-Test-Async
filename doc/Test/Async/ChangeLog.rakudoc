@@ -2,6 +2,13 @@
 =begin pod
 =CHANGELOG
 
+=head v0.1.3
+
+=item Improved handling of exceptions
+=item Subtests now attempt to report any exception produced by their body rather than bailing out immediately
+=item New method on Aggregator role: event-queue-active
+=item A couple of minor fixes
+
 =head2 v0.1.2
 
 =item Fixed a rare bug causing C<throws-like> to throw itself.
