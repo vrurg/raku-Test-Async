@@ -11,7 +11,7 @@ C<Test::Async::Reporter::TAP> - TAP reporter bundle
 Maps events into TAP output.
 
 The class is implementation detail. In addition to methods required by
-L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Reporter.md>,
+L<C<Test::Async::Reporter>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Reporter.md>,
 also defines C<TAP-str-from-ev>.
 
 =end pod

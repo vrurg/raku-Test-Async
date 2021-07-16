@@ -10,7 +10,7 @@ Don't Use `Test::Async` In A Module
 
 **Note** that this section is not about creating own test bundle.
 
-[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async.md) itself does some backstage work when imported with `use` or `require`. A part of this work is taking a list of registered bundles, fixing it, and building a [`Map`](https://docs.raku.org/type/Map) of exports out of it. The potential problem hides behind the word *fixing* because what it means is adding [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Base.md) into the list of registered bundles if no other bundles is registered yet; and adding [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Reporter/TAP.md) to the list if none of the registered bundles does [`Test::Async::Reporter`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Reporter.md) role. Say, if there is a module `Foo` which `use`s `Test::Async`, and there is a suite with a header like this:
+[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async.md) itself does some backstage work when imported with `use` or `require`. A part of this work is taking a list of registered bundles, fixing it, and building a [`Map`](https://docs.raku.org/type/Map) of exports out of it. The potential problem hides behind the word *fixing* because what it means is adding [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Base.md) into the list of registered bundles if no other bundles is registered yet; and adding [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Reporter/TAP.md) to the list if none of the registered bundles does [`Test::Async::Reporter`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Reporter.md) role. Say, if there is a module `Foo` which `use`s `Test::Async`, and there is a suite with a header like this:
 
     use Foo;
     use MyTests;
@@ -50,7 +50,7 @@ and then somewhere in the `MyTestApp` class implementation, which is presumably 
 
 `test-suite` attribute in this example is the suite object backing our subtest.
 
-It is also possible not to store the suite object as an attribute. Instead, one could use [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/JobMgr.md) method `start` to spawn new threads. This approach has two advantages: first, it preserves the suite object, on which the method has been invoked, as the one available via `test-suite`; second, it creates an awaitable job meaning that our subtest won't finish until the job is complete:
+It is also possible not to store the suite object as an attribute. Instead, one could use [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/JobMgr.md) method `start` to spawn new threads. This approach has two advantages: first, it preserves the suite object, on which the method has been invoked, as the one available via `test-suite`; second, it creates an awaitable job meaning that our subtest won't finish until the job is complete:
 
     method test-something-threaded {
         for ^10 -> $i {
@@ -93,12 +93,12 @@ Sometimes it might be useful to export a symbol or two from a bundle. The best w
         our sub foo { "exported" }
     }
 
-The reason for doing so is because a user could consume the bundle using [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async.md) parameters:
+The reason for doing so is because a user could consume the bundle using [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async.md) parameters:
 
     use Test::Async <MyBundle Base>;
     say foo;
 
-In this case [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async.md) not only will export all found test tool methods but it would also fetch the symbols from `EXPORT::DEFAULT` and re-export them. Apparently, the approach allows direct consuming via `use` statement to work too:
+In this case [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async.md) not only will export all found test tool methods but it would also fetch the symbols from `EXPORT::DEFAULT` and re-export them. Apparently, the approach allows direct consuming via `use` statement to work too:
 
     use Test::Async::MyBundle;
     use Test::Async::Base;
@@ -108,5 +108,5 @@ In this case [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.
 SEE ALSO
 ========
 
-[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async.md), [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Manual.md)
+[`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async.md), [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Manual.md)
 

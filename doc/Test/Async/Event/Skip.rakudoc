@@ -2,13 +2,13 @@
 =begin pod
 =head1 Class C<Event::Skip>
 
-Is L<C<Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Event/Test.md>.
+Is L<C<Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event/Test.md>.
 
 Reports skipped test.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod

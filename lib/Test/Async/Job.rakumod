@@ -7,7 +7,7 @@ C<Test::Async::Job> - a job record task
 
 =DESCRIPTION
 
-Class defines a job entry for L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/JobMgr.md>.
+Class defines a job entry for L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/JobMgr.md>.
 
 =ATTRIBUTES
 
@@ -48,8 +48,8 @@ I<True> if job has completed.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/JobMgr.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.2/docs/md/Test/Async/Hub.md>
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/JobMgr.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Hub.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
