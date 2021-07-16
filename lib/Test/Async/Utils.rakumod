@@ -49,6 +49,15 @@ enum TestStage  is export «TSInitializing TSInProgress TSFinishing TSFinished T
 # We cannot rely on event type for this because custom bundles could define their own events.
 enum TestResult is export <TRFailed TRPassed TRSkipped>;
 
+class ToolCallerCtx is export {
+    my subset CALLER-CTX of Any where Stash:D | PseudoStash:D;
+
+    has CallFrame:D $.frame is required;
+    has CALLER-CTX $.stash is required;
+    # If anchored then for any nested too call locate-tool-caller will return the anchored location.
+    has Bool:D $.anchored = False;
+}
+
 sub test-result(Bool(Mu) $cond, *%c) is export {
     # note "test-result fail: ", $fail.raku;
     my %profile;

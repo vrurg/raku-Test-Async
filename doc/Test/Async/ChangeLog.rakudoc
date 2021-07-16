@@ -2,6 +2,10 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.1.2
+
+=item Fixed a rare bug causing C<throws-like> to throw itself.
+
 =head2 v0.1.1
 
 =item Fixed a tool call stack race condition

@@ -79,6 +79,8 @@ L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/doc
 
 unit package Test::Async;
 
+use Test::Async::Utils;
+
 class Event is export {
     has $.origin = $*TEST-SUITE;
     has Int:D $.id = $++;
@@ -127,7 +129,7 @@ class Event::Command is Event {
 class Event::Test is Event::Report {
     has Str $.todo;
     has Str $.flunks;
-    has CallFrame:D $.caller is required;
+    has ToolCallerCtx:D $.caller is required;
     has @.pre-comments;
     has @.child-messages;
     has @.comments;
@@ -144,6 +146,7 @@ class Event::Terminate is Event {
 class Event::StageTransition is Event {
     has $.from is required;
     has $.to is required;
+    has %.params; # May contain some additional details about the transition
     method gist {
         callsame() ~ " " ~ $.from ~ " -> " ~ $.to
     }

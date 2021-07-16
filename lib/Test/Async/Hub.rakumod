@@ -303,7 +303,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 
 =head2 C<normalize-message(+@message --> Seq)>
 
-Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each
+Takes a free-form message possibly passed in in many chunks, splits it into lines and appends a new line to each
 individual line. This is the I<normal form> of a message.
 L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md>
 expects children suite messages to come in normalized form.
@@ -459,16 +459,7 @@ use Test::Async::X;
 also does Test::Async::Aggregator;
 also does Test::Async::JobMgr;
 
-my subset CALLER-CTX of Any where Stash:D | PseudoStash:D;
-
 has ::?CLASS $.parent-suite;
-
-class ToolCallerCtx {
-    has CallFrame:D $.frame is required;
-    has CALLER-CTX $.stash is required;
-    # If anchored then for any nested too call locate-tool-caller will return the anchored location.
-    has Bool:D $.anchored = False;
-}
 
 my atomicint $next-id = 0;
 has Int:D $.id = $next-id⚛++;
@@ -565,7 +556,7 @@ my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, 
 
 method stage { $!stage }
 
-method set-stage(TestStage:D $stage) {
+method set-stage(TestStage:D $stage, :%params = {}) {
     return $!stage if $!stage == $stage;
     loop {
         my $cur-stage = $!stage;
@@ -578,7 +569,7 @@ method set-stage(TestStage:D $stage) {
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
             self.start-event-loop if $cur-stage == TSInitializing;
             # Don't panic if the event queue is non-functional.
-            self.try-send: Event::StageTransition, :from($cur-stage), :to($stage);
+            self.try-send: Event::StageTransition, :from($cur-stage), :to($stage), :%params;
             return $cur-stage;
         }
     }
@@ -725,12 +716,11 @@ method run(:$is-async, Capture:D :$args = \()) {
     }
     CATCH {
         default {
-            self.x-sorry: $_;
             # Report failure by having at least one failed test.
             with $!planned {
                 $!tests-failed += $!planned - $!tests-run;
             }
-            self.fatality
+            self.fatality(exception => $_)
         }
     }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
@@ -769,7 +759,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType,
     if $tr == TRFailed && !(%profile<todo> || %ev-profile<todo>) {
         ++⚛$!tests-failed;
     }
-    %profile<caller> = (self.tool-caller // $.suite-caller).frame
+    %profile<caller> = self.tool-caller // $.suite-caller
         unless %ev-profile<caller>;
     self.send: evType, :$message, |%profile, |%ev-profile;
     $tr == TRPassed
@@ -786,7 +776,7 @@ method send-plan(UInt:D $planned, :$on-start) {
 }
 
 # Normal message form is a list of lines ending with newline.
-method normalize-message(@message) {
+method normalize-message(+@message) {
     @message.join.split("\n").map(* ~ "\n")
 }
 
@@ -860,8 +850,7 @@ method await-jobs {
         Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False); }),
         start {
             CATCH {
-                self.x-sorry($_);
-                self.fatality;
+                self.fatality(exception => $_);
                 .rethrow
             };
             self.await-all-jobs;
@@ -882,8 +871,8 @@ method finish(:$now = False) {
         # Wait untils all jobs are completed.
         self.await-jobs unless $now;
         self.set-stage(TSFinished);
+        # Let all events be processed before we start analyzing the results.
         self.sync-events;
-        # Let all event be processed before we start analyzing the results.
         # Same as plan, done-testing must be done in the main thread.
         self.send-plan: $!tests-run unless $.planned; # If $.planned is set then the plan has been reported on start.
         self.send: Event::DoneTesting;
@@ -997,14 +986,19 @@ method in-fatality(Bool:D :$local = False) {
     )
 }
 
-method fatality(Int:D $!exit-code = 255) {
-    self.set-stage(TSFatality);
+method fatality(Int:D $!exit-code = 255, Exception :$exception) {
+    my %params;
+    with $exception {
+        self.x-sorry: $_;
+        %params<exception> = $_;
+    }
+    self.set-stage(TSFatality, :%params);
     $!tests-failed = 1 unless $!tests-failed;
     with $.parent-suite {
-        .fatality($!exit-code)
+        .fatality($!exit-code, :$exception)
     }
     else {
-        if $!ev-queue.closed.status ~~ Planned {
+        if self.event-queue-is-active {
             self.send-command: Event::Cmd::BailOut, $!exit-code
         }
         else {

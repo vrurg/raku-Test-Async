@@ -153,7 +153,7 @@ method start-event-loop {
                 }
             }
             CATCH {
-                CATCH { note "EXCEPTION HANDLING IN EVENT LOOP DIED WITH: ", .message, "\n", .backtrace.Str.indent(4) }
+                CATCH { note "EXCEPTION HANDLING IN EVENT LOOP DIED WITH: ", .message, "\n", .backtrace.Str.indent(2) }
                 # self.trace-out: "===EVENT HANDLING=== ", $_, ~$_.backtrace;
                 self.x-sorry: $_, :comment("In event handling.");
                 my $drop-ev = $ev;
@@ -162,12 +162,16 @@ method start-event-loop {
                     $drop-ev = $!ev-queue.poll;
                 } while $drop-ev;
                 $!ev-queue.fail($_);
-                self.fatality;
+                self.fatality(exception => $_, :event-queue);
             }
             self!dispatch-event($ev);
             # self.trace-out: "<!! DISPATCHED EV: [" ~ self.id.fmt('%5d') ~ "] " ~ $ev.^name ~ "#" ~ $ev.id;
         }
     }
+}
+
+method event-queue-is-active(--> Bool:D) {
+    $!ev-queue.closed.status ~~ Planned
 }
 
 method !dispatch-event(Event:D $ev) {

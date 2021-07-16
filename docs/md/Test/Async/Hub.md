@@ -327,7 +327,7 @@ Emits `Event::Plan` event. If `$on-start` is *True* and suite is the topmost one
 `normalize-message(+@message --` Seq)>
 --------------------------------------
 
-Takes a free-form message possible passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the *normal form* of a message. [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md) expects children suite messages to come in normalized form.
+Takes a free-form message possibly passed in in many chunks, splits it into lines and appends a new line to each individual line. This is the *normal form* of a message. [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md) expects children suite messages to come in normalized form.
 
 *NOTE.* This form is chosen as *normal* because TAP is a line-based protocol for which a line must end with a newline.
 
