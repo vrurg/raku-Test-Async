@@ -28,9 +28,9 @@ for ^$count -> $id {
     @job-promise.push: my $p = Promise.new;
     subtest "test $id" => {
         $p.keep;
-        $*ERR.printf: "await: %6d\r", --⚛$to-await;
+        $*ERR.printf: "before await: %6d\r", --⚛$to-await;
         await $starter;
-        $*ERR.printf: "left: %6d\r", --⚛$to-complete;
+        $*ERR.printf: "after await : %6d\r", --⚛$to-complete;
         plan 1;
         pass "started $id";
     }
