@@ -1,17 +1,14 @@
 use Test::Async <When Base>;
 
-constant MAX-THREADS = 2000;
-constant CONC-COUNT = 1000;
+constant MAX-THREADS = 3000;
+constant CONC-COUNT = 1100;
 BEGIN {
     %*ENV<RAKUDO_MAX_THREADS> = MAX-THREADS;
-#    %*ENV<TEST_JOBS> = CONC-COUNT;
+    $*SCHEDULER = ThreadPoolScheduler.new: max_threads => MAX-THREADS;
 }
 
-$*SCHEDULER = ThreadPoolScheduler.new;
 
 my $count = 1000;
-# 5 minutes
-my $timeout = 300;
 
 plan $count + 2,
     :parallel, :!random,
@@ -22,15 +19,20 @@ plan $count + 2,
 is $*SCHEDULER.max_threads, MAX-THREADS, "max threads set";
 
 my $starter = Promise.new;
+my @job-promise;
+
 for ^$count -> $id {
+    @job-promise.push: my $p = Promise.new;
     subtest "test $id" => {
+        $p.keep;
         await $starter;
         plan 1;
         pass "started $id";
     }
 }
 
+await @job-promise;
 pass "all started";
-$starter.keep(1);
+$starter.keep;
 
 done-testing;
