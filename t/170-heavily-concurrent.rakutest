@@ -20,12 +20,14 @@ is $*SCHEDULER.max_threads, MAX-THREADS, "max threads set";
 
 my $starter = Promise.new;
 my @job-promise;
+my atomicint $to-complete = $count;
 
 for ^$count -> $id {
     @job-promise.push: my $p = Promise.new;
     subtest "test $id" => {
         $p.keep;
         await $starter;
+        $*ERR.printf: "left: %6d\r", --⚛$to-complete;
         plan 1;
         pass "started $id";
     }
