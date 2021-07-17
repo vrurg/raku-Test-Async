@@ -1,3 +1,4 @@
+use v6.d;
 use Test::Async <When Base>;
 
 constant MAX-THREADS = 3000;
@@ -20,12 +21,14 @@ is $*SCHEDULER.max_threads, MAX-THREADS, "max threads set";
 
 my $starter = Promise.new;
 my @job-promise;
+my atomicint $to-await = $count;
 my atomicint $to-complete = $count;
 
 for ^$count -> $id {
     @job-promise.push: my $p = Promise.new;
     subtest "test $id" => {
         $p.keep;
+        $*ERR.printf: "await: %6d\r", --⚛$to-await;
         await $starter;
         $*ERR.printf: "left: %6d\r", --⚛$to-complete;
         plan 1;
