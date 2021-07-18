@@ -164,12 +164,12 @@ it takes the postponed queue, shuffles jobs in it and invokes them in the result
 
 =head2 Events
 
- C<Test::Async> framework handles concurrency using event-driven flow control. Each event is an instance of a class
- inheriting from
- L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md> class. Events
- are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where they're read from by a dedicated thread and
- dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
- themselves, the other one is for event handling.
+C<Test::Async> framework handles concurrency using event-driven flow control. Each event is an instance of a class
+inheriting from
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md> class.
+Events are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where they're read from by a dedicated thread
+and dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
+themselves, the other one is for event handling.
 
     Thread#1 \
               \

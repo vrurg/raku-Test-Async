@@ -144,18 +144,13 @@ The way the manager works is it creates a pool (not a queue) of jobs. The order 
 Events
 ------
 
-    C<Test::Async> framework handles concurrency using event-driven flow control. Each event is an instance of a class
-    inheriting from
-    L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md> class. Events
-    are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where they're read from by a dedicated thread and
-    dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
-    themselves, the other one is for event handling.
+`Test::Async` framework handles concurrency using event-driven flow control. Each event is an instance of a class inheriting from [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md) class. Events are queued using a [`Channel`](https://docs.raku.org/type/Channel) where they're read from by a dedicated thread and dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests themselves, the other one is for event handling.
 
-       Thread#1 \
-                 \
-       Thread#2 --> [Event Queue] -> Event Handler Thread
-                 /
-       Thread#3 /
+    Thread#1 \
+              \
+    Thread#2 --> [Event Queue] -> Event Handler Thread
+              /
+    Thread#3 /
 
 The approach allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code. In particular, it proves to be useful for object state changes like, for example, for collecting messages from child suites ran asynchronously. Because the messages are stashed in an [`Array`](https://docs.raku.org/type/Array) the procedure is prone to race condition bugs. But when the responsibility of updating the array is in hands of a single thread it greatly simplifies the task.
 
