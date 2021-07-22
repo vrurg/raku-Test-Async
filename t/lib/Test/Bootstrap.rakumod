@@ -34,7 +34,7 @@ sub diag(Str:D $message) is export {
 
 sub done-testing is export {
     if $test-failed {
-        diag "You failed $test-failed test{$test-failed == 1 ?? '' !! 's'} of $planned";
+        diag "You failed $test-failed test{$test-failed == 1 ?? '' !! 's'}" ~ (" of $planned" if $planned);
     }
     if $planned.defined && $test-id != $planned {
         diag "You planned $planned tests but ran $test-id";
