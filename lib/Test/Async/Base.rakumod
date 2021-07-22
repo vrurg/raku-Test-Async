@@ -605,8 +605,7 @@ method fails-like (
     self!validate-matchers(%matcher);
     my $throws-like-context = $.tool-caller.stash // CALLER::;
     my $rc = False;
-    self.subtest: $message, :instant, :hidden, :!async, {
-        my \suite = self.test-suite;
+    self.subtest: $message, :instant, :hidden, :!async, -> \suite {
         suite.plan: 2;
         CATCH { default {
             with "expected code to fail but it threw {.^name} instead" {
