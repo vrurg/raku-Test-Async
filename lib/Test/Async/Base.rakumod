@@ -58,7 +58,7 @@ If C<test-flunks> is in effect then method returns its message and decreases C<$
 Method produces standardized I<"expected ... but got ..."> messages.
 
 The second candidate is used for non-string values. It stringifies them using
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md> C<stringify> routine and then passes over to the first candidate for formatting alongside with
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md> C<stringify> routine and then passes over to the first candidate for formatting alongside with
 named parameters captured in C<%c>.
 
 Named parameters:
@@ -112,9 +112,9 @@ invoked in a random order.
 It is possible to combine both async and random modes which might add even more stress to the code tested.
 
 I<Some more information about C<Test::Async> job management can be found in
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md>>
 
 The particular mode of operation is defined either by C<plan> keys C<parallel> or C<random>, or by subtest named
 parameters C<async> or C<instant>. The named parameters take precedence over plan parameters:
@@ -134,7 +134,7 @@ now!
 
 Adding C<:async> named parameter too will invoke the subtest instantly and asynchronously. And this also means that
 a subtest invoked this way won't be counted as a job by
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>.
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md>.
 In other words, we treat C<:instant> as: I<bypass any queue, just do it here and now!>
 
 Another edge case is using C<:async> with C<random>. In this case the subtest will be postponed. But when time to invoke
@@ -158,8 +158,8 @@ example could be written as:
     }
 
 and this is the way it must be used in a module. See
-L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async.md>
-and L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/CookBook.md>
+L<C<Test::Async>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async.md>
+and L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/CookBook.md>
 for more details.
 
 =head3 Hidden C<subtest>
@@ -168,7 +168,7 @@ C<:hidden> named parameter doesn't change how a subtest runs but rather how it r
 to be integral part of test tool method which invoked it. It means two things:
 
 =item flunked test tools called by subtest code won't report their location (file and line)
-(I<implemented by L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md> and might not be supported by 3rd party reporters>)
+(I<implemented by L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Reporter/TAP.md> and might not be supported by 3rd party reporters>)
 =item flunked subtest would report location of the test tool method which invoked it
 
 The primary purpose of this mode is to provide means of implementing compound test tools. I.e. tools which consist of
@@ -189,7 +189,7 @@ Note that we're using explicit C<:instant> and C<:!async> modes to prevent possi
 C<:parallel> and C<:random> in parent suite's plan. Besides, it is normal for a user to expect a test tool to be
 semi-atomic operation being done here and now.
 
-=head2 C<mutli is-run(Str() $code, %params, Str:D $message = "")>
+=head2 C<multi is-run(Str() $code, %params, Str:D $message = "")>
 =head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>
 
 This test tool is not provided by the standard L<C<Test>|https://docs.raku.org/type/Test> framework, but in slightly different forms it is defined
@@ -199,7 +199,7 @@ and
 L<roast|https://github.com/Raku/roast/blob/7033b07bbbb54a301b3bfd1253e30c5e7cebdfab/packages/Test-Helpers/lib/Test/Util.pm6#L107>
 tests.
 
-C<is-run> tests C<$code> by executing it in a child compiler process. In a way, it is like doining:
+C<is-run> tests C<$code> by executing it in a child compiler process. In a way, it is like doing:
 
     # echo "$code" | rakudo -
 
@@ -213,6 +213,7 @@ capture):
 =item C<:@args> - command line arguments for C<$code>
 =item C<:$err?> – expected error output
 =item C<:$exitcode = 0> – expected process exit code.
+=item C<:$timeout> - time in second to wait for the process to complete
 
 =head2 C<multi test-flunks(Str:D $message, Bool :$remaining?)>
 =head2 C<multi test-flunks($count)>
@@ -234,10 +235,10 @@ current suite are expected to flunk.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
@@ -250,6 +251,7 @@ unit test-bundle Test::Async::Base;
 use nqp;
 use Test::Async::Utils;
 use Test::Async::Hub;
+use Test::Async::X;
 
 use MONKEY-SEE-NO-EVAL;
 use Test::Async::Event;
@@ -604,8 +606,7 @@ method fails-like (
     self!validate-matchers(%matcher);
     my $throws-like-context = $.tool-caller.stash // CALLER::;
     my $rc = False;
-    self.subtest: $message, :instant, :hidden, :!async, {
-        my \suite = self.test-suite;
+    self.subtest: $message, :instant, :hidden, :!async, -> \suite {
         suite.plan: 2;
         CATCH { default {
             with "expected code to fail but it threw {.^name} instead" {
@@ -740,7 +741,7 @@ method skip-rest(Str:D $message = "") is test-tool(:!skippable) {
         self.skip($message, self.planned - $.tests-run);
     }
     else {
-        self.throw: X::PlanRequired, :op<skip-rest>
+        self.throw: Test::Async::X::PlanRequired, :op<skip-rest>
     }
 }
 
@@ -868,27 +869,57 @@ multi method is-run(Str:D() $code, %expected, Str:D $message = "") {
 }
 multi method is-run (
     Str:D() $code, Str:D $message = "",
-    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False )
+    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False,
+    UInt :$timeout )
 {
     self.subtest: $message, :instant, :hidden, :$async, -> $suite {
         $suite.plan(1 + ?$out.defined + ?$err.defined);
         my $code-file = self.temp-file('code', $code);
         LEAVE $code-file.IO.unlink;
 
-        my @proc-args = ($*EXECUTABLE, @compiler-args, $code-file, @args).flat;
+        my @proc-args = $*EXECUTABLE, |@compiler-args, $code-file, |@args;
 
-        with run :in, :out, :err, @proc-args, :%env {
-            $in ~~ Blob ?? .in.write: $in !! .in.print: $in if $in;
-            $ = .in.close;
-            my $proc-out      = .out.slurp: :close;
-            my $proc-err      = .err.slurp: :close;
-            my $proc-exitcode = .exitcode;
+        my $proc = Proc::Async.new: @proc-args;
 
+        my $proc-out = "";
+        my $proc-err = "";
+        my $proc-exitcode;
+        my $timed-out = False;
+        my $in-method = $in ~~ Blob ?? "write" !! "print";
+
+        react {
+            whenever $proc.stdout {
+                $proc-out ~= $_;
+            }
+            whenever $proc.stderr {
+                $proc-err ~= $_;
+            }
+            whenever $proc.start(ENV => %env) {
+                $proc-exitcode = .exitcode;
+                done;
+            }
+            with $in {
+                whenever $proc."$in-method"($in) {
+                    $proc.close-stdin;
+                }
+            }
+            with $timeout {
+                whenever Promise.in($timeout) {
+                    $timed-out = True;
+                    $proc.kill: SIGKILL;
+                }
+            }
+        }
+
+        if $timed-out {
+            $suite.flunk: "code timed out";
+        }
+        else {
             my $wanted-exitcode = $exitcode // 0;
 
             given $suite {
-                .cmp-ok: $proc-out,      '~~', $out,             'STDOUT' if $out.defined;
-                .cmp-ok: $proc-err,      '~~', $err,             'STDERR' if $err.defined;
+                .cmp-ok: $proc-out, '~~', $out, 'STDOUT' if $out.defined;
+                .cmp-ok: $proc-err, '~~', $err, 'STDERR' if $err.defined;
                 .cmp-ok: $proc-exitcode, '~~', $wanted-exitcode, 'Exit code';
             }
         }

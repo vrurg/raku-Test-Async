@@ -3,6 +3,29 @@ CHANGELOG
 
 
 
+v0.1.4
+------
+
+  * Mostly bug fix release
+
+  * Added `:timeout` parameter to `is-run`
+
+v0.1.3
+------
+
+  * Improved handling of exceptions
+
+  * Subtests now attempt to report any exception produced by their body rather than bailing out immediately
+
+  * New method on Aggregator role: event-queue-active
+
+  * A couple of minor fixes
+
+v0.1.2
+------
+
+  * Fixed a rare bug causing `throws-like` to throw itself.
+
 v0.1.1
 ------
 
@@ -13,9 +36,9 @@ v0.1.1
 v0.1.0
 ------
 
-  * Implemented tool call stack and tool anchoring ([`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md))
+  * Implemented tool call stack and tool anchoring ([`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md))
 
-  * Added support for pre-comments, or header comments, to [`Test::Async::Event::Test`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event/Test.md)
+  * Added support for pre-comments, or header comments, to [`Test::Async::Event::Test`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event/Test.md)
 
   * Added a header to the output of non-hiddent subtests, similar to [a Rakudo request ticket](https://github.com/rakudo/rakudo/issues/4266)
 

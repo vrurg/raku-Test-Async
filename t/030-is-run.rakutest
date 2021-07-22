@@ -1,7 +1,19 @@
 use v6;
 use Test::Async;
 
-plan 1;
+plan 3;
+
+# Use low-level Promise manipulations for better control over the process.
+my Bool $succeed;
+my $suite = test-suite;
+await Promise.anyof( Promise.in(5).then( { cas($succeed, Bool, False) } ),
+                     test-suite.start({
+                          $suite.test-flunks: "is-run is expected to fail because code doesn't finish before timeout";
+                          # Use sleep to ensure it really times out at some point.
+                          $suite.is-run: q<sleep 10>, :timeout(3), "timing out code";
+                      }).then( { cas($succeed, Bool, True )} ));
+
+ok $succeed, "timeout works with freezing code handled";
 
 is-run q<say "ok">,
     "is-run with simple code",

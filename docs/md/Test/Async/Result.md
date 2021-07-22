@@ -63,7 +63,7 @@ The profile capture is built the following way:
 SEE ALSO
 ========
 
-`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md).
+`test-result` routine from [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md).
 
 AUTHOR
 ======

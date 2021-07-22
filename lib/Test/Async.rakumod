@@ -18,7 +18,7 @@ C<Test::Async> - base module of the framework
 
 The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but
 is not recommended for a module. See
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/CookBook.md>
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/CookBook.md>
 for more details.
 
 =head2 Exports
@@ -35,20 +35,20 @@ via C<Test::Async::Hub> C<top-suite> method.
 =head3 Test Tools
 
 The module exports all test tools it finds in the top suite object. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>
 for more details.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/CookBook.md>,
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/CookBook.md>,
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
 =end pod
 
-module Test::Async:ver<0.1.901>:api<0.1.1> { }
+module Test::Async:ver<0.1.902>:api<0.1.1> { }
 
 our sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
@@ -82,13 +82,13 @@ our sub EXPORT(*@b) {
 END {
     if Test::Async::Hub.has-top-suite {
         my $suite = Test::Async::Hub.top-suite;
+        CATCH {
+            default {
+                $suite.fatality(255, exception => $_);
+            }
+        }
         # $suite.trace-out: "# ___ Test::Async END phaser, has top-suite";
         Test::Async::Hub.top-suite.done-testing;
-        my $exit-code = $suite.exit-code // ($suite.tests-failed min 254);
-        unless $exit-code {
-            $exit-code = 255
-                if ($suite.planned.defined && $suite.tests-run) && (($suite.planned // 0) != ($suite.tests-run // 0));
-        }
-        exit $exit-code;
+        exit $suite.exit-code;
     }
 }

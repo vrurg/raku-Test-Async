@@ -1,5 +1,6 @@
 use v6;
 use Test::Async;
+use Test::Async::X;
 
 plan 2;
 

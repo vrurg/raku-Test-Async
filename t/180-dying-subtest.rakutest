@@ -1,9 +1,23 @@
 use v6;
 use Test::Async;
 
-plan 1;
+plan 2;
 
 my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+
+is-run q:to/CODE/,
+           class X::DieFast is Exception { method message { "right now" } };
+           subtest "Dying" => { X::DieFast.new.throw }
+           CODE
+   "exception in an immediate subtest is caught and reported",
+   :compiler-args(@default-args),
+   :timeout(10),
+   :exitcode(1),
+   :out( /^^ \s+ '# ===SORRY!=== ' .* ' X::DieFast' .*?
+   ^^ \s+ '#' \s+ 'right now'
+   /),
+   :async,
+   :err("");
 
 is-run q:to/CODE/,
            plan 2, :parallel;
@@ -28,7 +42,7 @@ is-run q:to/CODE/,
                pass "good 2";
            }
            CODE
-       "exception in a subtest is caught and reported",
+       "exception in a parallel subtest is caught and reported",
        :compiler-args(@default-args),
        :exitcode(1),
        :out(

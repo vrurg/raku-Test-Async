@@ -13,10 +13,10 @@ C<Test::Async::Hub> - the core of C<Test::Async> framework
 
 =head1 DESCRIPTION
 
-Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>
+Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md>
 
-See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>
+See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>
 for general purpose of this class.
 
 =head2 Command Execution
@@ -65,7 +65,7 @@ If suite is planned for skipping then this is the message as for C<skip-remainin
 Otherwise undefined.
 
 B<NOTE!> Any examples of code in this documentation are based on the default
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md>
 bundle.
 
 =head2 C<TODO-message>
@@ -95,14 +95,14 @@ A string, recommended prefix to be used for indenting messages produced by the s
 =head2 C<suite-caller>
 
 An instance of
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub/ToolCallerCtx.md>.
+L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub/ToolCallerCtx.md>.
 Keeps information about the location where the suite was created.
 
 =head2 C<transparent>
 
 A flag. If I<True> then this suite will have its call location set to the where it's enclosing test tool or suite
 are called. C<subtest> implementation by
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md>
 uses this for C<:hidden> mode of operation.
 
 This attribute is propagated to child suites instantiated using C<create-suite> method. In other words, nested
@@ -153,19 +153,19 @@ is I<True>. The messages are submitted for reporting when the suite run ends and
 =head2 C<test-jobs>
 
 Maximus number of concurrently running jobs allowed. Note that a I<job> is anything invoked using C<start-job> method
-of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>.
+of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md>.
 
 =head2 C<stage>
 
 The current stage of suite lifecycle. See C<TestStage> enum in
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md>.
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md>.
 
 =head1 METHODS
 
 =head2 C<new>
 
 Creates a new instance of constructed C<Test::Async::Suite> class. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>.
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>.
 
 =head2 C<top-suite()>
 
@@ -177,8 +177,8 @@ Returns C<True> if the top suite singleton has been instantiated already.
 
 =head2 C<set-stage(TestStage:D $stage -> TestStage)>
 
-Transition suite state to stage C<$stage>. Throws C<X::StageTransition>
-(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
+Transition suite state to stage C<$stage>. Throws C<Test::Async::X::StageTransition>
+(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
 the method also starts the event loop thread.
 
 Returns the pre-transition stage.
@@ -196,7 +196,7 @@ The ultimate handler of event objects. A bundle wishing to react to events must 
 =head2 C<setup-from-plan>
 
 Setup suite parameters based on a plan profile hash. If called when suite stage is not C<TSInitializing> then throws
-C<X::PlanTooLate>.
+C<Test::Async::X::PlanTooLate>.
 
 The keys supported by profile are:
 
@@ -269,9 +269,9 @@ The method returns job C<Promise> of the invoked suite.
 
 Execute the suite here and now. Internal implementation detail.
 
-=head2 C<throw(X::Base:U \exType, *%c)>
+=head2 C<throw(Test::Async::X::Base:U \exType, *%c)>
 
-Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
+Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
 is added.
 
 =head2 C<abort>
@@ -305,7 +305,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 
 Takes a free-form message possibly passed in in many chunks, splits it into lines and appends a new line to each
 individual line. This is the I<normal form> of a message.
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md>
+L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Reporter/TAP.md>
 expects children suite messages to come in normalized form.
 
 I<NOTE.> This form is chosen as I<normal> because TAP is a line-based protocol for which a line must end with a newline.
@@ -355,7 +355,7 @@ This method implements two tasks:
 
 =item first, it pulls postponed jobs and invokes them in a random order
 =item next it calls C<await-all-jobs> to make sure all jobs have completed
-=item if C<await-all-jobs> doesn't finish in 30 seconds C<X::AwaitTimeout> is thrown
+=item if C<await-all-jobs> doesn't finish in 30 seconds C<Test::Async::X::AwaitTimeout> is thrown
 
 =head2 C<finish(:$now = False)>
 
@@ -386,7 +386,7 @@ detail.
 =head2 C<locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored --> ToolCallerCtx:D)>
 
 Finds the context in which the current test tool is invoked and returns a
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub/ToolCallerCtx.md>
+L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub/ToolCallerCtx.md>
 instance or a L<C<Failure>|https://docs.raku.org/type/Failure> in case of an error.
 
 C<$pre-skip> defines the number of frames to be skipped before the method starts looking for the real call location.
@@ -425,18 +425,18 @@ C<my-compound-tool> is called.
 =head2 C<temp-file(Str:D $base-name, $data --> Str:D)>
 
 Quickly create a temporary file and populate it with $data. Returns absolute file name. Throws
-C<X::FileCreate>/C<X::FileClose> in case of errors.
+C<Test::Async::X::FileCreate>/C<Test::Async::X::FileClose> in case of errors.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md>,
-L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Result.md>,
-L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/TestTool.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/X.md>
+L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Aggregator.md>,
+L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Decl.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md>,
+L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Result.md>,
+L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/TestTool.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
@@ -496,7 +496,7 @@ has Bool $.random;
 has atomicint $!next-test-id = 1;
 has atomicint $.tests-run = 0;
 has atomicint $.tests-failed = 0;
-has Int $.exit-code;
+has Int $!exit-code;
 
 # Run children in individual threads
 has Bool $.parallel;
@@ -532,9 +532,10 @@ submethod TWEAK(|) {
             $!suite-caller = .tool-caller // .suite-caller;
         }
         else {
-            self.throw: X::TransparentWithoutParent
+            self.throw: Test::Async::X::TransparentWithoutParent
         }
     }
+    self.start-event-loop;
 }
 
 my $singleton;
@@ -562,12 +563,11 @@ method set-stage(TestStage:D $stage, :%params = {}) {
         my $cur-stage = $!stage;
         # Prevent possible race condition when two concurrent locations are trying to set different states.
         # States are defined by the equivalence table.
-        self.throw: X::StageTransition, :from($cur-stage), :to($stage)
+        self.throw: Test::Async::X::StageTransition, :from($cur-stage), :to($stage)
             if @stage-equivalence[$cur-stage] > @stage-equivalence[$stage];
-        # Do nothing if requested stage is equivalent to the current one but preceeds it.
+        # Do nothing if requested stage is equivalent to the current one but precedes it.
         return $cur-stage if $cur-stage > $stage;
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
-            self.start-event-loop if $cur-stage == TSInitializing;
             # Don't panic if the event queue is non-functional.
             self.try-send: Event::StageTransition, :from($cur-stage), :to($stage), :%params;
             return $cur-stage;
@@ -591,7 +591,7 @@ multi method event(::?CLASS:D: Event::Report:D $ev) {
 method setup-from-plan(%plan) {
     my $cur-stage = %plan<tests>:exists ?? $.set-stage(TSInProgress) !! $!stage;
     if $cur-stage != TSInitializing {
-        self.throw: X::PlanTooLate;
+        self.throw: Test::Async::X::PlanTooLate;
     }
     if %plan<tests> {
         $!planned = %plan<tests>:delete;
@@ -616,7 +616,7 @@ multi method plan(UInt:D $tests, *%plan) {
 }
 multi method plan(*%plan) {
     CATCH {
-        when X::PlanTooLate {
+        when Test::Async::X::PlanTooLate {
             self.send: Event::Diag, :message("FAILURE: " ~ .message);
             $!tests-failed = $!planned // 1;
             if self.parent-suite {
@@ -637,6 +637,14 @@ multi method plan(*%plan) {
     }
 }
 
+method exit-code {
+    $!exit-code
+    || ($!tests-failed min 254)
+    || ($!planned.defined && ($!planned != ($!tests-run // 0))
+        ?? 255
+        !! 0)
+}
+
 method done-testing() is test-tool(:!skippable) {
     self.finish;
 }
@@ -649,7 +657,7 @@ method abort-testing() is test-tool(:!skippable) {
     }
     else {
         # The top suite must gracefully exit to shell
-        exit;
+        exit self.exit-code;
     }
 }
 
@@ -726,11 +734,10 @@ method run(:$is-async, Capture:D :$args = \()) {
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code(|$args);
-    # note "SUITE -> FINISH";
     self.finish;
 }
 
-method throw(X::Base:U \exType, *%c) is hidden-from-backtrace {
+method throw(Test::Async::X::Base:U \exType, *%c) is hidden-from-backtrace {
     exType.new( :suite(self), |%c ).throw
 }
 
@@ -847,7 +854,7 @@ method await-jobs {
     my $all-done = NotDoneYet;
     # self.trace-out: ">>> AWAIT JOBS TIMEOUT: ", $!job-timeout;
     await Promise.anyof(
-        Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False); }),
+        Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False) }),
         start {
             CATCH {
                 self.fatality(exception => $_);
@@ -859,12 +866,17 @@ method await-jobs {
     );
     # self.trace-out: ">>> JOBS AWAIT DONE: ", $all-done;
     unless $all-done {
-        self.throw(X::AwaitTimeout, :what('all jobs'))
+        self.throw(Test::Async::X::AwaitTimeout, :what('remaining jobs'))
     }
     self.send: Event::JobsAwaited;
 }
 
 method finish(:$now = False) {
+    CATCH {
+        default {
+            self.fatality(255, exception => $_);
+        }
+    }
     # Only do the sequence once even if accidentally called concurrently.
     return if $!stage == TSFinishing | TSFinished | TSDismissed | TSFatality;
     if self.set-stage(TSFinishing) == TSInProgress {
@@ -906,7 +918,7 @@ method push-tool-caller(ToolCallerCtx:D $ctx) {
 }
 
 method pop-tool-caller(--> ToolCallerCtx:D) {
-    fail X::EmptyToolStack.new(:suite(self), :op<pop>)
+    fail Test::Async::X::EmptyToolStack.new(:suite(self), :op<pop>)
         unless +@*TEST-TOOL-STACK;
     @*TEST-TOOL-STACK.pop
 }
@@ -938,11 +950,11 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
         ++$idx;
         $ctx = $ctx<CALLER>.WHO<LEXICAL>.WHO;
     }
-    fail X::NoToolCaller.new(:suite(self));
+    fail Test::Async::X::NoToolCaller.new(:suite(self));
 }
 
 method tool-caller(--> ToolCallerCtx:D) {
-    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
+    fail Test::Async::X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
     @*TEST-TOOL-STACK[*-1]
 }
 
@@ -956,10 +968,10 @@ method temp-file(Str:D $base-name, $data) {
                     ).join("-")
                 ).absolute;
     my $fh = $fname.IO.open: :w;
-    self.throw: X::FileCreate, :$fname, :details($fh.exception.message) unless $fh.so;
+    self.throw: Test::Async::X::FileCreate, :$fname, :details($fh.exception.message) unless $fh.so;
     $fh.print: $data;
     $fh.close
-        notandthen self.throw(X::FileClose, :$fname, :details(.exception.message));
+        notandthen self.throw(Test::Async::X::FileClose, :$fname, :details(.exception.message));
     $fname
 }
 
@@ -998,12 +1010,7 @@ method fatality(Int:D $!exit-code = 255, Exception :$exception) {
         .fatality($!exit-code, :$exception)
     }
     else {
-        if self.event-queue-is-active {
-            self.send-command: Event::Cmd::BailOut, $!exit-code
-        }
-        else {
-            exit $!exit-code
-        }
+        exit self.exit-code
     }
 }
 

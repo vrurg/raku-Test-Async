@@ -62,7 +62,7 @@ subtest "Nones" => {
 subtest "Errors" => {
     plan 1;
     throws-like { test-requires(:what<something>) },
-                X::WhenCondition,
+                Test::Async::X::WhenCondition,
                 "when with unknown condition throws",
                 :message("Bad 'when' condition :what");
 }

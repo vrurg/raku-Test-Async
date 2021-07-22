@@ -66,14 +66,14 @@ C<%profile> and then sends the new instance.
 
 Pushes an event into the local buffer. If event type is supplied then it gets instantiated first and then pushed.
 
-B<Note!> The method can only be used within the event loop thread. If called outside it throws C<X::BadPostEvent>.
+B<Note!> The method can only be used within the event loop thread. If called outside it throws C<Test::Async::X::BadPostEvent>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/X.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>,
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md>,
+L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md>,
+L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
@@ -124,7 +124,7 @@ method try-send(|c) {
 
 proto method post-event(Event, *%) {*}
 multi method post-event(Event:D $ev) {
-    self.throw: X::BadPostEvent, :owner($*TEST-ASYNC-EV-OWNER)
+    self.throw: Test::Async::X::BadPostEvent, :owner($*TEST-ASYNC-EV-OWNER)
         unless $*TEST-ASYNC-EV-OWNER === self;
     @!posted-events.push: $ev;
 }

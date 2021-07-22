@@ -34,7 +34,7 @@ sub diag(Str:D $message) is export {
 
 sub done-testing is export {
     if $test-failed {
-        diag "You failed $test-failed test{$test-failed == 1 ?? '' !! 's'} of $planned";
+        diag "You failed $test-failed test{$test-failed == 1 ?? '' !! 's'}" ~ (" of $planned" if $planned);
     }
     if $planned.defined && $test-id != $planned {
         diag "You planned $planned tests but ran $test-id";
@@ -54,28 +54,50 @@ sub like(Str:D $got, Regex:D $expect, $message) is export {
     diag "     got: {$got.defined ?? "<<$got>>" !! "*undef*"}";
 }
 
-sub is-run(Str:D $code, Str:D $message = "$code runs", :@compiler-args, :$out = '', :$err = '', :$exitcode = 0) is export {
+sub is-run(Str:D $code, Str:D $message = "$code runs",
+           :@compiler-args, :$out = '', :$err = '', :$exitcode = 0,
+           :$timeout) is export
+{
     my $ok = True;
     my @msg;
     with run($*EXECUTABLE, @compiler-args, :in, :out, :err) {
         .in.print: $code;
         $ = .in.close;
-        if .exitcode != $exitcode {
+        my $proc-exitcode;
+        my Bool $in-time;
+        if $timeout {
+            await Promise.anyof( Promise.in($timeout).then({ cas($in-time, Bool, False) }),
+                                 start {
+                                     $proc-exitcode = .exitcode;
+                                     cas($in-time, Bool, True);
+                                 });
+        }
+        else {
+            $proc-exitcode = .exitcode;
+            $in-time = True;
+        }
+        if $in-time {
+            if $proc-exitcode != $exitcode {
+                $ok = False;
+                @msg.push: "Expected exitcode $exitcode but got " ~ .exitcode;
+            }
+            unless ( my $pout = .out.slurp(:close) ) ~~ $out {
+                $ok = False;
+                @msg.push: "Standard output doesn't match.\n"
+                           ~ "expected: { $out.raku }\n"
+                           ~ "     got: { $pout.raku }";
+            }
+            # note "<<<<<<<<<<<<<\n", $pout, "\n>>>>>>>>>>>>>>>>";
+            unless ( my $perr = .err.slurp(:close) ) ~~ $err {
+                $ok = False;
+                @msg.push: "Standard error doesn't match.\n"
+                           ~ "expected: { $err.raku }\n"
+                           ~ "     got: { $perr.raku }";
+            }
+        }
+        else {
             $ok = False;
-            @msg.push: "Expected exitcode $exitcode but got " ~ .exitcode;
-        }
-        unless (my $pout = .out.slurp(:close)) ~~ $out {
-            $ok =False;
-            @msg.push: "Standard output doesn't match.\n"
-                        ~ "expected: {$out.raku}\n"
-                        ~ "     got: {$pout.raku}";
-        }
-        # note "<<<<<<<<<<<<<\n", $pout, "\n>>>>>>>>>>>>>>>>";
-        unless (my $perr = .err.slurp(:close)) ~~ $err {
-            $ok =False;
-            @msg.push: "Standard error doesn't match.\n"
-                        ~ "expected: {$err.raku}\n"
-                        ~ "     got: {$perr.raku}";
+            @msg.push: "Process timed out in " ~ $timeout ~ " sec.";
         }
     }
     ok $ok, $message;

@@ -3,7 +3,7 @@ PREFACE
 
 This document provides general information about `Test::Async`. Technical details are provided in corresponding modules.
 
-General test framework use information can be found in the documentation of Raku's standard [Test suite](https://docs.raku.org/type/Test). [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md) provides information about differences and additions between the standard framework and `Test::Async`.
+General test framework use information can be found in the documentation of Raku's standard [Test suite](https://docs.raku.org/type/Test). [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md) provides information about differences and additions between the standard framework and `Test::Async`.
 
 INTRODUCTION
 ============
@@ -25,11 +25,11 @@ The particular meaning is determined by a context or some other way.
 
 ### *Test bundle* or just *bundle*
 
-A module or a role implementing a set of test tools or extending/modifying the core functionality. A bundle providing the default set of tools is included into the framework and implemented by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md).
+A module or a role implementing a set of test tools or extending/modifying the core functionality. A bundle providing the default set of tools is included into the framework and implemented by [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md).
 
 ### *Reporter*
 
-A test bundle which provides reporting capabilities. For example, [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md) implements TAP output.
+A test bundle which provides reporting capabilities. For example, [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Reporter/TAP.md) implements TAP output.
 
 ### *Test tool*
 
@@ -69,7 +69,7 @@ results in:
 
 Next paragraphs are explaining where this output comes from.
 
-Let's start with bundles. One is created with either `test-bundle` or `test-reporter` keyword provided by [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Decl.md) module. For example:
+Let's start with bundles. One is created with either `test-bundle` or `test-reporter` keyword provided by [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Decl.md) module. For example:
 
     test-bundle MyBundle {
         method my-test($got, $expected, $message) is test-tool {
@@ -79,7 +79,7 @@ Let's start with bundles. One is created with either `test-bundle` or `test-repo
 
 In fact it is nothing else but a role declaration but with two important side effects:
 
-  * the role is backed by [`Test::Async::Metamodel::BundleHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Metamodel/BundleHOW.md) metaclass which subclasses `Metamodel::ParametricRoleHOW`
+  * the role is backed by [`Test::Async::Metamodel::BundleHOW`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Metamodel/BundleHOW.md) metaclass which subclasses `Metamodel::ParametricRoleHOW`
 
   * the declaration installs `ENTER` phaser on the compunit it is declared in which auto-registers the bundle with the framework core.
 
@@ -96,9 +96,9 @@ would just work. BTW, if one would try to dump parents and role of the suite obj
 
 Becase the framework skips loading the default bundle if there is one explicitly requested by a user. Same applies for `TAP` which is the default reporter bundle and which wouldn't be loaded if the user `use`s an alternative.
 
-When all bundles were loaded and registered, time comes for [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async.md) module to actually construct the suite class.
+When all bundles were loaded and registered, time comes for [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async.md) module to actually construct the suite class.
 
-**Note** that this is why [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async.md) must always be `use`d last. No bundle registered post-suite construction would be actually used.
+**Note** that this is why [`Test::Async`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async.md) must always be `use`d last. No bundle registered post-suite construction would be actually used.
 
 The construction algorithm could roughly be written as:
 
@@ -122,12 +122,12 @@ Putting this into a diagram would give us something like this for the default ca
 
 See example script: [examples/multi-bundle.raku](https://github.com/vrurg/raku-Test-Async/blob/v0.0.11/examples/multi-bundle.raku)
 
-This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The latter is as simple as overriding parent methods. For example, [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md) module uses this technique to implement `test-flunks` tool. It is doing so by intercepting test events passed in to `send-test` method of [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub.md). It is then inverts test's outcome if necessary and does few other adjustments to a new test event profile and passes on the control to the original `send-test` to complete the task.
+This approach allows custom bundles easily extend the core functionality or even override certain aspects of it. The latter is as simple as overriding parent methods. For example, [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md) module uses this technique to implement `test-flunks` tool. It is doing so by intercepting test events passed in to `send-test` method of [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub.md). It is then inverts test's outcome if necessary and does few other adjustments to a new test event profile and passes on the control to the original `send-test` to complete the task.
 
 Job Management
 --------------
 
-The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md) role and [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Job.md) class representing a single job to be done. The subsystem implements the following concepts:
+The asynchronous nature of the framework requires a proper job management subsystem. It is implemented by [`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md) role and [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Job.md) class representing a single job to be done. The subsystem implements the following concepts:
 
   * synchronous execution
 
@@ -144,22 +144,17 @@ The way the manager works is it creates a pool (not a queue) of jobs. The order 
 Events
 ------
 
-    C<Test::Async> framework handles concurrency using event-driven flow control. Each event is an instance of a class
-    inheriting from
-    L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md> class. Events
-    are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where they're read from by a dedicated thread and
-    dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
-    themselves, the other one is for event handling.
+`Test::Async` framework handles concurrency using event-driven flow control. Each event is an instance of a class inheriting from [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md) class. Events are queued using a [`Channel`](https://docs.raku.org/type/Channel) where they're read from by a dedicated thread and dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests themselves, the other one is for event handling.
 
-       Thread#1 \
-                 \
-       Thread#2 --> [Event Queue] -> Event Handler Thread
-                 /
-       Thread#3 /
+    Thread#1 \
+              \
+    Thread#2 --> [Event Queue] -> Event Handler Thread
+              /
+    Thread#3 /
 
 The approach allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code. In particular, it proves to be useful for object state changes like, for example, for collecting messages from child suites ran asynchronously. Because the messages are stashed in an [`Array`](https://docs.raku.org/type/Array) the procedure is prone to race condition bugs. But when the responsibility of updating the array is in hands of a single thread it greatly simplifies the task.
 
-Another advantage of the events is the ease of extending the framework functionality. Look at [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Reporter/TAP.md), for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so simply by listening to `Event::Test` kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!
+Another advantage of the events is the ease of extending the framework functionality. Look at [`Test::Async::Reporter::TAP`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Reporter/TAP.md), for example. It takes the burden of reporting to user on its 'shoulders' unloading it off the core. And it does so simply by listening to `Event::Test` kind of events. It would be as easy to implement an alternative reporter to get the test results be sent anywhere!
 
 Suite Plan And Lifecycle
 ------------------------
@@ -168,11 +163,11 @@ Suite has a number of parameters affecting its execution. Those are:
 
   * number of tests planned
 
-  * do child suites are invoked in parallel?
+  * are child suites to be invoked in parallel?
 
-  * do child suites invoked randomly?
+  * are child suites to be invoked randomly?
 
-  * should the suite be skipped over?
+  * should the suite be skipped over altogether?
 
   * does suite tests for a TODO feature?
 
@@ -199,7 +194,7 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
 
   * `readify` which defines whether invoking the tool results in suite transition from stage *initializing* into *in progress*
 
-  * `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md) is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
+  * `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md) is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
 
     test-bundle Test::Foo {
         method test-foo(...) is test-tool(:!skippable, :!readify) { ... }
@@ -209,9 +204,9 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
 Call Location And Anchoring
 ---------------------------
 
-Whenever a test fails `Test::Async` tries to provide the most useful information about where exactly the failure happened. For this purpose it keeps track of test tool call location. The information is recorded in a [`Test::Async::Hub::ToolCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub/ToolCallerCtx.md) record and stored on a tool call stack which kept in a per-job ([`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/JobMgr.md)) dynamic variable.
+Whenever a test fails `Test::Async` tries to provide the most useful information about where exactly the failure happened. For this purpose it keeps track of test tool call location. The information is recorded in a [`Test::Async::Hub::ToolCallerCtx`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub/ToolCallerCtx.md) record and stored on a tool call stack which kept in a per-job ([`Test::Async::JobMgr`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/JobMgr.md)) dynamic variable.
 
-Normally the location is determined by `locate-tool-caller` method of the [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub.md) class and points at the exact location of where a tool was used. But sometimes this information may not be really useful. For example, imagine a compound test tool which combines a few checks into a single call. Something like:
+Normally the location is determined by `locate-tool-caller` method of the [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub.md) class and points at the exact location of where a tool was used. But sometimes this information may not be really useful. For example, imagine a compound test tool which combines a few checks into a single call. Something like:
 
     method my-compound-tool(...) is test-tool {
         submethod "compound check", :hidden, {
@@ -224,7 +219,7 @@ Normally the location is determined by `locate-tool-caller` method of the [`Test
         }
     }
 
-The problem with the above construct is that even with `:hidden` attribute which makes a subtest to mimic it's callee (the compound test tools in our case), the nested submethod of the *other* tool would report the location where it's enclosing tool is invoked, which is inside of `my-compound-tool`. Considering that most likely both methods are part of a module the location reported wouldn't be really useful for a developer. To solve this kind of a problem `Test::Async` provides a way to declare *anchored* test tools or to manually anchor a location for tools with `:!wrappable` attribute of [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/TestTool.md). An anchor is a location which will be used by any nested test tool or a suite for its reports:
+The problem with the above construct is that even with `:hidden` attribute which makes a subtest to mimic it's callee (the compound test tools in our case), the nested submethod of the *other* tool would report the location where it's enclosing tool is invoked, which is inside of `my-compound-tool`. Considering that most likely both methods are part of a module the location reported wouldn't be really useful for a developer. To solve this kind of a problem `Test::Async` provides a way to declare *anchored* test tools or to manually anchor a location for tools with `:!wrappable` attribute of [`Test::Async::TestTool`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/TestTool.md). An anchor is a location which will be used by any nested test tool or a suite for its reports:
 
     method my-compound-tool(...) is test-tool(:anchor) {
         ...
@@ -232,11 +227,11 @@ The problem with the above construct is that even with `:hidden` attribute which
 
 Now, if the *other* `subtest` doesn't pass then the developer will see the location in their test file or wherever the compound tool was invoked.
 
-See [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub.md) `anchor` method to use within `:!wrappable` tools.
+See [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub.md) `anchor` method to use within `:!wrappable` tools.
 
 ### Call Context
 
-Another important detail to remember when we consider call location and anchoring are test tools utilizing [`EVAL`](https://docs.raku.org/routine/EVAL) routine. For example, we can mention `eval-lives-ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md). By doing something like:
+Another important detail to remember when we consider call location and anchoring are test tools utilizing [`EVAL`](https://docs.raku.org/routine/EVAL) routine. For example, we can mention `eval-lives-ok` from [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md). By doing something like:
 
     subtest "Contextual" => {
         plan 3;
@@ -253,7 +248,7 @@ we expect `$bar` to be available to the eval code because this is our lexical co
 SEE ALSO
 ========
 
-[`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Base.md), [`Test::Async::When`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/When.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Hub.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Event.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Decl.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/X.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Utils.md),
+[`Test::Async::CookBook`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/CookBook.md), [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md), [`Test::Async::When`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/When.md), [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Hub.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md), [`Test::Async::Decl`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Decl.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/X.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Utils.md),
 
 AUTHOR
 ======

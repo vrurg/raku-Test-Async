@@ -47,7 +47,7 @@ condition:
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.901/docs/md/Test/Async/Manual.md>
+L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
@@ -132,7 +132,7 @@ multi _testcond(Str(Any:D) :$module) {
 }
 multi _testcond(*%cond) {
     # We expect only one named parameter here
-    X::WhenCondition.new(:suite($*TEST-SUITE), :cond(%cond.keys)).throw
+    Test::Async::X::WhenCondition.new(:suite($*TEST-SUITE), :cond(%cond.keys)).throw
         if %cond;
 }
 
