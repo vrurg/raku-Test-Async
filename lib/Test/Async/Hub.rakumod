@@ -496,7 +496,7 @@ has Bool $.random;
 has atomicint $!next-test-id = 1;
 has atomicint $.tests-run = 0;
 has atomicint $.tests-failed = 0;
-has Int $.exit-code;
+has Int $!exit-code;
 
 # Run children in individual threads
 has Bool $.parallel;
@@ -637,6 +637,14 @@ multi method plan(*%plan) {
     }
 }
 
+method exit-code {
+    $!exit-code
+    || ($!tests-failed min 254)
+    || ($!planned.defined && ($!planned != ($!tests-run // 0))
+        ?? 255
+        !! 0)
+}
+
 method done-testing() is test-tool(:!skippable) {
     self.finish;
 }
@@ -649,7 +657,7 @@ method abort-testing() is test-tool(:!skippable) {
     }
     else {
         # The top suite must gracefully exit to shell
-        exit;
+        exit self.exit-code;
     }
 }
 
@@ -846,7 +854,7 @@ method await-jobs {
     my $all-done = NotDoneYet;
     # self.trace-out: ">>> AWAIT JOBS TIMEOUT: ", $!job-timeout;
     await Promise.anyof(
-        Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False); }),
+        Promise.in($!job-timeout).then({ cas($all-done, NotDoneYet, False) }),
         start {
             CATCH {
                 self.fatality(exception => $_);
@@ -864,6 +872,11 @@ method await-jobs {
 }
 
 method finish(:$now = False) {
+    CATCH {
+        default {
+            self.fatality(255, exception => $_);
+        }
+    }
     # Only do the sequence once even if accidentally called concurrently.
     return if $!stage == TSFinishing | TSFinished | TSDismissed | TSFatality;
     if self.set-stage(TSFinishing) == TSInProgress {
@@ -997,12 +1010,7 @@ method fatality(Int:D $!exit-code = 255, Exception :$exception) {
         .fatality($!exit-code, :$exception)
     }
     else {
-        if self.event-queue-is-active {
-            self.send-command: Event::Cmd::BailOut, $!exit-code
-        }
-        else {
-            exit $!exit-code
-        }
+        exit self.exit-code
     }
 }
 
