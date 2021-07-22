@@ -1,5 +1,4 @@
 use v6;
-use nqp;
 use lib $?FILE.IO.parent(1).add('lib');
 use Test::Bootstrap;
 

@@ -1,0 +1,71 @@
+use v6;
+use lib $?FILE.IO.parent(1).add('lib');
+use Test::Bootstrap;
+
+plan 3;
+my @default-args = ('-I' ~ $?FILE.IO.parent(2).add('lib')), '-MTest::Async';
+
+is-run q:to/CODE/,
+            my $count = 5;
+            plan :test-jobs($count), :parallel;
+            my atomicint $ready = 0;
+
+            my @p;
+            my $starter = Promise.new;
+
+            for ^$count -> $n {
+                @p[$n] = Promise.new;
+                subtest "test $n" => {
+                    ++⚛$ready;
+                    @p[$n].keep;
+                    await $starter;
+                    pass "started";
+                }
+            }
+
+            await @p;
+            is $ready, $count, "all parallel subtests have started";
+            $starter.keep;
+            done-testing;
+            CODE
+       "subtests start in parallel",
+       :compiler-args(@default-args),
+       :timeout(20),
+       :exitcode(0),
+       :err(''),
+       :out({ .contains('all parallel subtests have started')
+              && .lines.grep(/^ok \s+ \d/).list.elems == 6 });
+
+is-run q:to/CODE/,
+            plan 1, :parallel, :job-timeout(3);
+            subtest "looooong one" => {
+                plan 1;
+                sleep 10;
+                pass "it must not";
+            }
+            done-testing;
+            CODE
+       "frozen subtest can be aborted",
+       :compiler-args(@default-args),
+       :exitcode(255),
+       :err(/:s Timed out awaiting for remaining jobs/),
+        :out(/^'1..1'/);
+
+is-run q:to/CODE/,
+plan 1;
+subtest "Subtest with timeout" => {
+    plan 1, :parallel, :job-timeout(3);
+    subtest "be patient!" => {
+        sleep 10;
+        pass "it must not";
+    }
+}
+done-testing;
+CODE
+       "frozen sub-subtest can be aborted",
+       :compiler-args(@default-args),
+       :exitcode(1),
+       :out(/:s Timed out awaiting for remaining jobs/),
+       :err('');
+
+done-testing;

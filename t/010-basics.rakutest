@@ -1,9 +1,10 @@
 use v6;
 use Test::Async;
 
+my @default-args = ('-I' ~ $?FILE.IO.parent(2).add('lib')), '-MTest::Async';
+
 plan 7;
 
-my @default-args = ('-I' ~ $?FILE.IO.parent(2).add('lib')), '-MTest::Async';
 # is-run has been checked to work in 005-bootstrap.t. Use it to diagnose
 is-run q<pass "test passes">,
        "simple pass test, plan is output at the end",
@@ -46,16 +47,15 @@ is-run q:to/TEST_CODE/,
        :exitcode(4); # Exit code is the number of initially planned tests
 
 is-run q:to/TEST_CODE/,
-        plan 1;
-        pass "one pass";
-        abort-testing;
-        flunk "this never happens";
-        TEST_CODE
+            plan 1;
+            pass "one pass";
+            abort-testing;
+            flunk "this never happens";
+            TEST_CODE
        "abort-testing works at the top-level",
        :compiler-args(@default-args),
        :out("1..1\nok 1 - one pass\n"),
        :err(''),
        :exitcode(0); # Exit code is the number of initially planned tests
-
 
 done-testing;
