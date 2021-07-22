@@ -177,7 +177,7 @@ Returns C<True> if the top suite singleton has been instantiated already.
 
 =head2 C<set-stage(TestStage:D $stage -> TestStage)>
 
-Transition suite state to stage C<$stage>. Throws C<X::StageTransition>
+Transition suite state to stage C<$stage>. Throws C<Test::Async::X::StageTransition>
 (L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
 the method also starts the event loop thread.
 
@@ -196,7 +196,7 @@ The ultimate handler of event objects. A bundle wishing to react to events must 
 =head2 C<setup-from-plan>
 
 Setup suite parameters based on a plan profile hash. If called when suite stage is not C<TSInitializing> then throws
-C<X::PlanTooLate>.
+C<Test::Async::X::PlanTooLate>.
 
 The keys supported by profile are:
 
@@ -269,7 +269,7 @@ The method returns job C<Promise> of the invoked suite.
 
 Execute the suite here and now. Internal implementation detail.
 
-=head2 C<throw(X::Base:U \exType, *%c)>
+=head2 C<throw(Test::Async::X::Base:U \exType, *%c)>
 
 Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
 is added.
@@ -355,7 +355,7 @@ This method implements two tasks:
 
 =item first, it pulls postponed jobs and invokes them in a random order
 =item next it calls C<await-all-jobs> to make sure all jobs have completed
-=item if C<await-all-jobs> doesn't finish in 30 seconds C<X::AwaitTimeout> is thrown
+=item if C<await-all-jobs> doesn't finish in 30 seconds C<Test::Async::X::AwaitTimeout> is thrown
 
 =head2 C<finish(:$now = False)>
 
@@ -425,7 +425,7 @@ C<my-compound-tool> is called.
 =head2 C<temp-file(Str:D $base-name, $data --> Str:D)>
 
 Quickly create a temporary file and populate it with $data. Returns absolute file name. Throws
-C<X::FileCreate>/C<X::FileClose> in case of errors.
+C<Test::Async::X::FileCreate>/C<Test::Async::X::FileClose> in case of errors.
 
 =head1 SEE ALSO
 
@@ -532,7 +532,7 @@ submethod TWEAK(|) {
             $!suite-caller = .tool-caller // .suite-caller;
         }
         else {
-            self.throw: X::TransparentWithoutParent
+            self.throw: Test::Async::X::TransparentWithoutParent
         }
     }
 }
@@ -562,7 +562,7 @@ method set-stage(TestStage:D $stage, :%params = {}) {
         my $cur-stage = $!stage;
         # Prevent possible race condition when two concurrent locations are trying to set different states.
         # States are defined by the equivalence table.
-        self.throw: X::StageTransition, :from($cur-stage), :to($stage)
+        self.throw: Test::Async::X::StageTransition, :from($cur-stage), :to($stage)
             if @stage-equivalence[$cur-stage] > @stage-equivalence[$stage];
         # Do nothing if requested stage is equivalent to the current one but preceeds it.
         return $cur-stage if $cur-stage > $stage;
@@ -591,7 +591,7 @@ multi method event(::?CLASS:D: Event::Report:D $ev) {
 method setup-from-plan(%plan) {
     my $cur-stage = %plan<tests>:exists ?? $.set-stage(TSInProgress) !! $!stage;
     if $cur-stage != TSInitializing {
-        self.throw: X::PlanTooLate;
+        self.throw: Test::Async::X::PlanTooLate;
     }
     if %plan<tests> {
         $!planned = %plan<tests>:delete;
@@ -616,7 +616,7 @@ multi method plan(UInt:D $tests, *%plan) {
 }
 multi method plan(*%plan) {
     CATCH {
-        when X::PlanTooLate {
+        when Test::Async::X::PlanTooLate {
             self.send: Event::Diag, :message("FAILURE: " ~ .message);
             $!tests-failed = $!planned // 1;
             if self.parent-suite {
@@ -730,7 +730,7 @@ method run(:$is-async, Capture:D :$args = \()) {
     self.finish;
 }
 
-method throw(X::Base:U \exType, *%c) is hidden-from-backtrace {
+method throw(Test::Async::X::Base:U \exType, *%c) is hidden-from-backtrace {
     exType.new( :suite(self), |%c ).throw
 }
 
@@ -859,7 +859,7 @@ method await-jobs {
     );
     # self.trace-out: ">>> JOBS AWAIT DONE: ", $all-done;
     unless $all-done {
-        self.throw(X::AwaitTimeout, :what('all jobs'))
+        self.throw(Test::Async::X::AwaitTimeout, :what('remaining jobs'))
     }
     self.send: Event::JobsAwaited;
 }
@@ -906,7 +906,7 @@ method push-tool-caller(ToolCallerCtx:D $ctx) {
 }
 
 method pop-tool-caller(--> ToolCallerCtx:D) {
-    fail X::EmptyToolStack.new(:suite(self), :op<pop>)
+    fail Test::Async::X::EmptyToolStack.new(:suite(self), :op<pop>)
         unless +@*TEST-TOOL-STACK;
     @*TEST-TOOL-STACK.pop
 }
@@ -938,11 +938,11 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
         ++$idx;
         $ctx = $ctx<CALLER>.WHO<LEXICAL>.WHO;
     }
-    fail X::NoToolCaller.new(:suite(self));
+    fail Test::Async::X::NoToolCaller.new(:suite(self));
 }
 
 method tool-caller(--> ToolCallerCtx:D) {
-    fail X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
+    fail Test::Async::X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
     @*TEST-TOOL-STACK[*-1]
 }
 
@@ -956,10 +956,10 @@ method temp-file(Str:D $base-name, $data) {
                     ).join("-")
                 ).absolute;
     my $fh = $fname.IO.open: :w;
-    self.throw: X::FileCreate, :$fname, :details($fh.exception.message) unless $fh.so;
+    self.throw: Test::Async::X::FileCreate, :$fname, :details($fh.exception.message) unless $fh.so;
     $fh.print: $data;
     $fh.close
-        notandthen self.throw(X::FileClose, :$fname, :details(.exception.message));
+        notandthen self.throw(Test::Async::X::FileClose, :$fname, :details(.exception.message));
     $fname
 }
 

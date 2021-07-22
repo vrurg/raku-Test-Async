@@ -66,7 +66,7 @@ C<%profile> and then sends the new instance.
 
 Pushes an event into the local buffer. If event type is supplied then it gets instantiated first and then pushed.
 
-B<Note!> The method can only be used within the event loop thread. If called outside it throws C<X::BadPostEvent>.
+B<Note!> The method can only be used within the event loop thread. If called outside it throws C<Test::Async::X::BadPostEvent>.
 
 =head1 SEE ALSO
 
@@ -124,7 +124,7 @@ method try-send(|c) {
 
 proto method post-event(Event, *%) {*}
 multi method post-event(Event:D $ev) {
-    self.throw: X::BadPostEvent, :owner($*TEST-ASYNC-EV-OWNER)
+    self.throw: Test::Async::X::BadPostEvent, :owner($*TEST-ASYNC-EV-OWNER)
         unless $*TEST-ASYNC-EV-OWNER === self;
     @!posted-events.push: $ev;
 }

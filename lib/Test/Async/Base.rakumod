@@ -250,6 +250,7 @@ unit test-bundle Test::Async::Base;
 use nqp;
 use Test::Async::Utils;
 use Test::Async::Hub;
+use Test::Async::X;
 
 use MONKEY-SEE-NO-EVAL;
 use Test::Async::Event;
@@ -740,7 +741,7 @@ method skip-rest(Str:D $message = "") is test-tool(:!skippable) {
         self.skip($message, self.planned - $.tests-run);
     }
     else {
-        self.throw: X::PlanRequired, :op<skip-rest>
+        self.throw: Test::Async::X::PlanRequired, :op<skip-rest>
     }
 }
 

@@ -40,9 +40,7 @@ L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/doc
 
 =end pod
 
-unit package Test::Async;
-
-module X is export {
+module Test::Async::X {
     use Test::Async::Utils;
 
     class Base is Exception {
@@ -101,7 +99,7 @@ module X is export {
     class AwaitTimeout is Base {
         has Str:D $.what is required;
         method message {
-            "Timeout awaiting for $!what";
+            "Timed out awaiting for $!what";
         }
     }
 

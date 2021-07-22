@@ -132,7 +132,7 @@ multi _testcond(Str(Any:D) :$module) {
 }
 multi _testcond(*%cond) {
     # We expect only one named parameter here
-    X::WhenCondition.new(:suite($*TEST-SUITE), :cond(%cond.keys)).throw
+    Test::Async::X::WhenCondition.new(:suite($*TEST-SUITE), :cond(%cond.keys)).throw
         if %cond;
 }
 

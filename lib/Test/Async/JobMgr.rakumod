@@ -81,7 +81,7 @@ Pushes a job into C<@.postpone> queue.
 
 =head2 C<job-by-id(Int:D $id --> Test::Async::Job)>
 
-Returns job object with C<$id> or throws C<X::NoJobId>.
+Returns job object with C<$id> or throws C<Test::Async::X::NoJobId>.
 
 =head2 C<multi start-job(Int:D $id --> Promise)>
 =head2 C<multi start-job(Callable \code --> Promise)>
@@ -114,7 +114,7 @@ Returns a L<C<Promise>|https://docs.raku.org/type/Promise> kept with job code re
 Awaits for all running jobs to complete. If there are pending ones they'd be awaited too. The method returns when the
 job pool is emptied.
 
-Note that if the method encounters non-empty queue of postponed jobs it throws C<X::AwaitWithPostponed>. This is because
+Note that if the method encounters non-empty queue of postponed jobs it throws C<Test::Async::X::AwaitWithPostponed>. This is because
 any exiting postponed job would likely cause the job pool to remain non-empty forever.
 
 =head1 SEE ALSO
@@ -217,7 +217,7 @@ multi method postpone(Test::Async::Job:D $job) {
 method job-by-id(Int:D $id) {
     $!idx-lock.lock;
     LEAVE $!idx-lock.unlock;
-    %!job-idx{$id} // self.throw(X::NoJobId, :$id);
+    %!job-idx{$id} // self.throw(Test::Async::X::NoJobId, :$id);
 }
 
 # Start a parallel job, respect $.test-jobs
@@ -260,7 +260,7 @@ method !stop-job(Test::Async::Job:D $job) {
     my $next-request;
     $!active-lock.protect: {
         my $id = $job.id;
-        self.throw(X::JobInactive, :$id) unless %!active-jobs{$id}:exists;
+        self.throw(Test::Async::X::JobInactive, :$id) unless %!active-jobs{$id}:exists;
         %!active-jobs{$id}:delete;
         $next-request = $!requests.poll;
     }
@@ -306,7 +306,7 @@ multi method start(Test::Async::Job:D $job) {
 
 method await-all-jobs {
     $!postponed-lock.protect: {
-        self.throw: X::AwaitWithPostponed, :count(+@!postponed) if @!postponed;
+        self.throw: Test::Async::X::AwaitWithPostponed, :count(+@!postponed) if @!postponed;
     }
     while True {
         my @p = self.all-job-promises;
