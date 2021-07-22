@@ -74,12 +74,12 @@ Sends an event in the event queue for dispatching. If supplied with an event typ
 
 Pushes an event into the local buffer. If event type is supplied then it gets instantiated first and then pushed.
 
-**Note!** The method can only be used within the event loop thread. If called outside it throws `X::BadPostEvent`.
+**Note!** The method can only be used within the event loop thread. If called outside it throws `Test::Async::X::BadPostEvent`.
 
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Manual.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/X.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Manual.md), [`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md), [`Test::Async::Utils`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Utils.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/X.md)
 
 AUTHOR
 ======

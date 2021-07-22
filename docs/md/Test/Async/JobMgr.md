@@ -20,7 +20,7 @@ DESCRIPTION
 
 
 
-This role implements job management functionality, as described in section Job Management of [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Manual.md).
+This role implements job management functionality, as described in section Job Management of [`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Manual.md).
 
 Implementation Details
 ----------------------
@@ -55,7 +55,7 @@ METHODS
 `test-job()`
 ------------
 
-A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See `$.test-jobs` attribute of [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Hub.md), for example.
+A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See `$.test-jobs` attribute of [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Hub.md), for example.
 
 `job-count(--` Int)>
 --------------------
@@ -65,7 +65,7 @@ The total number of jobs in the job pool. Includes currently running ones.
 `new-job(Callable:D \code, :$async = False)`
 --------------------------------------------
 
-Creates a new job instance of [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Job.md) for `code` parameter. `$async` is used to mark the job as explicitly asynchronous.
+Creates a new job instance of [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Job.md) for `code` parameter. `$async` is used to mark the job as explicitly asynchronous.
 
 For the `code` assigned to the newly created job `test-suite` will return the object on which the `new-job` method was invoked.
 
@@ -98,7 +98,7 @@ Pushes a job into `@.postpone` queue.
 `job-by-id(Int:D $id --` Test::Async::Job)>
 -------------------------------------------
 
-Returns job object with `$id` or throws `X::NoJobId`.
+Returns job object with `$id` or throws `Test::Async::X::NoJobId`.
 
 `multi start-job(Int:D $id --` Promise)>
 ----------------------------------------
@@ -139,12 +139,12 @@ Returns a [`Promise`](https://docs.raku.org/type/Promise) kept with job code ret
 
 Awaits for all running jobs to complete. If there are pending ones they'd be awaited too. The method returns when the job pool is emptied.
 
-Note that if the method encounters non-empty queue of postponed jobs it throws `X::AwaitWithPostponed`. This is because any exiting postponed job would likely cause the job pool to remain non-empty forever.
+Note that if the method encounters non-empty queue of postponed jobs it throws `Test::Async::X::AwaitWithPostponed`. This is because any exiting postponed job would likely cause the job pool to remain non-empty forever.
 
 SEE ALSO
 ========
 
-[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Manual.md), [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Job.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/X.md)
+[`Test::Async::Manual`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Manual.md), [`Test::Async::Job`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Job.md), [`Test::Async::X`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/X.md)
 
 AUTHOR
 ======

@@ -2,10 +2,10 @@
 =begin pod
 =head1 Class C<Event::Command>
 
-Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md>
+Is L<C<Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md>
 
 Base class of commanding events.
-L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Hub.md>
+L<C<Test::Async::Hub>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Hub.md>
 handles them specially.
 
 =head2 Attributes
@@ -14,7 +14,7 @@ handles them specially.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod

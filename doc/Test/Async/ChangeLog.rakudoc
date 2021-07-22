@@ -2,7 +2,12 @@
 =begin pod
 =CHANGELOG
 
-=head v0.1.3
+=head2 v0.1.4
+
+=item Mostly bug fix release
+=item Added C<:timeout> parameter to C<is-run>
+
+=head2 v0.1.3
 
 =item Improved handling of exceptions
 =item Subtests now attempt to report any exception produced by their body rather than bailing out immediately
@@ -21,9 +26,9 @@
 =head2 v0.1.0
 
 =item Implemented tool call stack and tool anchoring
-    (L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Manual.md>)
+    (L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Manual.md>)
 =item Added support for pre-comments, or header comments, to
-    L<C<Test::Async::Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event/Test.md>
+    L<C<Test::Async::Event::Test>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event/Test.md>
 =item Added a header to the output of non-hiddent subtests, similar to
     L<a Rakudo request ticket|https://github.com/rakudo/rakudo/issues/4266>
 =item Implemented auto-registration for inline C<test-bundle> declarations

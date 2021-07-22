@@ -1,9 +1,9 @@
 Class `Event::Terminate`
 ========================
 
-Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md)
+Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
 
-This is the only kind of event which [`Term::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Term/Async/Aggregator.md) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
+This is the only kind of event which [`Term::Async::Aggregator`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Term/Async/Aggregator.md) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
 
 Attributes
 ----------
@@ -13,7 +13,7 @@ Attributes
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.3/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
 
 AUTHOR
 ======
