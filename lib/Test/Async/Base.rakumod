@@ -868,27 +868,57 @@ multi method is-run(Str:D() $code, %expected, Str:D $message = "") {
 }
 multi method is-run (
     Str:D() $code, Str:D $message = "",
-    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False )
+    Stringy :$in, :@compiler-args, :@args, :%env = %*ENV, :$out?, :$err?, :$exitcode = 0, :$async = False,
+    UInt :$timeout )
 {
     self.subtest: $message, :instant, :hidden, :$async, -> $suite {
         $suite.plan(1 + ?$out.defined + ?$err.defined);
         my $code-file = self.temp-file('code', $code);
         LEAVE $code-file.IO.unlink;
 
-        my @proc-args = ($*EXECUTABLE, @compiler-args, $code-file, @args).flat;
+        my @proc-args = $*EXECUTABLE, |@compiler-args, $code-file, |@args;
 
-        with run :in, :out, :err, @proc-args, :%env {
-            $in ~~ Blob ?? .in.write: $in !! .in.print: $in if $in;
-            $ = .in.close;
-            my $proc-out      = .out.slurp: :close;
-            my $proc-err      = .err.slurp: :close;
-            my $proc-exitcode = .exitcode;
+        my $proc = Proc::Async.new: @proc-args;
 
+        my $proc-out = "";
+        my $proc-err = "";
+        my $proc-exitcode;
+        my $timed-out = False;
+        my $in-method = $in ~~ Blob ?? "write" !! "print";
+
+        react {
+            whenever $proc.stdout {
+                $proc-out ~= $_;
+            }
+            whenever $proc.stderr {
+                $proc-err ~= $_;
+            }
+            whenever $proc.start(ENV => %env) {
+                $proc-exitcode = .exitcode;
+                done;
+            }
+            with $in {
+                whenever $proc."$in-method"($in) {
+                    $proc.close-stdin;
+                }
+            }
+            with $timeout {
+                whenever Promise.in($timeout) {
+                    $timed-out = True;
+                    $proc.kill: SIGKILL;
+                }
+            }
+        }
+
+        if $timed-out {
+            $suite.flunk: "code timed out";
+        }
+        else {
             my $wanted-exitcode = $exitcode // 0;
 
             given $suite {
-                .cmp-ok: $proc-out,      '~~', $out,             'STDOUT' if $out.defined;
-                .cmp-ok: $proc-err,      '~~', $err,             'STDERR' if $err.defined;
+                .cmp-ok: $proc-out, '~~', $out, 'STDOUT' if $out.defined;
+                .cmp-ok: $proc-err, '~~', $err, 'STDERR' if $err.defined;
                 .cmp-ok: $proc-exitcode, '~~', $wanted-exitcode, 'Exit code';
             }
         }
