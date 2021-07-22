@@ -535,6 +535,7 @@ submethod TWEAK(|) {
             self.throw: Test::Async::X::TransparentWithoutParent
         }
     }
+    self.start-event-loop;
 }
 
 my $singleton;
@@ -567,7 +568,6 @@ method set-stage(TestStage:D $stage, :%params = {}) {
         # Do nothing if requested stage is equivalent to the current one but precedes it.
         return $cur-stage if $cur-stage > $stage;
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
-            self.start-event-loop if $cur-stage == TSInitializing;
             # Don't panic if the event queue is non-functional.
             self.try-send: Event::StageTransition, :from($cur-stage), :to($stage), :%params;
             return $cur-stage;
