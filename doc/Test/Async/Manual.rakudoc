@@ -194,9 +194,9 @@ get the test results be sent anywhere!
 Suite has a number of parameters affecting its execution. Those are:
 
 =item number of tests planned
-=item do child suites are invoked in parallel?
-=item do child suites invoked randomly?
-=item should the suite be skipped over?
+=item are child suites to be invoked in parallel?
+=item are child suites to be invoked randomly?
+=item should the suite be skipped over altogether?
 =item does suite tests for a TODO feature?
 
 While executed, the suite passes a few stages:

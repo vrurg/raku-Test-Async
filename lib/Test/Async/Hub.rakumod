@@ -564,7 +564,7 @@ method set-stage(TestStage:D $stage, :%params = {}) {
         # States are defined by the equivalence table.
         self.throw: Test::Async::X::StageTransition, :from($cur-stage), :to($stage)
             if @stage-equivalence[$cur-stage] > @stage-equivalence[$stage];
-        # Do nothing if requested stage is equivalent to the current one but preceeds it.
+        # Do nothing if requested stage is equivalent to the current one but precedes it.
         return $cur-stage if $cur-stage > $stage;
         if cas($!stage, $cur-stage, $stage) == $cur-stage {
             self.start-event-loop if $cur-stage == TSInitializing;
@@ -726,7 +726,6 @@ method run(:$is-async, Capture:D :$args = \()) {
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
     &!code(|$args);
-    # note "SUITE -> FINISH";
     self.finish;
 }
 
