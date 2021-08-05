@@ -1,6 +1,10 @@
 use v6;
 use Test::Async;
 
+# Randomization helps to locate a problem where attribute $!n
+# is set in order different to that of $!id causing method delta
+# to sometimes return an illegal negative value.
+
 plan 5, :random;
 #plan 5, :random, :parallel;
 
