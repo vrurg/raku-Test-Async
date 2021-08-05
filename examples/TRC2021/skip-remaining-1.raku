@@ -1,6 +1,8 @@
 use v6;
 use Test::Async;
 
+# A test case where we don't know the number of tests beforehand.
+
 my $fail = False;
 my $failed = False;
 

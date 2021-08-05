@@ -11,6 +11,10 @@ use Test::Async <Base>;
 
 is-foo "Foo", "it is";
 
-diag "Suite MRO:\n", test-suite.^mro(:roles)
-                                .map({ (.HOW.^name.lc.contains('role') ?? "    " !! "  ") ~ .^name })
-                                .join("\n");
+diag "Suite MRO:\n", 
+    test-suite.^mro(:roles)
+            .map({ (.HOW.^name.lc.contains('role') 
+                        ?? "    role " 
+                        !! "  ") 
+                    ~ .^name })
+            .join("\n");
