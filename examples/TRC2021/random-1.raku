@@ -5,8 +5,8 @@ use Test::Async;
 # is set in order different to that of $!id causing method delta
 # to sometimes return an illegal negative value.
 
-plan 5, :random;
-#plan 5, :random, :parallel;
+#plan 5, :random;
+plan 5, :random, :parallel;
 
 class Foo {
     my atomicint $next-id = 0;

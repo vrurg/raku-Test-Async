@@ -1,14 +1,14 @@
 Class `Event::BailOut`
 ======================
 
-Is [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event/Report.md).
+Is [`Event::Report`](Report.md).
 
 Emitted when test suite is about to bail out.
 
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](../Event.md)
 
 AUTHOR
 ======

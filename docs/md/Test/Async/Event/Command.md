@@ -1,9 +1,9 @@
 Class `Event::Command`
 ======================
 
-Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
+Is [`Event`](../Event.md)
 
-Base class of commanding events. [`Test::Async::Hub`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Hub.md) handles them specially.
+Base class of commanding events. [`Test::Async::Hub`](../Hub.md) handles them specially.
 
 Attributes
 ----------
@@ -13,7 +13,7 @@ Attributes
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](../Event.md)
 
 AUTHOR
 ======

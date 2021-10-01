@@ -13,10 +13,10 @@ C<Test::Async::Hub> - the core of C<Test::Async> framework
 
 =head1 DESCRIPTION
 
-Consumes L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/JobMgr.md>
+Consumes L<C<Test::Async::Aggregator>|Aggregator.md>,
+L<C<Test::Async::JobMgr>|JobMgr.md>
 
-See L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Manual.md>
+See L<C<Test::Async::Manual>|Manual.md>
 for general purpose of this class.
 
 =head2 Command Execution
@@ -65,7 +65,7 @@ If suite is planned for skipping then this is the message as for C<skip-remainin
 Otherwise undefined.
 
 B<NOTE!> Any examples of code in this documentation are based on the default
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|Base.md>
 bundle.
 
 =head2 C<TODO-message>
@@ -95,14 +95,14 @@ A string, recommended prefix to be used for indenting messages produced by the s
 =head2 C<suite-caller>
 
 An instance of
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Hub/ToolCallerCtx.md>.
+L<C<Test::Async::Hub::ToolCallerCtx>|Hub/ToolCallerCtx.md>.
 Keeps information about the location where the suite was created.
 
 =head2 C<transparent>
 
 A flag. If I<True> then this suite will have its call location set to the where it's enclosing test tool or suite
 are called. C<subtest> implementation by
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Base>|Base.md>
 uses this for C<:hidden> mode of operation.
 
 This attribute is propagated to child suites instantiated using C<create-suite> method. In other words, nested
@@ -153,19 +153,19 @@ is I<True>. The messages are submitted for reporting when the suite run ends and
 =head2 C<test-jobs>
 
 Maximus number of concurrently running jobs allowed. Note that a I<job> is anything invoked using C<start-job> method
-of L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/JobMgr.md>.
+of L<C<Test::Async::JobMgr>|JobMgr.md>.
 
 =head2 C<stage>
 
 The current stage of suite lifecycle. See C<TestStage> enum in
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Utils.md>.
+L<C<Test::Async::Utils>|Utils.md>.
 
 =head1 METHODS
 
 =head2 C<new>
 
 Creates a new instance of constructed C<Test::Async::Suite> class. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Manual.md>.
+L<C<Test::Async::Manual>|Manual.md>.
 
 =head2 C<top-suite()>
 
@@ -178,7 +178,7 @@ Returns C<True> if the top suite singleton has been instantiated already.
 =head2 C<set-stage(TestStage:D $stage -> TestStage)>
 
 Transition suite state to stage C<$stage>. Throws C<Test::Async::X::StageTransition>
-(L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
+(L<C<Test::Async::X>|X.md>) if the transition is not possible. If transitions from C<TSInitializing> to C<TSInProgress> then
 the method also starts the event loop thread.
 
 Returns the pre-transition stage.
@@ -271,7 +271,7 @@ Execute the suite here and now. Internal implementation detail.
 
 =head2 C<throw(Test::Async::X::Base:U \exType, *%c)>
 
-Throws a L<C<Type::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
+Throws a L<C<Type::Async::X>|../../Type/Async/X.md> exception. C<%c> is used as exception constructor profile to which C<hub> named parameter
 is added.
 
 =head2 C<abort>
@@ -305,7 +305,7 @@ means, hands it over directly to C<report-event> method and instantly exits the 
 
 Takes a free-form message possibly passed in in many chunks, splits it into lines and appends a new line to each
 individual line. This is the I<normal form> of a message.
-L<C<Test::Async::Reporter::TAP>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Reporter/TAP.md>
+L<C<Test::Async::Reporter::TAP>|Reporter/TAP.md>
 expects children suite messages to come in normalized form.
 
 I<NOTE.> This form is chosen as I<normal> because TAP is a line-based protocol for which a line must end with a newline.
@@ -386,7 +386,7 @@ detail.
 =head2 C<locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored --> ToolCallerCtx:D)>
 
 Finds the context in which the current test tool is invoked and returns a
-L<C<Test::Async::Hub::ToolCallerCtx>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Hub/ToolCallerCtx.md>
+L<C<Test::Async::Hub::ToolCallerCtx>|Hub/ToolCallerCtx.md>
 instance or a L<C<Failure>|https://docs.raku.org/type/Failure> in case of an error.
 
 C<$pre-skip> defines the number of frames to be skipped before the method starts looking for the real call location.
@@ -429,14 +429,14 @@ C<Test::Async::X::FileCreate>/C<Test::Async::X::FileClose> in case of errors.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Aggregator>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Aggregator.md>,
-L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Decl.md>,
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md>,
-L<C<Test::Async::JobMgr>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/JobMgr.md>,
-L<C<Test::Async::Result>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Result.md>,
-L<C<Test::Async::TestTool>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/TestTool.md>,
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Utils.md>,
-L<C<Test::Async::X>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/X.md>
+L<C<Test::Async::Aggregator>|Aggregator.md>,
+L<C<Test::Async::Decl>|Decl.md>,
+L<C<Test::Async::Event>|Event.md>,
+L<C<Test::Async::JobMgr>|JobMgr.md>,
+L<C<Test::Async::Result>|Result.md>,
+L<C<Test::Async::TestTool>|TestTool.md>,
+L<C<Test::Async::Utils>|Utils.md>,
+L<C<Test::Async::X>|X.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

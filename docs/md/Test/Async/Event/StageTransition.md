@@ -1,7 +1,7 @@
 Class `Event::StageTransition`
 ==============================
 
-Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
+Is [`Event`](../Event.md)
 
 Emitted each time suite stage is changed.
 
@@ -15,7 +15,7 @@ Attributes
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](../Event.md)
 
 AUTHOR
 ======

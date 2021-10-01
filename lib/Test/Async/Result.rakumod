@@ -50,7 +50,7 @@ The profile capture is built the following way:
 =head1 SEE ALSO
 
 C<test-result> routine from
-L<C<Test::Async::Utils>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Utils.md>.
+L<C<Test::Async::Utils>|Utils.md>.
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 

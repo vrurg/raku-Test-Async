@@ -2,7 +2,7 @@
 =begin pod
 =head1 Class C<Event::Plan>
 
-Is L<C<Event::Report>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event/Report.md>.
+Is L<C<Event::Report>|Report.md>.
 
 Plan reporting event. Emitted when a suite gets to know the number of tests to be done.
 
@@ -13,7 +13,7 @@ Plan reporting event. Emitted when a suite gets to know the number of tests to b
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs/md/Test/Async/Event.md>
+L<C<Test::Async::Event>|../Event.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 =end pod
