@@ -42,34 +42,40 @@ use MONKEY-SEE-NO-EVAL;
 method !wrap-test-tools(Mu \type-obj) {
     for type-obj.^methods(:local).grep(Test::Async::TestTool) -> &meth is raw {
         next unless &meth.wrappable;
-        my $compiler := $*RAKU.compiler;
-        if $compiler.version >= v2021.09.228.gdd.2.b.274.fd && $compiler.backend eq 'moar' {
+
+        my $new_compiler := .version >= v2021.09.228.gdd.2.b.274.fd && .backend eq 'moar'
+            given $*RAKU.compiler;
+
+        # Test tool boilerplate wrapper.
+        my $wrappee;
+        my &wrapper := my method (|c) is hidden-from-backtrace is raw {
+            $wrappee := nextcallee if $new_compiler;
+            # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
+            return if self.in-fatality;
+
+            self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
+
+            if self.stage >= TSFinished {
+                warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
+                return;
+            }
+            self.set-stage(TSInProgress) if &meth.readify;
+            my $rc;
+            if &meth.skippable && $.skip-message.defined {
+                self.send-test: Event::Skip, $.skip-message, TRSkipped;
+                $rc = True;
+            }
+            else {
+                self.measure-telemetry: {
+                    $rc = $wrappee(self, |c);
+                }
+            }
+            self.pop-tool-caller;
+            $rc
+        };
+
+        if $new_compiler {
             # .wrap works on new-disp
-            my &wrapper := my method (|c) is hidden-from-backtrace is raw {
-                my $wrappee := nextcallee;
-                # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
-                return if self.in-fatality;
-
-                self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
-
-                if self.stage >= TSFinished {
-                    warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
-                    return;
-                }
-                self.set-stage(TSInProgress) if &meth.readify;
-                my $rc;
-                if &meth.skippable && $.skip-message.defined {
-                    self.send-test: Event::Skip, $.skip-message, TRSkipped;
-                    $rc = True;
-                }
-                else {
-                    self.measure-telemetry: {
-                        $rc = $wrappee(self, |c);
-                    }
-                }
-                self.pop-tool-caller;
-                $rc
-            };
             &wrapper.set_name(&meth.name);
             &meth.wrap: &wrapper;
         }
@@ -77,37 +83,11 @@ method !wrap-test-tools(Mu \type-obj) {
             # Code for older Rakudo compilers has to be wrapped into EVAL because new-disp doesn't have
             # nqp::invokewithcapture and fails to compile whatsoever
                 use nqp;
-                my $meth-do := nqp::getattr(&meth, Code, '$!do');
+                $wrappee := nqp::getattr(&meth, Code, '$!do');
 
-                # Test tool boilerplate wrapper.
-                my &wrap := my method (|c) is hidden-from-backtrace is raw {
-                    # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
-                    return if self.in-fatality;
-
-                    self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
-
-                    if self.stage >= TSFinished {
-                        warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
-                        return;
-                    }
-                    self.set-stage(TSInProgress) if &meth.readify;
-                    my $rc;
-                    if &meth.skippable && $.skip-message.defined {
-                        self.send-test: Event::Skip, $.skip-message, TRSkipped;
-                        $rc = True;
-                    }
-                    else {
-                        self.measure-telemetry: {
-                            $rc = $meth-do.(self, |c);
-                        }
-                    }
-                    self.pop-tool-caller;
-                    $rc
-                };
-
-                &wrap.set_name(&meth.name);
-                nqp::bindattr(&wrap, Code, '$!signature', &meth.signature.clone);
-                my \wrap-do = nqp::getattr(&wrap, Code, '$!do');
+                &wrapper.set_name(&meth.name);
+                nqp::bindattr(&wrapper, Code, '$!signature', &meth.signature.clone);
+                my \wrap-do = nqp::getattr(&wrapper, Code, '$!do');
                 nqp::setcodeobj(wrap-do, &meth);
                 nqp::bindattr(&meth, Code, '$!do', wrap-do);
         }
