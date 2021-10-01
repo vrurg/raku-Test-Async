@@ -948,7 +948,7 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
             return ToolCallerCtx.new: :frame(callframe($idx + 1)), :stash($ctx), :$anchored;
         }
         ++$idx;
-        $ctx = $ctx<CALLER>.WHO<LEXICAL>.WHO;
+        $ctx = $ctx<CALLER>.WHO;
     }
     fail Test::Async::X::NoToolCaller.new(:suite(self));
 }
