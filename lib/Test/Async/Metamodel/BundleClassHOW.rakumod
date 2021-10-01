@@ -34,49 +34,86 @@ L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs
 =end pod
 
 unit class Test::Async::Metamodel::BundleClassHOW is Metamodel::ClassHOW;
-use nqp;
 use Test::Async::Event;
 use Test::Async::Utils;
 use Test::Async::TestTool;
+use MONKEY-SEE-NO-EVAL;
 
 method !wrap-test-tools(Mu \type-obj) {
-    for type-obj.^methods.grep(Test::Async::TestTool) -> &meth is raw {
+    for type-obj.^methods(:local).grep(Test::Async::TestTool) -> &meth is raw {
         next unless &meth.wrappable;
-        my \meth-do = nqp::getattr(&meth, Code, '$!do');
+        if $*RAKU.compiler.version >= v2021.09.228.gdd.2.b.274.fd {
+            # .wrap works on new-disp
+            my &wrapper := my method (|c) is hidden-from-backtrace is raw {
+                my $wrappee := nextcallee;
+                # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
+                return if self.in-fatality;
 
-        # Test tool boilerplate wrapper.
-        my &wrap := my method (|) is hidden-from-backtrace is raw {
-            # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
-            return if self.in-fatality;
+                self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
 
-            my \capture = nqp::usecapture();
-
-            self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
-
-            if self.stage >= TSFinished {
-                warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
-                return;
-            }
-            self.set-stage(TSInProgress) if &meth.readify;
-            my $rc;
-            if &meth.skippable && $.skip-message.defined {
-                self.send-test: Event::Skip, $.skip-message, TRSkipped;
-                $rc = True;
-            }
-            else {
-                self.measure-telemetry: {
-                    $rc = nqp::invokewithcapture(meth-do, capture)
+                if self.stage >= TSFinished {
+                    warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
+                    return;
                 }
-            }
-            self.pop-tool-caller;
-            $rc
-        };
+                self.set-stage(TSInProgress) if &meth.readify;
+                my $rc;
+                if &meth.skippable && $.skip-message.defined {
+                    self.send-test: Event::Skip, $.skip-message, TRSkipped;
+                    $rc = True;
+                }
+                else {
+                    self.measure-telemetry: {
+                        $rc = $wrappee(self, |c);
+                    }
+                }
+                self.pop-tool-caller;
+                $rc
+            };
+            &wrapper.set_name(&meth.name);
+            &meth.wrap: &wrapper;
+        }
+        else {
+            # Code for older Rakudo compilers has to be wrapped into EVAL because new-disp doesn't have
+            # nqp::invokewithcapture and fails to compile whatsoever
+            EVAL q:to/WRAP_END/;
+                    use nqp;
+                    my \meth-do = nqp::getattr(&meth, Code, '$!do');
 
-        &wrap.set_name(&meth.name);
-        nqp::bindattr(&wrap, Code, '$!signature', &meth.signature.clone);
-        my \wrap-do = nqp::getattr(&wrap, Code, '$!do');
-        nqp::setcodeobj(wrap-do, &meth);
-        nqp::bindattr(&meth, Code, '$!do', wrap-do);
+                    # Test tool boilerplate wrapper.
+                    my &wrap := my method (|) is hidden-from-backtrace is raw {
+                        # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
+                        return if self.in-fatality;
+
+                        my \capture = nqp::usecapture();
+
+                        self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
+
+                        if self.stage >= TSFinished {
+                            warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
+                            return;
+                        }
+                        self.set-stage(TSInProgress) if &meth.readify;
+                        my $rc;
+                        if &meth.skippable && $.skip-message.defined {
+                            self.send-test: Event::Skip, $.skip-message, TRSkipped;
+                            $rc = True;
+                        }
+                        else {
+                            self.measure-telemetry: {
+                                $rc = nqp::invokewithcapture(meth-do, capture)
+                            }
+                        }
+                        self.pop-tool-caller;
+                        $rc
+                    };
+
+                    &wrap.set_name(&meth.name);
+                    nqp::bindattr(&wrap, Code, '$!signature', &meth.signature.clone);
+                    my \wrap-do = nqp::getattr(&wrap, Code, '$!do');
+                    nqp::setcodeobj(wrap-do, &meth);
+                    nqp::bindattr(&meth, Code, '$!do', wrap-do);
+                    WRAP_END
+        }
     }
 }
 

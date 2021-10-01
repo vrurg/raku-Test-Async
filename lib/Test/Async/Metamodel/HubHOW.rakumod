@@ -42,11 +42,13 @@ L<C<Test::Async::Decl>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.4/docs
 
 =end pod
 
-unit class Test::Async::Metamodel::HubHOW is Metamodel::ClassHOW;
+unit class Test::Async::Metamodel::HubHOW;
 use nqp;
 use Test::Async::Metamodel::BundleClassHOW;
 my $suite;
 my $suite-class;
+
+also is Test::Async::Metamodel::BundleClassHOW;
 
 my $bundle-typeobjs;
 my %bundles;
