@@ -1,14 +1,14 @@
 Class `Event::Diag`
 ===================
 
-Is [`Event::Report`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event/Report.md).
+Is [`Event::Report`](Report.md).
 
-Carries a diagnostics message. See `diag` in [`Test::Async::Base`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md).
+Carries a diagnostics message. See `diag` in [`Test::Async::Base`](../Base.md).
 
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](../Event.md)
 
 AUTHOR
 ======

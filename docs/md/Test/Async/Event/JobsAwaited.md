@@ -1,14 +1,14 @@
 Class <Event::JobsAwaited>
 ==========================
 
-Is [`Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md)
+Is [`Event`](../Event.md)
 
 Emitted when all pending jobs are completed.
 
 SEE ALSO
 ========
 
-[`Test::Async::Event`](https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Event.md)
+[`Test::Async::Event`](../Event.md)
 
 AUTHOR
 ======

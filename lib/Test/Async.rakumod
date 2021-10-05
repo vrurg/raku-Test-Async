@@ -18,7 +18,7 @@ C<Test::Async> - base module of the framework
 
 The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but
 is not recommended for a module. See
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/CookBook.md>
+L<C<Test::Async::CookBook>|Async/CookBook.md>
 for more details.
 
 =head2 Exports
@@ -35,14 +35,14 @@ via C<Test::Async::Hub> C<top-suite> method.
 =head3 Test Tools
 
 The module exports all test tools it finds in the top suite object. See
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>
+L<C<Test::Async::Manual>|Async/Manual.md>
 for more details.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Manual.md>,
-L<C<Test::Async::CookBook>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/CookBook.md>,
-L<C<Test::Async::Base>|https://github.com/vrurg/raku-Test-Async/blob/v0.1.902/docs/md/Test/Async/Base.md>
+L<C<Test::Async::Manual>|Async/Manual.md>,
+L<C<Test::Async::CookBook>|Async/CookBook.md>,
+L<C<Test::Async::Base>|Async/Base.md>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
