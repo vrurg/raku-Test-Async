@@ -22,7 +22,7 @@ is-run q<pass "test passes"; done-testing; pass "not allowed">,
        "no testing beyond done-testing",
         :compiler-args(@default-args),
         :out("ok 1 - test passes\n1..1\n"),
-        :err(/:s^^A test tool called after done\-testing /);
+        :err(/:s^^A test tool \`pass\` called after done\-testing /);
 
 is-run q<flunk "test fails">,
        "test fails, plan is at the end",
