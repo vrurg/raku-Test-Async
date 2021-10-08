@@ -142,7 +142,7 @@ sub EXPORT {
         # HOW anymore.
         method set_package(|) {
             if $*TEST-RESTORE-PACKAGE {
-                self.set_how('role', Metamodel::ParametricRoleHOW);
+                $*LANG.set_how('role', Metamodel::ParametricRoleHOW);
                 $*TEST-RESTORE-PACKAGE := False;
             }
             nextsame

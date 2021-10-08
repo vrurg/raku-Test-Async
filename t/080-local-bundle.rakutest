@@ -10,8 +10,21 @@ use v6;
 
 use Test::Async <Base>;
 
-plan 1;
+plan 2;
 
 test-local-tool;
+
+my @default-args = ('-I' ~ $?FILE.IO.parent(2).add('lib')), '-MTest::Async';
+
+is-run q:to/DECL_CODE/,
+use Test::Async::Decl;
+test-bundle AnotherBundle { }
+role R { }
+DECL_CODE
+    "test-bundle doesn't break role declaration",
+    :compiler-args(@default-args),
+    :exitcode(0),
+    :out(""),
+    :err("");
 
 done-testing;
