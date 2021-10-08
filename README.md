@@ -46,5 +46,5 @@ It is also possible to combine both *parallel* and *random* modes of operation.
 READ MORE
 =========
 
-[`Test::Async::Manual`](docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](docs/md/Test/Async/CookBook.md), [`Test::Async`](docs/md/Test/Async.md), [`Test::Async::Base`](docs/md/Test/Async/Base.md)
+[`Test::Async::Manual`](docs/md/Test/Async/Manual.md), [`Test::Async::CookBook`](docs/md/Test/Async/CookBook.md), [`Test::Async`](docs/md/Test/Async.md), [`Test::Async::Base`](docs/md/Test/Async/Base.md), [ChangeLog](ChangeLog.md)
 

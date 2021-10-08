@@ -43,38 +43,43 @@ method !wrap-test-tools(Mu \type-obj) {
     for type-obj.^methods(:local).grep(Test::Async::TestTool) -> &meth is raw {
         next unless &meth.wrappable;
 
-        my $new_compiler := .version >= v2021.09.228.gdd.2.b.274.fd && .backend eq 'moar'
+        my $newdisp-compiler := .version >= v2021.09.228.gdd.2.b.274.fd && .backend eq 'moar'
             given $*RAKU.compiler;
 
         # Test tool boilerplate wrapper.
         my $wrappee;
         my &wrapper := my method (|c) is hidden-from-backtrace is raw {
-            $wrappee := nextcallee if $new_compiler;
+            $wrappee := nextcallee if $newdisp-compiler;
+
             # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
-            return if self.in-fatality;
+            return Nil if self.in-fatality;
 
-            self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
+            self.jobify-tool: {
+                self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
 
-            if self.stage >= TSFinished {
-                warn "A test tool called after done-testing at " ~ $.tool-caller.frame.gist;
-                return;
-            }
-            self.set-stage(TSInProgress) if &meth.readify;
-            my $rc;
-            if &meth.skippable && $.skip-message.defined {
-                self.send-test: Event::Skip, $.skip-message, TRSkipped;
-                $rc = True;
-            }
-            else {
-                self.measure-telemetry: {
-                    $rc = $wrappee(self, |c);
+                if self.stage >= TSFinished {
+                    warn "A test tool `{&meth.tool-name}` called after done-testing at " ~ $.tool-caller.frame.gist
+                        ~ "\n  arguments: " ~ c.gist;
+                    return;
                 }
+                self.set-stage(TSInProgress) if &meth.readify;
+                my $rc;
+                if &meth.skippable && $.skip-message.defined {
+                    self.send-test: Event::Skip, $.skip-message, TRSkipped;
+                    $rc = True;
+                }
+                else {
+                    self.measure-telemetry: {
+                        $rc = $wrappee(self, |c);
+                    }
+                }
+
+                self.pop-tool-caller;
+                $rc
             }
-            self.pop-tool-caller;
-            $rc
         };
 
-        if $new_compiler {
+        if $newdisp-compiler {
             # .wrap works on new-disp
             &wrapper.set_name(&meth.name);
             &meth.wrap: &wrapper;

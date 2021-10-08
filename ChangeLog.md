@@ -3,6 +3,18 @@ CHANGELOG
 
 
 
+v0.1.7
+------
+
+  * Make the module play well with independent threads
+
+  * Improve warning message for tools invoked after `done-testing`
+
+v0.1.6
+------
+
+  * Fixed a critical bug in slang which was breaking role declarations
+
 v0.1.5
 ------
 

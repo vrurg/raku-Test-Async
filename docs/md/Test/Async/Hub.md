@@ -425,6 +425,14 @@ Pops a call location from tool call stack. Returns [`Failure`](https://docs.raku
 
 Returns the topmost call location on the tool call stack or a [`Failure`](https://docs.raku.org/type/Failure) if the stack is empty.
 
+### `jobify-tool(&code)`
+
+This method makes sure that a test tool is invoked in [`Test::Async::JobMgr`](JobMgr.md) environment. Normaly it is expected that tools are called from within threads created by the job manager. But sometimes this condition cannot be fulfilled. For example:
+
+    $object.method-returns-promise.then: -> $p { is $p.result, $expected, "promise completed as expected" };
+
+`then` code here is likely to be invoked in a thread created elsewhere without a chance for us to take over the process. This method wraps a test tool code into a job if it detects that the current thread is different from the suite's thread and there is not `$*TEST-SUITE` variable which is always set for us by the job manager.
+
 `anchor(&code)`, `anchor(Int:D $pre-skip, &code)`
 -------------------------------------------------
 
