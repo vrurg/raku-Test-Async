@@ -3,6 +3,11 @@ CHANGELOG
 
 
 
+v0.1.6
+------
+
+  * Fixed a critical bug in slang which was breaking role declarations
+
 v0.1.5
 ------
 
