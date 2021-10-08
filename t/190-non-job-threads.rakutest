@@ -1,0 +1,26 @@
+use v6;
+use Test::Async;
+
+# Make sure that test tools can be safely used in non-job manager created threads
+
+plan 4001;
+
+my @w;
+lives-ok {
+    for ^1000 -> $idx {
+        my $pfx = "thread " ~ ( $idx + 1 ).fmt( '%05d' );
+        @w[$idx] = ( start {
+            sleep .1.rand;
+            pass  $pfx ~ " completed";
+            $idx * 2
+        } ).then: {
+            pass $pfx ~ " promise kept";
+            is .result, $idx * 2, $pfx ~ " promise result";
+        };
+        pass $pfx ~ " is launched";
+    }
+
+    await @w;
+}, "all tests ran";
+
+done-testing;

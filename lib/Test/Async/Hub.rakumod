@@ -404,6 +404,19 @@ Pops a call location from tool call stack. Returns L<C<Failure>|https://docs.rak
 
 Returns the topmost call location on the tool call stack or a L<C<Failure>|https://docs.raku.org/type/Failure> if the stack is empty.
 
+=head3 C<jobify-tool(&code)>
+
+This method makes sure that a test tool is invoked in
+L<C<Test::Async::JobMgr>>
+environment. Normaly it is expected that tools are called from within threads created by the job manager. But sometimes
+this condition cannot be fulfilled. For example:
+
+    $object.method-returns-promise.then: -> $p { is $p.result, $expected, "promise completed as expected" };
+
+C<then> code here is likely to be invoked in a thread created elsewhere without a chance for us to take over the
+process. This method wraps a test tool code into a job if it detects that the current thread is different from the
+suite's thread and there is not `$*TEST-SUITE` variable which is always set for us by the job manager.
+
 =head2 C<anchor(&code)>, C<anchor(Int:D $pre-skip, &code)>
 
 This method sets anchor location (see
@@ -509,6 +522,8 @@ has $.job-timeout where Int:D | Inf = (%*ENV<TEST_ASYNC_JOB_TIMEOUT> || Inf).Num
 # Debug attributes
 has Bool $.trace-mode is rw = ? %*ENV<TEST_ASYNC_TRACING>;  # Tracing writes into output-<id>.trace file
 
+has Thread $!thread;
+
 method new(|c) {
     # This class is already mutated into a suit
     self === ::?CLASS
@@ -541,8 +556,10 @@ submethod TWEAK(|) {
 my $singleton;
 method top-suite {
     # Tool call stack
-    PROCESS::<@TEST-TOOL-STACK> = [];
-    $singleton //= ::?CLASS.new
+    cas $singleton, {
+        PROCESS::<@TEST-TOOL-STACK> = [] unless .defined;
+        $_ // self.new
+    }
 }
 
 method has-top-suite {
@@ -551,6 +568,11 @@ method has-top-suite {
 
 method test-suite {
     $*TEST-SUITE // self.top-suite
+}
+
+# The first invocation of this method will record the current thread choosing it as suit's primary
+method thread {
+    $!thread //= $*THREAD
 }
 
 my @stage-equivalence = TSInitializing, TSInProgress, TSInProgress, TSFinished, TSDismissed, TSDismissed;
@@ -919,7 +941,7 @@ method push-tool-caller(ToolCallerCtx:D $ctx) {
 
 method pop-tool-caller(--> ToolCallerCtx:D) {
     fail Test::Async::X::EmptyToolStack.new(:suite(self), :op<pop>)
-        unless +@*TEST-TOOL-STACK;
+        unless @*TEST-TOOL-STACK.elems;
     @*TEST-TOOL-STACK.pop
 }
 
@@ -955,7 +977,7 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
 
 method tool-caller(--> ToolCallerCtx:D) {
     fail Test::Async::X::EmptyToolStack.new(:op<tool-caller>, :suite(self)) unless +@*TEST-TOOL-STACK;
-    @*TEST-TOOL-STACK[*-1]
+    @*TEST-TOOL-STACK.tail
 }
 
 my atomicint $temp-count = 0;
@@ -973,6 +995,15 @@ method temp-file(Str:D $base-name, $data) {
     $fh.close
         notandthen self.throw(Test::Async::X::FileClose, :$fname, :details(.exception.message));
     $fname
+}
+
+# Make sure that if a tool is called from a non-job manager thread then it wouldn't compete for the tool stack with
+# tools in other threads
+method jobify-tool(&code) {
+    if self.thread !=== $*THREAD && !$*TEST-SUITE {
+        return await self.invoke-job: self.new-job(&code)
+    }
+    &code()
 }
 
 # Returns a list of "&tool-name" => &code pairs
