@@ -48,7 +48,7 @@ L<C<Test::Async::Base>|Async/Base.md>
 
 =end pod
 
-module Test::Async:ver<0.1.6>:api<0.1.1> { }
+module Test::Async:ver<0.1.7>:api<0.1.1> { }
 
 our sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;

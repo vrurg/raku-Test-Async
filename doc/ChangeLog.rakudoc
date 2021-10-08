@@ -2,6 +2,11 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.1.7
+
+=item Make the module play well with independent threads
+=item Improve warning message for tools invoked after C<done-testing>
+
 =head2 v0.1.6
 
 =item Fixed a critical bug in slang which was breaking role declarations

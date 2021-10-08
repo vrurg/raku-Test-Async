@@ -3,6 +3,13 @@ CHANGELOG
 
 
 
+v0.1.7
+------
+
+  * Make the module play well with independent threads
+
+  * Improve warning message for tools invoked after `done-testing`
+
 v0.1.6
 ------
 

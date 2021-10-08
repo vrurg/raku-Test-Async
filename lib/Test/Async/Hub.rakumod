@@ -407,7 +407,7 @@ Returns the topmost call location on the tool call stack or a L<C<Failure>|https
 =head3 C<jobify-tool(&code)>
 
 This method makes sure that a test tool is invoked in
-L<C<Test::Async::JobMgr>>
+L<C<Test::Async::JobMgr>|JobMgr.md>
 environment. Normaly it is expected that tools are called from within threads created by the job manager. But sometimes
 this condition cannot be fulfilled. For example:
 
