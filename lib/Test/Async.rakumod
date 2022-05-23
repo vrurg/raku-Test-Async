@@ -48,7 +48,9 @@ L<C<Test::Async::Base>|Async/Base.md>
 
 =end pod
 
-module Test::Async { }
+module Test::Async:ver($?DISTRIBUTION.meta<ver>):api($?DISTRIBUTION.meta<api>):auth($?DISTRIBUTION.meta<auth>) {
+    our sub META6 { $?DISTRIBUTION.meta }
+}
 
 our sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;

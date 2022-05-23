@@ -1,19 +1,15 @@
 {
-  "api": "0.1.1",
-  "auth": "zef:vrurg",
+  "name": "Test::Async",
+  "description": "Thread-safe testing framework",
+  "version": "0.1.8",
+  "meta-version": "0",
   "authors": [
     "Vadim Belman <vrurg@cpan.org>"
   ],
-  "build-depends": [
-  ],
-  "depends": [
-    "META6"
-  ],
-  "description": "Thread-safe testing framework",
-  "license": "Artistic-2.0",
-  "meta-version": "0",
-  "name": "Test::Async",
-  "production": true,
+  "auth": "zef:vrurg",
+  "depends": [],
+  "build-depends": [],
+  "test-depends": [],
   "provides": {
     "Test::Async": "lib/Test/Async.rakumod",
     "Test::Async::Aggregator": "lib/Test/Async/Aggregator.rakumod",
@@ -23,7 +19,6 @@
     "Test::Async::Hub": "lib/Test/Async/Hub.rakumod",
     "Test::Async::Job": "lib/Test/Async/Job.rakumod",
     "Test::Async::JobMgr": "lib/Test/Async/JobMgr.rakumod",
-    "Test::Async::META": "lib/Test/Async/META.rakumod",
     "Test::Async::Metamodel::BundleClassHOW": "lib/Test/Async/Metamodel/BundleClassHOW.rakumod",
     "Test::Async::Metamodel::BundleHOW": "lib/Test/Async/Metamodel/BundleHOW.rakumod",
     "Test::Async::Metamodel::HubHOW": "lib/Test/Async/Metamodel/HubHOW.rakumod",
@@ -36,18 +31,17 @@
     "Test::Async::When": "lib/Test/Async/When.rakumod",
     "Test::Async::X": "lib/Test/Async/X.rakumod"
   },
-  "raku": "6.d",
-  "resources": [
-  ],
-  "source-url": "https://github.com/vrurg/raku-Test-Async.git",
+  "resources": [],
   "support": {
     "source": "https://github.com/vrurg/raku-Test-Async.git"
   },
+  "license": "Artistic-2.0",
   "tags": [
     "TESTING",
     "ASYNC"
   ],
-  "test-depends": [
-  ],
-  "version": "0.1.7"
+  "api": "0.1.1",
+  "production": true,
+  "source-url": "https://github.com/vrurg/raku-Test-Async.git",
+  "raku": "6.d"
 }
