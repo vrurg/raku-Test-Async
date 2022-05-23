@@ -103,7 +103,7 @@ multi method TAP-str-from-ev(::?CLASS:D: Event::Test:D $ev, Str:D $kind,
     }
     my $TODO = ($ev.todo andthen " # TODO " ~ $_);
     my $message = $message-prefix
-                  ~ $ev.message.split(qw<\\ #>).map({ ++$ % 2 ?? $_ !! "\\" ~ $_ })
+                  ~ $ev.message.split(qw<\\ #>).map({ (++$ % 2) ?? $_ !! "\\" ~ $_ })
                   ~ $TODO
                   ~ $message-postfix;
     $prepend ~ $kind ~ " " ~ self.next-test-id ~ " - " ~ $message ~ $comment;
