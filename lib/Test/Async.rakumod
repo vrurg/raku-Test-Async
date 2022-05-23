@@ -48,7 +48,7 @@ L<C<Test::Async::Base>|Async/Base.md>
 
 =end pod
 
-module Test::Async:ver<0.1.7>:api<0.1.1> { }
+module Test::Async { }
 
 our sub EXPORT(*@b) {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
@@ -59,8 +59,8 @@ our sub EXPORT(*@b) {
     for @bundles.grep(Str) {
         my $bundle = .index('::') ?? $_ !! 'Test::Async::' ~ $_;
         require ::($bundle);
-        if (%REQUIRE_SYMBOLS<EXPORT>:exists) && (%REQUIRE_SYMBOLS<EXPORT>.WHO<DEFAULT>:exists) {
-            @bundle_exports.append: %REQUIRE_SYMBOLS<EXPORT>.WHO<DEFAULT>.WHO.pairs;
+        if (::<EXPORT>:exists) && (::("EXPORT").WHO<DEFAULT>:exists) {
+            @bundle_exports.append: ::("EXPORT").WHO<DEFAULT>.WHO.pairs;
         }
     }
     for Test::Async::Hub.HOW.bundles -> \bundle-class {
