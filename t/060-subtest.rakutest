@@ -1,7 +1,6 @@
 use v6;
-BEGIN {
-    $*SCHEDULER = ThreadPoolScheduler.new: :max_threads(3000);
-}
+BEGIN $*SCHEDULER = ThreadPoolScheduler.new: :max_threads(3000);
+
 use lib $?FILE.IO.parent(1).add('lib/060-subtest/lib');
 use Test::SubBundle;
 use Test::Async <Base>;
