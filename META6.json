@@ -39,7 +39,7 @@
     "TESTING",
     "ASYNC"
   ],
-  "version": "0.1.904"
+  "version": "0.1.904",
   "api": "0.1.1",
   "production": false,
   "source-url": "https://github.com/vrurg/raku-Test-Async.git",
