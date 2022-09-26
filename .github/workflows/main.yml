@@ -27,6 +27,7 @@ jobs:
         raku-version:
           - "latest"
           - "2022.03"
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
