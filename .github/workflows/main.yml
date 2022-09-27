@@ -31,15 +31,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+        name: Checkout repository
         with:
           submodules: recursive
       - uses: Raku/setup-raku@v1
+        name: Prepare Rakudo environment
         with:
           raku-version: ${{ matrix.raku-version }}
-      - run: raku -v # <= use or delete this
-      - run: zef install . --deps-only --test-depends --/test
-      - run: zef install --/test App::Prove6
-      - run: prove6 -I. --verbose
+      - run: raku -v
+        name: Rakudo version report
+      - run: |
+          zef install . --deps-only --test-depends --/test
+          zef install --/test App::Prove6
+          prove6 -I. --verbose
+        name: Run tests
 
       # add commands below for your own requirements
 
