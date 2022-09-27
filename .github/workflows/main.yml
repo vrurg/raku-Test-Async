@@ -24,27 +24,11 @@ jobs:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
-        raku-version:
+        rakudo-version:
           - "latest"
           - "2022.03"
       fail-fast: false
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-        name: Checkout repository
-        with:
-          submodules: recursive
-      - uses: Raku/setup-raku@v1
-        name: Prepare Rakudo environment
-        with:
-          raku-version: ${{ matrix.raku-version }}
-      - run: raku -v
-        name: Rakudo version report
-      - run: |
-          zef install . --deps-only --test-depends --/test
-          zef install --/test App::Prove6
-          prove6 -I. --verbose
-        name: Run tests
-
-      # add commands below for your own requirements
-
+    uses: vrurg/raku-build-tools/default-test-workflow.yml@workflow-v1
+    with:
+      os: ${{ matrix.os }}
+      rakudo-version: ${{ matrix.rakudo-version }}
