@@ -28,7 +28,7 @@ jobs:
           - "latest"
           - "2022.03"
       fail-fast: false
-    uses: vrurg/raku-build-tools/default-test-workflow.yml@workflow-v1
+    uses: vrurg/raku-build-tools/.github/workflows/default-test-workflow.yml@workflow-v1
     with:
       os: ${{ matrix.os }}
       rakudo-version: ${{ matrix.rakudo-version }}
