@@ -38,7 +38,7 @@ jobs:
       - name: Install new zef 
         working-directory: zef
         run: |
-          rakudo-m -I. bin/zef install . --/test
+          raku -I. bin/zef install . --/test
       - uses: actions/checkout@v3
         name: Checkout repository
         with:
@@ -48,9 +48,12 @@ jobs:
         run: |
           raku -v
           zef --version
+      - name: Use Module Test
+        working-directory: 'main'
+        run: raku -I. -It/lib -It/lib/003-declaration/lib -MTest::Bootstrap -MTest::Async::Decl -MTest::Async::Event -MTest::Async::Metamodel::BundleHOW -MTest::Async::Metamodel::ReporterHOW -MFoo
       - name: Test
         working-directory: 'main'
-        run: rakudo-m --ll-exception -I. t/003-declaration.rakutest
+        run: raku --ll-exception -I. t/003-declaration.rakutest
       - name: Test with prove6
         working-directory: 'main'
         run: |
