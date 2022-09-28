@@ -21,7 +21,7 @@ jobs:
         os:
           - windows-latest
         rakudo-version:
-          - "2020.12"
+          - "2021.12"
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
