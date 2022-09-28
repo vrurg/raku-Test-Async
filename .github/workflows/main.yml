@@ -23,8 +23,29 @@ jobs:
         rakudo-version:
           - "2020.12"
       fail-fast: false
-    uses: vrurg/raku-build-tools/.github/workflows/default-test-workflow.yml@workflow-v1
-    with:
-      os: ${{ matrix.os }}
-      rakudo-version: ${{ matrix.rakudo-version }}
-    - run: raku -I. t/003-declaration.rakutest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: Raku/setup-raku@v1
+        name: Prepare Rakudo ${{ inputs.rakudo-version }} environment
+        with:
+          raku-version: ${{ inputs.rakudo-version }}
+      - uses: actions/checkout@v3
+        name: Checkout zef
+        with:
+          repository: 'ugexe/zef'
+          ref: ${{ inputs.zef-version }}
+          path: 'zef'
+      - name: Install new zef ${{ inputs.zef-version }}
+        working-directory: zef
+        run: |
+          raku -I. bin/zef install .
+      - uses: actions/checkout@v3
+        name: Checkout repository
+        with:
+          submodules: recursive
+          path: 'main'
+      - name: Versions Report
+        run: |
+          raku -v
+          zef --version
+      - run: raku -I. t/003-declaration.rakutest
