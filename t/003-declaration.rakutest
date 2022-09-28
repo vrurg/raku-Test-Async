@@ -1,6 +1,8 @@
 use v6;
+use nqp;
 BEGIN note "WHERE ARE WE?";
-BEGIN note "CWD: ", $*CWD;
+BEGIN note "FILE: ", $?FILE;
+BEGIN note "nqp::cwd: ", nqp::cwd();
 use lib $?FILE.IO.parent(1).add('lib');
 use lib $?FILE.IO.parent(1).add('lib/003-declaration/lib');
 use Test::Bootstrap;
