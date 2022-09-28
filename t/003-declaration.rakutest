@@ -1,4 +1,6 @@
 use v6;
+BEGIN note "WHERE ARE WE?";
+BEGIN note "CWD: ", $*CWD;
 use lib $?FILE.IO.parent(1).add('lib');
 use lib $?FILE.IO.parent(1).add('lib/003-declaration/lib');
 use Test::Bootstrap;
