@@ -21,21 +21,21 @@ jobs:
         os:
           - windows-latest
         rakudo-version:
-          - "2021.12"
+          - "2020.12"
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: Raku/setup-raku@v1
-        name: Prepare Rakudo ${{ inputs.rakudo-version }} environment
+        name: Prepare Rakudo ${{ matrix.rakudo-version }} environment
         with:
-          raku-version: ${{ inputs.rakudo-version }}
+          raku-version: ${{ matrix.rakudo-version }}
       - uses: actions/checkout@v3
         name: Checkout zef
         with:
           repository: 'ugexe/zef'
-          ref: ${{ inputs.zef-version }}
+          ref: 'v0.14.2'
           path: 'zef'
-      - name: Install new zef ${{ inputs.zef-version }}
+      - name: Install new zef 
         working-directory: zef
         run: |
           raku -I. bin/zef install .
