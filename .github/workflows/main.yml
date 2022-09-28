@@ -50,7 +50,7 @@ jobs:
           zef --version
       - name: Test
         working-directory: 'main'
-        run: raku -I. t/003-declaration.rakutest
+        run: rakudo-m --ll-exception -I. t/003-declaration.rakutest
       - name: Test with prove6
         working-directory: 'main'
         run: |
