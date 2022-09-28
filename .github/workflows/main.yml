@@ -51,3 +51,12 @@ jobs:
       - name: Test
         working-directory: 'main'
         run: raku -I. t/003-declaration.rakutest
+      - name: Test with prove6
+        working-directory: 'main'
+        run: |
+          zef install App::Prove6 --/test
+          prove6 -I. --verbose t/003-declaration.rakutest
+      - name: Full test with prove6
+        working-directory: 'main'
+        run: |
+          prove6 -I. --verbose 
