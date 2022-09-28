@@ -1,6 +1,6 @@
 use v6;
 use nqp;
-BEGIN note "WHERE ARE WE 1?";
+BEGIN note "WHERE ARE WE 1? ", $*CWD;
 BEGIN note "WHERE ARE WE 2?";
 BEGIN note "FILE: ", $?FILE;
 BEGIN note "nqp::cwd: ", nqp::cwd();
