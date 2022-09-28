@@ -48,4 +48,6 @@ jobs:
         run: |
           raku -v
           zef --version
-      - run: raku -I. t/003-declaration.rakutest
+      - name: Test
+        working-directory: 'main'
+        run: raku -I. t/003-declaration.rakutest
