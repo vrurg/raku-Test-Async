@@ -3,6 +3,11 @@ CHANGELOG
 
 
 
+v0.1.9
+------
+
+  * `diag` is now using `**` slurpiness and gistifies its arguments, making it more `say`-alike
+
 v0.1.7
 ------
 
