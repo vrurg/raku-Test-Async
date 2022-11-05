@@ -279,7 +279,7 @@ method flunk(Str:D $message = "") is test-tool {
     self.proclaim: False, $message
 }
 
-method diag(+@msg) is test-tool(:!skip) {
+method diag(**@msg) is test-tool(:!skip) {
     self.send: Event::Diag, :message(@msg.join);
 }
 
