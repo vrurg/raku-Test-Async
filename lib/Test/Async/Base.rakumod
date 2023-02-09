@@ -765,27 +765,36 @@ multi method is-deeply(Mu $got, Mu $expected, $message = '') {
 method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
     my subset Simple of Mu where Stringy | Numeric | Junction;
 
-    my sub cmp-simple(Mu \v1, Mu \v2) {
-        (v1.WHAT & v2.WHAT) ~~ Stringy | Numeric
-            && v1.WHAT ~~ v2.WHAT
-            ?? v1 eqv v2
-            !! v1.raku eq v2.raku
+    my sub cmp-simple(Mu $val1, Mu $val2) {
+        ($val1.WHAT & $val2.WHAT) ~~ Stringy | Numeric
+            && $val1.WHAT ~~ $val2.WHAT
+            ?? $val1 eqv $val2
+            !! $val1.raku eq $val2.raku
     }
 
     my proto sub deep-cmp(|) {*}
 
-    multi sub deep-cmp(Junction:D \v1, Junction:D \v2, Str:D $path) {
-        unless v1.raku eq v2.raku {
-            take ("Junction", $path, ((v1, v2),));
+    multi sub deep-cmp(Junction:D $val1, Junction:D $val2, Str:D $path) {
+        unless $val1.raku eq $val2.raku {
+            take ("Junction", $path, (($val1, $val2),));
         }
     }
 
-    multi sub deep-cmp(Seq:D \v1, Seq:D \v2, Str:D $path) {
-        deep-cmp v1.List, v2.List, $path, :what<Sequence>
+    multi sub deep-cmp(Seq:D $val1, Seq:D $val2, Str:D $path) {
+        deep-cmp $val1.List, $val2.List, $path, :what<Sequence>
     }
 
     multi sub deep-cmp(%v1, %v2, Str:D $path) {
         my @diffs;
+
+        unless %v1.keys (==) %v2.keys {
+            my $all-keys = %v1.keys ∪ %v2.keys;
+            my sub key-list(%h) {
+                _msg( $all-keys.keys.sort.map({ %h{$_}:exists ?? "<$_>" !! (' ' x (.chars + 2)) }).join(" ") )
+            }
+            @diffs.push: (key-list(%v1), key-list(%v2), :exp-sfx<keys>, :got-sfx<keys>);
+        }
+
         for (%v1.keys ∪ %v2.keys).keys.sort -> $key {
             my $exp-sfx = "at key <$key>";
             my $v1k := %v1{$key};
@@ -811,21 +820,26 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
         take (%v1.^name, $path, @diffs) if @diffs;
     }
 
-    multi sub deep-cmp(List:D \v1, List:D \v2, Str:D $path, Str :$what) {
+    multi sub deep-cmp(List:D $val1, List:D $val2, Str:D $path, Str :$what) {
         my @diffs;
-        for ^(v1.elems max v2.elems) -> $idx {
-            next if !((v1[$idx]:exists) || (v2[$idx]:exists));
 
-            my $v1idx := v1[$idx];
-            my $v2idx := v2[$idx];
+        if $val1.elems != $val2.elems {
+            @diffs.push: ($val1.elems, $val2.elems, :exp-sfx<size>, :got-sfx<size>);
+        }
+
+        for ^($val1.elems max $val2.elems) -> $idx {
+            next if !(($val1[$idx]:exists) || ($val2[$idx]:exists));
+
+            my $v1idx := $val1[$idx];
+            my $v2idx := $val2[$idx];
             my $both-val := $v1idx & $v2idx;
             my $exp-sfx = "at [$idx]";
 
-            if v1[$idx]:!exists {
-                @diffs.push: (_msg("no element"), v2[$idx], :$exp-sfx);
+            if $val1[$idx]:!exists {
+                @diffs.push: (_msg("no element"), $val2[$idx], :$exp-sfx);
             }
-            elsif v2[$idx]:!exists {
-                @diffs.push: (v1[$idx], _msg("no element"), :$exp-sfx);
+            elsif $val2[$idx]:!exists {
+                @diffs.push: ($val1[$idx], _msg("no element"), :$exp-sfx);
             }
             elsif !$both-val.defined {
                 @diffs.push: ($v1idx, $v2idx, :$exp-sfx, :gist) unless $v1idx === $v2idx;
@@ -834,10 +848,10 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
                 @diffs.push: ($v1idx, $v2idx, :$exp-sfx) unless cmp-simple($v1idx, $v2idx);
             }
             else {
-                deep-cmp(v1[$idx], v2[$idx], $path ~ "[$idx]");
+                deep-cmp($val1[$idx], $val2[$idx], $path ~ "[$idx]");
             }
         }
-        take (($what // v1.^name), $path, @diffs) if @diffs;
+        take (($what // $val1.^name), $path, @diffs) if @diffs;
     }
 
     multi sub deep-cmp(&v1, &v2, Str:D $path) {
@@ -846,31 +860,31 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
         }
     }
 
-    multi sub deep-cmp(QuantHash:D \v1, QuantHash:D \v2, Str:D $path) {
-        unless v1.WHAT =:= v2.WHAT && v1 == v2 {
-            take (v1.^name, $path, ((v1, v2),));
+    multi sub deep-cmp(QuantHash:D $val1, QuantHash:D $val2, Str:D $path) {
+        unless $val1.WHAT =:= $val2.WHAT && $val1 == $val2 {
+            take ($val1.^name, $path, (($val1, $val2),));
         }
     }
 
-    multi sub deep-cmp(Numeric:D \v1, Numeric:D \v2, Str:D $path) {
-        unless v1 == v2 {
-            take ("Numeric", $path, ((v1, v2),));
+    multi sub deep-cmp(Numeric:D $val1, Numeric:D $val2, Str:D $path) {
+        unless $val1 == $val2 {
+            take ("Numeric", $path, (($val1, $val2),));
         }
     }
 
-    multi sub deep-cmp(Stringy:D \v1, Stringy:D \v2, Str:D $path) {
-        unless v1 eq v2 {
-            take ("String", $path, ((v1, v2),));
+    multi sub deep-cmp(Stringy:D $val1, Stringy:D $val2, Str:D $path) {
+        unless $val1 eq $val2 {
+            take ("String", $path, (($val1, $val2),));
         }
     }
 
-    multi sub deep-cmp(Mu:D \v1, Mu:D \v2, Str:D $path) {
+    multi sub deep-cmp(Mu:D $val1, Mu:D $val2, Str:D $path) {
         my @diffs;
-        if v1.WHAT =:= v2.WHAT {
-            for v1.WHAT.^attributes(:all, :!local) -> $attr {
+        if $val1.WHAT =:= $val2.WHAT {
+            for $val1.WHAT.^attributes(:all, :!local) -> $attr {
                 next unless $attr.has_accessor || $attr.is_built;
-                my $v1a := $attr.get_value(v1);
-                my $v2a := $attr.get_value(v2);
+                my $v1a := $attr.get_value($val1);
+                my $v2a := $attr.get_value($val2);
                 my $both-val = $v1a & $v2a;
                 my $exp-sfx = $attr.name;
                 if $both-val.defined {
@@ -890,21 +904,21 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
             }
         }
         else {
-            @diffs.push: (v1, v2);
+            @diffs.push: ($val1, $val2);
         }
         take ("Object", $path, @diffs) if @diffs;
     }
 
-    multi sub deep-cmp(Mu:U \v1, Mu:D \v2, Str:D $path) {
-        take ("Object", $path, ((_msg("type object of " ~ v1.^name), v2),));
+    multi sub deep-cmp(Mu:U $val1, Mu:D $val2, Str:D $path) {
+        take ("Object", $path, ((_msg("type object of " ~ $val1.^name), $val2),));
     }
 
-    multi sub deep-cmp(Mu:D \v1, Mu:U \v2, Str:D $path) {
-        take ("Object", $path, ((v1, _msg("type object of " ~ v2.^name)),));
+    multi sub deep-cmp(Mu:D $val1, Mu:U $val2, Str:D $path) {
+        take ("Object", $path, (($val1, _msg("type object of " ~ $val2.^name)),));
     }
 
-    multi sub deep-cmp(Mu:U \v1, Mu:U \v2, Str:D $path) {
-        take ("Type object", $path, ((v1, v2, :gist),)) unless v1 === v2;
+    multi sub deep-cmp(Mu:U $val1, Mu:U $val2, Str:D $path) {
+        take ("Type object", $path, (($val1, $val2, :gist),)) unless $val1 === $val2;
     }
 
     my @diffs = gather deep-cmp(expected, got, "");
