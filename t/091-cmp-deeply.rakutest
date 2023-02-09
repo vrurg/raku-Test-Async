@@ -14,7 +14,7 @@ subtest 'Basic' => {
 }
 
 subtest 'Attributes' => {
-    plan 5;
+    plan 8;
 
     my class Foo { has $.foo; has $.fubar; }
     my class Bar { has $!bar is built; }
@@ -22,7 +22,7 @@ subtest 'Attributes' => {
     my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
     my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
 
-    test-flunks 4;
+    test-flunks 7;
     cmp-deeply @got, @expected, "class instance deep withing an array";
 
     @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
@@ -31,11 +31,23 @@ subtest 'Attributes' => {
 
     @got      = [1, 2, %( foo =>  Bar.new(:bar('13')) )];
     @expected = [1, 2, %( foo =>  Bar.new(:bar(13)  ) )];
-    cmp-deeply @got, @expected, "'is built' attribute";
+    cmp-deeply @got, @expected, "'is built' attribute, value types";
 
     @got      = [1, 2, %( foo =>  Bar.new()           )];
     @expected = [1, 2, %( foo =>  Bar.new(:bar('13')) )];
-    cmp-deeply @got, @expected, "'is built' attribute";
+    cmp-deeply @got, @expected, "'is built' attribute not set";
+
+    @got      = [1, 2, %( foo => <a b c> )];
+    @expected = [1, 2, %( foo => <a b c d e f> )];
+    cmp-deeply @got, @expected, "differen size lists";
+
+    @got      = [1, 2, %( foo => [|<a b c d e f>] )];
+    @got[2]<foo>[2]:delete; # Create a sparse array
+    cmp-deeply @got, @expected, "sparse array";
+
+    @got      = [1, 2, %( foo => <a b c>, baz => "extra"    )];
+    @expected = [1, 2, %( foo => <a b c>, bar => "missing!" )];
+    cmp-deeply @got, @expected, "objects are the same";
 
     @got      = [1, 2, %( foo =>  Bar.new(:bar(42)) )];
     @expected = [1, 2, %( foo =>  Bar.new(:bar(42)) )];

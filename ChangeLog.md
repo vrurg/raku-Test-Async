@@ -3,6 +3,11 @@ CHANGELOG
 
 
 
+v0.1.10
+-------
+
+  * Make `cmp-deeply` reports about difference in positionals or associatives more detailed by reporting different sizes or key sets, respectively.
+
 v0.1.9
 ------
 
