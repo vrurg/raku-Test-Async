@@ -196,6 +196,28 @@ The primary purpose of this mode is to provide means of implementing compound te
 
 Note that we're using explicit `:instant` and `:!async` modes to prevent possible side effect related to use of `:parallel` and `:random` in parent suite's plan. Besides, it is normal for a user to expect a test tool to be semi-atomic operation being done here and now.
 
+`cmp-deeply(Mu \got, Mu \expected, Str:D $message)`
+---------------------------------------------------
+
+This test is similar to `is-deeply` as it compares complex structure in depth. The difference is that `cmp-deeply` traverses deep into the structure is reports any difference found at the point where it is found. For example:
+
+    my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+    my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
+
+    cmp-deeply @got, @expected, "class instance deep withing an array";
+
+This test would result in a diagnostic message like this:
+
+    # Object at path [2]<foo>:
+    #     expected $!foo: 13
+    #                got: "13"
+    #     expected $!fubar: 12
+    #                  got: 11
+
+Which tells us that a difference has been found in an instance of a class (*Object*) located in a key `foo` of an [`Associative`](https://docs.raku.org/type/Associative) which is located in the second index of a [`Positional`](https://docs.raku.org/type/Positional). Differences are reported for each attribute where they are found.
+
+Another difference of this test to `is-deeply` is that it disrespect containerization status and focuses on structure alone.
+
 `multi is-run(Str() $code, %params, Str:D $message = "")`
 ---------------------------------------------------------
 
