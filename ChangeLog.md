@@ -8,6 +8,8 @@ v0.1.9
 
   * `diag` is now using `**` slurpiness and gistifies its arguments, making it more `say`-alike
 
+  * Added `cmp-deeply` test
+
 v0.1.7
 ------
 
