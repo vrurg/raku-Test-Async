@@ -1,0 +1,83 @@
+use v6.d;
+use Test::Async;
+
+plan 4;
+
+subtest 'Basic' => {
+    plan 1;
+
+    my %got      = a => 1, b => (<c d e>, Bool,   pi, 11    ), f => "foo", type => Int;
+    my %expected = a => 1, b => (<c d f>, Promise, e, 12, 13), f => "bar", type => Str;
+
+    test-flunks;
+    cmp-deeply %got, %expected, "a hash";
+}
+
+subtest 'Attributes' => {
+    plan 8;
+
+    my class Foo { has $.foo; has $.fubar; }
+    my class Bar { has $!bar is built; }
+
+    my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+    my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
+
+    test-flunks 7;
+    cmp-deeply @got, @expected, "class instance deep withing an array";
+
+    @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+    @expected = [1, 2, %( foo =>  "Foo" )];
+    cmp-deeply @got, @expected, "simple type vs. object";
+
+    @got      = [1, 2, %( foo =>  Bar.new(:bar('13')) )];
+    @expected = [1, 2, %( foo =>  Bar.new(:bar(13)  ) )];
+    cmp-deeply @got, @expected, "'is built' attribute, value types";
+
+    @got      = [1, 2, %( foo =>  Bar.new()           )];
+    @expected = [1, 2, %( foo =>  Bar.new(:bar('13')) )];
+    cmp-deeply @got, @expected, "'is built' attribute not set";
+
+    @got      = [1, 2, %( foo => <a b c> )];
+    @expected = [1, 2, %( foo => <a b c d e f> )];
+    cmp-deeply @got, @expected, "differen size lists";
+
+    @got      = [1, 2, %( foo => [|<a b c d e f>] )];
+    @got[2]<foo>[2]:delete; # Create a sparse array
+    cmp-deeply @got, @expected, "sparse array";
+
+    @got      = [1, 2, %( foo => <a b c>, baz => "extra"    )];
+    @expected = [1, 2, %( foo => <a b c>, bar => "missing!" )];
+    cmp-deeply @got, @expected, "objects are the same";
+
+    @got      = [1, 2, %( foo =>  Bar.new(:bar(42)) )];
+    @expected = [1, 2, %( foo =>  Bar.new(:bar(42)) )];
+    cmp-deeply @got, @expected, "objects are the same";
+}
+
+subtest 'Junctions' => {
+    plan 2;
+
+    my %got      = a => 1, b => (<c d e>.any, );
+    my %expected = a => 1, b => (<c d f>.any, );
+
+    test-flunks 2;
+    cmp-deeply %got, %expected, "same kind, different eigenstates";
+
+    %got      = a => 1, b => (<c d e>.any, );
+    %expected = a => 1, b => (<c d e>.none, );
+    cmp-deeply %got, %expected, "same eigenstates, different types";
+}
+
+subtest "Containerization" => {
+
+    plan 2;
+    my class Bar { has $!bar is built; method set-bar(\v) { $!bar := v } }
+    my $b1 = Bar.new(bar => (1,2));
+    my $b2 = Bar.new; $b2.set-bar: (1,2);
+
+    test-flunks "is-deeply respects containerization";
+    is-deeply $b1, $b2;
+    cmp-deeply $b1, $b2, "cmp-deeply ignores containerization";
+}
+
+done-testing;

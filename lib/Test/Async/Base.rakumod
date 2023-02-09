@@ -189,6 +189,31 @@ Note that we're using explicit C<:instant> and C<:!async> modes to prevent possi
 C<:parallel> and C<:random> in parent suite's plan. Besides, it is normal for a user to expect a test tool to be
 semi-atomic operation being done here and now.
 
+=head2 C<cmp-deeply(Mu \got, Mu \expected, Str:D $message)>
+
+This test is similar to C<is-deeply> as it compares complex structure in depth. The difference is that C<cmp-deeply>
+traverses deep into the structure is reports any difference found at the point where it is found. For example:
+
+    my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+    my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
+
+    cmp-deeply @got, @expected, "class instance deep withing an array";
+
+This test would result in a diagnostic message like this:
+
+    # Object at path [2]<foo>:
+    #     expected $!foo: 13
+    #                got: "13"
+    #     expected $!fubar: 12
+    #                  got: 11
+
+Which tells us that a difference has been found in an instance of a class (I<Object>) located in a key C<foo> of an
+L<C<Associative>|https://docs.raku.org/type/Associative> which is located in the second index of a L<C<Positional>|https://docs.raku.org/type/Positional>. Differences are reported for each
+attribute where they are found.
+
+Another difference of this test to C<is-deeply> is that it disrespect containerization status and focuses on structure
+alone.
+
 =head2 C<multi is-run(Str() $code, %params, Str:D $message = "")>
 =head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>
 
@@ -264,6 +289,14 @@ has Numeric:D $.FLUNK-count = 0;
 has &.dismiss-callback;
 has &.fatality-callback;
 
+# Helper class and sub for not attempting .gist or .raku when just a message is expected
+my class _MSG {
+    has $.msg;
+    method raku { $!msg }
+    method gist { $!msg }
+}
+my sub _msg(Str:D $msg) { _MSG.new(:$msg) }
+
 method take-FLUNK {
     return Nil unless $!FLUNK-count;
     my $msg = $!FLUNK-message;
@@ -279,8 +312,8 @@ method flunk(Str:D $message = "") is test-tool {
     self.proclaim: False, $message
 }
 
-method diag(+@msg) is test-tool(:!skip) {
-    self.send: Event::Diag, :message(@msg.join);
+method diag(**@msg) is test-tool(:!skip) {
+    self.send: Event::Diag, :message(@msg.map(*.gist).join);
 }
 
 method ok(Mu $cond, Str:D $message = "") is test-tool {
@@ -729,6 +762,179 @@ multi method is-deeply(Mu $got, Mu $expected, $message = '') {
     self.proclaim($result, $message)
 }
 
+method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
+    my subset Simple of Mu where Stringy | Numeric | Junction;
+
+    my sub cmp-simple(Mu $val1, Mu $val2) {
+        ($val1.WHAT & $val2.WHAT) ~~ Stringy | Numeric
+            && $val1.WHAT ~~ $val2.WHAT
+            ?? $val1 eqv $val2
+            !! $val1.raku eq $val2.raku
+    }
+
+    my proto sub deep-cmp(|) {*}
+
+    multi sub deep-cmp(Junction:D $val1, Junction:D $val2, Str:D $path) {
+        unless $val1.raku eq $val2.raku {
+            take ("Junction", $path, (($val1, $val2),));
+        }
+    }
+
+    multi sub deep-cmp(Seq:D $val1, Seq:D $val2, Str:D $path) {
+        deep-cmp $val1.List, $val2.List, $path, :what<Sequence>
+    }
+
+    multi sub deep-cmp(%v1, %v2, Str:D $path) {
+        my @diffs;
+
+        unless %v1.keys (==) %v2.keys {
+            my $all-keys = %v1.keys ∪ %v2.keys;
+            my sub key-list(%h) {
+                _msg( $all-keys.keys.sort.map({ %h{$_}:exists ?? "<$_>" !! (' ' x (.chars + 2)) }).join(" ") )
+            }
+            @diffs.push: (key-list(%v1), key-list(%v2), :exp-sfx<keys>, :got-sfx<keys>);
+        }
+
+        for (%v1.keys ∪ %v2.keys).keys.sort -> $key {
+            my $exp-sfx = "at key <$key>";
+            my $v1k := %v1{$key};
+            my $v2k := %v2{$key};
+            my $both-val = $v1k & $v2k;
+
+            if %v1{$key}:!exists {
+                @diffs.push: (_msg("no key"), %v2{$key}, :$exp-sfx);
+            }
+            elsif %v2{$key}:!exists {
+                @diffs.push: (%v1{$key}, "no key", :$exp-sfx);
+            }
+            elsif !$both-val.defined {
+                @diffs.push: ($v1k, $v2k, :$exp-sfx, :gist) unless $v1k === $v2k;
+            }
+            elsif $both-val ~~ Simple {
+                @diffs.push: ($v1k, $v2k, :$exp-sfx) unless cmp-simple($v1k, $v2k);
+            }
+            else {
+                deep-cmp(%v1{$key}<>, %v2{$key}<>, $path ~ "<$key>");
+            }
+        }
+        take (%v1.^name, $path, @diffs) if @diffs;
+    }
+
+    multi sub deep-cmp(List:D $val1, List:D $val2, Str:D $path, Str :$what) {
+        my @diffs;
+
+        if $val1.elems != $val2.elems {
+            @diffs.push: ($val1.elems, $val2.elems, :exp-sfx<size>, :got-sfx<size>);
+        }
+
+        for ^($val1.elems max $val2.elems) -> $idx {
+            next if !(($val1[$idx]:exists) || ($val2[$idx]:exists));
+
+            my $v1idx := $val1[$idx];
+            my $v2idx := $val2[$idx];
+            my $both-val := $v1idx & $v2idx;
+            my $exp-sfx = "at [$idx]";
+
+            if $val1[$idx]:!exists {
+                @diffs.push: (_msg("no element"), $val2[$idx], :$exp-sfx);
+            }
+            elsif $val2[$idx]:!exists {
+                @diffs.push: ($val1[$idx], _msg("no element"), :$exp-sfx);
+            }
+            elsif !$both-val.defined {
+                @diffs.push: ($v1idx, $v2idx, :$exp-sfx, :gist) unless $v1idx === $v2idx;
+            }
+            elsif $both-val ~~ Simple {
+                @diffs.push: ($v1idx, $v2idx, :$exp-sfx) unless cmp-simple($v1idx, $v2idx);
+            }
+            else {
+                deep-cmp($val1[$idx], $val2[$idx], $path ~ "[$idx]");
+            }
+        }
+        take (($what // $val1.^name), $path, @diffs) if @diffs;
+    }
+
+    multi sub deep-cmp(&v1, &v2, Str:D $path) {
+        unless &v1 === &v2 {
+            take (&v1.^name, $path, ((&v1, &v2),));
+        }
+    }
+
+    multi sub deep-cmp(QuantHash:D $val1, QuantHash:D $val2, Str:D $path) {
+        unless $val1.WHAT =:= $val2.WHAT && $val1 == $val2 {
+            take ($val1.^name, $path, (($val1, $val2),));
+        }
+    }
+
+    multi sub deep-cmp(Numeric:D $val1, Numeric:D $val2, Str:D $path) {
+        unless $val1 == $val2 {
+            take ("Numeric", $path, (($val1, $val2),));
+        }
+    }
+
+    multi sub deep-cmp(Stringy:D $val1, Stringy:D $val2, Str:D $path) {
+        unless $val1 eq $val2 {
+            take ("String", $path, (($val1, $val2),));
+        }
+    }
+
+    multi sub deep-cmp(Mu:D $val1, Mu:D $val2, Str:D $path) {
+        my @diffs;
+        if $val1.WHAT =:= $val2.WHAT {
+            for $val1.WHAT.^attributes(:all, :!local) -> $attr {
+                next unless $attr.has_accessor || $attr.is_built;
+                my $v1a := $attr.get_value($val1);
+                my $v2a := $attr.get_value($val2);
+                my $both-val = $v1a & $v2a;
+                my $exp-sfx = $attr.name;
+                if $both-val.defined {
+                    if $both-val ~~ Simple {
+                        @diffs.push: ($v1a, $v2a, :$exp-sfx) unless cmp-simple($v1a, $v2a);
+                    }
+                    else {
+                        deep-cmp $v1a, $v2a, $path ~ ($attr.has_accessor ?? "." !! "!")  ~ $attr.name.substr(2);
+                    }
+                }
+                elsif !$v1a.defined {
+                    @diffs.push: (_msg("type object of " ~ $v1a.^name), $v2a, :$exp-sfx);
+                }
+                else {
+                    @diffs.push: ($v1a, _msg("type object of " ~ $v2a.^name), :$exp-sfx);
+                }
+            }
+        }
+        else {
+            @diffs.push: ($val1, $val2);
+        }
+        take ("Object", $path, @diffs) if @diffs;
+    }
+
+    multi sub deep-cmp(Mu:U $val1, Mu:D $val2, Str:D $path) {
+        take ("Object", $path, ((_msg("type object of " ~ $val1.^name), $val2),));
+    }
+
+    multi sub deep-cmp(Mu:D $val1, Mu:U $val2, Str:D $path) {
+        take ("Object", $path, (($val1, _msg("type object of " ~ $val2.^name)),));
+    }
+
+    multi sub deep-cmp(Mu:U $val1, Mu:U $val2, Str:D $path) {
+        take ("Type object", $path, (($val1, $val2, :gist),)) unless $val1 === $val2;
+    }
+
+    my @diffs = gather deep-cmp(expected, got, "");
+    my $result = test-result
+        !@diffs,
+        fail => -> {
+            comments => @diffs.map: {
+                # Each diff is [$what, $path, [(got, expected), ...]]
+                .[0] ~ |(" at path " ~ .[1] if .[1]) ~ ":\n" ~
+                .[2].map({ self.expected-got(| .Capture).indent(4) }).join("\n")
+            }
+        };
+
+    self.proclaim: $result, $message
+}
+
 method skip(Str:D $message = "", UInt:D $count = 1) is test-tool(:!skippable) {
     for ^$count {
         self.send-test: Event::Skip, $message, TRSkipped
@@ -963,7 +1169,7 @@ multi method expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-
       $exp-str.fmt($format) ~ $expected ~ "\n"
     ~ $got-str.fmt($format) ~ $got
 }
-multi method expected-got(+@pos where *.elems == 2, :$gist?, :$quote?, *%c) {
+multi method expected-got(+@pos where *.elems == 2, :$gist, :$quote, *%c) {
     my @stringified;
     for @pos -> $pos {
         my $spos;
@@ -992,7 +1198,7 @@ multi method send-test(::?CLASS:D: Event::Test:U \evType, Str:D $message, TestRe
         }
         my $evType := evType;
         my $test-result;
-        my @comments = %profile<comments> //= [];
+        my @comments = (%profile<comments> //= []).List;
         given evType {
             when Event::NotOk {
                 @comments.unshift: 'FLUNK - ' ~ $fmsg;

@@ -2,6 +2,18 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.1.10
+
+=begin item
+Make C<cmp-deeply> reports about difference in positionals or associatives more detailed by reporting different sizes
+or key sets, respectively.
+=end item
+
+=head2 v0.1.9
+
+=item C<diag> is now using C<**> slurpiness and gistifies its arguments, making it more C<say>-alike
+=item Added C<cmp-deeply> test
+
 =head2 v0.1.7
 
 =item Make the module play well with independent threads
