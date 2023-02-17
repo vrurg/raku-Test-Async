@@ -332,7 +332,7 @@ multi method isa-ok(Mu $got, Mu $expected, Str:D $message = "Is a '{$expected.^n
                 ?? $got.isa($expected)
                 !! nqp::istype($got, $expected.WHAT)),
             fail => -> {
-                comments => self.expected-got($expected, $got)
+                comments => self.expected-got($expected.WHAT, $got.WHAT)
             }),
         $message
 }
