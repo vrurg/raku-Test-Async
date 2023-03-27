@@ -516,7 +516,7 @@ has Bool $.parallel;
 # Messages collected during test code run.
 has Str:D @.messages;
 # How many jobs can be invoked in parallel.
-has UInt:D $.test-jobs = (try { %*ENV<TEST_JOBS>.Int } || ($*KERNEL.cpu-cores - 2)) max 1;
+has UInt:D $.test-jobs = ((%*ENV<TEST_JOBS> andthen .Int) || ($*KERNEL.cpu-cores - 2)) max 1;
 has $.job-timeout where Int:D | Inf = (%*ENV<TEST_ASYNC_JOB_TIMEOUT> || Inf).Num;
 
 # Debug attributes
