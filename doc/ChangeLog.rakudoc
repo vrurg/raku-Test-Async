@@ -2,6 +2,11 @@
 =begin pod
 =CHANGELOG
 
+=head v0.1.11
+
+=item C<isa-ok> reports types only now
+=item Fix handling of TEST_JOBS environment variable
+
 =head2 v0.1.10
 
 =begin item

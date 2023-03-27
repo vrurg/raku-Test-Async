@@ -3,6 +3,15 @@ CHANGELOG
 
 
 
+head
+====
+
+v0.1.11
+
+  * `isa-ok` reports types only now
+
+  * Fix handling of TEST_JOBS environment variable
+
 v0.1.10
 -------
 
