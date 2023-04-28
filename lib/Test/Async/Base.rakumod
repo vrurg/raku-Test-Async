@@ -926,9 +926,9 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
         !@diffs,
         fail => -> {
             comments => @diffs.map: {
-                # Each diff is [$what, $path, [(got, expected), ...]]
+                # Each diff is [$what, $path, [(got, expected, |%named-args), ...]]
                 .[0] ~ |(" at path " ~ .[1] if .[1]) ~ ":\n" ~
-                .[2].map({ self.expected-got(| .Capture).indent(4) }).join("\n")
+                .[2].map({ self.expected-got(|.[0, 1], |.[2..*].Capture).indent(4) }).join("\n")
             }
         };
 
