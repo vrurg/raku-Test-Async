@@ -1,7 +1,7 @@
 use v6.d;
 use Test::Async;
 
-plan 4;
+plan 5;
 
 subtest 'Basic' => {
     plan 2;
@@ -84,6 +84,24 @@ subtest "Containerization" => {
     test-flunks "is-deeply respects containerization";
     is-deeply $b1, $b2;
     cmp-deeply $b1, $b2, "cmp-deeply ignores containerization";
+}
+
+subtest "Undefined attributes" => {
+    plan 2;
+
+    my class Foo {
+        has Str $.s;
+    }
+
+    my $f1 = Foo.new;
+    my $f2 = Foo.new;
+
+    cmp-deeply $f1, $f2, "undefined attribute values";
+
+    my $f3 = Foo.new: :s("set");
+
+    test-flunks "one attribute is set, other is not";
+    cmp-deeply $f1, $f3, "different concreteness of attributes";
 }
 
 done-testing;

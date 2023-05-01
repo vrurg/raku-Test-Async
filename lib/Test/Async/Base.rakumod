@@ -887,7 +887,7 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
                 my $v2a := $attr.get_value($val2);
                 my $both-val = $v1a & $v2a;
                 my $exp-sfx = $attr.name;
-                if $both-val.defined {
+                if ! ($v1a.defined ^^ $v2a.defined) {
                     if $both-val ~~ Simple {
                         @diffs.push: ($v1a, $v2a, :$exp-sfx) unless cmp-simple($v1a, $v2a);
                     }
