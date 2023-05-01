@@ -1,7 +1,7 @@
 {
   "name": "Test::Async",
   "description": "Thread-safe testing framework",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "meta-version": "0",
   "authors": [
     "Vadim Belman <vrurg@cpan.org>"
