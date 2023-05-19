@@ -1,4 +1,4 @@
-use v6;
+use v6.e.PREVIEW;
 use Test::Async::Hub;
 use Test::Async::Utils;
 

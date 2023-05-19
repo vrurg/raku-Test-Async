@@ -1,4 +1,4 @@
-use v6;
+use v6.e.PREVIEW;
 
 =begin pod
 =head1 NAME
@@ -496,7 +496,7 @@ has Int:D $.nesting = 0;
 has Str:D $.nesting-prefix = "  ";
 # If true the suite will report it's parent tool-caller attribute.
 has Bool:D $.transparent = False;
-has ToolCallerCtx $.suite-caller where *.defined;
+has ToolCallerCtx $.suite-caller;
 
 # Are we an asynchronous child? Transitive, i.e. event if the suit is started synchronously by a parent but the parent
 # itself is async – this becomes true.

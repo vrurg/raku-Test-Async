@@ -1,7 +1,7 @@
-use v6;
+use v6.e.PREVIEW;
 
 =begin pod
-=NAME 
+=NAME
 
 C<Test::Async::Metamodel::ReporterHOW> - metaclass backing a reporter bundle
 

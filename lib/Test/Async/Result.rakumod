@@ -1,4 +1,4 @@
-use v6;
+use v6.e.PREVIEW;
 
 =begin pod
 =NAME
@@ -8,7 +8,7 @@ C<Test::Async::Result> - test result representation
 =SYNOPSIS
 
     self.proclaim: test-result(
-                        $condition, 
+                        $condition,
                         fail => {
                             comments => "a comment about the cause of flunk",
                         });
