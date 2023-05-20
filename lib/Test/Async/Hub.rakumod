@@ -509,6 +509,8 @@ has Bool $.random;
 has atomicint $!next-test-id = 1;
 has atomicint $.tests-run = 0;
 has atomicint $.tests-failed = 0;
+# &*EXIT handler prior to suite's user code invocation
+has &!EXIT;
 has Int $!exit-code;
 
 # Run children in individual threads
@@ -755,7 +757,17 @@ method run(:$is-async, Capture:D :$args = \()) {
     }
     $!is-async = ($!parent-suite && $!parent-suite.is-async) || ?$is-async;
     my $*TEST-SUITE = self;
-    &!code(|$args);
+    &!EXIT = &*EXIT;
+    LEAVE &!EXIT = Nil;
+    {
+        my &*EXIT = sub TEST-ASYNC-EXIT($status) {
+            self.proclaim: False, "exit() used within a test suite";
+            &*EXIT = &!EXIT;
+            self.finish(:now);
+            self.fatality($status);
+        }
+        &!code(|$args);
+    }
     self.finish;
 }
 
@@ -1041,6 +1053,9 @@ method fatality(Int:D $!exit-code = 255, Exception :$exception) {
         .fatality($!exit-code, :$exception)
     }
     else {
+        with &!EXIT {
+            .(self.exit-code)
+        }
         exit self.exit-code
     }
 }
