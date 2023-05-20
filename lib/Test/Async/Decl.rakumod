@@ -82,14 +82,15 @@ use Test::Async::Metamodel::BundleHOW;
 use Test::Async::Metamodel::ReporterHOW;
 use Test::Async::TestTool;
 
-multi trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
+my constant %aliases = :skip<skippable>, :wrap<wrappable>, :name<tool-name>, :anchor<anchoring>;
+
+multi sub trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
     my %p = tool-name => meth.name, :readify, :skippable, :wrappable, :!anchoring;
     if $test-tool ~~ Str:D {
         %p<tool-name> = $test-tool;
     }
     elsif $test-tool ~~ Positional | Iterable | Associative {
         my %tt = |$test-tool;
-        my %aliases = :skip<skippable>, :wrap<wrappable>, :name<tool-name>, :anchor<anchoring>;
         for %tt.keys -> $param {
             if $param ~~ any(<name readify skip skippable wrap wrappable anchor anchoring>) {
                 %p{%aliases{$param} // $param} = %tt{$param};
