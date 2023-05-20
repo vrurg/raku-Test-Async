@@ -8,7 +8,7 @@ use Test::Async <Base>;
 # Be explicit about the mode of operation, no parallel, no randomization are allowed.
 plan 19, :!parallel, :!random;
 
-my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+my @default-args = '-I' ~ $?FILE.IO.parent(2), '-MTest::Async';
 my $job-count = test-suite.test-jobs;
 
 # Catch the simplest errors here.

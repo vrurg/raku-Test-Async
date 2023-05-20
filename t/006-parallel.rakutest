@@ -3,7 +3,7 @@ use lib $?FILE.IO.parent(1).add('lib');
 use Test::Bootstrap;
 
 plan 3;
-my @default-args = ('-I' ~ $?FILE.IO.parent(2).add('lib')), '-MTest::Async';
+my @default-args = ('-I' ~ $?FILE.IO.parent(2)), '-MTest::Async';
 
 is-run q:to/CODE/,
             my $count = 5;

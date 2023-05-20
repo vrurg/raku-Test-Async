@@ -4,7 +4,7 @@ use Test::Async::X;
 
 plan 2;
 
-my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+my @default-args = '-I' ~ $?FILE.IO.parent(2), '-MTest::Async';
 
 my class X::TestError is Exception {
     has Str:D $.foo is required;

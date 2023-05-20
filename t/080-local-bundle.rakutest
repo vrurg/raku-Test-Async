@@ -14,7 +14,7 @@ plan 2;
 
 test-local-tool;
 
-my @default-args = ('-I' ~ $?FILE.IO.parent(2).add('lib')), '-MTest::Async';
+my @default-args = ('-I' ~ $?FILE.IO.parent(2)), '-MTest::Async';
 
 is-run q:to/DECL_CODE/,
 use Test::Async::Decl;

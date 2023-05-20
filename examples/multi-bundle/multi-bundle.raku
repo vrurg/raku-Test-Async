@@ -1,5 +1,5 @@
 #!/usr/bin/env raku
-use lib $?FILE.IO.parent(1).add('lib');
+use lib $?FILE.IO.parent(1);
 use Test::Custom1;
 use Test::Custom2;
 use Test::Async;

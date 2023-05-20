@@ -74,7 +74,7 @@ subtest "Plan 'when' condition skips" => {
 }
 
 subtest "Top suite 'when'" => {
-    my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib');
+    my @default-args = '-I' ~ $?FILE.IO.parent(2);
     is-run q:to/TEST_CODE/, "'when' in a top suite plan",
                 use Test::Async <When Base>;
                 plan 4, :when(<release>);
