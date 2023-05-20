@@ -2,6 +2,19 @@
 =begin pod
 =CHANGELOG
 
+=head v0.1.14
+
+=item Implement C<test-assertiion> trait
+=item Fix C<exit> freezing when called within a C<subtest>
+
+=head v0.1.13
+
+=item Fix comparing of undefined attributes
+
+=head v0.1.12
+
+=item Fix C<cmp-deeply> failing while reporting a C<Pair>
+
 =head v0.1.11
 
 =item C<isa-ok> reports types only now

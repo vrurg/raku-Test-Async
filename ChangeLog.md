@@ -6,6 +6,29 @@ CHANGELOG
 head
 ====
 
+v0.1.14
+
+  * Implement `test-assertiion` trait
+
+  * Fix `exit` freezing when called within a `subtest`
+
+head
+====
+
+v0.1.13
+
+  * Fix comparing of undefined attributes
+
+head
+====
+
+v0.1.12
+
+  * Fix `cmp-deeply` failing while reporting a `Pair`
+
+head
+====
+
 v0.1.11
 
   * `isa-ok` reports types only now
