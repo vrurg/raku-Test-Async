@@ -1,0 +1,36 @@
+use v6.e.PREVIEW;
+use Test::Async;
+
+plan 1;
+
+my @default-args = '-I' ~ $?FILE.IO.parent(2), '-MTest::Async';
+
+is-run q:to/TEST/, "exit() within a subtest doesn't freeze but results in a non-pass",
+        plan 2;
+        subtest "bail" => {
+            plan 1;
+            pass "all fine";
+            exit(13);
+        }
+
+        subtest "post bail" => {
+            flunk "this must not be";
+        }
+        TEST
+    # STDOUT must include the first subtest + flunks caused by exit(), but not the second subtest, even as a flunk
+    out => /
+            ^ "1..2" \n
+            "# Subtest: bail" \n
+            \h* "1..1" \n
+            \h* "ok 1 - all fine" \n
+            \h* "not ok 2 - exit() used within a test suite" \n
+            \h* "# Failed test 'exit() used within a test suite'" \n
+            .*
+            \h* "# Failed test 'bail'" \n
+            \h* "# at " \N+ \h line \s \d+ \n \s* $ /,
+    err => "",
+    :compiler-args(@default-args),
+    :exitcode(13),
+    :timeout(30);
+
+done-testing;
