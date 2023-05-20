@@ -30,6 +30,36 @@ Also exports:
 Return the test suite which is actual for the current context. The suite is looked up either in C<$*TEST-SUITE> or
 via C<Test::Async::Hub> C<top-suite> method.
 
+=head3 C<is test-assertion> or C<is test-tool>
+
+A quick way to turn a C<routine> into test tool. This means, in particular, that for test tools, invoked from within
+the routine, any error would be reported as if it is the test assertions flunked. For example, for the following test
+suite:
+
+=begin code
+ 1: use Test::Async;
+ 2: sub flunk-me(Str:D $message) is test-assertion {
+ 3:    subtest $message, :hidden, {
+ 4:        pass "oki";
+ 5:        flunk "I'm intentionally bad"
+ 6:    }
+ 7: }
+ 8: test-flunks "we need to see where it flunks";
+ 9: subtest "Flunking" => {
+10:     flunk-me "need to.";
+11: }
+=end code
+
+The output would contain something like:
+
+=begin output
+    # Failed test 'need to.'
+    # at ...test-suite-path... line 10
+=end output
+
+The above example also uses the recommended practive of using a test assertion where, whenever it is calling 2 or more
+test tools, a C<:hidden> C<subtest> would be wrapping around them in order to create common context.
+
 =head3 Test Tools
 
 The module exports all test tools it finds in the top suite object. See
