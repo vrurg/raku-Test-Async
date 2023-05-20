@@ -1,4 +1,4 @@
-use v6.e.PREVIEW;
+use v6;
 unit module Test::Bootstrap;
 
 my $planned;
