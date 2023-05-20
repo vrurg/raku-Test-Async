@@ -56,6 +56,7 @@ method !wrap-test-tools(Mu \type-obj) {
 
             self.jobify-tool: {
                 self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
+                LEAVE self.pop-tool-caller;
 
                 if self.stage >= TSFinished {
                     warn "A test tool `{&meth.tool-name}` called after done-testing at " ~ $.tool-caller.frame.gist
@@ -74,7 +75,6 @@ method !wrap-test-tools(Mu \type-obj) {
                     }
                 }
 
-                self.pop-tool-caller;
                 $rc
             }
         };
