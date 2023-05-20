@@ -106,7 +106,7 @@ multi sub trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
     }
 }
 
-sub EXPORT {
+sub EXPORT is raw {
     use NQPHLL:from<NQP>;
     my role TestAsyncGrammar {
         token package_declarator:sym<test-hub> {
