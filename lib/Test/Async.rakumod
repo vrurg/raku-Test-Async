@@ -1,6 +1,4 @@
 use v6.e.PREVIEW;
-use Test::Async::Hub;
-use Test::Async::Utils;
 
 =begin pod
 =head1 NAME
@@ -50,6 +48,18 @@ L<C<Test::Async::Base>|Async/Base.md>
 
 module Test::Async:ver($?DISTRIBUTION.meta<ver>):api($?DISTRIBUTION.meta<api>):auth($?DISTRIBUTION.meta<auth>) {
     our sub META6 { $?DISTRIBUTION.meta }
+}
+
+use Test::Async::Hub;
+use Test::Async::Utils;
+
+multi sub trait_mod:<is>(Routine:D \routine, :test-tool(:$test-assertion)!) is export {
+    my &wrapper = my sub (|args) is hidden-from-backtrace is raw {
+        my &nextc := nextcallee();
+        $*TEST-SUITE.anchor: { &nextc(|args) }
+    }
+    &wrapper.set_name(routine.name);
+    routine.wrap(&wrapper);
 }
 
 sub EXPORT(*@b) is raw {
