@@ -52,7 +52,7 @@ module Test::Async:ver($?DISTRIBUTION.meta<ver>):api($?DISTRIBUTION.meta<api>):a
     our sub META6 { $?DISTRIBUTION.meta }
 }
 
-our sub EXPORT(*@b) {
+sub EXPORT(*@b) is raw {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
     @bundles = (<Base>) unless @bundles;
     my $has-reporter;
