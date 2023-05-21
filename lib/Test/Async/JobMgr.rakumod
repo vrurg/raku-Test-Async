@@ -169,6 +169,7 @@ method new-job(Callable:D $code is raw, :$async = False) {
                 :$async,
                 code => {
                     my $*TEST-SUITE = self;
+                    my $*TEST-JOB = $job;
                     my @*TEST-TOOL-STACK;
                     CATCH {
                         self.x-sorry($_, :comment("JOB #" ~ $job.id ~ " DIED"));
