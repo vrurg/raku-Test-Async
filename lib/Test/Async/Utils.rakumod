@@ -43,6 +43,11 @@ unit module Test::Async::Utils;
 use nqp;
 use Test::Async::Result;
 
+constant IS-NEWDISP-COMPILER is export = do {
+    .version >= v2021.09.228.gdd.2.b.274.fd && .backend eq 'moar' given $*RAKU.compiler
+};
+
+
 enum TestMode   is export <TMAsync TMSequential TMRandom>;
 enum TestStage  is export «TSInitializing TSInProgress TSFinishing TSFinished TSDismissed TSFatality»;
 # This is used to inform send-test what statistics counter it must update.

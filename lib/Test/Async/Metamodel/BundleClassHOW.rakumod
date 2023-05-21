@@ -43,13 +43,10 @@ method !wrap-test-tools(Mu \type-obj) {
     for type-obj.^methods(:local).grep(Test::Async::TestTool) -> &meth is raw {
         next unless &meth.wrappable;
 
-        my $newdisp-compiler := .version >= v2021.09.228.gdd.2.b.274.fd && .backend eq 'moar'
-            given $*RAKU.compiler;
-
         # Test tool boilerplate wrapper.
         my $wrappee;
         my &wrapper := my method (|c) is hidden-from-backtrace is raw {
-            $wrappee := nextcallee if $newdisp-compiler;
+            $wrappee := nextcallee if IS-NEWDISP-COMPILER;
 
             # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
             return Nil if self.in-fatality;
@@ -79,7 +76,7 @@ method !wrap-test-tools(Mu \type-obj) {
             }
         };
 
-        if $newdisp-compiler {
+        if IS-NEWDISP-COMPILER {
             # .wrap works on new-disp
             &wrapper.set_name(&meth.name);
             &meth.wrap: &wrapper;
