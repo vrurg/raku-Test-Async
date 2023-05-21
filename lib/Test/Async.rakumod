@@ -82,13 +82,15 @@ module Test::Async:ver($?DISTRIBUTION.meta<ver>):api($?DISTRIBUTION.meta<api>):a
 
 use Test::Async::Hub;
 use Test::Async::Utils;
+use nqp;
 
 multi sub trait_mod:<is>(Routine:D \routine, :test-tool(:$test-assertion)!) is export {
-    my &wrapper = my sub (|args) is hidden-from-backtrace is raw {
-        my &nextc := nextcallee();
-        $*TEST-SUITE.anchor: { &nextc(|args) }
+    my $wrappee := nqp::getattr(routine, Code, '$!do');
+    my &wrapper := my sub (|args) is hidden-from-backtrace is raw {
+        $wrappee := nextcallee() if IS-NEWDISP-COMPILER;
+        $*TEST-SUITE.anchor: { $wrappee(|args) }
     }
-    &wrapper.set_name(routine.name);
+    &wrapper.set_name(routine.name ~ ":<test-tool-wrapper>");
     routine.wrap(&wrapper);
 }
 
