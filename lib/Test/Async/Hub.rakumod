@@ -976,14 +976,32 @@ method locate-tool-caller(Int:D $pre-skip, Bool:D :$anchored = False --> ToolCal
     return $!suite-caller if $!transparent;
     my $ctx = CALLER::;
     my Int:D $idx = 0;
-    while $ctx {
+    my $job-id = ($*TEST-JOB ?? $*TEST-JOB.id !! -1);
+    my $th-id = $*THREAD.id;
+    # note "[$th-id / $job-id] ??? LOOK FOR CTX\n", Backtrace.new.full.Str.indent(4);
+    loop {
         # Skip as many frames as requested + own frame
-        unless $idx < $pre-skip || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::') {
-            return ToolCallerCtx.new: :frame(callframe($idx + 1)), :stash($ctx), :$anchored;
+        last unless (my $frame = callframe($idx + 1)) && $frame.file.defined;
+        # note "[$th-id / $job-id] FRAME $idx/$pre-skip: ", $frame.code.name, " // ", $frame.file, ":", $frame.line, "\n",
+        #     $frame.annotations.keys.map({ $_ => $frame.annotations{$_} }).join("\n").indent(4);
+        unless $idx < $pre-skip
+            || $frame.file.starts-with('SETTING::' | 'NQP::')
+            || $frame.file.ends-with('.nqp')
+            || $frame.file.contains('CORE.setting')
+            || $ctx<LEXICAL>.WHO<::?PACKAGE>.^name.starts-with('Test::Async::')
+        {
+            return ToolCallerCtx.new: :$frame, :stash($ctx), :$anchored;
         }
         ++$idx;
         $ctx = $ctx<CALLER>.WHO;
     }
+    # No appropriate frame in the stack is most likely caused by a frame optimized away. In case it happened to a code
+    # invoked via Promise we still have a chance of accessing its dynamic context.
+    if @*TEST-TOOL-STACK {
+        # note "[$th-id / $job-id] !!! PICK THE CONTEXT FROM PROMISE OUTERS";
+        return @*TEST-TOOL-STACK.tail
+    }
+    # note "[$th-id / $job-id] !!! NO TOOL CALLER";
     fail Test::Async::X::NoToolCaller.new(:suite(self));
 }
 
