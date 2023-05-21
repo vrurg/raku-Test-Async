@@ -37,7 +37,6 @@ unit class Test::Async::Metamodel::BundleClassHOW is Metamodel::ClassHOW;
 use Test::Async::Event;
 use Test::Async::Utils;
 use Test::Async::TestTool;
-use MONKEY-SEE-NO-EVAL;
 
 method !wrap-test-tools(Mu \type-obj) {
     for type-obj.^methods(:local).grep(Test::Async::TestTool) -> &meth is raw {
@@ -51,8 +50,10 @@ method !wrap-test-tools(Mu \type-obj) {
             # Don't even try invoking a test tool if the whole suite is doomed. This includes doomed parent suite too.
             return Nil if self.in-fatality;
 
+            my ToolCallerCtx:D $tctx = self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
+
             self.jobify-tool: {
-                self.push-tool-caller: self.locate-tool-caller(1, |(:anchored if &meth.anchoring));
+                self.push-tool-caller: $tctx;
                 LEAVE self.pop-tool-caller;
 
                 if self.stage >= TSFinished {
@@ -82,16 +83,14 @@ method !wrap-test-tools(Mu \type-obj) {
             &meth.wrap: &wrapper;
         }
         else {
-            # Code for older Rakudo compilers has to be wrapped into EVAL because new-disp doesn't have
-            # nqp::invokewithcapture and fails to compile whatsoever
-                use nqp;
-                $wrappee := nqp::getattr(&meth, Code, '$!do');
+            use nqp;
+            $wrappee := nqp::getattr(&meth, Code, '$!do');
 
-                &wrapper.set_name(&meth.name);
-                nqp::bindattr(&wrapper, Code, '$!signature', &meth.signature.clone);
-                my \wrap-do = nqp::getattr(&wrapper, Code, '$!do');
-                nqp::setcodeobj(wrap-do, &meth);
-                nqp::bindattr(&meth, Code, '$!do', wrap-do);
+            &wrapper.set_name(&meth.name);
+            nqp::bindattr(&wrapper, Code, '$!signature', &meth.signature.clone);
+            my \wrap-do = nqp::getattr(&wrapper, Code, '$!do');
+            nqp::setcodeobj(wrap-do, &meth);
+            nqp::bindattr(&meth, Code, '$!do', wrap-do);
         }
     }
 }
