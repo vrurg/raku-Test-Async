@@ -59,7 +59,7 @@ class ToolCallerCtx is export {
 
     has CallFrame:D $.frame is required;
     has CALLER-CTX $.stash is required;
-    # If anchored then for any nested too call locate-tool-caller will return the anchored location.
+    # If anchored then for any nested call locate-tool-caller will return the anchored location.
     has Bool:D $.anchored = False;
 }
 
