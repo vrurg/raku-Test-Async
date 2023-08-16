@@ -6,6 +6,13 @@ CHANGELOG
 head
 ====
 
+v0.1.15
+
+  * Fix `test-assertion` trait when the assertion is used at the top level
+
+head
+====
+
 v0.1.14
 
   * Implement `test-assertiion` trait
