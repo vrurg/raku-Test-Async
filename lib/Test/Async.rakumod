@@ -88,7 +88,7 @@ multi sub trait_mod:<is>(Routine:D \routine, :test-tool(:$test-assertion)!) is e
     my $wrappee := nqp::getattr(routine, Code, '$!do');
     my &wrapper := my sub (|args) is hidden-from-backtrace is raw {
         $wrappee := nextcallee() if IS-NEWDISP-COMPILER;
-        $*TEST-SUITE.anchor: { $wrappee(|args) }
+        ($*TEST-SUITE // Test::Async::Hub.top-suite).anchor: { $wrappee(|args) }
     }
     &wrapper.set_name(routine.name ~ ":<test-tool-wrapper>");
     routine.wrap(&wrapper);
