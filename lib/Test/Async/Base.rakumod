@@ -842,7 +842,7 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
                 @diffs.push: ($val1[$idx], _msg("no element"), :$exp-sfx);
             }
             elsif !$both-val.defined {
-                @diffs.push: ($v1idx, $v2idx, :$exp-sfx, :gist) unless $v1idx === $v2idx;
+                @diffs.push: ($v1idx, $v2idx, :$exp-sfx, :gist) unless $v1idx<> =:= $v2idx<>;
             }
             elsif $both-val ~~ Simple {
                 @diffs.push: ($v1idx, $v2idx, :$exp-sfx) unless cmp-simple($v1idx, $v2idx);
