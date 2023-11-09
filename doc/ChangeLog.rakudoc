@@ -5,6 +5,7 @@
 =head v0.1.16
 
 =item Fix C<cmp-deeply> for nominalizables
+=item Fix C<cmp-deeply> for paramterized hashes with non-string keys
 
 =head v0.1.15
 
