@@ -787,16 +787,17 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
     multi sub deep-cmp(%v1, %v2, Str:D $path) {
         my @diffs;
 
-        unless %v1.keys (==) %v2.keys {
-            my $all-keys = %v1.keys ∪ %v2.keys;
+        # Remember that keys are not always strings.
+        my Mu @all-keys = (|%v1.keys, |%v2.keys);
+        unless @all-keys.first(-> Mu \key { ! (%v1{key}:exists and %v1{key}:exists) }, :k) =:= Nil {
             my sub key-list(%h) {
-                _msg( $all-keys.keys.sort.map({ %h{$_}:exists ?? "<$_>" !! (' ' x (.chars + 2)) }).join(" ") )
+                _msg( @all-keys.sort.map({ %h{$_}:exists ?? "<{.gist}>" !! (' ' x (.gist.chars + 2)) }).join(" ") )
             }
             @diffs.push: (key-list(%v1), key-list(%v2), :exp-sfx<keys>, :got-sfx<keys>);
         }
 
         for (%v1.keys ∪ %v2.keys).keys.sort -> $key {
-            my $exp-sfx = "at key <$key>";
+            my $exp-sfx = "at key <{$key.gist}>";
             my $v1k := %v1{$key};
             my $v2k := %v2{$key};
             my $both-val = $v1k & $v2k;
@@ -814,7 +815,7 @@ method cmp-deeply(Mu \got, Mu \expected, $message = '') is test-tool {
                 @diffs.push: ($v1k, $v2k, :$exp-sfx) unless cmp-simple($v1k, $v2k);
             }
             else {
-                deep-cmp(%v1{$key}<>, %v2{$key}<>, $path ~ "<$key>");
+                deep-cmp(%v1{$key}<>, %v2{$key}<>, $path ~ "<{$key.gist}>");
             }
         }
         take (%v1.^name, $path, @diffs) if @diffs;
