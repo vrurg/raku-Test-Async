@@ -1,23 +1,33 @@
 =begin pod
-=NAME
+=NAME C<Test::Async::Reporter> - a reporter bundle role
 
-C<Test::Async::Reporter> - a reporter bundle role
 
-=DESCRIPTION
+=DESCRIPTION This role is applied to a bundle declared with C<test-reporter>. Implies implementations of methods:
 
-This role is applied to a bundle declared with C<test-reporter>. Implies implementations of methods:
 
 =item C<report-event(Event:D)> – report an event to user
 =item C<indent-message(+@message, :$prefix, :$nesting, *% --> Array())> - indent all lines in C<@message> using
 C<$prefix> by C<$nesting> levels. C<@message> is expected to be in normalized form (see
-C<normalize-message> in L<C<Test::Async::Hub>|Hub.md>).
+C<normalize-message> in L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>).
 =item C<message-to-console(+@message)> – send C<@message> to its final destination.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Decl>|Decl.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

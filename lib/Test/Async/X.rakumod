@@ -1,44 +1,5 @@
 use v6;
 
-=begin pod
-=NAME
-
-C<Test::Async::X> - collection of C<Test::Async> exceptions
-
-=DESCRIPTION
-
-All exceptions are based upon C<Test::Async::X> class. The class has and requires a single attribute C<$.suite> which
-points at the suite object which thrown the exception. The recommended method C<throw> of
-L<C<Test::Async::Hub>|Hub.md>
-sets the attribute automatically.
-
-=head1 EXPORTED EXCEPTIONS
-
-=item C<Test::Async::X::AwaitTimeout>
-=item C<Test::Async::X::AwaitWithPostponed>
-=item C<Test::Async::X::BadPostEvent>
-=item C<Test::Async::X::JobInactive>
-=item C<Test::Async::X::NoJobId>
-=item C<Test::Async::X::NoToolCaller>
-=item C<Test::Async::X::PlanRequired>
-=item C<Test::Async::X::StageTransition>
-=item C<Test::Async::X::WhenCondition>
-=item C<Test::Async::X::TransparentWithoutParent>
-=item C<Test::Async::X::FileOp>
-=item2 C<Test::Async::X::FileCreate>
-=item2 C<Test::Async::X::FileClose>
-=item2 C<Test::Async::X::FileWrite>
-=item2 C<Test::Async::X::FileRead>
-
-=head1 SEE ALSO
-
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Hub>|Hub.md>,
-L<C<Test::Async::Utils>|Utils.md>
-
-=AUTHOR Vadim Belman <vrurg@cpan.org>
-
-=end pod
 
 module Test::Async::X {
     use Test::Async::Utils;

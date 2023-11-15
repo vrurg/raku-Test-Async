@@ -5,15 +5,14 @@ C<Test::Async> - base module of the framework
 
 =head1 SYNOPSIS
 
-    use Test::Async;
-    plan 1;
-    pass "Hello World!";
-    done-testing;
-
+use Test::Async;
+plan 1;
+pass "Hello World!";
+done-testing
 =head1 DESCRIPTION
 
 The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but
-is not recommended for a module. See L<C<Test::Async::CookBook>> for more details.
+is not recommended for a module. See L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook> for more details.
 
 =head2 Exports
 
@@ -59,15 +58,27 @@ test tools, a C<:hidden> C<subtest> would be wrapping around them in order to cr
 =head3 Test Tools
 
 The module exports all test tools it finds in the top suite object. See
-L<C<Test::Async::Manual>|Async/Manual.md>
+L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
 for more details.
 
 =head1 SEE ALSO
 
-=item L<C<Test::Async::Manual>>
-=item L<C<Test::Async::CookBook>>
-=item L<C<Test::Async::Base>>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook>
+=item L<C<Test::Async::Base>|rakudoc:Test::Async::Base>
+=item L<C<ChangeLog>|rakudoc:..::ChangeLog>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

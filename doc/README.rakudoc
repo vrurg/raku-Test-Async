@@ -1,20 +1,26 @@
 =begin pod
 =head1 NAME
 
-Test::Async - asynchronous, thread-sage testing
+C<Test::Async> - asynchronous, thread-sage testing
 
 =head1 SYNOPSYS
 
+=begin code :lang<raku>
 use Test::Async;
+
 plan 2, :parallel;
+
 subtest "Async 1" => {
-plan 1;
-pass "a test"
+    plan 1;
+    pass "a test"
 }
+
 subtest "Async 2" => {
-plan 1;
-pass "another test"
+    plan 1;
+    pass "another test"
 }
+=end code
+
 =head1 DESCRIPTION
 
 C<Test::Async> provides a framework and a base set of tests tools compatible with the standard Raku C<Test> module. But
@@ -41,7 +47,7 @@ being dependent on the order execution.
 
 It is also possible to combine both I<parallel> and I<random> modes of operation.
 
-=head1 READ MORE
+=head1 WAY MORE IN
 
 =item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
 =item L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook>
@@ -49,6 +55,16 @@ It is also possible to combine both I<parallel> and I<random> modes of operation
 =item L<C<Test::Async::Base>|rakudoc:Test::Async::Base>
 =item L<C<ChangeLog>|rakudoc:..::ChangeLog>
 =item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
 
 =end pod
 

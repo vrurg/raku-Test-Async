@@ -1,18 +1,18 @@
 =begin pod
 =NAME
-
 C<Test::Async::Metamodel::HubHOW> - metaclass backing Hub/Suite classes.
 
 =DESCRIPTION
-
 This class acts as a registry for test bundle roles, and as a construction yard for the custom C<Test::Async::Suite>
 class.
 
 =methods C<register-bundle(Mu \bundle-role)>
 
+
 Registers bundle role for later suite class construction.
 
 =method C<construct-suite(\hub-class --> Test::Async::Suite:U)>
+
 
 Returns a custom C<Test::Async::Suite> class based on all test bundles registered. The construction happens only once,
 all consequent calls to the method get the same suite type object.
@@ -21,21 +21,35 @@ Normally this method is to be invoked on the hub class: C<Test::Async::Hub.^cons
 
 =method C<suite-class(\hub-class)>
 
+
 Convenience shortcut to C<construct-suite>
 
 =method C<suite(\obj)>
+
 
 Returns I<True> if suite class has been constructed already.
 
 =method C<bundles()>
 
+
 Returns a list of registered bundles.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|../Manual.md>,
-L<C<Test::Async::Decl>|../Decl.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

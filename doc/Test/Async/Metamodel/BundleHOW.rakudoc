@@ -1,18 +1,27 @@
 =begin pod
 =NAME
-
 C<Test::Async::Metamodel::BundleHOW> - metaclass backing bundle roles
 
 =DESCRIPTION
-
 The only function is to register the bundle role with slang defined in
-L<C<Test::Async::Decl>|../Decl.md>.
+L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|../Manual.md>,
-L<C<Test::Async::Decl>|../Decl.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

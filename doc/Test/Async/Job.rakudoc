@@ -1,14 +1,11 @@
 =begin pod
 =NAME
-
 C<Test::Async::Job> - a job record task
 
 =DESCRIPTION
-
-Class defines a job entry for L<C<Test::Async::JobMgr>|JobMgr.md>.
+Class defines a job entry for L<C<Test::Async::JobMgr>|rakudoc:Test::Async::JobMgr>.
 
 =ATTRIBUTES
-
 =head2 C<Int:D $.id>
 
 Job ID number. Autoincerements.
@@ -27,7 +24,6 @@ Job completion promise. Undefined until the job is invoked. Set to a L<C<Promise
 instance as soon as job starts execution and is kept with job code return value.
 
 =METHODS
-
 =head2 C<start(--> Promise:D)>
 
 Starts job in a thread.
@@ -46,9 +42,20 @@ I<True> if job has completed.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::JobMgr>|JobMgr.md>,
-L<C<Test::Async::Hub>|Hub.md>
+=item L<C<Test::Async::JobMgr>|rakudoc:Test::Async::JobMgr>
+=item L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

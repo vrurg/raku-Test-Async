@@ -1,76 +1,42 @@
-NAME
-====
-
-
+# NAME
 
 `Test::Async::Base` – this test bundle contains all the base test tools
 
-SYNOPSIS
-========
+# SYNOPSIS
 
+use Test::Async::Base; use Test::Async; plan 1; pass "Hello world\!"; done-testing
 
-
-    use Test::Async::Base;
-    use Test::Async;
-    plan 1;
-    pass "Hello world!";
-    done-testing
-
-DESCRIPTION
-===========
-
-
+# DESCRIPTION
 
 This bundle is supposed to provide same test tools, as the standard Raku [`Test`](https://docs.raku.org/type/Test). So that
 
-    use Test::Async;
-    plan ...;
-    ...; # Do tests
-    done-testing
+use Test::Async; plan ... ; ... ; done-testing would be the same as:
 
-would be the same as:
-
-    use Test;
-    plan ...;
-    ...; # Do tests
-    done-testing
-
-For this reason this document only tells about differences between the two.
+use Test; plan ... ; ... ; done-testing For this reason this document only tells about differences between the two.
 
 Test tools resulting in either *ok* or *not ok* messages return either *True* or *False* depending on test outcome. `skip` always considered to be successful and thus returns *True*.
 
-ATTRIBUTES
-==========
+# ATTRIBUTES
 
-
-
-`Str:D $.FLUNK-message`
------------------------
+## `Str:D $.FLUNK-message`
 
 The message set with `test-flunks`.
 
-`Numeric:D $.FLUNK-count`
--------------------------
+## `Numeric:D $.FLUNK-count`
 
 Number of tests expected to flunk. Reduces with each next test completing.
 
 See `take-FLUNK`.
 
-METHODS
-=======
+# METHODS
 
-
-
-`take-FLUNK(--` Str)>
----------------------
+## `take-FLUNK(--` Str)\>
 
 If `test-flunks` is in effect then method returns its message and decreases `$.FLUNK-count`.
 
-`multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --` Str)>
----------------------------------------------------------------------------------------
+## `multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --` Str)\>
 
-`multi expected-got($expected, $got, :$gist, :$quote, *%c)`
------------------------------------------------------------
+## `multi expected-got($expected, $got, :$gist, :$quote, *%c)`
 
 Method produces standardized *"expected ... but got ..."* messages.
 
@@ -78,53 +44,45 @@ The second candidate is used for non-string values. It stringifies them using [`
 
 Named parameters:
 
-  * `:$exp-sfx` - suffix for "expected", a string which will be inserted after it.
+  - `:$exp-sfx` - suffix for "expected", a string which will be inserted after it.
 
-  * `:$got-sfx` – suffix for "got"
+  - `:$got-sfx` – suffix for "got"
 
-  * `:$gist` - enforces use of method `gist` to stringify values
+  - `:$gist` - enforces use of method `gist` to stringify values
 
-  * `:$quote` - enforces use of quotes around the stringified values
+  - `:$quote` - enforces use of quotes around the stringified values
 
-`cmd-settestflunk`
-------------------
+## `cmd-settestflunk`
 
 Handler for `Event::Cmd::SetTestFlunk` defined by this bundle.
 
-TEST TOOLS
-==========
+# TEST TOOLS
 
-`diag +@msg`
-------------
+## `diag +@msg`
 
 Unlike the standard [`Test`](https://docs.raku.org/type/Test) `diag`, accepts a list too allowing similar usage as with `say` and `note`.
 
-`skip-remaining($message, Bool :$global?)`
-------------------------------------------
+## `skip-remaining($message, Bool :$global?)`
 
 Skips all remaining tests in current suite. If `$global` is set then it's the same as invoking `skip-remaining` on all suite parents, including the topmost suite.
 
-`todo-remaining(Str:D $message)`
---------------------------------
+## `todo-remaining(Str:D $message)`
 
 Mark all remaining tests of the current suite as *TODO*.
 
-`multi subtest(Pair $what, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)`
--------------------------------------------------------------------------------------------------
+## `multi subtest(Pair $what, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)`
 
-`multi subtest(Str:D $message, Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)`
------------------------------------------------------------------------------------------------------------------------
+## `multi subtest(Str:D $message, Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)`
 
-`multi subtest(Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)`
--------------------------------------------------------------------------------------------------------
+## `multi subtest(Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)`
 
 `subtest` is a way to logically group a number of tests together. The default `subtest` behaviour is no different from what is described in [`Test`](https://docs.raku.org/type/Test#sub_subtest). But additionally we can invoke it:
 
-  * asynchronously
+  - asynchronously
 
-  * in random order with other `subtest`s of the same nesting level
+  - in random order with other `subtest`s of the same nesting level
 
-  * randomly and asynchronously at the same time
+  - randomly and asynchronously at the same time
 
 A `subtest` could also kind of hide itself behind another test tool.
 
@@ -140,19 +98,21 @@ It is possible to combine both async and random modes which might add even more 
 
 The particular mode of operation is defined either by `plan` keys `parallel` or `random`, or by subtest named parameters `async` or `instant`. The named parameters take precedence over plan parameters:
 
-  * if `instant` is set then `plan`'s `random` is ignored
+  - if `instant` is set then `plan`'s `random` is ignored
 
-  * if `async` is set then `plan`'s `parallel` is ignored
+  - if `async` is set then `plan`'s `parallel` is ignored
 
 For example, let's assume that our current suite is configured for random execution of subtest. Then
 
-    subtest "foo", :instant, {
-        ...
-    }
+``` 
+subtest "foo", :instant, {
+    ...
+}
+```
 
-would result in the `subtest` be invoked right away, where it's declaration is encountered, without postponing. Similarly, if `parallel` plan parameter is in effect, `:instant` will overrule it so it will run right here, right now!
+would result in the `subtest` be invoked right away, where it's declaration is encountered, without postponing. Similarly, if `parallel` plan parameter is in effect, `:instant` will overrule it so it will run right here, right now\!
 
-Adding `:async` named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won't be counted as a job by [`Test::Async::JobMgr`](JobMgr.md). In other words, we treat `:instant` as: *bypass any queue, just do it here and now!*
+Adding `:async` named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won't be counted as a job by [`Test::Async::JobMgr`](JobMgr.md). In other words, we treat `:instant` as: *bypass any queue, just do it here and now\!*
 
 Another edge case is using `:async` with `random`. In this case the subtest will be postponed. But when time to invoke subtests comes this particular one will get his dedicated thread no matter what `parallel` is set to.
 
@@ -160,17 +120,21 @@ Any other named parameters passed to a `subtest` are treated as plan keys.
 
 Subset topic variable is set to the backing suite object. For example, this is an excerpt from *t/060-subtest.t*:
 
-    subtest "subtest topic" => {
-        .plan: 1;
-        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
-    }
+``` 
+subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
+```
 
 The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above example could be written as:
 
-    Test::Async::Hub.test-suite.subtest "subtest topic" => {
-        .plan: 1;
-        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
-    }
+``` 
+Test::Async::Hub.test-suite.subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
+```
 
 and this is the way it must be used in a module. See [`Test::Async`](../Async.md) and [`Test::Async::CookBook`](CookBook.md) for more details.
 
@@ -178,102 +142,105 @@ and this is the way it must be used in a module. See [`Test::Async`](../Async.md
 
 `:hidden` named parameter doesn't change how a subtest runs but rather how it reports itself. A hidden subtest pretends to be integral part of test tool method which invoked it. It means two things:
 
-  * flunked test tools called by subtest code won't report their location (file and line) (*implemented by [`Test::Async::Reporter::TAP`](Reporter/TAP.md) and might not be supported by 3rd party reporters*)
+  - flunked test tools called by subtest code won't report their location (file and line) (*implemented by [`Test::Async::Reporter::TAP`](Reporter/TAP.md) and might not be supported by 3rd party reporters*)
 
-  * flunked subtest would report location of the test tool method which invoked it
+  - flunked subtest would report location of the test tool method which invoked it
 
 The primary purpose of this mode is to provide means of implementing compound test tools. I.e. tools which consist of two or more tests which outcomes are to be reported back to the user. The most common implementation of such tool method would look like:
 
-    method compound-tool(..., Str:D $message) is test-tool {
-        subtest $message, :hidden, :instant, :!async, {
-            plan 2;
-            my ($result1, $result2) = (False, False);
-            ...;
-            ok $result1, "result1";
-            ok $result2, "result2";
-        }
+``` 
+method compound-tool(..., Str:D $message) is test-tool {
+    subtest $message, :hidden, :instant, :!async, {
+        plan 2;
+        my ($result1, $result2) = (False, False);
+        ...;
+        ok $result1, "result1";
+        ok $result2, "result2";
     }
+}
+```
 
 Note that we're using explicit `:instant` and `:!async` modes to prevent possible side effect related to use of `:parallel` and `:random` in parent suite's plan. Besides, it is normal for a user to expect a test tool to be semi-atomic operation being done here and now.
 
-`cmp-deeply(Mu \got, Mu \expected, Str:D $message)`
----------------------------------------------------
+## `cmp-deeply(Mu \got, Mu \expected, Str:D $message)`
 
 This test is similar to `is-deeply` as it compares complex structure in depth. The difference is that `cmp-deeply` traverses deep into the structure is reports any difference found at the point where it is found. For example:
 
-    my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
-    my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
+``` 
+my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
 
-    cmp-deeply @got, @expected, "class instance deep withing an array";
+cmp-deeply @got, @expected, "class instance deep withing an array";
+```
 
 This test would result in a diagnostic message like this:
-
-    # Object at path [2]<foo>:
-    #     expected $!foo: 13
-    #                got: "13"
-    #     expected $!fubar: 12
-    #                  got: 11
 
 Which tells us that a difference has been found in an instance of a class (*Object*) located in a key `foo` of an [`Associative`](https://docs.raku.org/type/Associative) which is located in the second index of a [`Positional`](https://docs.raku.org/type/Positional). Differences are reported for each attribute where they are found.
 
 Another difference of this test to `is-deeply` is that it disrespect containerization status and focuses on structure alone.
 
-`multi is-run(Str() $code, %params, Str:D $message = "")`
----------------------------------------------------------
+## `multi is-run(Str() $code, %params, Str:D $message = "")`
 
-`multi is-run(Str() $code, Str:D $message = "", *%params)`
-----------------------------------------------------------
+## `multi is-run(Str() $code, Str:D $message = "", *%params)`
 
 This test tool is not provided by the standard [`Test`](https://docs.raku.org/type/Test) framework, but in slightly different forms it is defined in helper modules included in [Rakudo](https://github.com/rakudo/rakudo/blob/e5ecdc4382d2739a701be7956fad52e897936fea/t/packages/Test/Helpers.pm6#L17) and [roast](https://github.com/Raku/roast/blob/7033b07bbbb54a301b3bfd1253e30c5e7cebdfab/packages/Test-Helpers/lib/Test/Util.pm6#L107) tests.
 
 `is-run` tests `$code` by executing it in a child compiler process. In a way, it is like doing:
 
-    # echo "$code" | rakudo -
-
 Takes the following named parameters (`%params` from the first candidate is passed to the second candidate as a capture):
 
-  * `:$in` – data to be sent to the compiler input
+  - `:$in` – data to be sent to the compiler input
 
-  * `:$out?` – expected standard output
+  - `:$out?` – expected standard output
 
-  * `:%env = %*ENV` - environment to be passed to the child process
+  - `:%env = %*ENV` - environment to be passed to the child process
 
-  * `:@compiler-args` – command line arguments for the compiler process
+  - `:@compiler-args` – command line arguments for the compiler process
 
-  * `:@args` - command line arguments for `$code`
+  - `:@args` - command line arguments for `$code`
 
-  * `:$err?` – expected error output
+  - `:$err?` – expected error output
 
-  * `:$exitcode = 0` – expected process exit code.
+  - `:$exitcode = 0` – expected process exit code.
 
-  * `:$timeout` - time in second to wait for the process to complete
+  - `:$timeout` - time in second to wait for the process to complete
 
-`multi test-flunks(Str:D $message, Bool :$remaining?)`
-------------------------------------------------------
+## `multi test-flunks(Str:D $message, Bool :$remaining?)`
 
-`multi test-flunks($count)`
----------------------------
+## `multi test-flunks($count)`
 
-`multi test-flunks(Str $message, $count)`
------------------------------------------
+## `multi test-flunks(Str $message, $count)`
 
-This test tool informs the bundle that the following tests are expected to flunk and this is exactly what we expect of them to do! Or we can say that it inverts next `$count` tests results. It can be considered as a meta-tool as it operates over other test tools.
+This test tool informs the bundle that the following tests are expected to flunk and this is exactly what we expect of them to do\! Or we can say that it inverts next `$count` tests results. It can be considered as a meta-tool as it operates over other test tools.
 
 The primary purpose is to allow testing other test tools. For example, test *t/080-is-approx.t* uses it to make sure that tests are failing when they have to fail:
 
-    test-flunks 2;
-    is-approx 5, 6;
-    is-approx 5, 6, 'test desc three';
+``` 
+test-flunks 2;
+is-approx 5, 6;
+is-approx 5, 6, 'test desc three';
+```
 
 Setting `$count` to [`Inf`](https://docs.raku.org/type/Inf) is the same as using `:remaining` named parameter and means: all remaining tests in the current suite are expected to flunk.
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::Manual`](Manual.md), [`Test::Async::Decl`](Decl.md), [`Test::Async::Utils`](Utils.md), [`Test::Async::Event`](Event.md)
+  - [`Test::Async::Manual`](Manual.md)
 
-AUTHOR
-======
+  - [`Test::Async::Decl`](Decl.md)
 
-Vadim Belman <vrurg@cpan.org>
+  - [`Test::Async::Utils`](Utils.md)
 
+  - [`Test::Async::Event`](Event.md)
+
+  - [`INDEX`](../../../../INDEX.md)
+
+# COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../LICENSE) file in this d

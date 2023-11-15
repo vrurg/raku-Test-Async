@@ -1,74 +1,61 @@
-NAME
-====
-
-
+# NAME
 
 `Test::Async::Job` - a job record task
 
-DESCRIPTION
-===========
-
-
+# DESCRIPTION
 
 Class defines a job entry for [`Test::Async::JobMgr`](JobMgr.md).
 
-ATTRIBUTES
-==========
+# ATTRIBUTES
 
-
-
-`Int:D $.id`
-------------
+## `Int:D $.id`
 
 Job ID number. Autoincerements.
 
-`Callable:D $.code`
--------------------
+## `Callable:D $.code`
 
 User code to be executed.
 
-`Bool $.async`
---------------
+## `Bool $.async`
 
 If *True* then the job must be executed asynchronously.
 
-`Promise $.promise`
--------------------
+## `Promise $.promise`
 
 Job completion promise. Undefined until the job is invoked. Set to a [`Promise`](https://docs.raku.org/type/Promise) instance as soon as job starts execution and is kept with job code return value.
 
-METHODS
-=======
+# METHODS
 
-
-
-`start(--` Promise:D)>
-----------------------
+## `start(--` Promise:D)\>
 
 Starts job in a thread.
 
-`invoke(--` Promise:D)>
------------------------
+## `invoke(--` Promise:D)\>
 
 Starts job instantly in the current thread.
 
-`is-started(--` Bool)>
-----------------------
+## `is-started(--` Bool)\>
 
 *True* if job has been started.
 
-`is-completed(--` Bool)>
-------------------------
+## `is-completed(--` Bool)\>
 
 *True* if job has completed.
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::JobMgr`](JobMgr.md), [`Test::Async::Hub`](Hub.md)
+  - [`Test::Async::JobMgr`](JobMgr.md)
 
-AUTHOR
-======
+  - [`Test::Async::Hub`](Hub.md)
 
-Vadim Belman <vrurg@cpan.org>
+  - [`INDEX`](../../../../INDEX.md)
 
+# COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../LICENSE) file in this distribution.

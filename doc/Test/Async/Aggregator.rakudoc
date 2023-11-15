@@ -68,11 +68,14 @@ B<Note!> The method can only be used within the event loop thread. If called out
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Event>|Event.md>,
-L<C<Test::Async::Utils>|Utils.md>,
-L<C<Test::Async::X>|X.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
+=item L<C<Test::Async::Utils>|rakudoc:Test::Async::Utils>
+=item L<C<Test::Async::X>|rakudoc:Test::Async::X>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
 
+
 =end pod
+

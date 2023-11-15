@@ -1,79 +1,127 @@
 =begin pod
-=CHANGELOG 
-=head v0.1.16
+=config  :title("ChangeLog")
+=head1 CHANGELOG
+
+=begin item
+B<v0.1.16>
 
 =item Fix C<cmp-deeply> for nominalizables
 =item Fix C<cmp-deeply> for paramterized hashes with non-string keys
 
-=head v0.1.15
+=end item
+
+=begin item
+B<v0.1.15>
 
 =item Fix C<test-assertion> trait when the assertion is used at the top level
 
-=head v0.1.14
+=end item
+
+=begin item
+B<v0.1.14>
 
 =item Implement C<test-assertiion> trait
 =item Fix C<exit> freezing when called within a C<subtest>
 
-=head v0.1.13
+=end item
+
+=begin item
+B<v0.1.13>
 
 =item Fix comparing of undefined attributes
 
-=head v0.1.12
+=end item
+
+=begin item
+B<v0.1.12>
 
 =item Fix C<cmp-deeply> failing while reporting a C<Pair>
 
-=head v0.1.11
+=end item
+
+=begin item
+B<v0.1.11>
 
 =item C<isa-ok> reports types only now
 =item Fix handling of TEST_JOBS environment variable
 
-=head2 v0.1.10
+=end item
+
+=begin item
+B<v0.1.10>
 
 =begin item
 Make C<cmp-deeply> reports about difference in positionals or associatives more detailed by reporting different sizes
 or key sets, respectively.
 =end item
 
-=head2 v0.1.9
+=end item
+
+=begin item
+B<v0.1.9>
 
 =item C<diag> is now using C<**> slurpiness and gistifies its arguments, making it more C<say>-alike
 =item Added C<cmp-deeply> test
 
-=head2 v0.1.7
+=end item
+
+=begin item
+B<v0.1.7>
 
 =item Make the module play well with independent threads
 =item Improve warning message for tools invoked after C<done-testing>
 
-=head2 v0.1.6
+=end item
+
+=begin item
+B<v0.1.6>
 
 =item Fixed a critical bug in slang which was breaking role declarations
 
-=head2 v0.1.5
+=end item
+
+=begin item
+B<v0.1.5>
 
 =item Fixed compatibility with Rakudo compiler new-disp implementation
 
-=head2 v0.1.4
+=end item
+
+=begin item
+B<v0.1.4>
 
 =item Mostly bug fix release
 =item Added C<:timeout> parameter to C<is-run>
 
-=head2 v0.1.3
+=end item
+
+=begin item
+B<v0.1.3>
 
 =item Improved handling of exceptions
 =item Subtests now attempt to report any exception produced by their body rather than bailing out immediately
 =item New method on Aggregator role: event-queue-active
 =item A couple of minor fixes
 
-=head2 v0.1.2
+=end item
+
+=begin item
+B<v0.1.2>
 
 =item Fixed a rare bug causing C<throws-like> to throw itself.
 
-=head2 v0.1.1
+=end item
+
+=begin item
+B<v0.1.1>
 
 =item Fixed a tool call stack race condition
 =item Fixed a todo+subtest race condition and extra todo count consumption
 
-=head2 v0.1.0
+=end item
+
+=begin item
+B<v0.1.0>
 
 =item Implemented tool call stack and tool anchoring
 (L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>)
@@ -83,5 +131,12 @@ L<C<Test::Async::Event::Test>|rakudoc:Test::Async::Event::Test>
 L<a Rakudo request ticket|https://github.com/rakudo/rakudo/issues/4266>
 =item Implemented auto-registration for inline C<test-bundle> declarations
 =item Added C<abort-testing> tool
+=end item
+
+=head1 SEE ALSO
+
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<README>|rakudoc:..::README>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 =end pod
 

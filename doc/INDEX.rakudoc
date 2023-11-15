@@ -3,9 +3,14 @@
 
 =head1 Test::Async Document Pages
 
-=item L«C«..::ChangeLog»|rakudoc:..::ChangeLog»
+=item L«C«ChangeLog»|rakudoc:..::ChangeLog»
 =item L«C«README»|rakudoc:..::README»
+=item L«C«Test::Async»|rakudoc:Test::Async»
+=item L«C«Test::Async::Aggregator»|rakudoc:Test::Async::Aggregator»
+=item L«C«Test::Async::Base»|rakudoc:Test::Async::Base»
 =item L«C«Test::Async::CookBook»|rakudoc:Test::Async::CookBook»
+=item L«C«Test::Async::Decl»|rakudoc:Test::Async::Decl»
+=item L«C«Test::Async::Event»|rakudoc:Test::Async::Event»
 =item L«C«Test::Async::Event::BailOut»|rakudoc:Test::Async::Event::BailOut»
 =item L«C«Test::Async::Event::Command»|rakudoc:Test::Async::Event::Command»
 =item L«C«Test::Async::Event::Diag»|rakudoc:Test::Async::Event::Diag»
@@ -20,16 +25,21 @@
 =item L«C«Test::Async::Event::Telemetry»|rakudoc:Test::Async::Event::Telemetry»
 =item L«C«Test::Async::Event::Terminate»|rakudoc:Test::Async::Event::Terminate»
 =item L«C«Test::Async::Event::Test»|rakudoc:Test::Async::Event::Test»
+=item L«C«Test::Async::Hub»|rakudoc:Test::Async::Hub»
 =item L«C«Test::Async::Hub::ToolCallerCtx»|rakudoc:Test::Async::Hub::ToolCallerCtx»
+=item L«C«Test::Async::Job»|rakudoc:Test::Async::Job»
+=item L«C«Test::Async::JobMgr»|rakudoc:Test::Async::JobMgr»
 =item L«C«Test::Async::Manual»|rakudoc:Test::Async::Manual»
+=item L«C«Test::Async::Metamodel::BundleClassHOW»|rakudoc:Test::Async::Metamodel::BundleClassHOW»
+=item L«C«Test::Async::Metamodel::BundleHOW»|rakudoc:Test::Async::Metamodel::BundleHOW»
+=item L«C«Test::Async::Metamodel::HubHOW»|rakudoc:Test::Async::Metamodel::HubHOW»
+=item L«C«Test::Async::Metamodel::ReporterHOW»|rakudoc:Test::Async::Metamodel::ReporterHOW»
+=item L«C«Test::Async::Reporter»|rakudoc:Test::Async::Reporter»
+=item L«C«Test::Async::Reporter::TAP»|rakudoc:Test::Async::Reporter::TAP»
+=item L«C«Test::Async::Result»|rakudoc:Test::Async::Result»
+=item L«C«Test::Async::TestTool»|rakudoc:Test::Async::TestTool»
+=item L«C«Test::Async::Utils»|rakudoc:Test::Async::Utils»
+=item L«C«Test::Async::When»|rakudoc:Test::Async::When»
+=item L«C«Test::Async::X»|rakudoc:Test::Async::X»
 
-=head1 COPYRIGHT
-
-(c) 2023, Vadim Belman <vrurg@cpan.org>
-
-=head1 LICENSE
-
-Artistic License 2.0
-
-See the L<I<LICENSE>|file:LICENSE> file in this distribution.
 =end pod

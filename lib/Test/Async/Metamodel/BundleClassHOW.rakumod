@@ -1,37 +1,5 @@
 use v6;
 
-=begin pod
-=NAME
-
-C<Test::Async::Metamodel::BundleClassHOW> - metaclass backing custom bundle classes.
-
-=DESCRIPTION
-
-This class purpose is to ensure that test tool methods are wrapped into common boilerplate. The boilerplate does
-the following:
-
-=item determines calling context to make sure any error reported points at user code where the test tool is invoked.
-As a result it sets C<tool-caller> and C<caller-ctx> attributes of the current suite object.
-=item validates if current suite stage allows test tool invokation
-=item tries to transition the suite into C<TSInProgress> stage if tool method object has `$.readify` set (see
-L<C<Test::Async::TestTool>|../TestTool.md>
-=item emits C<Event::Skip> if tool method has its C<$.skippable> set and suite's C<$.skip-message> is defined.
-=item otherwise invokes the original test tool method code.
-
-Wrapping doesn't replace the method object itself.
-
-If test tool method object has its C<wrappable> attribute set to I<False> then wrapping doesn't take place. In this case
-the method must take care of all necessary preparations itself. See implementation of C<subtest> by
-L<C<Test::Async::Base>|../Base.md> for example.
-
-=head1 SEE ALSO
-
-L<C<Test::Async::Manual>|../Manual.md>,
-L<C<Test::Async::Decl>|../Decl.md>
-
-=AUTHOR Vadim Belman <vrurg@cpan.org>
-
-=end pod
 
 unit class Test::Async::Metamodel::BundleClassHOW is Metamodel::ClassHOW;
 use Test::Async::Event;

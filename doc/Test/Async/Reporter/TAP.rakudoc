@@ -1,14 +1,28 @@
 =begin pod
 =NAME
-
 C<Test::Async::Reporter::TAP> - TAP reporter bundle
 
 =DESCRIPTION
-
 Maps events into TAP output.
 
 The class is implementation detail. In addition to methods required by
-L<C<Test::Async::Reporter>|../Reporter.md>,
+L<C<Test::Async::Reporter>|rakudoc:Test::Async::Reporter>,
 also defines C<TAP-str-from-ev>.
 
+=head1 SEE ALSO
+
+=item L<C<Test::Async::Reporter>|rakudoc:Test::Async::Reporter>
+=item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 =end pod
+

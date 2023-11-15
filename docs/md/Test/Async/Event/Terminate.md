@@ -1,22 +1,25 @@
-Class `Event::Terminate`
-========================
+# Class `Event::Terminate`
 
-Is [`Event`](../Event.md)
+Is [`Event`](https://raku.land/?q=Event)
 
-This is the only kind of event which [`Term::Async::Aggregator`](../../../Term/Async/Aggregator.md) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
+This is the only kind of event which [`Term::Async::Aggregator`](https://raku.land/?q=Term::Async::Aggregator) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
 
-Attributes
-----------
+## Attributes
 
-  * `Promise::Vow $.completed`, required – a promise vow to be kept when event loop finishes processing all remaining events.
+  - `Promise::Vow $.completed`, required – a promise vow to be kept when event loop finishes processing all remaining events.
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::Event`](../Event.md)
+  - [`Test::Async::Event`](../Event.md)
 
-AUTHOR
-======
+  - [`INDEX`](../../../../../INDEX.md)
 
-Vadim Belman <vrurg@cpan.org>
+# COPYRIGHT
 
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../../LICENSE) file in this distribution.

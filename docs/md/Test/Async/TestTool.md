@@ -1,85 +1,71 @@
-NAME
-====
-
-
+# NAME
 
 `Test::Async::TestTool` - role consumed by test tool methods
 
-DESCRIPTION
-===========
-
-
+# DESCRIPTION
 
 This role is applied by `test-tool` trait to a test tool method.
 
-ATTRIBUTES
-==========
+# ATTRIBUTES
 
-
-
-`$.tool-name`
--------------
+## `$.tool-name`
 
 Contains the name which must be used for exporting a test tool routine. Makes sense if method must be named differently from what is provided for the user.
 
-[`Bool:D`](https://docs.raku.org/type/Bool) `$.readify`
--------------------------------------------------------
+## [`Bool:D`](https://docs.raku.org/type/Bool) `$.readify`
 
 This flag is indicating if test tool must cause it's suite object to transition from `TSInitializing` stage.
 
-[`Bool:D`](https://docs.raku.org/type/Bool) `$.skippable`
----------------------------------------------------------
+## [`Bool:D`](https://docs.raku.org/type/Bool) `$.skippable`
 
 This flag indicates that this test tool could be skipped. A typical example of a non-skippable tool is the `skip` itself, or `todo` tool family. The importance of this nuance stems from the fact that when `skip-remaining` tool is in effect the wrapper of a test tool code detects this situation and emits a skip event instantly without actually invoking the tool method. Without `$.skippable` reset to *False* a line like:
 
-    skip "for a reason", 3;
+skip "for a reason", 3 would result in a single skip event which is counted as a test run. Our plan will fail because of 2 missing skip events.
 
-would result in a single skip event which is counted as a test run. Our plan will fail because of 2 missing skip events.
-
-[`Bool:D`](https://docs.raku.org/type/Bool) `$.wrappable`
----------------------------------------------------------
+## [`Bool:D`](https://docs.raku.org/type/Bool) `$.wrappable`
 
 Resetting this flag to *False* would result in test tool method would be left intact by [`Test::Async::Metamodel::BundleClassHOW`](Metamodel/BundleClassHOW.md).
 
-[`Bool:D`](https://docs.raku.org/type/Bool) `$.anchoring`
----------------------------------------------------------
+## [`Bool:D`](https://docs.raku.org/type/Bool) `$.anchoring`
 
 Marks a test tool as an *anchoring* one. See [`Test::Async::Manual`](Manual.md) Call Location And Anchoring section for more details.
 
 *False* by default.
 
-METHODS
-=======
+# METHODS
 
-
-
-`set-tool-name(Str:D $name)`
-----------------------------
+## `set-tool-name(Str:D $name)`
 
 Sets `$.tool-name`.
 
-`set-readify(Boold:D $readify)`
--------------------------------
+## `set-readify(Boold:D $readify)`
 
 Sets `$.readify`
 
-`set-skippable(Bool:D $skippable)`
-----------------------------------
+## `set-skippable(Bool:D $skippable)`
 
 Sets `$.skippable`
 
-`set-wrappable(Bool:D $wrappable)`
-----------------------------------
+## `set-wrappable(Bool:D $wrappable)`
 
 Sets `$.wrappable`
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::Manual`](Manual.md), [`Test::Async::Decl`](Decl.md)
+  - [`Test::Async::Manual`](Manual.md)
 
-AUTHOR
-======
+  - [`Test::Async::Decl`](Decl.md)
 
-Vadim Belman <vrurg@cpan.org>
+  - [`Test::Async`](../Async.md)
 
+  - [`INDEX`](../../../../INDEX.md)
+
+# COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../LICENSE) file in this distribution.

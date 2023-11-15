@@ -295,16 +295,26 @@ right context then? This is where anchoring comes to help by setting common cont
 
 =head1 SEE ALSO
 
-L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook>,
-L<C<Test::Async::Base>|rakudoc:Test::Async::Base>,
-L<C<Test::Async::When>|rakudoc:Test::Async::When>,
-L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>,
-L<C<Test::Async::Event>|rakudoc:Test::Async::Event>,
-L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>,
-L<C<Test::Async::X>|rakudoc:Test::Async::X>,
-L<C<Test::Async::Utils>|rakudoc:Test::Async::Utils>,
+=item L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook>
+=item L<C<Test::Async::Base>|rakudoc:Test::Async::Base>
+=item L<C<Test::Async::When>|rakudoc:Test::Async::When>
+=item L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
+=item L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<Test::Async::X>|rakudoc:Test::Async::X>
+=item L<C<Test::Async::Utils>|rakudoc:Test::Async::Utils>
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
 
 
 =end pod

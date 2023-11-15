@@ -15,9 +15,8 @@ C<Test::Async::JobMgr> – job management role
     }
 
 =DESCRIPTION
-
 This role implements job management functionality, as described in section Job Management of
-L<C<Test::Async::Manual>|Manual.md>.
+L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>.
 
 =head2 Implementation Details
 
@@ -33,18 +32,16 @@ Jobs are grouped into three categories:
 A completed job is removed from the pool automatically, the user code doesn't need to worry about this.
 
 =ATTRIBUTES
-
 =head2 C<@.postponed>
 
 Queue of jobs postponed for later invocation. Not actually used by the manager itself except by C<await-all-jobs>
 methods. Provided for consuming class code convenience.
 
 =METHODS
-
 =head2 C<test-job()>
 
 A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See C<$.test-jobs>
-attribute of L<C<Test::Async::Hub>|Hub.md>, for example.
+attribute of L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>, for example.
 
 =head2 C<job-count(--> Int)>
 
@@ -52,7 +49,7 @@ The total number of jobs in the job pool. Includes currently running ones.
 
 =head2 C<new-job(Callable:D \code, :$async = False)>
 
-Creates a new job instance of L<C<Test::Async::Job>|Job.md>
+Creates a new job instance of L<C<Test::Async::Job>|rakudoc:Test::Async::Job>
 for C<code> parameter. C<$async> is used to mark the job as explicitly asynchronous.
 
 For the C<code> assigned to the newly created job C<test-suite> will return the object on which the C<new-job> method
@@ -117,10 +114,21 @@ any exiting postponed job would likely cause the job pool to remain non-empty fo
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Job>|Job.md>,
-L<C<Test::Async::X>|X.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Job>|rakudoc:Test::Async::Job>
+=item L<C<Test::Async::X>|rakudoc:Test::Async::X>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@lflat.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

@@ -1,24 +1,27 @@
-Class `Event::StageTransition`
-==============================
+# Class `Event::StageTransition`
 
-Is [`Event`](../Event.md)
+Is [`Event`](https://raku.land/?q=Event)
 
 Emitted each time suite stage is changed.
 
-Attributes
-----------
+## Attributes
 
-  * `$.from` – the stage before transition
+  - `$.from` – the stage before transition
 
-  * `$.to` – the stage after transition
+  - `$.to` – the stage after transition
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::Event`](../Event.md)
+  - [`Test::Async::Event`](../Event.md)
 
-AUTHOR
-======
+  - [`INDEX`](../../../../../INDEX.md)
 
-Vadim Belman <vrurg@cpan.org>
+# COPYRIGHT
 
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../../LICENSE) file in this distributio

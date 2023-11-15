@@ -1,10 +1,8 @@
 =begin pod
 =NAME
-
 C<Test::Async::Decl> - declarations for writing new bundles
 
 =SYNOPSIS
-
     use Test::Async::Decl;
 
     unit test-bundle MyBundle;
@@ -14,27 +12,26 @@ C<Test::Async::Decl> - declarations for writing new bundles
     }
 
 =DESCRIPTION
-
 This module exports declarations needed to write custom bundles for C<Test::Async> framework.
 
 =head2 C<test-bundle>
 
 Declares a bundle role backed by
-L<C<Test::Async::Metamodel::BundleHOW>|Metamodel/BundleHOW.md>
+L<C<Test::Async::Metamodel::BundleHOW>|rakudoc:Test::Async::Metamodel::BundleHOW>
 metaclass.
 
 =head2 C<test-reporter>
 
 Declares a bundle role wishing to act as a reporter. Backed by
-L<C<Test::Async::Metamodel::ReporterHOW>|Metamodel/ReporterHOW.md>
+L<C<Test::Async::Metamodel::ReporterHOW>|rakudoc:Test::Async::Metamodel::ReporterHOW>
 metaclass. The bundle also consumes
-L<C<Test::Async::Reporter>|Reporter.md>
+L<C<Test::Async::Reporter>|rakudoc:Test::Async::Reporter>
 role.
 
 =head2 C<test-hub>
 
 This kind of package creates a hub class which is backed by
-L<C<Test::Async::Metamodel::HubHOW>|Metamodel/HubHOW.md>
+L<C<Test::Async::Metamodel::HubHOW>|rakudoc:Test::Async::Metamodel::HubHOW>
 metaclass. Barely useful for a third-party developer.
 
 =head2 C<&trait_mod:<is>(Method:D \meth, :$test-tool!)>
@@ -47,7 +44,7 @@ This trait is used to declare a method in a bundle as a test tool:
 
 The method is then exported to user as C<&foo> routine. Internally the method is getting wrapped into a code which
 does necessary preparations for the tool to act as expected. See
-L<C<Test::Async::Metamodel::BundleClassHOW>|Metamodel/BundleClassHOW.md>
+L<C<Test::Async::Metamodel::BundleClassHOW>|rakudoc:Test::Async::Metamodel::BundleClassHOW>
 for more details.
 
 The following named parameters are accepted by the trait:
@@ -58,18 +55,29 @@ The following named parameters are accepted by the trait:
 =item C<wrappable> aka C<wrap>
 
 They correspond to same-named attributes of
-L<C<Test::Async::TestTool>|TestTool.md>.
+L<C<Test::Async::TestTool>|rakudoc:Test::Async::TestTool>.
 By default C<skippable>, C<readify>, and C<wrappable> are set to I<True>. Thus it rather makes sense to negate them, as
 shown in the L<#SYNOPSIS>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Metamodel::BundleHOW>|Metamodel/BundleHOW.md>,
-L<C<Test::Async::Metamodel::BundleClassHOW>|Metamodel/BundleClassHOW.md>,
-L<C<Test::Async::Metamodel::HubHOW>|Metamodel/HubHOW.md>,
-L<C<Test::Async::Metamodel::ReporterHOW>|Metamodel/ReporterHOW.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Metamodel::BundleHOW>|rakudoc:Test::Async::Metamodel::BundleHOW>
+=item L<C<Test::Async::Metamodel::BundleClassHOW>|rakudoc:Test::Async::Metamodel::BundleClassHOW>
+=item L<C<Test::Async::Metamodel::HubHOW>|rakudoc:Test::Async::Metamodel::HubHOW>
+=item L<C<Test::Async::Metamodel::ReporterHOW>|rakudoc:Test::Async::Metamodel::ReporterHOW>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

@@ -1,13 +1,11 @@
 =begin pod
 =NAME
-
 C<Test::Async::X> - collection of C<Test::Async> exceptions
 
 =DESCRIPTION
-
 All exceptions are based upon C<Test::Async::X> class. The class has and requires a single attribute C<$.suite> which
 points at the suite object which thrown the exception. The recommended method C<throw> of
-L<C<Test::Async::Hub>|Hub.md>
+L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
 sets the attribute automatically.
 
 =head1 EXPORTED EXCEPTIONS
@@ -30,10 +28,22 @@ sets the attribute automatically.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Hub>|Hub.md>,
-L<C<Test::Async::Utils>|Utils.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
+=item L<C<Test::Async::Utils>|rakudoc:Test::Async::Utils>
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

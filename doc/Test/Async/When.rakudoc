@@ -1,29 +1,22 @@
 =begin pod
 =NAME
-
 C<Test::Async::When> - add C<:when> key to plan
 
 =SYNOPSIS
-
 Whole top suite:
 
-    use Test::Async <When Base>;
-    plan :when(<release>);
-
+use Test::Async <When Base>;
+plan :when((<release>))
 Or a subtest only:
 
-    use Test::Async <When Base>;
-    subtest "Might be skipped" => {
-        plan :when(
-                :all(
-                    :any(<release author>),
-                    :module<Optional::Module>));
-        ...
-    }
+use Test::Async <When Base>;
+subtest "Might be skipped" => {
+    plan :when((:all((:any((<release author>)), :module<Optional::Module>))));
+    ...
+}
 }
 
 =DESCRIPTION
-
 This bundle extends C<plan> with additional parameter C<:when> which defines when the suite is to be actually ran. If
 C<when> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:
 
@@ -45,8 +38,20 @@ condition:
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Manual>|Manual.md>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+
