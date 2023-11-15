@@ -378,34 +378,35 @@ li > .pod-block-code { margin-top: 16px; }
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
-<tr class="toc-level-2"><td class="toc-number">0.1</td><td class="toc-text"><a href="#Bool:D_$.cond"><code class="pod-code-inline">Bool:D $.cond</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.2</td><td class="toc-text"><a href="#$.fail-profile,_$.success-profile"><code class="pod-code-inline">$.fail-profile</code>, <code class="pod-code-inline">$.success-profile</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.3</td><td class="toc-text"><a href="#event-profile(--_Hash:D)&gt;"><code class="pod-code-inline">event-profile(--</code> Hash:D)&gt;</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#ATTRIBUTES">ATTRIBUTES</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.1</td><td class="toc-text"><a href="#Bool:D_$.cond"><code class="pod-code-inline">Bool:D $.cond</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.2</td><td class="toc-text"><a href="#$.fail-profile,_$.success-profile"><code class="pod-code-inline">$.fail-profile</code>, <code class="pod-code-inline">$.success-profile</code></a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">5</td><td class="toc-text"><a href="#METHODS">METHODS</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.1</td><td class="toc-text"><a href="#event-profile(--_Hash:D)&gt;"><code class="pod-code-inline">event-profile(--</code> Hash:D)&gt;</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">6</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">7</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">8</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
 
 </table>
 </nav>
 
 
     <div class="pod-body">
-    <section><h1>NAME</h1>
-</section>
+    <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
 <p><code>Test::Async::Result</code> - test result representation</p>
-<section><h1>SYNOPSIS</h1>
-</section>
+<h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
 <pre class="pod-block-code">self.proclaim:
     test-result( $condition,
                  fail =&gt; {
                      comments =&gt; "a comment about the cause of flunk",
                  });
 </pre>
-<section><h1>DESCRIPTION</h1>
-</section>
+<h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
 <p>This class represents information about test outcomes.</p>
-<section><h1>ATTRIBUTES</h1>
-</section>
+<h1 id="ATTRIBUTES"><a class="u" href="#___top" title="go to top of document">ATTRIBUTES</a></h1>
 <h2 id="Bool:D_$.cond"><a class="u" href="#___top" title="go to top of document"><code>Bool:D $.cond</code></a></h2>
 <p><em>True</em> if test is considered success, <em>False</em> otherwise. <strong>Note</strong> that a skipped tests is a success.</p>
 <h2 id="$.fail-profile,_$.success-profile"><a class="u" href="#___top" title="go to top of document"><code>$.fail-profile</code>, <code>$.success-profile</code></a></h2>
@@ -414,8 +415,7 @@ li > .pod-block-code { margin-top: 16px; }
 <pre class="pod-block-code">my $tr = test-result($condition, fail =&gt; -&gt; { comments =&gt; self.expected-got($expected, $got) });
 </pre>
 <p>In this case <code>event-profile</code> method will invoke the code and use the return value as profile itself. This improves performance in cases when profile keys are set using some rather heavy code (like the <code>expected-got</code> method in the example above) but eventually might not even be used after all.</p>
-<section><h1>METHODS</h1>
-</section>
+<h1 id="METHODS"><a class="u" href="#___top" title="go to top of document">METHODS</a></h1>
 <h2 id="event-profile(--_Hash:D)&gt;"><a class="u" href="#___top" title="go to top of document"><code>event-profile(--</code> Hash:D)&gt;</a></h2>
 <p>Returns a profile in accordance to <code>$.cond</code> value.</p>
 <p>The profile capture is built the following way:</p>

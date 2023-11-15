@@ -1,8 +1,8 @@
 =begin pod
-=NAME
+=head1 NAME
 C<Test::Async::Metamodel::ReporterHOW> - metaclass backing a reporter bundle
 
-=DESCRIPTION
+=head1 DESCRIPTION
 This class inherits from C<Test::Async::Metamodel::BundleHOW> and adds implicit application of
 L<C<Test::Async::Reporter>|rakudoc:Test::Async::Reporter>
 role.

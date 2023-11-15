@@ -1,8 +1,8 @@
 =begin pod
-=NAME
+=head1 NAME
 C<Test::Async::X> - collection of C<Test::Async> exceptions
 
-=DESCRIPTION
+=head1 DESCRIPTION
 All exceptions are based upon C<Test::Async::X> class. The class has and requires a single attribute C<$.suite> which
 points at the suite object which thrown the exception. The recommended method C<throw> of
 L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>

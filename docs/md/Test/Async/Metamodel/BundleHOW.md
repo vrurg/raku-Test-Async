@@ -1,10 +1,6 @@
-# NAME
+# NAME `Test::Async::Metamodel::BundleHOW` - metaclass backing bundle roles
 
-`Test::Async::Metamodel::BundleHOW` - metaclass backing bundle roles
-
-# DESCRIPTION
-
-The only function is to register the bundle role with slang defined in [`Test::Async::Decl`](../Decl.md).
+# DESCRIPTION The only function is to register the bundle role with slang defined in [`Test::Async::Decl`](../Decl.md).
 
 # SEE ALSO
 

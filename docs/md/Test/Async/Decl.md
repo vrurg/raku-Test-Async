@@ -1,12 +1,8 @@
-# NAME
+# NAME `Test::Async::Decl` - declarations for writing new bundles
 
-`Test::Async::Decl` - declarations for writing new bundles
-
-# SYNOPSIS
+# SYNOPSIS use Test::Async::Decl;
 
 ``` 
-use Test::Async::Decl;
-
 unit test-bundle MyBundle;
 
 method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
@@ -14,9 +10,7 @@ method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
 }
 ```
 
-# DESCRIPTION
-
-This module exports declarations needed to write custom bundles for `Test::Async` framework.
+# DESCRIPTION This module exports declarations needed to write custom bundles for `Test::Async` framework.
 
 ## `test-bundle`
 

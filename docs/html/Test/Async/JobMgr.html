@@ -380,30 +380,33 @@ li > .pod-block-code { margin-top: 16px; }
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
 <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
 <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.1</td><td class="toc-text"><a href="#Implementation_Details">Implementation Details</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.2</td><td class="toc-text"><a href="#@.postponed"><code class="pod-code-inline">@.postponed</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.3</td><td class="toc-text"><a href="#test-job()"><code class="pod-code-inline">test-job()</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.4</td><td class="toc-text"><a href="#job-count(--_Int)&gt;"><code class="pod-code-inline">job-count(--</code> Int)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.5</td><td class="toc-text"><a href="#new-job(Callable:D_\code,_:$async_=_False)"><code class="pod-code-inline">new-job(Callable:D \code, :$async = False)</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.6</td><td class="toc-text"><a href="#all-job-promises(--_Seq)&gt;"><code class="pod-code-inline">all-job-promises(--</code> Seq)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.7</td><td class="toc-text"><a href="#active-job-promises(--_Seq)&gt;"><code class="pod-code-inline">active-job-promises(--</code> Seq)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.8</td><td class="toc-text"><a href="#mutli_release-job(Int:D_$id)"><code class="pod-code-inline">mutli release-job(Int:D $id)</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.9</td><td class="toc-text"><a href="#multi_release-job(Test::Async::Job:D_$job)"><code class="pod-code-inline">multi release-job(Test::Async::Job:D $job)</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.10</td><td class="toc-text"><a href="#multi_postpone(Callable:D_\code,_:$async_=_False)"><code class="pod-code-inline">multi postpone(Callable:D \code, :$async = False)</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.11</td><td class="toc-text"><a href="#multi_postpone(Test::Async::Job:D_$job)"><code class="pod-code-inline">multi postpone(Test::Async::Job:D $job)</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.12</td><td class="toc-text"><a href="#job-by-id(Int:D_$id_--_Test::Async::Job)&gt;"><code class="pod-code-inline">job-by-id(Int:D $id --</code> Test::Async::Job)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.13</td><td class="toc-text"><a href="#multi_start-job(Int:D_$id_--_Promise)&gt;"><code class="pod-code-inline">multi start-job(Int:D $id --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.14</td><td class="toc-text"><a href="#multi_start-job(Callable_\code_--_Promise)&gt;"><code class="pod-code-inline">multi start-job(Callable \code --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.15</td><td class="toc-text"><a href="#multi_start-job(Test::Async::Job:D_$job_--_Promise)&gt;"><code class="pod-code-inline">multi start-job(Test::Async::Job:D $job --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.16</td><td class="toc-text"><a href="#multi_start(Int:D_$id_--_Promise)&gt;"><code class="pod-code-inline">multi start(Int:D $id --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.17</td><td class="toc-text"><a href="#multi_start(Callable:D_\code_--_Promise)&gt;"><code class="pod-code-inline">multi start(Callable:D \code --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.18</td><td class="toc-text"><a href="#multi_start(Test::Async::Job:D_$job_--_Promise)&gt;"><code class="pod-code-inline">multi start(Test::Async::Job:D $job --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.19</td><td class="toc-text"><a href="#multi_invoke-job(Int:D_$id_--_Promise)&gt;"><code class="pod-code-inline">multi invoke-job(Int:D $id --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.20</td><td class="toc-text"><a href="#multi_invoke-job(Test::Async::Job:D_$job_--_Promise)&gt;"><code class="pod-code-inline">multi invoke-job(Test::Async::Job:D $job --</code> Promise)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">2.21</td><td class="toc-text"><a href="#await-all-jobs()"><code class="pod-code-inline">await-all-jobs()</code></a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">5</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION_This_role_implements_job_management_functionality,_as_described_in_section_Job_Management_of_Test::Async::Manual.">DESCRIPTION This role implements job management functionality, as described in section Job Management of <code class="pod-code-inline">Test::Async::Manual</code>.</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Implementation_Details">Implementation Details</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#ATTRIBUTES">ATTRIBUTES</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.1</td><td class="toc-text"><a href="#@.postponed"><code class="pod-code-inline">@.postponed</code></a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">5</td><td class="toc-text"><a href="#METHODS">METHODS</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.1</td><td class="toc-text"><a href="#test-job()"><code class="pod-code-inline">test-job()</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.2</td><td class="toc-text"><a href="#job-count(--_Int)&gt;"><code class="pod-code-inline">job-count(--</code> Int)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.3</td><td class="toc-text"><a href="#new-job(Callable:D_\code,_:$async_=_False)"><code class="pod-code-inline">new-job(Callable:D \code, :$async = False)</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.4</td><td class="toc-text"><a href="#all-job-promises(--_Seq)&gt;"><code class="pod-code-inline">all-job-promises(--</code> Seq)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.5</td><td class="toc-text"><a href="#active-job-promises(--_Seq)&gt;"><code class="pod-code-inline">active-job-promises(--</code> Seq)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.6</td><td class="toc-text"><a href="#mutli_release-job(Int:D_$id)"><code class="pod-code-inline">mutli release-job(Int:D $id)</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.7</td><td class="toc-text"><a href="#multi_release-job(Test::Async::Job:D_$job)"><code class="pod-code-inline">multi release-job(Test::Async::Job:D $job)</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.8</td><td class="toc-text"><a href="#multi_postpone(Callable:D_\code,_:$async_=_False)"><code class="pod-code-inline">multi postpone(Callable:D \code, :$async = False)</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.9</td><td class="toc-text"><a href="#multi_postpone(Test::Async::Job:D_$job)"><code class="pod-code-inline">multi postpone(Test::Async::Job:D $job)</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.10</td><td class="toc-text"><a href="#job-by-id(Int:D_$id_--_Test::Async::Job)&gt;"><code class="pod-code-inline">job-by-id(Int:D $id --</code> Test::Async::Job)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.11</td><td class="toc-text"><a href="#multi_start-job(Int:D_$id_--_Promise)&gt;"><code class="pod-code-inline">multi start-job(Int:D $id --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.12</td><td class="toc-text"><a href="#multi_start-job(Callable_\code_--_Promise)&gt;"><code class="pod-code-inline">multi start-job(Callable \code --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.13</td><td class="toc-text"><a href="#multi_start-job(Test::Async::Job:D_$job_--_Promise)&gt;"><code class="pod-code-inline">multi start-job(Test::Async::Job:D $job --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.14</td><td class="toc-text"><a href="#multi_start(Int:D_$id_--_Promise)&gt;"><code class="pod-code-inline">multi start(Int:D $id --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.15</td><td class="toc-text"><a href="#multi_start(Callable:D_\code_--_Promise)&gt;"><code class="pod-code-inline">multi start(Callable:D \code --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.16</td><td class="toc-text"><a href="#multi_start(Test::Async::Job:D_$job_--_Promise)&gt;"><code class="pod-code-inline">multi start(Test::Async::Job:D $job --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.17</td><td class="toc-text"><a href="#multi_invoke-job(Int:D_$id_--_Promise)&gt;"><code class="pod-code-inline">multi invoke-job(Int:D $id --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.18</td><td class="toc-text"><a href="#multi_invoke-job(Test::Async::Job:D_$job_--_Promise)&gt;"><code class="pod-code-inline">multi invoke-job(Test::Async::Job:D $job --</code> Promise)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">5.19</td><td class="toc-text"><a href="#await-all-jobs()"><code class="pod-code-inline">await-all-jobs()</code></a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">6</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">7</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">8</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
 
 </table>
 </nav>
@@ -421,6 +424,7 @@ li > .pod-block-code { margin-top: 16px; }
         self.await-all-jobs;
     }
 }</pre>
+<h1 id="DESCRIPTION_This_role_implements_job_management_functionality,_as_described_in_section_Job_Management_of_Test::Async::Manual.">DESCRIPTION This role implements job management functionality, as described in section Job Management of <a href="Manual.html"><code>Test::Async::Manual</code></a>.</h1>
 <h2 id="Implementation_Details"><a class="u" href="#___top" title="go to top of document">Implementation Details</a></h2>
 <p>All jobs are kept in unordered "pool" and identified either by the object representing them, or by unique numeric ID assigned to each job.</p>
 <p>Jobs are grouped into three categories:</p>
@@ -432,12 +436,10 @@ li > .pod-block-code { margin-top: 16px; }
 </li>
 </ul>
 <p>A completed job is removed from the pool automatically, the user code doesn't need to worry about this.</p>
-<section><h1>ATTRIBUTES</h1>
-</section>
+<h1 id="ATTRIBUTES"><a class="u" href="#___top" title="go to top of document">ATTRIBUTES</a></h1>
 <h2 id="@.postponed"><a class="u" href="#___top" title="go to top of document"><code>@.postponed</code></a></h2>
 <p>Queue of jobs postponed for later invocation. Not actually used by the manager itself except by <code>await-all-jobs</code> methods. Provided for consuming class code convenience.</p>
-<section><h1>METHODS</h1>
-</section>
+<h1 id="METHODS"><a class="u" href="#___top" title="go to top of document">METHODS</a></h1>
 <h2 id="test-job()"><a class="u" href="#___top" title="go to top of document"><code>test-job()</code></a></h2>
 <p>A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See <code>$.test-jobs</code> attribute of <a href="Hub.html"><code>Test::Async::Hub</code></a>, for example.</p>
 <h2 id="job-count(--_Int)&gt;"><a class="u" href="#___top" title="go to top of document"><code>job-count(--</code> Int)&gt;</a></h2>

@@ -15,9 +15,7 @@ class MyApp does Test::Async::JobMgr {
 }
 ```
 
-# DESCRIPTION
-
-This role implements job management functionality, as described in section Job Management of [`Test::Async::Manual`](Manual.md).
+# DESCRIPTION This role implements job management functionality, as described in section Job Management of [`Test::Async::Manual`](Manual.md).
 
 ## Implementation Details
 

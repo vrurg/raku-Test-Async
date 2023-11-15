@@ -378,25 +378,30 @@ li > .pod-block-code { margin-top: 16px; }
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
-<tr class="toc-level-2"><td class="toc-number">0.1</td><td class="toc-text"><a href="#Int:D_$.id"><code class="pod-code-inline">Int:D $.id</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.2</td><td class="toc-text"><a href="#Callable:D_$.code"><code class="pod-code-inline">Callable:D $.code</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.3</td><td class="toc-text"><a href="#Bool_$.async"><code class="pod-code-inline">Bool $.async</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.4</td><td class="toc-text"><a href="#Promise_$.promise"><code class="pod-code-inline">Promise $.promise</code></a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.5</td><td class="toc-text"><a href="#start(--_Promise:D)&gt;"><code class="pod-code-inline">start(--</code> Promise:D)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.6</td><td class="toc-text"><a href="#invoke(--_Promise:D)&gt;"><code class="pod-code-inline">invoke(--</code> Promise:D)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.7</td><td class="toc-text"><a href="#is-started(--_Bool)&gt;"><code class="pod-code-inline">is-started(--</code> Bool)&gt;</a></td></tr>
-<tr class="toc-level-2"><td class="toc-number">0.8</td><td class="toc-text"><a href="#is-completed(--_Bool)&gt;"><code class="pod-code-inline">is-completed(--</code> Bool)&gt;</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME_Test::Async::Job_-_a_job_record_task">NAME <code class="pod-code-inline">Test::Async::Job</code> - a job record task</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#DESCRIPTION_Class_defines_a_job_entry_for_Test::Async::JobMgr.">DESCRIPTION Class defines a job entry for <code class="pod-code-inline">Test::Async::JobMgr</code>.</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#ATTRIBUTES">ATTRIBUTES</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Int:D_$.id"><code class="pod-code-inline">Int:D $.id</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#Callable:D_$.code"><code class="pod-code-inline">Callable:D $.code</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">3.3</td><td class="toc-text"><a href="#Bool_$.async"><code class="pod-code-inline">Bool $.async</code></a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">3.4</td><td class="toc-text"><a href="#Promise_$.promise"><code class="pod-code-inline">Promise $.promise</code></a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#METHODS">METHODS</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.1</td><td class="toc-text"><a href="#start(--_Promise:D)&gt;"><code class="pod-code-inline">start(--</code> Promise:D)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.2</td><td class="toc-text"><a href="#invoke(--_Promise:D)&gt;"><code class="pod-code-inline">invoke(--</code> Promise:D)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.3</td><td class="toc-text"><a href="#is-started(--_Bool)&gt;"><code class="pod-code-inline">is-started(--</code> Bool)&gt;</a></td></tr>
+<tr class="toc-level-2"><td class="toc-number">4.4</td><td class="toc-text"><a href="#is-completed(--_Bool)&gt;"><code class="pod-code-inline">is-completed(--</code> Bool)&gt;</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">5</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">6</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">7</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
 
 </table>
 </nav>
 
 
     <div class="pod-body">
-    <section><h1>ATTRIBUTES</h1>
-</section>
+    <h1 id="NAME_Test::Async::Job_-_a_job_record_task"><a class="u" href="#___top" title="go to top of document">NAME <code>Test::Async::Job</code> - a job record task</a></h1>
+<h1 id="DESCRIPTION_Class_defines_a_job_entry_for_Test::Async::JobMgr.">DESCRIPTION Class defines a job entry for <a href="JobMgr.html"><code>Test::Async::JobMgr</code></a>.</h1>
+<h1 id="ATTRIBUTES"><a class="u" href="#___top" title="go to top of document">ATTRIBUTES</a></h1>
 <h2 id="Int:D_$.id"><a class="u" href="#___top" title="go to top of document"><code>Int:D $.id</code></a></h2>
 <p>Job ID number. Autoincerements.</p>
 <h2 id="Callable:D_$.code"><a class="u" href="#___top" title="go to top of document"><code>Callable:D $.code</code></a></h2>
@@ -405,8 +410,7 @@ li > .pod-block-code { margin-top: 16px; }
 <p>If <em>True</em> then the job must be executed asynchronously.</p>
 <h2 id="Promise_$.promise"><a class="u" href="#___top" title="go to top of document"><code>Promise $.promise</code></a></h2>
 <p>Job completion promise. Undefined until the job is invoked. Set to a <a href="https://docs.raku.org/type/Promise"><code>Promise</code></a> instance as soon as job starts execution and is kept with job code return value.</p>
-<section><h1>METHODS</h1>
-</section>
+<h1 id="METHODS"><a class="u" href="#___top" title="go to top of document">METHODS</a></h1>
 <h2 id="start(--_Promise:D)&gt;"><a class="u" href="#___top" title="go to top of document"><code>start(--</code> Promise:D)&gt;</a></h2>
 <p>Starts job in a thread.</p>
 <h2 id="invoke(--_Promise:D)&gt;"><a class="u" href="#___top" title="go to top of document"><code>invoke(--</code> Promise:D)&gt;</a></h2>

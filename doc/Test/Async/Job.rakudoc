@@ -1,11 +1,11 @@
 =begin pod
-=NAME
+=head1 NAME
 C<Test::Async::Job> - a job record task
 
-=DESCRIPTION
+=head1 DESCRIPTION
 Class defines a job entry for L<C<Test::Async::JobMgr>|rakudoc:Test::Async::JobMgr>.
 
-=ATTRIBUTES
+=head1 ATTRIBUTES
 =head2 C<Int:D $.id>
 
 Job ID number. Autoincerements.
@@ -23,7 +23,7 @@ If I<True> then the job must be executed asynchronously.
 Job completion promise. Undefined until the job is invoked. Set to a L<C<Promise>|https://docs.raku.org/type/Promise>
 instance as soon as job starts execution and is kept with job code return value.
 
-=METHODS
+=head1 METHODS
 =head2 C<start(--> Promise:D)>
 
 Starts job in a thread.

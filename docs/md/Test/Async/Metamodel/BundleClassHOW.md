@@ -1,10 +1,6 @@
-# NAME
+# NAME `Test::Async::Metamodel::BundleClassHOW` - metaclass backing custom bundle classes.
 
-`Test::Async::Metamodel::BundleClassHOW` - metaclass backing custom bundle classes.
-
-# DESCRIPTION
-
-This class purpose is to ensure that test tool methods are wrapped into common boilerplate. The boilerplate does the following:
+# DESCRIPTION This class purpose is to ensure that test tool methods are wrapped into common boilerplate. The boilerplate does the following:
 
   - determines calling context to make sure any error reported points at user code where the test tool is invoked. As a result it sets `tool-caller` and `caller-ctx` attributes of the current suite object.
 

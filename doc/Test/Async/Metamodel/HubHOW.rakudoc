@@ -1,8 +1,8 @@
 =begin pod
-=NAME
+=head1 NAME
 C<Test::Async::Metamodel::HubHOW> - metaclass backing Hub/Suite classes.
 
-=DESCRIPTION
+=head1 DESCRIPTION
 This class acts as a registry for test bundle roles, and as a construction yard for the custom C<Test::Async::Suite>
 class.
 

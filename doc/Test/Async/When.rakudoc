@@ -1,8 +1,8 @@
 =begin pod
-=NAME
+=head1 NAME
 C<Test::Async::When> - add C<:when> key to plan
 
-=SYNOPSIS
+=head1 SYNOPSIS
 Whole top suite:
 
 use Test::Async <When Base>;
@@ -16,7 +16,7 @@ subtest "Might be skipped" => {
 }
 }
 
-=DESCRIPTION
+=head1 DESCRIPTION
 This bundle extends C<plan> with additional parameter C<:when> which defines when the suite is to be actually ran. If
 C<when> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:
 

@@ -378,17 +378,23 @@ li > .pod-block-code { margin-top: 16px; }
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
-<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME_Test::Async::When_-_add_:when_key_to_plan">NAME <code class="pod-code-inline">Test::Async::When</code> - add <code class="pod-code-inline">:when</code> key to plan</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS_Whole_top_suite:">SYNOPSIS Whole top suite:</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION_This_bundle_extends_plan_with_additional_parameter_:when_which_defines_when_the_suite_is_to_be_actually_ran._If_when_condition_is_not_fulfilled_the_suite_is_skipped._The_condition_is_a_nested_combination_of_keys_and_values:">DESCRIPTION This bundle extends <code class="pod-code-inline">plan</code> with additional parameter <code class="pod-code-inline">:when</code> which defines when the suite is to be actually ran. If <code class="pod-code-inline">when</code> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#SEE_ALSO">SEE ALSO</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">5</td><td class="toc-text"><a href="#COPYRIGHT">COPYRIGHT</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">6</td><td class="toc-text"><a href="#LICENSE">LICENSE</a></td></tr>
 
 </table>
 </nav>
 
 
     <div class="pod-body">
-    <p>use Test::Async &lt;When Base&gt;; plan :when((&lt;release&gt;)) Or a subtest only:</p>
+    <h1 id="NAME_Test::Async::When_-_add_:when_key_to_plan"><a class="u" href="#___top" title="go to top of document">NAME <code>Test::Async::When</code> - add <code>:when</code> key to plan</a></h1>
+<h1 id="SYNOPSIS_Whole_top_suite:"><a class="u" href="#___top" title="go to top of document">SYNOPSIS Whole top suite:</a></h1>
+<p>use Test::Async &lt;When Base&gt;; plan :when((&lt;release&gt;)) Or a subtest only:</p>
 <p>use Test::Async &lt;When Base&gt;; subtest "Might be skipped" =&gt; { plan :when((:all((:any((&lt;release author&gt;)), :module&lt;Optional::Module&gt;)))); ... } }</p>
+<h1 id="DESCRIPTION_This_bundle_extends_plan_with_additional_parameter_:when_which_defines_when_the_suite_is_to_be_actually_ran._If_when_condition_is_not_fulfilled_the_suite_is_skipped._The_condition_is_a_nested_combination_of_keys_and_values:"><a class="u" href="#___top" title="go to top of document">DESCRIPTION This bundle extends <code>plan</code> with additional parameter <code>:when</code> which defines when the suite is to be actually ran. If <code>when</code> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:</a></h1>
 <ul><li><p>a string value means a name of a testing mode enabled with an environment variable. Simply put, it gets uppercased, appended with <em>_TESTING</em> and the resulting name is checked against <code>%*ENV</code>. If the string is already ending with <em>_TESTING</em> it is used as-is.</p>
 </li>
 <li><p>a pair with <code>env</code> key tests for a environment variable. The variable name is used as-is, with no manipulations done to it.</p>

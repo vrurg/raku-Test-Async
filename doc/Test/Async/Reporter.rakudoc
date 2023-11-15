@@ -1,9 +1,9 @@
 =begin pod
-=NAME
+=head1 NAME
 
 C<Test::Async::Reporter> - a reporter bundle role
 
-=DESCRIPTION
+=head1 DESCRIPTION
 
 This role is applied to a bundle declared with C<test-reporter>. Implies implementations of methods:
 
