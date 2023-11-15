@@ -5,3 +5,5 @@ raku-Test-Async.iml
 .test-repo/
 Test-Async-*
 *.bk
+.gen-doc-index.json
+.gen-doc-link-dest.json
