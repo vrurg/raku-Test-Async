@@ -1,0 +1,76 @@
+=begin pod
+=head1 NAME
+
+C<Test::Async::Event> – collection of standard events
+
+=head1 SYNOPSIS
+
+    use Test::Async::Event;
+
+    test-bundle MyBundle {
+        method foo(Str:D $message) is test-tool {
+            self.send-test: Event::Ok, :$message
+        }
+    }
+
+=DESCRIPTION
+
+General information about C<Test::Async> event management can be found in
+L<C<Test::Async::Manual>|Manual.md>.
+
+Events are objects of classes derived from C<Event> class. This module provides support for C<Test::Async> core. In
+general, all event classes can be conventionally split into the following groups:
+
+=item I<informative> – events signalling about some state changes. Like, for example, suite termination.
+=item I<reporting> - events bearing a message to be reported to user.
+=item I<commands> – those which tell the core to perform an action.
+=item I<tests> – outcomes of individual test tools.
+
+=head2 Class C<Event>
+
+The base event class.
+
+=head3 Attributes
+
+=item C<$.origin> – event originating object. Defaults to the current test suite object.
+=item C<Int:D $.id> – event id, a sequential number.
+=item C<Instant:D $.time> – the moment when event object was created.
+
+=head3 Methods
+
+=item C<Profile> – returns a L<C<Map>|https://docs.raku.org/type/Map> suitable for passing to an event constructor. The
+method collects all changed public attributes of an object.
+=item C<gist>, C<Str> – stringify event object for reporting.
+
+=head1 EVENT SUBCLASSES
+
+=item L<C<Event::BailOut>|Event/BailOut.md>
+=item L<C<Event::Command>|Event/Command.md>
+=item L<C<Event::Diag>|Event/Diag.md>
+=item L<C<Event::DoneTesting>|Event/DoneTesting.md>
+=item L<C<Event::JobsAwaited>|Event/JobsAwaited.md>
+=item L<C<Event::NotOk>|Event/NotOk.md>
+=item L<C<Event::Ok>|Event/Ok.md>
+=item L<C<Event::Plan>|Event/Plan.md>
+=item L<C<Event::Report>|Event/Report.md>
+=item L<C<Event::Skip>|Event/Skip.md>
+=item L<C<Event::StageTransition>|Event/StageTransition.md>
+=item L<C<Event::Telemetry>|Event/Telemetry.md>
+=item L<C<Event::Terminate>|Event/Terminate.md>
+=item L<C<Event::Test>|Event/Test.md>
+
+=head2 Command event classes C<Event::Cmd::*>
+
+A bundle of events used internally for commands. See
+L<C<Test::Async::Hub>|Hub.md>
+and possibly other modules. The set of command events is not standartized and subject for changes.
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Manual>|Manual.md>,
+L<C<Test::Async::Aggregator>|Aggregator.md>,
+L<C<Test::Async::Hub>|Hub.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod

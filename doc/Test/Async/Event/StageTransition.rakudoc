@@ -1,8 +1,7 @@
-
 =begin pod
 =head1 Class C<Event::StageTransition>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Event>|rakudoc:Event>
 
 Emitted each time suite stage is changed.
 
@@ -13,7 +12,9 @@ Emitted each time suite stage is changed.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

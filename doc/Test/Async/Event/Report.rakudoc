@@ -1,8 +1,7 @@
-
 =begin pod
 =head1 Class C<Event::Report>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Event>|rakudoc:Event>
 
 Base class for events carrying a text message of any kind.
 
@@ -12,7 +11,9 @@ Base class for events carrying a text message of any kind.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

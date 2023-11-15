@@ -1,14 +1,15 @@
-
 =begin pod
 =head1 Class C<Event::Telemetry>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Event>|rakudoc:Event>
 
 Under development yet.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

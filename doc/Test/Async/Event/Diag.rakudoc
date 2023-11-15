@@ -1,15 +1,16 @@
-
 =begin pod
 =head1 Class C<Event::Diag>
 
-Is L<C<Event::Report>|Report.md>.
+Is L<C<Event::Report>|rakudoc:Event::Report>.
 
 Carries a diagnostics message. See C<diag> in
-L<C<Test::Async::Base>|../Base.md>.
+L<C<Test::Async::Base>|rakudoc:Test::Async::Base>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

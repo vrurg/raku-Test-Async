@@ -1,0 +1,23 @@
+=begin pod
+=NAME
+
+C<Test::Async::Reporter> - a reporter bundle role
+
+=DESCRIPTION
+
+This role is applied to a bundle declared with C<test-reporter>. Implies implementations of methods:
+
+=item C<report-event(Event:D)> – report an event to user
+=item C<indent-message(+@message, :$prefix, :$nesting, *% --> Array())> - indent all lines in C<@message> using
+C<$prefix> by C<$nesting> levels. C<@message> is expected to be in normalized form (see
+C<normalize-message> in L<C<Test::Async::Hub>|Hub.md>).
+=item C<message-to-console(+@message)> – send C<@message> to its final destination.
+
+=head1 SEE ALSO
+
+L<C<Test::Async::Manual>|Manual.md>,
+L<C<Test::Async::Decl>|Decl.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod

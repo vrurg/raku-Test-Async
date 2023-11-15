@@ -1,14 +1,15 @@
-
 =begin pod
 =head1 Class <Event::JobsAwaited>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Event>|rakudoc:Event>
 
 Emitted when all pending jobs are completed.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

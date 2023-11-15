@@ -1,11 +1,10 @@
-
 =begin pod
 =head1 Class C<Event::Command>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Event>|rakudoc:Event>
 
 Base class of commanding events.
-L<C<Test::Async::Hub>|../Hub.md>
+L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
 handles them specially.
 
 =head2 Attributes
@@ -14,7 +13,9 @@ handles them specially.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

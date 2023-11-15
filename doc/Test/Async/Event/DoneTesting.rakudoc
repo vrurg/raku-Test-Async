@@ -1,14 +1,15 @@
-
 =begin pod
 =head1 Class C<Event::DoneTesting>
 
-Is L<C<Event::Report>|Report.md>.
+Is L<C<Event::Report>|rakudoc:Event::Report>.
 
 Emitted when testing is all done.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+

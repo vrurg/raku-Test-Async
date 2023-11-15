@@ -1,0 +1,35 @@
+=begin pod
+=config :!index :title("Test::Async Document Pages")
+
+=head1 Test::Async Document Pages
+
+=item L«C«..::ChangeLog»|rakudoc:..::ChangeLog»
+=item L«C«README»|rakudoc:..::README»
+=item L«C«Test::Async::CookBook»|rakudoc:Test::Async::CookBook»
+=item L«C«Test::Async::Event::BailOut»|rakudoc:Test::Async::Event::BailOut»
+=item L«C«Test::Async::Event::Command»|rakudoc:Test::Async::Event::Command»
+=item L«C«Test::Async::Event::Diag»|rakudoc:Test::Async::Event::Diag»
+=item L«C«Test::Async::Event::DoneTesting»|rakudoc:Test::Async::Event::DoneTesting»
+=item L«C«Test::Async::Event::JobsAwaited»|rakudoc:Test::Async::Event::JobsAwaited»
+=item L«C«Test::Async::Event::NotOk»|rakudoc:Test::Async::Event::NotOk»
+=item L«C«Test::Async::Event::Ok»|rakudoc:Test::Async::Event::Ok»
+=item L«C«Test::Async::Event::Plan»|rakudoc:Test::Async::Event::Plan»
+=item L«C«Test::Async::Event::Report»|rakudoc:Test::Async::Event::Report»
+=item L«C«Test::Async::Event::Skip»|rakudoc:Test::Async::Event::Skip»
+=item L«C«Test::Async::Event::StageTransition»|rakudoc:Test::Async::Event::StageTransition»
+=item L«C«Test::Async::Event::Telemetry»|rakudoc:Test::Async::Event::Telemetry»
+=item L«C«Test::Async::Event::Terminate»|rakudoc:Test::Async::Event::Terminate»
+=item L«C«Test::Async::Event::Test»|rakudoc:Test::Async::Event::Test»
+=item L«C«Test::Async::Hub::ToolCallerCtx»|rakudoc:Test::Async::Hub::ToolCallerCtx»
+=item L«C«Test::Async::Manual»|rakudoc:Test::Async::Manual»
+
+=head1 COPYRIGHT
+
+(c) 2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+=end pod

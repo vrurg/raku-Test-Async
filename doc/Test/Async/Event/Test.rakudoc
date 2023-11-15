@@ -1,8 +1,7 @@
-
 =begin pod
 =head1 Class C<Event::Test>
 
-Is L<C<Event::Report>|Report.md>.
+Is L<C<Event::Report>|rakudoc:Event::Report>.
 
 Base class for events reporting test outcomes.
 
@@ -10,7 +9,7 @@ Base class for events reporting test outcomes.
 
 =item C<Str $.todo> – message to use if test is marked as I<TODO>.
 =item C<Str $.flunks> – message to use if test is marked as anticipated failure (see C<test-flunks> in
-L<C<Test::Async::Base>|../Base.md>.
+L<C<Test::Async::Base>|rakudoc:Test::Async::Base>.
 =item C<CallFrame:D $.caller>, required – position in user code where the test was called.
 =item C<@.child-messages> – messages from child suites. Each entry should be a single line ending with newline.
 =item C<@.comments> – comments for the test. Normally expected to be reported with C<diag>. Not special formatting
@@ -19,8 +18,10 @@ requirements except for a recommendation for the last line not to end with a new
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>,
-L<C<Test::Async::Event::Report>|Report.md>
+L<C<Test::Async::Event>|rakudoc:Test::Async::Event>,
+L<C<Test::Async::Event::Report>|rakudoc:Test::Async::Event::Report>
 
 =AUTHOR Vadim Belman <vrurg@cpan.org>
+
 =end pod
+
