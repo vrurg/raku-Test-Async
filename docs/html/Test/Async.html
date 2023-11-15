@@ -397,7 +397,11 @@ li > .pod-block-code { margin-top: 16px; }
     <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
 <p><code>Test::Async</code> - base module of the framework</p>
 <h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
-<p>use Test::Async; plan 1; pass "Hello World!"; done-testing</p>
+<pre class="pod-block-code">use Test::Async;
+plan 1;
+pass "Hello World!";
+done-testing
+</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
 <p>The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but is not recommended for a module. See <a href="Async/CookBook.html"><code>Test::Async::CookBook</code></a> for more details.</p>
 <h2 id="Exports"><a class="u" href="#___top" title="go to top of document">Exports</a></h2>

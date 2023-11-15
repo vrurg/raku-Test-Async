@@ -1,18 +1,36 @@
-# NAME
-
-`Test::Async::Base` – this test bundle contains all the base test tools
+# NAME `Test::Async::Base` – this test bundle contains all the base test tools
 
 # SYNOPSIS
 
-use Test::Async::Base; use Test::Async; plan 1; pass "Hello world\!"; done-testing
+``` raku
+use Test::Async::Base;
+use Test::Async;
+plan 1;
+pass "Hello world!";
+done-testing
+```
 
 # DESCRIPTION
 
 This bundle is supposed to provide same test tools, as the standard Raku [`Test`](https://docs.raku.org/type/Test). So that
 
-use Test::Async; plan ... ; ... ; done-testing would be the same as:
+``` raku
+use Test::Async;
+plan ... ;
+... ;
+done-testing
+```
 
-use Test; plan ... ; ... ; done-testing For this reason this document only tells about differences between the two.
+would be the same as:
+
+``` raku
+use Test;
+plan ... ;
+... ;
+done-testing
+```
+
+For this reason this document only tells about differences between the two.
 
 Test tools resulting in either *ok* or *not ok* messages return either *True* or *False* depending on test outcome. `skip` always considered to be successful and thus returns *True*.
 

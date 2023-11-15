@@ -1,18 +1,26 @@
 =begin pod
-=NAME C<Test::Async::Result> - test result representation
+=NAME
+
+C<Test::Async::Result> - test result representation
 
 
-=SYNOPSIS self.proclaim: test-result(
-                        $condition,
-                        fail => {
-                            comments => "a comment about the cause of flunk",
-                        });
+=SYNOPSIS
+
+=begin code :lang<raku>
+self.proclaim:
+    test-result( $condition,
+                 fail => {
+                     comments => "a comment about the cause of flunk",
+                 });
+=end code
 
 
-=DESCRIPTION This class represents information about test outcomes.
+=DESCRIPTION
+
+This class represents information about test outcomes.
 
 
-=ATTRIBUTES 
+=ATTRIBUTES
 =head2 C<Bool:D $.cond>
 
 I<True> if test is considered success, I<False> otherwise. B<Note> that a skipped tests is a success.
@@ -24,13 +32,16 @@ C<fail-profile> is used. The most typical use of this is to add comments explain
 
 A profile attribute can be made lazy if set to a code object:
 
-    my $tr = test-result($condition, fail => -> { comments => self.expected-got($expected, $got) });
+=begin code :lang<raku>
+my $tr = test-result($condition, fail => -> { comments => self.expected-got($expected, $got) });
+=end code
 
 In this case C<event-profile> method will invoke the code and use the return value as profile itself. This improves
 performance in cases when profile keys are set using some rather heavy code (like the C<expected-got> method in the
 example above) but eventually might not even be used after all.
 
-=METHODS 
+=METHODS
+
 =head2 C<event-profile(--> Hash:D)>
 
 Returns a profile in accordance to C<$.cond> value.

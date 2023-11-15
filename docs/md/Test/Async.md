@@ -4,7 +4,12 @@
 
 # SYNOPSIS
 
-use Test::Async; plan 1; pass "Hello World\!"; done-testing
+``` raku
+use Test::Async;
+plan 1;
+pass "Hello World!";
+done-testing
+```
 
 # DESCRIPTION
 

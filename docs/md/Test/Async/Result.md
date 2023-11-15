@@ -4,7 +4,13 @@
 
 # SYNOPSIS
 
-self.proclaim: test-result( $condition, fail =\> { comments =\> "a comment about the cause of flunk", });
+``` raku
+self.proclaim:
+    test-result( $condition,
+                 fail => {
+                     comments => "a comment about the cause of flunk",
+                 });
+```
 
 # DESCRIPTION
 
@@ -22,7 +28,7 @@ Profiles to be used to create a new `Event::Test` object. Depending on `$.cond` 
 
 A profile attribute can be made lazy if set to a code object:
 
-``` 
+``` raku
 my $tr = test-result($condition, fail => -> { comments => self.expected-got($expected, $got) });
 ```
 

@@ -5,10 +5,13 @@ C<Test::Async> - base module of the framework
 
 =head1 SYNOPSIS
 
+=begin code :lang<raku>
 use Test::Async;
 plan 1;
 pass "Hello World!";
 done-testing
+=end code
+
 =head1 DESCRIPTION
 
 The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but

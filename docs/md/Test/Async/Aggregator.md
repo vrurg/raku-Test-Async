@@ -4,7 +4,7 @@
 
 # SYNOPSIS
 
-``` 
+``` raku
 class MyHub does Test::Async::Aggregator {
     my class Event::My {
         has $.data;
@@ -77,6 +77,12 @@ Pushes an event into the local buffer. If event type is supplied then it gets in
 
   - [`INDEX`](../../../../INDEX.md)
 
-# AUTHOR
+# COPYRIGHT
 
-Vadim Belman <vrurg@cpan.org>
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../LICENSE) file in this distribution.
