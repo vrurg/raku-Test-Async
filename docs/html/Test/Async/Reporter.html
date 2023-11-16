@@ -395,7 +395,7 @@ li > .pod-block-code { margin-top: 16px; }
 <p>This role is applied to a bundle declared with <code>test-reporter</code>. Implies implementations of methods:</p>
 <ul><li><p><code>report-event(Event:D)</code> – report an event to user</p>
 </li>
-<li><p><code>indent-message(+@message, :$prefix, :$nesting, *% --</code> Array())&gt; - indent all lines in <code>@message</code> using <code>$prefix</code> by <code>$nesting</code> levels. <code>@message</code> is expected to be in normalized form (see <code>normalize-message</code> in <a href="Hub.html"><code>Test::Async::Hub</code></a>).</p>
+<li><p><code>indent-message(+@message, :$prefix, :$nesting, *% --&gt; Array())</code> - indent all lines in <code>@message</code> using <code>$prefix</code> by <code>$nesting</code> levels. <code>@message</code> is expected to be in normalized form (see <code>normalize-message</code> in <a href="Hub.html"><code>Test::Async::Hub</code></a>).</p>
 </li>
 <li><p><code>message-to-console(+@message)</code> – send <code>@message</code> to its final destination.</p>
 </li>

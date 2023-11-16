@@ -379,7 +379,7 @@ li > .pod-block-code { margin-top: 16px; }
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
 <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS_use_Test::Async::Decl;">SYNOPSIS use Test::Async::Decl;</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
 <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
 <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#test-bundle"><code class="pod-code-inline">test-bundle</code></a></td></tr>
 <tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#test-reporter"><code class="pod-code-inline">test-reporter</code></a></td></tr>
@@ -396,12 +396,15 @@ li > .pod-block-code { margin-top: 16px; }
     <div class="pod-body">
     <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
 <p><code>Test::Async::Decl</code> - declarations for writing new bundles</p>
-<h1 id="SYNOPSIS_use_Test::Async::Decl;"><a class="u" href="#___top" title="go to top of document">SYNOPSIS use Test::Async::Decl;</a></h1>
-<pre class="pod-block-code">unit test-bundle MyBundle;
+<h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
+<pre class="pod-block-code">use Test::Async::Decl;
+
+unit test-bundle MyBundle;
 
 method my-tool(...) is test-tool(:name&lt;mytool&gt;, :!skippable, :!readify) {
     ...
-}</pre>
+}
+</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
 <p>This module exports declarations needed to write custom bundles for <code>Test::Async</code> framework.</p>
 <h2 id="test-bundle"><a class="u" href="#___top" title="go to top of document"><code>test-bundle</code></a></h2>
@@ -414,7 +417,8 @@ method my-tool(...) is test-tool(:name&lt;mytool&gt;, :!skippable, :!readify) {
 <p>This trait is used to declare a method in a bundle as a test tool:</p>
 <pre class="pod-block-code">method foo(...) is test-tool {
     ...
-}</pre>
+}
+</pre>
 <p>The method is then exported to user as <code>&amp;foo</code> routine. Internally the method is getting wrapped into a code which does necessary preparations for the tool to act as expected. See <a href="Metamodel/BundleClassHOW.html"><code>Test::Async::Metamodel::BundleClassHOW</code></a> for more details.</p>
 <p>The following named parameters are accepted by the trait:</p>
 <ul><li><p><code>tool-name</code> aka <code>name</code></p>

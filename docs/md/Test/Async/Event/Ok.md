@@ -1,6 +1,6 @@
-# Class `Event::Ok`
+# Class `Test::Async::Event::Ok`
 
-Is [`Event::Test`](https://raku.land/?q=Event::Test).
+Is [`Test::Async::Event::Test`](Test.md).
 
 Reports test pass.
 

@@ -129,9 +129,11 @@ parameters C<async> or C<instant>. The named parameters take precedence over pla
 
 For example, let's assume that our current suite is configured for random execution of subtest. Then
 
-    subtest "foo", :instant, {
-        ...
-    }
+=begin code :lang<raku>
+subtest "foo", :instant, {
+    ...
+}
+=end code
 
 would result in the C<subtest> be invoked right away, where it's declaration is encountered, without postponing.
 Similarly, if C<parallel> plan parameter is in effect, C<:instant> will overrule it so it will run right here, right
@@ -149,23 +151,25 @@ Any other named parameters passed to a C<subtest> are treated as plan keys.
 
 Subset topic variable is set to the backing suite object. For example, this is an excerpt from I<t/060-subtest.t>:
 
-    subtest "subtest topic" => {
-        .plan: 1;
-        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
-    }
+=begin code :lang<raku>
+subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
+=end code
 
 The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above
 example could be written as:
 
-    Test::Async::Hub.test-suite.subtest "subtest topic" => {
-        .plan: 1;
-        .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
-    }
+=begin code :lang<raku>
+Test::Async::Hub.test-suite.subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
+=end code
 
-and this is the way it must be used in a module. See
-L<C<Test::Async>|rakudoc:Test::Async>
-and L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook>
-for more details.
+and this is the way it must be used in a module. See L<C<Test::Async>|rakudoc:Test::Async> and
+L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook> for more details.
 
 =head3 Hidden C<subtest>
 
@@ -180,15 +184,17 @@ The primary purpose of this mode is to provide means of implementing compound te
 two or more tests which outcomes are to be reported back to the user. The most common implementation of such tool method
 would look like:
 
-    method compound-tool(..., Str:D $message) is test-tool {
-        subtest $message, :hidden, :instant, :!async, {
-            plan 2;
-            my ($result1, $result2) = (False, False);
-            ...;
-            ok $result1, "result1";
-            ok $result2, "result2";
-        }
+=begin code :lang<raku>
+method compound-tool(..., Str:D $message) is test-tool {
+    subtest $message, :hidden, :instant, :!async, {
+        plan 2;
+        my ($result1, $result2) = (False, False);
+        ...;
+        ok $result1, "result1";
+        ok $result2, "result2";
     }
+}
+=end code
 
 Note that we're using explicit C<:instant> and C<:!async> modes to prevent possible side effect related to use of
 C<:parallel> and C<:random> in parent suite's plan. Besides, it is normal for a user to expect a test tool to be
@@ -199,10 +205,12 @@ semi-atomic operation being done here and now.
 This test is similar to C<is-deeply> as it compares complex structure in depth. The difference is that C<cmp-deeply>
 traverses deep into the structure is reports any difference found at the point where it is found. For example:
 
-    my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
-    my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
+=begin code :lang<raku>
+my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
 
-    cmp-deeply @got, @expected, "class instance deep withing an array";
+cmp-deeply @got, @expected, "class instance deep withing an array";
+=end code
 
 This test would result in a diagnostic message like this:
 
@@ -216,8 +224,8 @@ alone.
 =head2 C<multi is-run(Str() $code, %params, Str:D $message = "")>
 =head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>
 
-This test tool is not provided by the standard L<C<Test>|https://docs.raku.org/type/Test> framework, but in slightly different forms it is defined
-in helper modules included in
+This test tool is not provided by the standard L<C<Test>|https://docs.raku.org/type/Test> framework, but in slightly
+different forms it is defined in helper modules included in
 L<Rakudo|https://github.com/rakudo/rakudo/blob/e5ecdc4382d2739a701be7956fad52e897936fea/t/packages/Test/Helpers.pm6#L17>
 and
 L<roast|https://github.com/Raku/roast/blob/7033b07bbbb54a301b3bfd1253e30c5e7cebdfab/packages/Test-Helpers/lib/Test/Util.pm6#L107>
@@ -248,9 +256,11 @@ operates over other test tools.
 The primary purpose is to allow testing other test tools. For example, test I<t/080-is-approx.t> uses it to make sure
 that tests are failing when they have to fail:
 
-    test-flunks 2;
-    is-approx 5, 6;
-    is-approx 5, 6, 'test desc three';
+=begin code :lang<raku>
+test-flunks 2;
+is-approx 5, 6;
+is-approx 5, 6, 'test desc three';
+=end code
 
 Setting C<$count> to L<C<Inf>|https://docs.raku.org/type/Inf> is the same as using C<:remaining> named parameter and means: all remaining tests in the
 current suite are expected to flunk.

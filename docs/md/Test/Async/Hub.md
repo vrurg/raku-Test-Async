@@ -4,7 +4,7 @@
 
 # SYNOPSIS
 
-``` 
+``` raku
 if test-suite.random {
     say "The current suite is in random mode"
 }
@@ -50,7 +50,7 @@ The number of tests planned for this suite. Undefined if no plans were made.
 
 If suite is planned for skipping then this is the message as for `skip-remaining` tool:
 
-``` 
+``` raku
 subtest "Conditional test" => {
     plan |($condition ?? :skip-all('makes no sens because ...') !! Empty);
     pass "dummy test";
@@ -69,7 +69,7 @@ If suite is planned for *TODO* then this is the message as for any of `todo` tes
 
 A number of remaining *TODO* tests:
 
-``` 
+``` raku
 todo "To be done yet...", 3;
 pass  "test 1";
 # -> test-suite.TODO-count == 2 at this point
@@ -105,14 +105,19 @@ True if the suite itself or any of its parents is invoked asynchronously.
 
 Indicates if the whole suite has been marked as *TODO*. This makes difference between:
 
-``` 
+``` raku
 todo "Later...";
 subtest "new feature" => { ... }
 ```
 
 and
 
-subtest "new feature" =\> { todo-remaining "Later..."; ... }
+``` raku
+subtest "new feature" => {
+    todo-remaining "Later...";
+    ...
+}
+```
 
 Also *True* if `todo` parameter of plan is set to a message, which is virtually the same as prefixing the subtest with `todo`.
 
@@ -168,7 +173,7 @@ Returns the pre-transition stage.
 
 The ultimate handler of event objects. A bundle wishing to react to events must define a multi-candidate of this method:
 
-``` 
+``` raku
 test-bundle MyBundle {
     multi method event(Event::Telemetry:D $ev) {
         ...
@@ -216,7 +221,7 @@ Similar to `done-testing` but also interrupts current test suite. If it happens 
 
 This tool is helpful to avoid constructs like:
 
-``` 
+``` raku
 if !ok($my-check-result, "...") {
     skip-rest "other tests make no sense now";
 }
@@ -227,7 +232,7 @@ else {
 
 Such approach could be especially annoying if *other tests* also have a case where failure must skip remaining tests. Instead one can do:
 
-``` 
+``` raku
 if !ok($my-check-result, "...") {
     skip-rest "other tests make no sense now";
     abort-testing
@@ -315,9 +320,9 @@ This is the main method to emit a test event depending on test outcome passed in
 Returns the next available test number. This is the number one sees next to test outcome status:
 
 ``` 
-ok 2 - message
-   ^
-   +--- this is it!
+    ok 2 - message
+       ^
+       +--- this is it!
 ```
 
 ## `take-TODO(--` Str)\>
@@ -384,7 +389,7 @@ Returns the topmost call location on the tool call stack or a [`Failure`](https:
 
 This method makes sure that a test tool is invoked in [`Test::Async::JobMgr`](JobMgr.md) environment. Normaly it is expected that tools are called from within threads created by the job manager. But sometimes this condition cannot be fulfilled. For example:
 
-``` 
+``` raku
 $object.method-returns-promise.then: -> $p { is $p.result, $expected, "promise completed as expected" };
 ```
 
@@ -394,7 +399,7 @@ $object.method-returns-promise.then: -> $p { is $p.result, $expected, "promise c
 
 This method sets anchor location (see [`Type::Async::Manual`](https://modules.raku.org/dist/Type::Async::Manual) Call Location And Anchoring section) for all nested test suits or calls to test tools, done within `&code`. For example:
 
-``` 
+``` raku
 method my-compound-tool(...) is test-tool(:!wrap) {
     self.anchor: {
         subtest "compound subtest", :hidden, {

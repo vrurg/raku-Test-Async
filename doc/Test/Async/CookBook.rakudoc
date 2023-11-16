@@ -20,21 +20,26 @@ to the list if none of the registered bundles does
 L<C<Test::Async::Reporter>|rakudoc:Test::Async::Reporter>
 role. Say, if there is a module C<Foo> which C<use>s C<Test::Async>, and there is a suite with a header like this:
 
-    use Foo;
-    use MyTests;
-    use MyReporter;
-    use Test::Async;
+=begin code :lang<raku>
+use Foo;
+use MyTests;
+use MyReporter;
+use Test::Async;
+=end code
 
 Then we will have implicitly registered C<Test::Async::Base> and C<Test::Async::Reporter::TAP>. While not being a
 problem most of the time, this could pose a risk in some unforeseen edge cases.
 
 The recommended way is to use C<Test::Async::Hub> class C<test-suite> method which returns the current test :
 
+=begin code :lang<raku>
 use Test::Async::Hub;
 sub foo {
     my $suite = Test::Async::Hub.test-suite;
     $suite.pass("that's the way")
 }
+=end code
+
 Another recommended way is shown in the first example of the next section.
 
 =head2 Testing A Multithreaded Application
@@ -48,18 +53,23 @@ pass data into the test suit main thread, etc., etc., etc.
 
 Nah, that's not how we do it! How about:
 
-    subtest "Threaded testing" => {
-        my $test-app = MyTestApp.new( :test-suite(test-suite) );
-        $test-app.test-something-threaded;
-    }
+=begin code :lang<raku>
+subtest "Threaded testing" => {
+    my $test-app = MyTestApp.new( :test-suite(test-suite) );
+    $test-app.test-something-threaded;
+}
+=end code
 
 and then somewhere in the C<MyTestApp> class implementation, which is presumably inherits from the base application
 class and overrides some of its method for testing, we simply do something like:
 
+=begin code :lang<raku>
 method foo ($param) {
     self.test-suite.item.ok(self.is-param-valid($param), "method foo got correct parameter");
     nextsame
 }
+=end code
+
 C<test-suite> attribute in this example is the suite object backing our subtest.
 
 It is also possible not to store the suite object as an attribute. Instead, one could use
@@ -68,6 +78,7 @@ method C<start> to spawn new threads. This approach has two advantages: first, i
 the method has been invoked, as the one available via C<test-suite>; second, it creates an awaitable job meaning that
 our subtest won't finish until the job is complete:
 
+=begin code :lang<raku>
 method test-something-threaded {
     for ^10 -> $i {
         Test::Async::Hub.test-suite.start({
@@ -78,22 +89,24 @@ method test-something-threaded {
 method bar ($i) {
     Test::Async::Hub.test-suite.cmp-ok($i, "<", 10, "small enough")
 }
-}
+=end code
 
 All outcomes of C<cmp-ok> will be reported as part of our C<subtest>.
 
 This approach provides more flexibility because it makes it possible to simultaneously test different execution branches
 of the same object:
 
-    use Test::Async;
-    plan 1, :parallel;
-    my $test-app = MyTestApp.new;
-    subtest "Branch 1" => {
-        $test-app.test-something-threaded1;
-    }
-    subtest "Branch 2" => {
-        $test-app.test-something-threaded2;
-    }
+=begin code :lang<raku>
+use Test::Async;
+plan 1, :parallel;
+my $test-app = MyTestApp.new;
+subtest "Branch 1" => {
+    $test-app.test-something-threaded1;
+}
+subtest "Branch 2" => {
+    $test-app.test-something-threaded2;
+}
+=end code
 
 When both methods C«test-something-threaded<N>» are using C<test-suite.start> then both subtests will report only
 related test tool outcomes.
@@ -103,26 +116,32 @@ related test tool outcomes.
 Sometimes it might be useful to export a symbol or two from a bundle. The best way to do it is to use C<EXPORT::DEFAULT>
 package defined in your bundle file:
 
-    test-bundle Test::Async::MyBundle {
-        ...
-    }
-    package EXPORT::DEFAULT {
-        our sub foo { "exported" }
-    }
+=begin code :lang<raku>
+test-bundle Test::Async::MyBundle {
+    ...
+}
+package EXPORT::DEFAULT {
+    our sub foo { "exported" }
+}
+=end code
 
 The reason for doing so is because a user could consume the bundle using L<C<Test::Async>|rakudoc:Test::Async> parameters:
 
-    use Test::Async <MyBundle Base>;
-    say foo;
+=begin code :lang<raku>
+use Test::Async <MyBundle Base>;
+say foo;
+=end code
 
 In this case L<C<Test::Async>|rakudoc:Test::Async> not only will export all found test tool methods but it would also fetch the symbols from
 C<EXPORT::DEFAULT> and re-export them. Apparently, the approach allows direct consuming via C<use> statement to work
 too:
 
-    use Test::Async::MyBundle;
-    use Test::Async::Base;
-    use Test::Async;
-    say foo;
+=begin code :lang<raku>
+use Test::Async::MyBundle;
+use Test::Async::Base;
+use Test::Async;
+say foo;
+=end code
 
 =head1 SEE ALSO
 

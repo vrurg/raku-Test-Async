@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::Diag>
+=head1 Class C<Test::Async::Event::Diag>
 
-Is L<C<Event::Report>|rakudoc:Event::Report>.
+Is L<C<Test::Async::Event::Report>|rakudoc:Test::Async::Event::Report>.
 
 Carries a diagnostics message. See C<diag> in
 L<C<Test::Async::Base>|rakudoc:Test::Async::Base>.

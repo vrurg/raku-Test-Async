@@ -2,9 +2,11 @@
 
 `Test::Async::Decl` - declarations for writing new bundles
 
-# SYNOPSIS use Test::Async::Decl;
+# SYNOPSIS
 
-``` 
+``` raku
+use Test::Async::Decl;
+
 unit test-bundle MyBundle;
 
 method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
@@ -32,7 +34,7 @@ This kind of package creates a hub class which is backed by [`Test::Async::Metam
 
 This trait is used to declare a method in a bundle as a test tool:
 
-``` 
+``` raku
 method foo(...) is test-tool {
     ...
 }

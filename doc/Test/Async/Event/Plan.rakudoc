@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::Plan>
+=head1 Class C<Test::Async::Event::Plan>
 
-Is L<C<Event::Report>|rakudoc:Event::Report>.
+Is L<C<Test::Async::Event::Report>|rakudoc:Test::Async::Event::Report>.
 
 Plan reporting event. Emitted when a suite gets to know the number of tests to be done.
 

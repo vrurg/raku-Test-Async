@@ -10,7 +10,7 @@ Non-systematic collection of tips.
 
 [`Test::Async`](../Async.md) itself does some backstage work when imported with `use` or `require`. A part of this work is taking a list of registered bundles, fixing it, and building a [`Map`](https://docs.raku.org/type/Map) of exports out of it. The potential problem hides behind the word *fixing* because what it means is adding [`Test::Async::Base`](Base.md) into the list of registered bundles if no other bundles is registered yet; and adding [`Test::Async::Reporter::TAP`](Reporter/TAP.md) to the list if none of the registered bundles does [`Test::Async::Reporter`](Reporter.md) role. Say, if there is a module `Foo` which `use`s `Test::Async`, and there is a suite with a header like this:
 
-``` 
+``` raku
 use Foo;
 use MyTests;
 use MyReporter;
@@ -21,7 +21,15 @@ Then we will have implicitly registered `Test::Async::Base` and `Test::Async::Re
 
 The recommended way is to use `Test::Async::Hub` class `test-suite` method which returns the current test :
 
-use Test::Async::Hub; sub foo { my $suite = Test::Async::Hub.test-suite; $suite.pass("that's the way") } Another recommended way is shown in the first example of the next section.
+``` raku
+use Test::Async::Hub;
+sub foo {
+    my $suite = Test::Async::Hub.test-suite;
+    $suite.pass("that's the way")
+}
+```
+
+Another recommended way is shown in the first example of the next section.
 
 ## Testing A Multithreaded Application
 
@@ -29,7 +37,7 @@ One of the biggest reasons which pushed me to implement `Test::Async` was a need
 
 Nah, that's not how we do it\! How about:
 
-``` 
+``` raku
 subtest "Threaded testing" => {
     my $test-app = MyTestApp.new( :test-suite(test-suite) );
     $test-app.test-something-threaded;
@@ -38,17 +46,35 @@ subtest "Threaded testing" => {
 
 and then somewhere in the `MyTestApp` class implementation, which is presumably inherits from the base application class and overrides some of its method for testing, we simply do something like:
 
-method foo ($param) { self.test-suite.item.ok(self.is-param-valid($param), "method foo got correct parameter"); nextsame } `test-suite` attribute in this example is the suite object backing our subtest.
+``` raku
+method foo ($param) {
+    self.test-suite.item.ok(self.is-param-valid($param), "method foo got correct parameter");
+    nextsame
+}
+```
+
+`test-suite` attribute in this example is the suite object backing our subtest.
 
 It is also possible not to store the suite object as an attribute. Instead, one could use [`Test::Async::JobMgr`](JobMgr.md) method `start` to spawn new threads. This approach has two advantages: first, it preserves the suite object, on which the method has been invoked, as the one available via `test-suite`; second, it creates an awaitable job meaning that our subtest won't finish until the job is complete:
 
-method test-something-threaded { for ^10 -\> $i { Test::Async::Hub.test-suite.start({ self.bar($i) }) } } method bar ($i) { Test::Async::Hub.test-suite.cmp-ok($i, "\<", 10, "small enough") } }
+``` raku
+method test-something-threaded {
+    for ^10 -> $i {
+        Test::Async::Hub.test-suite.start({
+            self.bar($i)
+        })
+    }
+}
+method bar ($i) {
+    Test::Async::Hub.test-suite.cmp-ok($i, "<", 10, "small enough")
+}
+```
 
 All outcomes of `cmp-ok` will be reported as part of our `subtest`.
 
 This approach provides more flexibility because it makes it possible to simultaneously test different execution branches of the same object:
 
-``` 
+``` raku
 use Test::Async;
 plan 1, :parallel;
 my $test-app = MyTestApp.new;
@@ -66,7 +92,7 @@ When both methods `test-something-threaded<N>` are using `test-suite.start` then
 
 Sometimes it might be useful to export a symbol or two from a bundle. The best way to do it is to use `EXPORT::DEFAULT` package defined in your bundle file:
 
-``` 
+``` raku
 test-bundle Test::Async::MyBundle {
     ...
 }
@@ -77,14 +103,14 @@ package EXPORT::DEFAULT {
 
 The reason for doing so is because a user could consume the bundle using [`Test::Async`](../Async.md) parameters:
 
-``` 
+``` raku
 use Test::Async <MyBundle Base>;
 say foo;
 ```
 
 In this case [`Test::Async`](../Async.md) not only will export all found test tool methods but it would also fetch the symbols from `EXPORT::DEFAULT` and re-export them. Apparently, the approach allows direct consuming via `use` statement to work too:
 
-``` 
+``` raku
 use Test::Async::MyBundle;
 use Test::Async::Base;
 use Test::Async;

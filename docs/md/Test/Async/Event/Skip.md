@@ -1,6 +1,6 @@
-# Class `Event::Skip`
+# Class `Test::Async::Event::Skip`
 
-Is [`Event::Test`](https://raku.land/?q=Event::Test).
+Is [`Test::Async::Event::Test`](Test.md).
 
 Reports skipped test.
 

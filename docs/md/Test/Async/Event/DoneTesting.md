@@ -1,6 +1,6 @@
-# Class `Event::DoneTesting`
+# Class `Test::Async::Event::DoneTesting`
 
-Is [`Event::Report`](https://raku.land/?q=Event::Report).
+Is [`Test::Async::Event::Report`](Report.md).
 
 Emitted when testing is all done.
 

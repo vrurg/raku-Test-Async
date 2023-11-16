@@ -1,6 +1,6 @@
-# Class `Event::Terminate`
+# Class `Test::Async::Event::Terminate`
 
-Is [`Event`](https://raku.land/?q=Event)
+Is [`Test::Async::Event`](../Event.md)
 
 This is the only kind of event which [`Term::Async::Aggregator`](https://raku.land/?q=Term::Async::Aggregator) role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately. Then it fulfills event's promise.
 

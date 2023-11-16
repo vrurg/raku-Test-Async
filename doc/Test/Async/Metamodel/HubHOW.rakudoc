@@ -8,12 +8,11 @@ C<Test::Async::Metamodel::HubHOW> - metaclass backing Hub/Suite classes.
 This class acts as a registry for test bundle roles, and as a construction yard for the custom C<Test::Async::Suite>
 class.
 
-=methods C<register-bundle(Mu \bundle-role)>
-
+=head2 C<method register-bundle(Mu \bundle-role)>
 
 Registers bundle role for later suite class construction.
 
-=method C<construct-suite(\hub-class --> Test::Async::Suite:U)>
+=head2 C«method construct-suite(\hub-class --> Test::Async::Suite:U)»
 
 
 Returns a custom C<Test::Async::Suite> class based on all test bundles registered. The construction happens only once,
@@ -21,17 +20,17 @@ all consequent calls to the method get the same suite type object.
 
 Normally this method is to be invoked on the hub class: C<Test::Async::Hub.^construct-suite>.
 
-=method C<suite-class(\hub-class)>
+=head2 C<method suite-class(\hub-class)>
 
 
 Convenience shortcut to C<construct-suite>
 
-=method C<suite(\obj)>
+=head2 C<method suite(\obj)>
 
 
 Returns I<True> if suite class has been constructed already.
 
-=method C<bundles()>
+=head2 C<method bundles()>
 
 
 Returns a list of registered bundles.

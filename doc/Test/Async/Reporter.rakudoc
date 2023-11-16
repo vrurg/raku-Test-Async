@@ -10,7 +10,7 @@ This role is applied to a bundle declared with C<test-reporter>. Implies impleme
 
 =item C<report-event(Event:D)> – report an event to user
 =begin item
-C<indent-message(+@message, :$prefix, :$nesting, *% --> Array())> - indent all lines in C<@message> using
+C«indent-message(+@message, :$prefix, :$nesting, *% --> Array())» - indent all lines in C<@message> using
 C<$prefix> by C<$nesting> levels. C<@message> is expected to be in normalized form (see
 C<normalize-message> in L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>).
 =end item

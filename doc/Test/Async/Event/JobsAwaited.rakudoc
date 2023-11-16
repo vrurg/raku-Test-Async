@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class <Event::JobsAwaited>
+=head1 Class <Test::Async::Event::JobsAwaited>
 
-Is L<C<Event>|rakudoc:Event>
+Is L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 Emitted when all pending jobs are completed.
 

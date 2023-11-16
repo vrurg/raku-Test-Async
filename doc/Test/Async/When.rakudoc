@@ -5,18 +5,23 @@ C<Test::Async::When> - add C<:when> key to plan
 
 =head1 SYNOPSIS
 
-Whole top suite:
+Entire top suite:
 
+=begin code :lang<raku>
 use Test::Async <When Base>;
 plan :when((<release>))
+=end code
+
 Or a subtest only:
 
+=begin code :lang<raku>
 use Test::Async <When Base>;
 subtest "Might be skipped" => {
     plan :when((:all((:any((<release author>)), :module<Optional::Module>))));
     ...
 }
 }
+=end code
 
 =head1 DESCRIPTION
 
@@ -36,8 +41,10 @@ fulfilled
 By default the topmost condition means C<any>, so that the following two statements are actually check the same
 condition:
 
-    plan :when<release author>;
-    plan :when(:any<release author>);
+=begin code :lang<raku>
+plan :when<release author>;
+plan :when(:any<release author>);
+=end code
 
 =head1 SEE ALSO
 

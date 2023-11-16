@@ -1,6 +1,6 @@
-# Class `Event::Test`
+# Class `Test::Async::Event::Test`
 
-Is [`Event::Report`](https://raku.land/?q=Event::Report).
+Is [`Test::Async::Event::Report`](Report.md).
 
 Base class for events reporting test outcomes.
 

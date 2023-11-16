@@ -4,11 +4,23 @@
 
 # SYNOPSIS
 
-Whole top suite:
+Entire top suite:
 
-use Test::Async <When Base>; plan :when((<release>)) Or a subtest only:
+``` raku
+use Test::Async <When Base>;
+plan :when((<release>))
+```
 
-use Test::Async <When Base>; subtest "Might be skipped" =\> { plan :when((:all((:any((<release author>)), :module<Optional::Module>)))); ... } }
+Or a subtest only:
+
+``` raku
+use Test::Async <When Base>;
+subtest "Might be skipped" => {
+    plan :when((:all((:any((<release author>)), :module<Optional::Module>))));
+    ...
+}
+}
+```
 
 # DESCRIPTION
 
@@ -26,7 +38,7 @@ This bundle extends `plan` with additional parameter `:when` which defines when 
 
 By default the topmost condition means `any`, so that the following two statements are actually check the same condition:
 
-``` 
+``` raku
 plan :when<release author>;
 plan :when(:any<release author>);
 ```

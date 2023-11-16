@@ -8,7 +8,7 @@ This role is applied to a bundle declared with `test-reporter`. Implies implemen
 
   - `report-event(Event:D)` – report an event to user
 
-  - `indent-message(+@message, :$prefix, :$nesting, *% --` Array())\> - indent all lines in `@message` using `$prefix` by `$nesting` levels. `@message` is expected to be in normalized form (see `normalize-message` in [`Test::Async::Hub`](Hub.md)).
+  - `indent-message(+@message, :$prefix, :$nesting, *% --> Array())` - indent all lines in `@message` using `$prefix` by `$nesting` levels. `@message` is expected to be in normalized form (see `normalize-message` in [`Test::Async::Hub`](Hub.md)).
 
   - `message-to-console(+@message)` – send `@message` to its final destination.
 

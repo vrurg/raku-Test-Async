@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::Skip>
+=head1 Class C<Test::Async::Event::Skip>
 
-Is L<C<Event::Test>|rakudoc:Event::Test>.
+Is L<C<Test::Async::Event::Test>|rakudoc:Test::Async::Event::Test>.
 
 Reports skipped test.
 

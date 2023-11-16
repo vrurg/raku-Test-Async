@@ -458,7 +458,8 @@ li > .pod-block-code { margin-top: 16px; }
 <h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
 <pre class="pod-block-code">if test-suite.random {
     say "The current suite is in random mode"
-}</pre>
+}
+</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
 <p>Consumes <a href="Aggregator.html"><code>Test::Async::Aggregator</code></a>, <a href="JobMgr.html"><code>Test::Async::JobMgr</code></a></p>
 <p>See <a href="Manual.html"><code>Test::Async::Manual</code></a> for general purpose of this class.</p>
@@ -482,7 +483,8 @@ li > .pod-block-code { margin-top: 16px; }
 <pre class="pod-block-code">subtest "Conditional test" =&gt; {
     plan |($condition ?? :skip-all('makes no sens because ...') !! Empty);
     pass "dummy test";
-}</pre>
+}
+</pre>
 <p>Otherwise undefined.</p>
 <p><strong>NOTE!</strong> Any examples of code in this documentation are based on the default <a href="Base.html"><code>Test::Async::Base</code></a> bundle.</p>
 <h2 id="TODO-message"><a class="u" href="#___top" title="go to top of document"><code>TODO-message</code></a></h2>
@@ -493,7 +495,8 @@ li > .pod-block-code { margin-top: 16px; }
 pass  "test 1";
 # -&gt; test-suite.TODO-count == 2 at this point
 flunk "test 2";
-pass  "test 3";</pre>
+pass  "test 3";
+</pre>
 <p>Could be set to <code>Inf</code> meaning all remaining tests are to be <em>TODO</em>-marked.</p>
 <h2 id="nesting"><a class="u" href="#___top" title="go to top of document"><code>nesting</code></a></h2>
 <p>How deep are we from the top suite? I.e. a child of a child of the top suite will have nesting 2.</p>
@@ -509,9 +512,14 @@ pass  "test 3";</pre>
 <h2 id="is-TODO"><a class="u" href="#___top" title="go to top of document"><code>is-TODO</code></a></h2>
 <p>Indicates if the whole suite has been marked as <em>TODO</em>. This makes difference between:</p>
 <pre class="pod-block-code">todo "Later...";
-subtest "new feature" =&gt; { ... }</pre>
+subtest "new feature" =&gt; { ... }
+</pre>
 <p>and</p>
-<p>subtest "new feature" =&gt; { todo-remaining "Later..."; ... }</p>
+<pre class="pod-block-code">subtest "new feature" =&gt; {
+    todo-remaining "Later...";
+    ...
+}
+</pre>
 <p>Also <em>True</em> if <code>todo</code> parameter of plan is set to a message, which is virtually the same as prefixing the subtest with <code>todo</code>.</p>
 <h2 id="parallel"><a class="u" href="#___top" title="go to top of document"><code>parallel</code></a></h2>
 <p><em>True</em> if suite is invoking children suites asynchronously.</p>
@@ -543,7 +551,8 @@ subtest "new feature" =&gt; { ... }</pre>
     multi method event(Event::Telemetry:D $ev) {
         ...
     }
-}</pre>
+}
+</pre>
 <h2 id="setup-from-plan"><a class="u" href="#___top" title="go to top of document"><code>setup-from-plan</code></a></h2>
 <p>Setup suite parameters based on a plan profile hash. If called when suite stage is not <code>TSInitializing</code> then throws <code>Test::Async::X::PlanTooLate</code>.</p>
 <p>The keys supported by profile are:</p>
@@ -577,7 +586,8 @@ subtest "new feature" =&gt; { ... }</pre>
 }
 else {
     ... # Do all other tests
-}</pre>
+}
+</pre>
 <p>Such approach could be especially annoying if <em>other tests</em> also have a case where failure must skip remaining tests. Instead one can do:</p>
 <pre class="pod-block-code">if !ok($my-check-result, "...") {
     skip-rest "other tests make no sense now";
@@ -588,7 +598,8 @@ if !ok($my-other-check, "...") {
     skip-rest "makes no sense to proceed";
     abort-testing
 }
-... # Do the rest</pre>
+... # Do the rest
+</pre>
 <h2 id="create-suite(suiteType_=_self.WHAT,_*%c)"><a class="u" href="#___top" title="go to top of document"><code>create-suite(suiteType = self.WHAT, *%c)</code></a></h2>
 <p>Creates a child suite. <code>%c</code> is used to pass parameters to the suite constructor method.</p>
 <h2 id="invoke-suite($suite,_:$async_=_False,_:$instant_=_False,_Capture:D_:$args=\())"><a class="u" href="#___top" title="go to top of document"><code>invoke-suite($suite, :$async = False, :$instant = False, Capture:D :$args=\())</code></a></h2>
@@ -635,9 +646,10 @@ if !ok($my-other-check, "...") {
 <p>This is the main method to emit a test event depending on test outcome passed in <code>$cond</code> or <code>$result.cond</code>. The method sets event <code>origin</code> to the invoking object, sets event's object <code>@.messages</code> and <code>$.nesting</code>. <code>%event-profile</code> is what the user wants to pass to <code>Event::Test</code> constructor. <code>%c</code> capture is bypassed to `send-test` method as-is.</p>
 <h2 id="next-test-id"><a class="u" href="#___top" title="go to top of document"><code>next-test-id</code></a></h2>
 <p>Returns the next available test number. This is the number one sees next to test outcome status:</p>
-<pre class="pod-block-code">ok 2 - message
-   ^
-   +--- this is it!</pre>
+<pre class="pod-block-code">    ok 2 - message
+       ^
+       +--- this is it!
+</pre>
 <h2 id="take-TODO(--_Str)&gt;"><a class="u" href="#___top" title="go to top of document"><code>take-TODO(--</code> Str)&gt;</a></h2>
 <p>If suit has a <em>TODO</em> in effect, i.e. <code>$.is-TODO</code> is <em>True</em> or <code>$!TODO-count</code> is greater than 0, then this method will return the current <code>$.TODO-message</code>. The <code>$.TODO-count</code> will be reduced if necessary.</p>
 <h2 id="set-todo(Str:D_$message,_Int:D_$count)"><a class="u" href="#___top" title="go to top of document"><code>set-todo(Str:D $message, Int:D $count)</code></a></h2>
@@ -674,7 +686,8 @@ if !ok($my-other-check, "...") {
 <p>Returns the topmost call location on the tool call stack or a <a href="https://docs.raku.org/type/Failure"><code>Failure</code></a> if the stack is empty.</p>
 <h3 id="jobify-tool(&amp;code)"><a class="u" href="#___top" title="go to top of document"><code>jobify-tool(&amp;code)</code></a></h3>
 <p>This method makes sure that a test tool is invoked in <a href="JobMgr.html"><code>Test::Async::JobMgr</code></a> environment. Normaly it is expected that tools are called from within threads created by the job manager. But sometimes this condition cannot be fulfilled. For example:</p>
-<pre class="pod-block-code">$object.method-returns-promise.then: -&gt; $p { is $p.result, $expected, "promise completed as expected" };</pre>
+<pre class="pod-block-code">$object.method-returns-promise.then: -&gt; $p { is $p.result, $expected, "promise completed as expected" };
+</pre>
 <p><code>then</code> code here is likely to be invoked in a thread created elsewhere without a chance for us to take over the process. This method wraps a test tool code into a job if it detects that the current thread is different from the suite's thread and there is not `$*TEST-SUITE` variable which is always set for us by the job manager.</p>
 <h2 id="anchor(&amp;code),_anchor(Int:D_$pre-skip,_&amp;code)"><a class="u" href="#___top" title="go to top of document"><code>anchor(&amp;code)</code>, <code>anchor(Int:D $pre-skip, &amp;code)</code></a></h2>
 <p>This method sets anchor location (see <a href="https://modules.raku.org/dist/Type::Async::Manual"><code>Type::Async::Manual</code></a> Call Location And Anchoring section) for all nested test suits or calls to test tools, done within <code>&amp;code</code>. For example:</p>
@@ -684,7 +697,8 @@ if !ok($my-other-check, "...") {
             my-other-compound-tool(...);
         }
     }
-}</pre>
+}
+</pre>
 <p>In the example the subtest and any nested tools/suits used by <code>my-other-compound-tool</code> will report the location where <code>my-compound-tool</code> is called.</p>
 <h2 id="temp-file(Str:D_$base-name,_$data_--_Str:D)&gt;"><a class="u" href="#___top" title="go to top of document"><code>temp-file(Str:D $base-name, $data --</code> Str:D)&gt;</a></h2>
 <p>Quickly create a temporary file and populate it with $data. Returns absolute file name. Throws <code>Test::Async::X::FileCreate</code>/<code>Test::Async::X::FileClose</code> in case of errors.</p>

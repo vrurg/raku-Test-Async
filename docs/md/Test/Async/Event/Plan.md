@@ -1,6 +1,6 @@
-# Class `Event::Plan`
+# Class `Test::Async::Event::Plan`
 
-Is [`Event::Report`](https://raku.land/?q=Event::Report).
+Is [`Test::Async::Event::Report`](Report.md).
 
 Plan reporting event. Emitted when a suite gets to know the number of tests to be done.
 

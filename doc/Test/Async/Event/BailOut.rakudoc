@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::BailOut>
+=head1 Class C<Test::Async::Event::BailOut>
 
-Is L<C<Event::Report>|rakudoc:Event::Report>.
+Is L<C<Test::Async::Event::Report>|rakudoc:Test::Async::Event::Report>.
 
 Emitted when test suite is about to bail out.
 

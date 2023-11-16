@@ -1,6 +1,6 @@
-# Class `Event::Report`
+# Class `Test::Async::Event::Report`
 
-Is [`Event`](https://raku.land/?q=Event)
+Is [`Test::Async::Event`](../Event.md)
 
 Base class for events carrying a text message of any kind.
 

@@ -1,6 +1,6 @@
-# Class `Event::Telemetry`
+# Class `Test::Async::Event::Telemetry`
 
-Is [`Event`](https://raku.land/?q=Event)
+Is [`Test::Async::Event`](../Event.md)
 
 Under development yet.
 

@@ -124,7 +124,7 @@ The particular mode of operation is defined either by `plan` keys `parallel` or 
 
 For example, let's assume that our current suite is configured for random execution of subtest. Then
 
-``` 
+``` raku
 subtest "foo", :instant, {
     ...
 }
@@ -140,7 +140,7 @@ Any other named parameters passed to a `subtest` are treated as plan keys.
 
 Subset topic variable is set to the backing suite object. For example, this is an excerpt from *t/060-subtest.t*:
 
-``` 
+``` raku
 subtest "subtest topic" => {
     .plan: 1;
     .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
@@ -149,7 +149,7 @@ subtest "subtest topic" => {
 
 The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above example could be written as:
 
-``` 
+``` raku
 Test::Async::Hub.test-suite.subtest "subtest topic" => {
     .plan: 1;
     .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
@@ -168,7 +168,7 @@ and this is the way it must be used in a module. See [`Test::Async`](../Async.md
 
 The primary purpose of this mode is to provide means of implementing compound test tools. I.e. tools which consist of two or more tests which outcomes are to be reported back to the user. The most common implementation of such tool method would look like:
 
-``` 
+``` raku
 method compound-tool(..., Str:D $message) is test-tool {
     subtest $message, :hidden, :instant, :!async, {
         plan 2;
@@ -186,7 +186,7 @@ Note that we're using explicit `:instant` and `:!async` modes to prevent possibl
 
 This test is similar to `is-deeply` as it compares complex structure in depth. The difference is that `cmp-deeply` traverses deep into the structure is reports any difference found at the point where it is found. For example:
 
-``` 
+``` raku
 my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
 my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
 
@@ -235,7 +235,7 @@ This test tool informs the bundle that the following tests are expected to flunk
 
 The primary purpose is to allow testing other test tools. For example, test *t/080-is-approx.t* uses it to make sure that tests are failing when they have to fail:
 
-``` 
+``` raku
 test-flunks 2;
 is-approx 5, 6;
 is-approx 5, 6, 'test desc three';

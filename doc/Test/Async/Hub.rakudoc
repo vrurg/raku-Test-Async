@@ -5,9 +5,11 @@ C<Test::Async::Hub> - the core of C<Test::Async> framework
 
 =head1 SYNOPSIS
 
-    if test-suite.random {
-        say "The current suite is in random mode"
-    }
+=begin code :lang<raku>
+if test-suite.random {
+    say "The current suite is in random mode"
+}
+=end code
 
 =head1 DESCRIPTION
 
@@ -55,10 +57,12 @@ The number of tests planned for this suite. Undefined if no plans were made.
 
 If suite is planned for skipping then this is the message as for C<skip-remaining> tool:
 
-    subtest "Conditional test" => {
-        plan |($condition ?? :skip-all('makes no sens because ...') !! Empty);
-        pass "dummy test";
-    }
+=begin code :lang<raku>
+subtest "Conditional test" => {
+    plan |($condition ?? :skip-all('makes no sens because ...') !! Empty);
+    pass "dummy test";
+}
+=end code
 
 Otherwise undefined.
 
@@ -74,11 +78,13 @@ If suite is planned for I<TODO> then this is the message as for any of C<todo> t
 
 A number of remaining I<TODO> tests:
 
-    todo "To be done yet...", 3;
-    pass  "test 1";
-    # -> test-suite.TODO-count == 2 at this point
-    flunk "test 2";
-    pass  "test 3";
+=begin code :lang<raku>
+todo "To be done yet...", 3;
+pass  "test 1";
+# -> test-suite.TODO-count == 2 at this point
+flunk "test 2";
+pass  "test 3";
+=end code
 
 Could be set to C<Inf> meaning all remaining tests are to be I<TODO>-marked.
 
@@ -114,15 +120,19 @@ True if the suite itself or any of its parents is invoked asynchronously.
 
 Indicates if the whole suite has been marked as I<TODO>. This makes difference between:
 
-    todo "Later...";
-    subtest "new feature" => { ... }
+=begin code :lang<raku>
+todo "Later...";
+subtest "new feature" => { ... }
+=end code
 
 and
 
+=begin code :lang<raku>
 subtest "new feature" => {
-todo-remaining "Later...";
-...
+    todo-remaining "Later...";
+    ...
 }
+=end code
 
 Also I<True> if C<todo> parameter of plan is set to a message, which is virtually the same as prefixing the subtest with
 C<todo>.
@@ -185,11 +195,13 @@ Returns the pre-transition stage.
 
 The ultimate handler of event objects. A bundle wishing to react to events must define a multi-candidate of this method:
 
-    test-bundle MyBundle {
-        multi method event(Event::Telemetry:D $ev) {
-            ...
-        }
+=begin code :lang<raku>
+test-bundle MyBundle {
+    multi method event(Event::Telemetry:D $ev) {
+        ...
     }
+}
+=end code
 
 =head2 C<setup-from-plan>
 
@@ -226,26 +238,30 @@ Similar to C<done-testing> but also interrupts current test suite. If it happens
 
 This tool is helpful to avoid constructs like:
 
-    if !ok($my-check-result, "...") {
-        skip-rest "other tests make no sense now";
-    }
-    else {
-        ... # Do all other tests
-    }
+=begin code :lang<raku>
+if !ok($my-check-result, "...") {
+    skip-rest "other tests make no sense now";
+}
+else {
+    ... # Do all other tests
+}
+=end code
 
 Such approach could be especially annoying if I<other tests> also have a case where failure must skip remaining tests.
 Instead one can do:
 
-    if !ok($my-check-result, "...") {
-        skip-rest "other tests make no sense now";
-        abort-testing
-    }
-    ... # Do more tests
-    if !ok($my-other-check, "...") {
-        skip-rest "makes no sense to proceed";
-        abort-testing
-    }
-    ... # Do the rest
+=begin code :lang<raku>
+if !ok($my-check-result, "...") {
+    skip-rest "other tests make no sense now";
+    abort-testing
+}
+... # Do more tests
+if !ok($my-other-check, "...") {
+    skip-rest "makes no sense to proceed";
+    abort-testing
+}
+... # Do the rest
+=end code
 
 =head2 C<create-suite(suiteType = self.WHAT, *%c)>
 
@@ -327,9 +343,11 @@ what the user wants to pass to C<Event::Test> constructor. C<%c> capture is bypa
 
 Returns the next available test number. This is the number one sees next to test outcome status:
 
+=begin code
     ok 2 - message
        ^
        +--- this is it!
+=end code
 
 =head2 C<take-TODO(--> Str)>
 
@@ -409,7 +427,9 @@ L<C<Test::Async::JobMgr>|rakudoc:Test::Async::JobMgr>
 environment. Normaly it is expected that tools are called from within threads created by the job manager. But sometimes
 this condition cannot be fulfilled. For example:
 
-    $object.method-returns-promise.then: -> $p { is $p.result, $expected, "promise completed as expected" };
+=begin code :lang<raku>
+$object.method-returns-promise.then: -> $p { is $p.result, $expected, "promise completed as expected" };
+=end code
 
 C<then> code here is likely to be invoked in a thread created elsewhere without a chance for us to take over the
 process. This method wraps a test tool code into a job if it detects that the current thread is different from the
@@ -422,13 +442,15 @@ L<C<Type::Async::Manual>|https://modules.raku.org/dist/Type::Async::Manual>
 Call Location And Anchoring section) for all nested test suits or calls to test tools, done within C<&code>.
 For example:
 
-    method my-compound-tool(...) is test-tool(:!wrap) {
-        self.anchor: {
-            subtest "compound subtest", :hidden, {
-                my-other-compound-tool(...);
-            }
+=begin code :lang<raku>
+method my-compound-tool(...) is test-tool(:!wrap) {
+    self.anchor: {
+        subtest "compound subtest", :hidden, {
+            my-other-compound-tool(...);
         }
     }
+}
+=end code
 
 In the example the subtest and any nested tools/suits used by C<my-other-compound-tool> will report the location where
 C<my-compound-tool> is called.

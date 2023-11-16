@@ -1,6 +1,6 @@
-# Class `Event::Diag`
+# Class `Test::Async::Event::Diag`
 
-Is [`Event::Report`](https://raku.land/?q=Event::Report).
+Is [`Test::Async::Event::Report`](Report.md).
 
 Carries a diagnostics message. See `diag` in [`Test::Async::Base`](../Base.md).
 

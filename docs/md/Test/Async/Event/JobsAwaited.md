@@ -1,6 +1,6 @@
-# Class <Event::JobsAwaited>
+# Class <Test::Async::Event::JobsAwaited>
 
-Is [`Event`](https://raku.land/?q=Event)
+Is [`Test::Async::Event`](../Event.md)
 
 Emitted when all pending jobs are completed.
 

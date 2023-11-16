@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::NotOk>
+=head1 Class C<Test::Async::Event::NotOk>
 
-Is L<C<Event::Test>|rakudoc:Event::Test>.
+Is L<C<Test::Async::Event::Test>|rakudoc:Test::Async::Event::Test>.
 
 Reports flunked test.
 

@@ -65,12 +65,12 @@ Next paragraphs are explaining where this output comes from.
 
 Let's start with bundles. One is created with either `test-bundle` or `test-reporter` keyword provided by [`Test::Async::Decl`](Decl.md) module. For example:
 
-``` 
-test-bundle MyBundle {
-    method my-test($got, $expected, $message) is test-tool {
-        ...
+``` raku
+    test-bundle MyBundle {
+        method my-test($got, $expected, $message) is test-tool {
+            ...
+        }
     }
-}
 ```
 
 In fact it is nothing else but a role declaration but with two important side effects:
@@ -81,7 +81,7 @@ In fact it is nothing else but a role declaration but with two important side ef
 
 The second item means that this code:
 
-``` 
+``` raku
 use MyBundle;
 use Test::Async;
 plan 1;
@@ -147,11 +147,11 @@ The way the manager works is it creates a pool (not a queue) of jobs. The order 
 `Test::Async` framework handles concurrency using event-driven flow control. Each event is an instance of a class inheriting from [`Test::Async::Event`](Event.md) class. Events are queued using a [`Channel`](https://docs.raku.org/type/Channel) where they're read from by a dedicated thread and dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests themselves, the other one is for event handling.
 
 ``` 
-Thread#1 \
-          \
-Thread#2 --> [Event Queue] -> Event Handler Thread
-          /
-Thread#3 /
+    Thread#1 \
+              \
+    Thread#2 --> [Event Queue] -> Event Handler Thread
+              /
+    Thread#3 /
 ```
 
 The approach allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential code. In particular, it proves to be useful for object state changes like, for example, for collecting messages from child suites ran asynchronously. Because the messages are stashed in an [`Array`](https://docs.raku.org/type/Array) the procedure is prone to race condition bugs. But when the responsibility of updating the array is in hands of a single thread it greatly simplifies the task.
@@ -195,11 +195,13 @@ A test tool is a method with `test-tool` trait applied. It has two properties:
   - `readify` which defines whether invoking the tool results in suite transition from stage *initializing* into *in progress*
 
   - `skippable` defines whether the tool can be skipped over. For example, `ok` from [`Test::Async::Base`](Base.md) is skippable; but `skip` and the family themselves are not, as well as `todo` and few other.
-    
-    test-bundle Test::Foo {
-    method test-foo(...) is test-tool(:\!skippable, :\!readify) { ... }
+
+``` raku
+test-bundle Test::Foo {
+    method test-foo(...) is test-tool(:!skippable, :!readify) { ... }
     method test-bar(...) is test-tool { ... }
-    }
+}
+```
 
 ## Call Location And Anchoring
 
@@ -207,25 +209,25 @@ Whenever a test fails `Test::Async` tries to provide the most useful information
 
 Normally the location is determined by `locate-tool-caller` method of the [`Test::Async::Hub`](Hub.md) class and points at the exact location of where a tool was used. But sometimes this information may not be really useful. For example, imagine a compound test tool which combines a few checks into a single call. Something like:
 
-``` 
-method my-compound-tool(...) is test-tool {
-    submethod "compound check", :hidden, {
-        my-other-compound-tool ...;
+``` raku
+    method my-compound-tool(...) is test-tool {
+        submethod "compound check", :hidden, {
+            my-other-compound-tool ...;
+        }
     }
-}
-method my-other-compound-tool(...) is test-tool {
-    submethod "other compound check", :hidden, {
-        flunk "say, something went wrong";
+    method my-other-compound-tool(...) is test-tool {
+        submethod "other compound check", :hidden, {
+            flunk "say, something went wrong";
+        }
     }
-}
 ```
 
 The problem with the above construct is that even with `:hidden` attribute which makes a subtest to mimic it's callee (the compound test tools in our case), the nested submethod of the *other* tool would report the location where it's enclosing tool is invoked, which is inside of `my-compound-tool`. Considering that most likely both methods are part of a module the location reported wouldn't be really useful for a developer. To solve this kind of a problem `Test::Async` provides a way to declare *anchored* test tools or to manually anchor a location for tools with `:!wrappable` attribute of [`Test::Async::TestTool`](TestTool.md). An anchor is a location which will be used by any nested test tool or a suite for its reports:
 
-``` 
-method my-compound-tool(...) is test-tool(:anchor) {
-    ...
-}
+``` raku
+    method my-compound-tool(...) is test-tool(:anchor) {
+        ...
+    }
 ```
 
 Now, if the *other* `subtest` doesn't pass then the developer will see the location in their test file or wherever the compound tool was invoked.
@@ -236,7 +238,7 @@ See [`Test::Async::Hub`](Hub.md) `anchor` method to use within `:!wrappable` too
 
 Another important detail to remember when we consider call location and anchoring are test tools utilizing [`EVAL`](https://docs.raku.org/routine/EVAL) routine. For example, we can mention `eval-lives-ok` from [`Test::Async::Base`](Base.md). By doing something like:
 
-``` 
+``` raku
 subtest "Contextual" => {
     plan 3;
     my $bar = pi;

@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::Telemetry>
+=head1 Class C<Test::Async::Event::Telemetry>
 
-Is L<C<Event>|rakudoc:Event>
+Is L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 Under development yet.
 

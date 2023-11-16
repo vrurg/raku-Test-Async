@@ -1,6 +1,6 @@
-# Class `Event::NotOk`
+# Class `Test::Async::Event::NotOk`
 
-Is [`Event::Test`](https://raku.land/?q=Event::Test).
+Is [`Test::Async::Event::Test`](Test.md).
 
 Reports flunked test.
 

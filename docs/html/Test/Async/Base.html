@@ -495,7 +495,8 @@ done-testing
 <p>For example, let's assume that our current suite is configured for random execution of subtest. Then</p>
 <pre class="pod-block-code">subtest "foo", :instant, {
     ...
-}</pre>
+}
+</pre>
 <p>would result in the <code>subtest</code> be invoked right away, where it's declaration is encountered, without postponing. Similarly, if <code>parallel</code> plan parameter is in effect, <code>:instant</code> will overrule it so it will run right here, right now!</p>
 <p>Adding <code>:async</code> named parameter too will invoke the subtest instantly and asynchronously. And this also means that a subtest invoked this way won't be counted as a job by <a href="JobMgr.html"><code>Test::Async::JobMgr</code></a>. In other words, we treat <code>:instant</code> as: <em>bypass any queue, just do it here and now!</em></p>
 <p>Another edge case is using <code>:async</code> with <code>random</code>. In this case the subtest will be postponed. But when time to invoke subtests comes this particular one will get his dedicated thread no matter what <code>parallel</code> is set to.</p>
@@ -504,12 +505,14 @@ done-testing
 <pre class="pod-block-code">subtest "subtest topic" =&gt; {
     .plan: 1;
     .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
-}</pre>
+}
+</pre>
 <p>The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above example could be written as:</p>
 <pre class="pod-block-code">Test::Async::Hub.test-suite.subtest "subtest topic" =&gt; {
     .plan: 1;
     .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
-}</pre>
+}
+</pre>
 <p>and this is the way it must be used in a module. See <a href="../Async.html"><code>Test::Async</code></a> and <a href="CookBook.html"><code>Test::Async::CookBook</code></a> for more details.</p>
 <h3 id="Hidden_subtest"><a class="u" href="#___top" title="go to top of document">Hidden <code>subtest</code></a></h3>
 <p><code>:hidden</code> named parameter doesn't change how a subtest runs but rather how it reports itself. A hidden subtest pretends to be integral part of test tool method which invoked it. It means two things:</p>
@@ -527,14 +530,16 @@ done-testing
         ok $result1, "result1";
         ok $result2, "result2";
     }
-}</pre>
+}
+</pre>
 <p>Note that we're using explicit <code>:instant</code> and <code>:!async</code> modes to prevent possible side effect related to use of <code>:parallel</code> and <code>:random</code> in parent suite's plan. Besides, it is normal for a user to expect a test tool to be semi-atomic operation being done here and now.</p>
 <h2 id="cmp-deeply(Mu_\got,_Mu_\expected,_Str:D_$message)"><a class="u" href="#___top" title="go to top of document"><code>cmp-deeply(Mu \got, Mu \expected, Str:D $message)</code></a></h2>
 <p>This test is similar to <code>is-deeply</code> as it compares complex structure in depth. The difference is that <code>cmp-deeply</code> traverses deep into the structure is reports any difference found at the point where it is found. For example:</p>
 <pre class="pod-block-code">my @got      = [1, 2, %( foo =&gt;  Foo.new(:foo('13'), :fubar(11)) )];
 my @expected = [1, 2, %( foo =&gt;  Foo.new(:foo(13),   :fubar(12)) )];
 
-cmp-deeply @got, @expected, "class instance deep withing an array";</pre>
+cmp-deeply @got, @expected, "class instance deep withing an array";
+</pre>
 <p>This test would result in a diagnostic message like this:</p>
 <p>Which tells us that a difference has been found in an instance of a class (<em>Object</em>) located in a key <code>foo</code> of an <a href="https://docs.raku.org/type/Associative"><code>Associative</code></a> which is located in the second index of a <a href="https://docs.raku.org/type/Positional"><code>Positional</code></a>. Differences are reported for each attribute where they are found.</p>
 <p>Another difference of this test to <code>is-deeply</code> is that it disrespect containerization status and focuses on structure alone.</p>
@@ -567,7 +572,8 @@ cmp-deeply @got, @expected, "class instance deep withing an array";</pre>
 <p>The primary purpose is to allow testing other test tools. For example, test <em>t/080-is-approx.t</em> uses it to make sure that tests are failing when they have to fail:</p>
 <pre class="pod-block-code">test-flunks 2;
 is-approx 5, 6;
-is-approx 5, 6, 'test desc three';</pre>
+is-approx 5, 6, 'test desc three';
+</pre>
 <p>Setting <code>$count</code> to <a href="https://docs.raku.org/type/Inf"><code>Inf</code></a> is the same as using <code>:remaining</code> named parameter and means: all remaining tests in the current suite are expected to flunk.</p>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
 <ul><li><p><a href="Manual.html"><code>Test::Async::Manual</code></a></p>

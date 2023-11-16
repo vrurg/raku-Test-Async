@@ -1,6 +1,6 @@
-# Class `Event::StageTransition`
+# Class `Test::Async::Event::StageTransition`
 
-Is [`Event`](https://raku.land/?q=Event)
+Is [`Test::Async::Event`](../Event.md)
 
 Emitted each time suite stage is changed.
 

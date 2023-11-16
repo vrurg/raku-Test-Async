@@ -75,11 +75,13 @@ Let's start with bundles. One is created with either C<test-bundle> or C<test-re
 L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl> module.
 For example:
 
+=begin code :lang<raku>
     test-bundle MyBundle {
         method my-test($got, $expected, $message) is test-tool {
             ...
         }
     }
+=end code
 
 In fact it is nothing else but a role declaration but with two important side effects:
 
@@ -92,14 +94,18 @@ the framework core.
 
 The second item means that this code:
 
-    use MyBundle;
-    use Test::Async;
-    plan 1;
-    my-test pi, 2*pi, "whatever";
+=begin code :lang<raku>
+use MyBundle;
+use Test::Async;
+plan 1;
+my-test pi, 2*pi, "whatever";
+=end code
 
 would just work. BTW, if one would try to dump parents and role of the suite object, as show above, he would get:
 
-    Suit, MyBundle_class, MyBundle, TAP_class, TAP, Reporter, Hub, JobMgr, Aggregator, Any, Mu
+=begin code
+Suit, MyBundle_class, MyBundle, TAP_class, TAP, Reporter, Hub, JobMgr, Aggregator, Any, Mu
+=end code
 
 Becase the framework skips loading the default bundle if there is one explicitly requested by a user. Same applies for
 C<TAP> which is the default reporter bundle and which wouldn't be loaded if the user C<use>s an alternative.
@@ -123,9 +129,11 @@ The construction algorithm could roughly be written as:
 
 Putting this into a diagram would give us something like this for the default case:
 
-    .         Suite -> Base_class -> TAP_class -> Hub -> Any -> Mu
-    .                  |             |
-    . bundle roles:    Base          TAP
+=begin code
+.         Suite -> Base_class -> TAP_class -> Hub -> Any -> Mu
+.                  |             |
+. bundle roles:    Base          TAP
+=end code
 
 See example script:
 L<I<examples/multi-bundle/multi-bundle.raku>|file:examples/multi-bundle/multi-bundle.raku>
@@ -170,11 +178,13 @@ Events are queued using a L<C<Channel>|https://docs.raku.org/type/Channel> where
 and dispatched for handling by suite object methods. So it makes each suit own at least two threads: first is for tests
 themselves, the other one is for event handling.
 
+=begin code
     Thread#1 \
               \
     Thread#2 --> [Event Queue] -> Event Handler Thread
               /
     Thread#3 /
+=end code
 
 The approach allows to combine the best of two worlds: speed of asynchronous operations and predictability of sequential
 code. In particular, it proves to be useful for object state changes like, for example, for collecting messages from
@@ -222,10 +232,12 @@ I<in progress>
 L<C<Test::Async::Base>|rakudoc:Test::Async::Base> is skippable;
 but C<skip> and the family themselves are not, as well as C<todo> and few other.
 
-    test-bundle Test::Foo {
-        method test-foo(...) is test-tool(:!skippable, :!readify) { ... }
-        method test-bar(...) is test-tool { ... }
-    }
+=begin code :lang<raku>
+test-bundle Test::Foo {
+    method test-foo(...) is test-tool(:!skippable, :!readify) { ... }
+    method test-bar(...) is test-tool { ... }
+}
+=end code
 
 =head2 Call Location And Anchoring
 
@@ -241,6 +253,7 @@ L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
 class and points at the exact location of where a tool was used. But sometimes this information may not be really
 useful. For example, imagine a compound test tool which combines a few checks into a single call. Something like:
 
+=begin code :lang<raku>
     method my-compound-tool(...) is test-tool {
         submethod "compound check", :hidden, {
             my-other-compound-tool ...;
@@ -251,6 +264,7 @@ useful. For example, imagine a compound test tool which combines a few checks in
             flunk "say, something went wrong";
         }
     }
+=end code
 
 The problem with the above construct is that even with C<:hidden> attribute which makes a subtest to mimic it's
 callee (the compound test tools in our case), the nested submethod of the I<other> tool would report the location
@@ -261,9 +275,11 @@ tools with C<:!wrappable> attribute of
 L<C<Test::Async::TestTool>|rakudoc:Test::Async::TestTool>.
 An anchor is a location which will be used by any nested test tool or a suite for its reports:
 
+=begin code :lang<raku>
     method my-compound-tool(...) is test-tool(:anchor) {
         ...
     }
+=end code
 
 Now, if the I<other> C<subtest> doesn't pass then the developer will see the location in their test file or wherever
 the compound tool was invoked.
@@ -278,15 +294,17 @@ L<C<EVAL>|https://docs.raku.org/routine/EVAL> routine.
 For example, we can mention C<eval-lives-ok>
 from L<C<Test::Async::Base>|rakudoc:Test::Async::Base>. By doing something like:
 
-    subtest "Contextual" => {
-        plan 3;
-        my $bar = pi;
-        { # The inner block is needed to prevent $bar from being lowered away by optimizer.
-            is $bar, pi, "control test";
-            eval-lives-ok q<$bar *= 2>, "evaling test sees a local variable";
-            is $bar, pi * 2, "eval changed the local variable";
-        }
+=begin code :lang<raku>
+subtest "Contextual" => {
+    plan 3;
+    my $bar = pi;
+    { # The inner block is needed to prevent $bar from being lowered away by optimizer.
+        is $bar, pi, "control test";
+        eval-lives-ok q<$bar *= 2>, "evaling test sees a local variable";
+        is $bar, pi * 2, "eval changed the local variable";
     }
+}
+=end code
 
 we expect C<$bar> to be available to the eval code because this is our lexical context. And yet, the example above is
 rather simplistic and C<eval-lives-ok> can simply use its C<CALLER::> context to function correctly. But what if it is

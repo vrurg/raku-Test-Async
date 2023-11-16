@@ -393,9 +393,18 @@ li > .pod-block-code { margin-top: 16px; }
     <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
 <p><code>Test::Async::When</code> - add <code>:when</code> key to plan</p>
 <h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
-<p>Whole top suite:</p>
-<p>use Test::Async &lt;When Base&gt;; plan :when((&lt;release&gt;)) Or a subtest only:</p>
-<p>use Test::Async &lt;When Base&gt;; subtest "Might be skipped" =&gt; { plan :when((:all((:any((&lt;release author&gt;)), :module&lt;Optional::Module&gt;)))); ... } }</p>
+<p>Entire top suite:</p>
+<pre class="pod-block-code">use Test::Async &lt;When Base&gt;;
+plan :when((&lt;release&gt;))
+</pre>
+<p>Or a subtest only:</p>
+<pre class="pod-block-code">use Test::Async &lt;When Base&gt;;
+subtest "Might be skipped" =&gt; {
+    plan :when((:all((:any((&lt;release author&gt;)), :module&lt;Optional::Module&gt;))));
+    ...
+}
+}
+</pre>
 <h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
 <p>This bundle extends <code>plan</code> with additional parameter <code>:when</code> which defines when the suite is to be actually ran. If <code>when</code> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:</p>
 <ul><li><p>a string value means a name of a testing mode enabled with an environment variable. Simply put, it gets uppercased, appended with <em>_TESTING</em> and the resulting name is checked against <code>%*ENV</code>. If the string is already ending with <em>_TESTING</em> it is used as-is.</p>
@@ -411,7 +420,8 @@ li > .pod-block-code { margin-top: 16px; }
 </ul>
 <p>By default the topmost condition means <code>any</code>, so that the following two statements are actually check the same condition:</p>
 <pre class="pod-block-code">plan :when&lt;release author&gt;;
-plan :when(:any&lt;release author&gt;);</pre>
+plan :when(:any&lt;release author&gt;);
+</pre>
 <h1 id="SEE_ALSO"><a class="u" href="#___top" title="go to top of document">SEE ALSO</a></h1>
 <ul><li><p><a href="Manual.html"><code>Test::Async::Manual</code></a></p>
 </li>

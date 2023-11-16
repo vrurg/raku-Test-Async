@@ -1,7 +1,7 @@
 =begin pod
-=head1 Class C<Event::Report>
+=head1 Class C<Test::Async::Event::Report>
 
-Is L<C<Event>|rakudoc:Event>
+Is L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 Base class for events carrying a text message of any kind.
 

@@ -6,35 +6,25 @@
 
 This class acts as a registry for test bundle roles, and as a construction yard for the custom `Test::Async::Suite` class.
 
-# methods
-
-`register-bundle(Mu \bundle-role)`
+## `method register-bundle(Mu \bundle-role)`
 
 Registers bundle role for later suite class construction.
 
-# method
-
-`construct-suite(\hub-class --` Test::Async::Suite:U)\>
+## `method construct-suite(\hub-class --> Test::Async::Suite:U)`
 
 Returns a custom `Test::Async::Suite` class based on all test bundles registered. The construction happens only once, all consequent calls to the method get the same suite type object.
 
 Normally this method is to be invoked on the hub class: `Test::Async::Hub.^construct-suite`.
 
-# method
-
-`suite-class(\hub-class)`
+## `method suite-class(\hub-class)`
 
 Convenience shortcut to `construct-suite`
 
-# method
-
-`suite(\obj)`
+## `method suite(\obj)`
 
 Returns *True* if suite class has been constructed already.
 
-# method
-
-`bundles()`
+## `method bundles()`
 
 Returns a list of registered bundles.
 

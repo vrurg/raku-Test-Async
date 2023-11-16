@@ -4,13 +4,16 @@
 C<Test::Async::Decl> - declarations for writing new bundles
 
 =head1 SYNOPSIS
-    use Test::Async::Decl;
 
-    unit test-bundle MyBundle;
+=begin code :lang<raku>
+use Test::Async::Decl;
 
-    method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
-        ...
-    }
+unit test-bundle MyBundle;
+
+method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
+    ...
+}
+=end code
 
 =head1 DESCRIPTION
 
@@ -40,9 +43,11 @@ metaclass. Barely useful for a third-party developer.
 
 This trait is used to declare a method in a bundle as a test tool:
 
-    method foo(...) is test-tool {
-        ...
-    }
+=begin code :lang<raku>
+method foo(...) is test-tool {
+    ...
+}
+=end code
 
 The method is then exported to user as C<&foo> routine. Internally the method is getting wrapped into a code which
 does necessary preparations for the tool to act as expected. See

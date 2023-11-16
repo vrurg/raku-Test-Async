@@ -4,7 +4,7 @@
 
 # SYNOPSIS
 
-``` 
+``` raku
 class MyApp does Test::Async::JobMgr {
     method foo {
         self.start-job: self.new-job( { self.worker-method }, :async );

@@ -1,6 +1,6 @@
-# Class `Event::Command`
+# Class `Test::Async::Event::Command`
 
-Is [`Event`](https://raku.land/?q=Event)
+Is [`Test::Async::Event`](../Event.md)
 
 Base class of commanding events. [`Test::Async::Hub`](../Hub.md) handles them specially.
 
@@ -12,7 +12,7 @@ Base class of commanding events. [`Test::Async::Hub`](../Hub.md) handles them sp
 
 # SEE ALSO
 
-[`Test::Async::Event`](../Event.md)
+  - [`Test::Async::Event`](../Event.md)
 
 # COPYRIGHT
 

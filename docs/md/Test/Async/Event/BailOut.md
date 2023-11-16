@@ -1,6 +1,6 @@
-# Class `Event::BailOut`
+# Class `Test::Async::Event::BailOut`
 
-Is [`Event::Report`](https://raku.land/?q=Event::Report).
+Is [`Test::Async::Event::Report`](Report.md).
 
 Emitted when test suite is about to bail out.
 
