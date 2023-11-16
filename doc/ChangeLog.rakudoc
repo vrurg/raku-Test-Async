@@ -3,6 +3,12 @@
 =head1 CHANGELOG
 
 =begin item
+B<v0.1.17>
+
+
+=end item
+
+=begin item
 B<v0.1.16>
 
 =item Fix C<cmp-deeply> for nominalizables
