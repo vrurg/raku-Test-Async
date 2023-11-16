@@ -1,5 +1,7 @@
 # CHANGELOG
 
+  - **v0.1.17**
+
   - **v0.1.16**
     
       - Fix `cmp-deeply` for nominalizables
