@@ -1,8 +1,10 @@
 =begin pod
 =head1 NAME
+
 C<Test::Async::Metamodel::BundleHOW> - metaclass backing bundle roles
 
 =head1 DESCRIPTION
+
 The only function is to register the bundle role with slang defined in
 L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>.
 

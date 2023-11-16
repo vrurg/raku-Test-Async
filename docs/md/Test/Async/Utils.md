@@ -1,4 +1,6 @@
-# NAME `Test::Async::Utils` - `Test::Async` utilities
+# NAME
+
+`Test::Async::Utils` - `Test::Async` utilities
 
 # EXPORTED ENUMS
 

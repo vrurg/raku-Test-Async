@@ -1,6 +1,10 @@
-# NAME `Test::Async::Metamodel::ReporterHOW` - metaclass backing a reporter bundle
+# NAME
 
-# DESCRIPTION This class inherits from `Test::Async::Metamodel::BundleHOW` and adds implicit application of [`Test::Async::Reporter`](../Reporter.md) role.
+`Test::Async::Metamodel::ReporterHOW` - metaclass backing a reporter bundle
+
+# DESCRIPTION
+
+This class inherits from `Test::Async::Metamodel::BundleHOW` and adds implicit application of [`Test::Async::Reporter`](../Reporter.md) role.
 
 # SEE ALSO
 

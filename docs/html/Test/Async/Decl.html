@@ -378,9 +378,9 @@ li > .pod-block-code { margin-top: 16px; }
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
-<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME_Test::Async::Decl_-_declarations_for_writing_new_bundles">NAME <code class="pod-code-inline">Test::Async::Decl</code> - declarations for writing new bundles</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
 <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS_use_Test::Async::Decl;">SYNOPSIS use Test::Async::Decl;</a></td></tr>
-<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION_This_module_exports_declarations_needed_to_write_custom_bundles_for_Test::Async_framework.">DESCRIPTION This module exports declarations needed to write custom bundles for <code class="pod-code-inline">Test::Async</code> framework.</a></td></tr>
+<tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
 <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#test-bundle"><code class="pod-code-inline">test-bundle</code></a></td></tr>
 <tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#test-reporter"><code class="pod-code-inline">test-reporter</code></a></td></tr>
 <tr class="toc-level-2"><td class="toc-number">3.3</td><td class="toc-text"><a href="#test-hub"><code class="pod-code-inline">test-hub</code></a></td></tr>
@@ -394,14 +394,16 @@ li > .pod-block-code { margin-top: 16px; }
 
 
     <div class="pod-body">
-    <h1 id="NAME_Test::Async::Decl_-_declarations_for_writing_new_bundles"><a class="u" href="#___top" title="go to top of document">NAME <code>Test::Async::Decl</code> - declarations for writing new bundles</a></h1>
+    <h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
+<p><code>Test::Async::Decl</code> - declarations for writing new bundles</p>
 <h1 id="SYNOPSIS_use_Test::Async::Decl;"><a class="u" href="#___top" title="go to top of document">SYNOPSIS use Test::Async::Decl;</a></h1>
 <pre class="pod-block-code">unit test-bundle MyBundle;
 
 method my-tool(...) is test-tool(:name&lt;mytool&gt;, :!skippable, :!readify) {
     ...
 }</pre>
-<h1 id="DESCRIPTION_This_module_exports_declarations_needed_to_write_custom_bundles_for_Test::Async_framework."><a class="u" href="#___top" title="go to top of document">DESCRIPTION This module exports declarations needed to write custom bundles for <code>Test::Async</code> framework.</a></h1>
+<h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
+<p>This module exports declarations needed to write custom bundles for <code>Test::Async</code> framework.</p>
 <h2 id="test-bundle"><a class="u" href="#___top" title="go to top of document"><code>test-bundle</code></a></h2>
 <p>Declares a bundle role backed by <a href="Metamodel/BundleHOW.html"><code>Test::Async::Metamodel::BundleHOW</code></a> metaclass.</p>
 <h2 id="test-reporter"><a class="u" href="#___top" title="go to top of document"><code>test-reporter</code></a></h2>

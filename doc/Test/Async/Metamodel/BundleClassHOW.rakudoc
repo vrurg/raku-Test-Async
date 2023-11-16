@@ -1,8 +1,10 @@
 =begin pod
 =head1 NAME
+
 C<Test::Async::Metamodel::BundleClassHOW> - metaclass backing custom bundle classes.
 
 =head1 DESCRIPTION
+
 This class purpose is to ensure that test tool methods are wrapped into common boilerplate. The boilerplate does
 the following:
 

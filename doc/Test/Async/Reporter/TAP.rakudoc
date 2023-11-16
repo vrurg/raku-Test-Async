@@ -1,8 +1,10 @@
 =begin pod
 =head1 NAME
+
 C<Test::Async::Reporter::TAP> - TAP reporter bundle
 
 =head1 DESCRIPTION
+
 Maps events into TAP output.
 
 The class is implementation detail. In addition to methods required by

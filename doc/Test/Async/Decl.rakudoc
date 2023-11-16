@@ -1,5 +1,6 @@
 =begin pod
 =head1 NAME
+
 C<Test::Async::Decl> - declarations for writing new bundles
 
 =head1 SYNOPSIS
@@ -12,6 +13,7 @@ C<Test::Async::Decl> - declarations for writing new bundles
     }
 
 =head1 DESCRIPTION
+
 This module exports declarations needed to write custom bundles for C<Test::Async> framework.
 
 =head2 C<test-bundle>

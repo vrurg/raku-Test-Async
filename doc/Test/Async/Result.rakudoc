@@ -21,6 +21,7 @@ This class represents information about test outcomes.
 
 
 =head1 ATTRIBUTES
+
 =head2 C<Bool:D $.cond>
 
 I<True> if test is considered success, I<False> otherwise. B<Note> that a skipped tests is a success.

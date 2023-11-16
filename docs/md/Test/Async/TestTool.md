@@ -1,6 +1,10 @@
-# NAME `Test::Async::TestTool` - role consumed by test tool methods
+# NAME
 
-# DESCRIPTION This role is applied by `test-tool` trait to a test tool method.
+`Test::Async::TestTool` - role consumed by test tool methods
+
+# DESCRIPTION
+
+This role is applied by `test-tool` trait to a test tool method.
 
 # ATTRIBUTES
 

@@ -1,6 +1,10 @@
-# NAME `Test::Async::Job` - a job record task
+# NAME
 
-# DESCRIPTION Class defines a job entry for [`Test::Async::JobMgr`](JobMgr.md).
+`Test::Async::Job` - a job record task
+
+# DESCRIPTION
+
+Class defines a job entry for [`Test::Async::JobMgr`](JobMgr.md).
 
 # ATTRIBUTES
 

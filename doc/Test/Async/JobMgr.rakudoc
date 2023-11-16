@@ -15,6 +15,7 @@ C<Test::Async::JobMgr> – job management role
     }
 
 =head1 DESCRIPTION
+
 This role implements job management functionality, as described in section Job Management of
 L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>.
 
@@ -32,12 +33,14 @@ Jobs are grouped into three categories:
 A completed job is removed from the pool automatically, the user code doesn't need to worry about this.
 
 =head1 ATTRIBUTES
+
 =head2 C<@.postponed>
 
 Queue of jobs postponed for later invocation. Not actually used by the manager itself except by C<await-all-jobs>
 methods. Provided for consuming class code convenience.
 
 =head1 METHODS
+
 =head2 C<test-job()>
 
 A stub. Consuming class must provide it to report the maximum number of simultaneously executed jobs. See C<$.test-jobs>

@@ -1,6 +1,10 @@
-# NAME `Test::Async::Metamodel::HubHOW` - metaclass backing Hub/Suite classes.
+# NAME
 
-# DESCRIPTION This class acts as a registry for test bundle roles, and as a construction yard for the custom `Test::Async::Suite` class.
+`Test::Async::Metamodel::HubHOW` - metaclass backing Hub/Suite classes.
+
+# DESCRIPTION
+
+This class acts as a registry for test bundle roles, and as a construction yard for the custom `Test::Async::Suite` class.
 
 # methods
 

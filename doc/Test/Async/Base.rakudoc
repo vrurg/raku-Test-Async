@@ -1,5 +1,6 @@
 =begin pod
 =head1 NAME
+
 C<Test::Async::Base> – this test bundle contains all the base test tools
 
 =head1 SYNOPSIS
@@ -39,6 +40,7 @@ Test tools resulting in either I<ok> or I<not ok> messages return either I<True>
 C<skip> always considered to be successful and thus returns I<True>.
 
 =head1 ATTRIBUTES
+
 =head2 C<Str:D $.FLUNK-message>
 
 The message set with C<test-flunks>.
@@ -50,6 +52,7 @@ Number of tests expected to flunk. Reduces with each next test completing.
 See C<take-FLUNK>.
 
 =head1 METHODS
+
 =head2 C<take-FLUNK(--> Str)>
 
 If C<test-flunks> is in effect then method returns its message and decreases C<$.FLUNK-count>.

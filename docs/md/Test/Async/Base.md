@@ -1,4 +1,6 @@
-# NAME `Test::Async::Base` – this test bundle contains all the base test tools
+# NAME
+
+`Test::Async::Base` – this test bundle contains all the base test tools
 
 # SYNOPSIS
 

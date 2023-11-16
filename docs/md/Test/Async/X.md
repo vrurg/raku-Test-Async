@@ -1,6 +1,10 @@
-# NAME `Test::Async::X` - collection of `Test::Async` exceptions
+# NAME
 
-# DESCRIPTION All exceptions are based upon `Test::Async::X` class. The class has and requires a single attribute `$.suite` which points at the suite object which thrown the exception. The recommended method `throw` of [`Test::Async::Hub`](Hub.md) sets the attribute automatically.
+`Test::Async::X` - collection of `Test::Async` exceptions
+
+# DESCRIPTION
+
+All exceptions are based upon `Test::Async::X` class. The class has and requires a single attribute `$.suite` which points at the suite object which thrown the exception. The recommended method `throw` of [`Test::Async::Hub`](Hub.md) sets the attribute automatically.
 
 # EXPORTED EXCEPTIONS
 
