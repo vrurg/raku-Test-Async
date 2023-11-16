@@ -1,0 +1,288 @@
+=begin pod
+=head1 NAME
+
+C<Test::Async::Base> – this test bundle contains all the base test tools
+
+=head1 SYNOPSIS
+
+=begin code :lang<raku>
+use Test::Async::Base;
+use Test::Async;
+plan 1;
+pass "Hello world!";
+done-testing
+=end code
+
+=head1 DESCRIPTION
+
+This bundle is supposed to provide same test tools, as the standard Raku L<C<Test>|https://docs.raku.org/type/Test>. So
+that
+
+=begin code :lang<raku>
+use Test::Async;
+plan ... ;
+... ;
+done-testing
+=end code
+
+would be the same as:
+
+=begin code :lang<raku>
+use Test;
+plan ... ;
+... ;
+done-testing
+=end code
+
+For this reason this document only tells about differences between the two.
+
+Test tools resulting in either I<ok> or I<not ok> messages return either I<True> or I<False> depending on test outcome.
+C<skip> always considered to be successful and thus returns I<True>.
+
+=head1 ATTRIBUTES
+
+=head2 C<Str:D $.FLUNK-message>
+
+The message set with C<test-flunks>.
+
+=head2 C<Numeric:D $.FLUNK-count>
+
+Number of tests expected to flunk. Reduces with each next test completing.
+
+See C<take-FLUNK>.
+
+=head1 METHODS
+
+=head2 C<take-FLUNK(--> Str)>
+
+If C<test-flunks> is in effect then method returns its message and decreases C<$.FLUNK-count>.
+
+=head2 C<multi expected-got(Str:D $expected, Str:D $got, Str :$exp-sfx, Str :$got-sfx --> Str)>
+=head2 C<multi expected-got($expected, $got, :$gist, :$quote, *%c)>
+
+Method produces standardized I<"expected ... but got ..."> messages.
+
+The second candidate is used for non-string values. It stringifies them using
+L<C<Test::Async::Utils>|rakudoc:Test::Async::Utils> C<stringify> routine and then passes over to the first candidate for formatting alongside with
+named parameters captured in C<%c>.
+
+Named parameters:
+
+=item C<:$exp-sfx> - suffix for "expected", a string which will be inserted after it.
+=item C<:$got-sfx> – suffix for "got"
+=item C<:$gist> - enforces use of method C<gist> to stringify values
+=item C<:$quote> - enforces use of quotes around the stringified values
+
+=head2 C<cmd-settestflunk>
+
+Handler for C<Event::Cmd::SetTestFlunk> defined by this bundle.
+
+=head1 TEST TOOLS
+
+=head2 C<diag +@msg>
+
+Unlike the standard L<C<Test>|https://docs.raku.org/type/Test> C<diag>, accepts a list too allowing similar usage as with C<say> and C<note>.
+
+=head2 C<skip-remaining($message, Bool :$global?)>
+
+Skips all remaining tests in current suite. If C<$global> is set then it's the same as invoking C<skip-remaining> on
+all suite parents, including the topmost suite.
+
+=head2 C<todo-remaining(Str:D $message)>
+
+Mark all remaining tests of the current suite as I<TODO>.
+
+=head2 C<multi subtest(Pair $what, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)>
+=head2 C<multi subtest(Str:D $message, Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)>
+=head2 C<multi subtest(Callable:D \code, Bool:D :$async=False, Bool:D :$instant=False, :$hidden=False, *%plan)>
+
+C<subtest> is a way to logically group a number of tests together. The default C<subtest> behaviour is no different from
+what is described in L<C<Test>|https://docs.raku.org/type/Test#sub_subtest>. But additionally we can invoke it:
+
+=item asynchronously
+=item in random order with other C<subtest>s of the same nesting level
+=item randomly and asynchronously at the same time
+
+A C<subtest> could also kind of hide itself behind another test tool.
+
+C<subtest> returns a L<C<Promise>|https://docs.raku.org/type/Promise> kept with I<True> or I<False> depending on
+C<subtest> pass/flunk status.
+
+=head3 Invocation modes of C<subtest>
+
+The asynchronous invocation means that a C<subtest> will be run in a new dedicated thread. The random invocation means
+that C<subtest> invocation is postponed until the suite code ends. Then all postponed subtests will be pulled and
+invoked in a random order.
+
+It is possible to combine both async and random modes which might add even more stress to the code tested.
+
+I<Some more information about C<Test::Async> job management can be found in
+L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>,
+L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>,
+L<C<Test::Async::JobMgr>|rakudoc:Test::Async::JobMgr>>
+
+The particular mode of operation is defined either by C<plan> keys C<parallel> or C<random>, or by subtest named
+parameters C<async> or C<instant>. The named parameters take precedence over plan parameters:
+
+=item if C<instant> is set then C<plan>'s C<random> is ignored
+=item if C<async> is set then C<plan>'s C<parallel> is ignored
+
+For example, let's assume that our current suite is configured for random execution of subtest. Then
+
+=begin code :lang<raku>
+subtest "foo", :instant, {
+    ...
+}
+=end code
+
+would result in the C<subtest> be invoked right away, where it's declaration is encountered, without postponing.
+Similarly, if C<parallel> plan parameter is in effect, C<:instant> will overrule it so it will run right here, right
+now!
+
+Adding C<:async> named parameter too will invoke the subtest instantly and asynchronously. And this also means that
+a subtest invoked this way won't be counted as a job by
+L<C<Test::Async::JobMgr>|rakudoc:Test::Async::JobMgr>.
+In other words, we treat C<:instant> as: I<bypass any queue, just do it here and now!>
+
+Another edge case is using C<:async> with C<random>. In this case the subtest will be postponed. But when time to invoke
+subtests comes this particular one will get his dedicated thread no matter what C<parallel> is set to.
+
+Any other named parameters passed to a C<subtest> are treated as plan keys.
+
+Subset topic variable is set to the backing suite object. For example, this is an excerpt from I<t/060-subtest.t>:
+
+=begin code :lang<raku>
+subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
+=end code
+
+The example is the recommended mode of operation when a subtest is invoked in a module. In other words, the above
+example could be written as:
+
+=begin code :lang<raku>
+Test::Async::Hub.test-suite.subtest "subtest topic" => {
+    .plan: 1;
+    .cmp-ok: $_, '===', test-suite, "topic is set to the test suite object";
+}
+=end code
+
+and this is the way it must be used in a module. See L<C<Test::Async>|rakudoc:Test::Async> and
+L<C<Test::Async::CookBook>|rakudoc:Test::Async::CookBook> for more details.
+
+=head3 Hidden C<subtest>
+
+C<:hidden> named parameter doesn't change how a subtest runs but rather how it reports itself. A hidden subtest pretends
+to be integral part of test tool method which invoked it. It means two things:
+
+=item flunked test tools called by subtest code won't report their location (file and line)
+(I<implemented by L<C<Test::Async::Reporter::TAP>|rakudoc:Test::Async::Reporter::TAP> and might not be supported by 3rd party reporters>)
+=item flunked subtest would report location of the test tool method which invoked it
+
+The primary purpose of this mode is to provide means of implementing compound test tools. I.e. tools which consist of
+two or more tests which outcomes are to be reported back to the user. The most common implementation of such tool method
+would look like:
+
+=begin code :lang<raku>
+method compound-tool(..., Str:D $message) is test-tool {
+    subtest $message, :hidden, :instant, :!async, {
+        plan 2;
+        my ($result1, $result2) = (False, False);
+        ...;
+        ok $result1, "result1";
+        ok $result2, "result2";
+    }
+}
+=end code
+
+Note that we're using explicit C<:instant> and C<:!async> modes to prevent possible side effect related to use of
+C<:parallel> and C<:random> in parent suite's plan. Besides, it is normal for a user to expect a test tool to be
+semi-atomic operation being done here and now.
+
+=head2 C<cmp-deeply(Mu \got, Mu \expected, Str:D $message)>
+
+This test is similar to C<is-deeply> as it compares complex structure in depth. The difference is that C<cmp-deeply>
+traverses deep into the structure is reports any difference found at the point where it is found. For example:
+
+=begin code :lang<raku>
+my @got      = [1, 2, %( foo =>  Foo.new(:foo('13'), :fubar(11)) )];
+my @expected = [1, 2, %( foo =>  Foo.new(:foo(13),   :fubar(12)) )];
+
+cmp-deeply @got, @expected, "class instance deep withing an array";
+=end code
+
+This test would result in a diagnostic message like this:
+
+Which tells us that a difference has been found in an instance of a class (I<Object>) located in a key C<foo> of an
+L<C<Associative>|https://docs.raku.org/type/Associative> which is located in the second index of a L<C<Positional>|https://docs.raku.org/type/Positional>. Differences are reported for each
+attribute where they are found.
+
+Another difference of this test to C<is-deeply> is that it disrespect containerization status and focuses on structure
+alone.
+
+=head2 C<multi is-run(Str() $code, %params, Str:D $message = "")>
+=head2 C<multi is-run(Str() $code, Str:D $message = "", *%params)>
+
+This test tool is not provided by the standard L<C<Test>|https://docs.raku.org/type/Test> framework, but in slightly
+different forms it is defined in helper modules included in
+L<Rakudo|https://github.com/rakudo/rakudo/blob/e5ecdc4382d2739a701be7956fad52e897936fea/t/packages/Test/Helpers.pm6#L17>
+and
+L<roast|https://github.com/Raku/roast/blob/7033b07bbbb54a301b3bfd1253e30c5e7cebdfab/packages/Test-Helpers/lib/Test/Util.pm6#L107>
+tests.
+
+C<is-run> tests C<$code> by executing it in a child compiler process. In a way, it is like doing:
+
+Takes the following named parameters (C<%params> from the first candidate is passed to the second candidate as a
+capture):
+
+=item C<:$in> – data to be sent to the compiler input
+=item C<:$out?> – expected standard output
+=item C<:%env = %*ENV> - environment to be passed to the child process
+=item C<:@compiler-args> – command line arguments for the compiler process
+=item C<:@args> - command line arguments for C<$code>
+=item C<:$err?> – expected error output
+=item C<:$exitcode = 0> – expected process exit code.
+=item C<:$timeout> - time in second to wait for the process to complete
+
+=head2 C<multi test-flunks(Str:D $message, Bool :$remaining?)>
+=head2 C<multi test-flunks($count)>
+=head2 C<multi test-flunks(Str $message, $count)>
+
+This test tool informs the bundle that the following tests are expected to flunk and this is exactly what we expect of
+them to do! Or we can say that it inverts next C<$count> tests results. It can be considered as a meta-tool as it
+operates over other test tools.
+
+The primary purpose is to allow testing other test tools. For example, test I<t/080-is-approx.t> uses it to make sure
+that tests are failing when they have to fail:
+
+=begin code :lang<raku>
+test-flunks 2;
+is-approx 5, 6;
+is-approx 5, 6, 'test desc three';
+=end code
+
+Setting C<$count> to L<C<Inf>|https://docs.raku.org/type/Inf> is the same as using C<:remaining> named parameter and means: all remaining tests in the
+current suite are expected to flunk.
+
+=head1 SEE ALSO
+
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<Test::Async::Utils>|rakudoc:Test::Async::Utils>
+=item L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
+=item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
+
+=end pod
+

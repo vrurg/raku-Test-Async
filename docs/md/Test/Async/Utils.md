@@ -1,49 +1,49 @@
-NAME
-====
-
-
+# NAME
 
 `Test::Async::Utils` - `Test::Async` utilities
 
-EXPORTED ENUMS
-==============
+# EXPORTED ENUMS
 
-`TestMode`
-----------
+## `TestMode`
 
 Suite mode of operation:
 
-  * `TMSequential` - all child suites are invoked sequentially as appear in the code
+  - `TMSequential` - all child suites are invoked sequentially as appear in the code
 
-  * `TMAsync` – child suites are invoked asynchronously as appear in the code
+  - `TMAsync` – child suites are invoked asynchronously as appear in the code
 
-  * `TMRandom` - child suites are invoked in random order after the suite code is done
+  - `TMRandom` - child suites are invoked in random order after the suite code is done
 
-`TestStage`
------------
+## `TestStage`
 
 Suite lifecycle stages: `TSInitializing`, `TSInProgress`, `TSFinishing`, `TSFinished`, `TSDismissed`.
 
-`TestResult`
-------------
+## `TestResult`
 
 Test outcome codes: `TRPassed`, `TRFailed`, `TRSkipped`
 
-EXPORTED ROUTINES
-=================
+# EXPORTED ROUTINES
 
-`test-result(Bool $cond, :$fail, :$success --` Test::Async::Result)>
---------------------------------------------------------------------
+## `test-result(Bool $cond, :$fail, :$success --` Test::Async::Result)\>
 
 Creates a [`Test::Async::Result`](Result.md) object using the provided parameters. `$fail` and `$success` are shortcut names for corresponding `-profile` attributes of `Test::Async::Result` class.
 
-`stringify(Mu \obj --` Str:D)>
-------------------------------
+## `stringify(Mu \obj --` Str:D)\>
 
 Tries to stringify the `obj` in the most appropriate way. Use it to unify the look of test comments.
 
-AUTHOR
-======
+# SEE ALSO
 
-Vadim Belman <vrurg@cpan.org>
+  - [`Test::Async`](../Async.md)
 
+  - [`INDEX`](../../../../INDEX.md)
+
+# COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../LICENSE) file in this distribution.

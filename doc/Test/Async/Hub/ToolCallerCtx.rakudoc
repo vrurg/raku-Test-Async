@@ -1,19 +1,18 @@
-
 =begin pod
 =head1 CLASS
 
 C<Test::Async::Hub::TollCallerCtx> - call location record
 
-=DESCRIPTION
+=head1 DESCRIPTION
 
 Keeps information about where a tool was invoked and what is the role of the invocation.
 
-=ATTRIBUTES
+=head1 ATTRIBUTES
 
 =head3 L<C<CallFrame:D>|https://docs.raku.org/type/CallFrame> C<$.frame>
 
 Required. L<C<CallFrame>|https://docs.raku.org/type/CallFrame> of where the tool/suite was invoked. Note that this would not necessarily point at the immediate
-caller. See L<C<Test::Async::Manual>|../Manual.md> Call Location And Anchoring section for more information.
+caller. See L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual> Call Location And Anchoring section for more information.
 
 =head3 L<C<Stash:D>|https://docs.raku.org/type/Stash> | L<C<PseudoStash:D>|https://docs.raku.org/type/PseudoStash> C<$.stash>
 
@@ -22,14 +21,25 @@ Required. C<.WHO> of the C<$.frame> location namespace.
 =head3 L<C<Bool>|https://docs.raku.org/type/Bool> C<$.anchored>
 
 Defines whether the location record is an anchored one. See the corresponding section in
-L<C<Test::Async::Manual>|../Manual.md>.
+L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async>|../../Async.md>,
-L<C<Test::Async::Hub>|../Hub.md>,
-L<C<Test::Async::Manual>|../Manual.md>
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 
 =end pod
+

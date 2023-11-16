@@ -1,0 +1,81 @@
+=begin pod
+=head1 NAME
+
+C<Test::Async::TestTool> - role consumed by test tool methods
+
+=head1 DESCRIPTION
+
+This role is applied by C<test-tool> trait to a test tool method.
+
+=head1 ATTRIBUTES
+
+=head2 C<$.tool-name>
+
+Contains the name which must be used for exporting a test tool routine. Makes sense if method must be named differently
+from what is provided for the user.
+
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.readify>
+
+This flag is indicating if test tool must cause it's suite object to transition from C<TSInitializing> stage.
+
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.skippable>
+
+This flag indicates that this test tool could be skipped. A typical example of a non-skippable tool is the C<skip>
+itself, or C<todo> tool family. The importance of this nuance stems from the fact that when C<skip-remaining> tool is in
+effect the wrapper of a test tool code detects this situation and emits a skip event instantly without actually invoking
+the tool method. Without C<$.skippable> reset to I<False> a line like:
+
+skip "for a reason", 3
+would result in a single skip event which is counted as a test run. Our plan will fail because of 2 missing skip events.
+
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.wrappable>
+
+Resetting this flag to I<False> would result in test tool method would be left intact by
+L<C<Test::Async::Metamodel::BundleClassHOW>|rakudoc:Test::Async::Metamodel::BundleClassHOW>.
+
+=head2 L<C<Bool:D>|https://docs.raku.org/type/Bool> C<$.anchoring>
+
+Marks a test tool as an I<anchoring> one. See
+L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+Call Location And Anchoring section for more details.
+
+I<False> by default.
+
+=head1 METHODS
+
+=head2 C<set-tool-name(Str:D $name)>
+
+Sets C<$.tool-name>.
+
+=head2 C<set-readify(Boold:D $readify)>
+
+Sets C<$.readify>
+
+=head2 C<set-skippable(Bool:D $skippable)>
+
+Sets C<$.skippable>
+
+=head2 C<set-wrappable(Bool:D $wrappable)>
+
+Sets C<$.wrappable>
+
+=head1 SEE ALSO
+
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<Test::Async>|rakudoc:Test::Async>
+=item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
+
+=end pod
+

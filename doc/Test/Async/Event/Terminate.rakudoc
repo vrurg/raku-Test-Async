@@ -1,11 +1,10 @@
-
 =begin pod
-=head1 Class C<Event::Terminate>
+=head1 Class C<Test::Async::Event::Terminate>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 This is the only kind of event which
-L<C<Term::Async::Aggregator>|../../../Term/Async/Aggregator.md>
+L<C<Term::Async::Aggregator>|rakudoc:Term::Async::Aggregator>
 role cares about. It tells the event loop to pull any remaining events from the queue and dispatch them immediately.
 Then it fulfills event's promise.
 
@@ -16,7 +15,18 @@ events.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+=item L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 =end pod
+

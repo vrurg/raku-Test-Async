@@ -1,24 +1,25 @@
-NAME
-====
-
-
+# NAME
 
 `Test::Async::Metamodel::BundleHOW` - metaclass backing bundle roles
 
-DESCRIPTION
-===========
-
-
+# DESCRIPTION
 
 The only function is to register the bundle role with slang defined in [`Test::Async::Decl`](../Decl.md).
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::Manual`](../Manual.md), [`Test::Async::Decl`](../Decl.md)
+  - [`Test::Async::Manual`](../Manual.md)
 
-AUTHOR
-======
+  - [`Test::Async::Decl`](../Decl.md)
 
-Vadim Belman <vrurg@cpan.org>
+  - [`INDEX`](../../../../../INDEX.md)
 
+# COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../../LICENSE) file in this distribution.

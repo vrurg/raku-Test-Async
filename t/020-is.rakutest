@@ -1,7 +1,7 @@
 use v6;
 use Test::Async;
 
-my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+my @default-args = '-I' ~ $?FILE.IO.parent(2), '-MTest::Async';
 
 my @tests =
     [q<is "a", "a", "Str match";>, { :exitcode(0), :out("ok 1 - Str match\n1..1\n") }],

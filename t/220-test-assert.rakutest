@@ -1,0 +1,28 @@
+use v6.e.PREVIEW;
+use Test::Async;
+
+my @default-args = '-I' ~ $?FILE.IO.parent(2), '-MTest::Async';
+
+is-run q:to/TEST-CODE/, "test-assertion trait turns a sub into a test tool",
+        sub flunk-me(Str:D $message) is test-assertion {
+            subtest $message, :hidden, {
+                pass "oki";
+                flunk "I'm intentionally bad"
+            }
+        }
+        test-flunks "we need to see where it flunks";
+        subtest "Flunking" => {
+            flunk-me "need to.";
+        }
+        TEST-CODE
+    :compiler-args(@default-args),
+    :out(/^^ \h+ "ok 1 - oki" \n
+         ^^ \h+ "not ok 2 - I'm intentionally bad" \n
+         [ <!before "# F"> . ]*
+         ^^ \h+ "# Failed test 'need to.'" \n
+         # The following is the key test where we make sure the reported location is where the test assertion is invoked
+         ^^ \h+ "# at " .*? " line 9" <.wb> /),
+    :err(""),
+    :exitcode(0);
+
+done-testing;

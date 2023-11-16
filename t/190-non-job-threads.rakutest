@@ -9,14 +9,14 @@ my @w;
 lives-ok {
     for ^1000 -> $idx {
         my $pfx = "thread " ~ ( $idx + 1 ).fmt( '%05d' );
-        @w[$idx] = ( start {
+        @w[$idx] = (( start {
             sleep .1.rand;
             pass  $pfx ~ " completed";
             $idx * 2
         } ).then: {
             pass $pfx ~ " promise kept";
             is .result, $idx * 2, $pfx ~ " promise result";
-        };
+        });
         pass $pfx ~ " is launched";
     }
 

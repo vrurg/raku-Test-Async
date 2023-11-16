@@ -1,0 +1,30 @@
+=begin pod
+=head1 NAME
+
+C<Test::Async::Metamodel::ReporterHOW> - metaclass backing a reporter bundle
+
+=head1 DESCRIPTION
+
+This class inherits from C<Test::Async::Metamodel::BundleHOW> and adds implicit application of
+L<C<Test::Async::Reporter>|rakudoc:Test::Async::Reporter>
+role.
+
+=head1 SEE ALSO
+
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
+
+=end pod
+

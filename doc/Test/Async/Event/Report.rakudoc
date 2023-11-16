@@ -1,8 +1,7 @@
-
 =begin pod
-=head1 Class C<Event::Report>
+=head1 Class C<Test::Async::Event::Report>
 
-Is L<C<Event>|../Event.md>
+Is L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
 
 Base class for events carrying a text message of any kind.
 
@@ -12,7 +11,18 @@ Base class for events carrying a text message of any kind.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+=item L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 =end pod
+

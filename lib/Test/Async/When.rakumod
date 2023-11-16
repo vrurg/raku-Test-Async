@@ -1,57 +1,5 @@
 use v6;
 
-=begin pod
-=NAME
-
-C<Test::Async::When> - add C<:when> key to plan
-
-=SYNOPSIS
-
-Whole top suite:
-
-    use Test::Async <When Base>;
-    plan :when(<release>);
-
-Or a subtest only:
-
-    use Test::Async <When Base>;
-    subtest "Might be skipped" => {
-        plan :when(
-                :all(
-                    :any(<release author>),
-                    :module<Optional::Module>));
-        ...
-    }
-}
-
-=DESCRIPTION
-
-This bundle extends C<plan> with additional parameter C<:when> which defines when the suite is to be actually ran. If
-C<when> condition is not fulfilled the suite is skipped. The condition is a nested combination of keys and values:
-
-=item a string value means a name of a testing mode enabled with an environment variable. Simply put, it gets
-uppercased, appended with I<_TESTING> and the resulting name is checked against C<%*ENV>. If the string is already
-ending with I<_TESTING> it is used as-is.
-=item a pair with C<env> key tests for a environment variable. The variable name is used as-is, with no manipulations
-done to it.
-=item a pair with C<module> key tests if a module with the given name is available
-=item a pair with keys C<any> or C<all> basically means that either any of it subcondition or all of them are to be
-fulfilled
-=item a pair with C<none> key means all of its sunconditions must fail.
-
-By default the topmost condition means C<any>, so that the following two statements are actually check the same
-condition:
-
-    plan :when<release author>;
-    plan :when(:any<release author>);
-
-=head1 SEE ALSO
-
-L<C<Test::Async::Manual>|Manual.md>
-
-=AUTHOR Vadim Belman <vrurg@cpan.org>
-
-=end pod
 
 use Test::Async::Decl;
 unit test-bundle Test::Async::When;

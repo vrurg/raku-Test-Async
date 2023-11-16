@@ -1,0 +1,43 @@
+=begin pod
+=head1 NAME
+
+C<Test::Async::Metamodel::BundleClassHOW> - metaclass backing custom bundle classes.
+
+=head1 DESCRIPTION
+
+This class purpose is to ensure that test tool methods are wrapped into common boilerplate. The boilerplate does
+the following:
+
+=item determines calling context to make sure any error reported points at user code where the test tool is invoked.
+As a result it sets C<tool-caller> and C<caller-ctx> attributes of the current suite object.
+=item validates if current suite stage allows test tool invokation
+=item tries to transition the suite into C<TSInProgress> stage if tool method object has `$.readify` set (see
+L<C<Test::Async::TestTool>|rakudoc:Test::Async::TestTool>
+=item emits C<Event::Skip> if tool method has its C<$.skippable> set and suite's C<$.skip-message> is defined.
+=item otherwise invokes the original test tool method code.
+
+Wrapping doesn't replace the method object itself.
+
+If test tool method object has its C<wrappable> attribute set to I<False> then wrapping doesn't take place. In this case
+the method must take care of all necessary preparations itself. See implementation of C<subtest> by
+L<C<Test::Async::Base>|rakudoc:Test::Async::Base> for example.
+
+=head1 SEE ALSO
+
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Decl>|rakudoc:Test::Async::Decl>
+=item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
+
+=end pod
+

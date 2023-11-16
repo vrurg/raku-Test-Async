@@ -1,17 +1,21 @@
-Class `Event::Telemetry`
-========================
+# Class `Test::Async::Event::Telemetry`
 
-Is [`Event`](../Event.md)
+Is [`Test::Async::Event`](../Event.md)
 
 Under development yet.
 
-SEE ALSO
-========
+# SEE ALSO
 
-[`Test::Async::Event`](../Event.md)
+  - [`Test::Async::Event`](../Event.md)
 
-AUTHOR
-======
+  - [`INDEX`](../../../../../INDEX.md)
 
-Vadim Belman <vrurg@cpan.org>
+# COPYRIGHT
 
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../../LICENSE) file in this distribution.

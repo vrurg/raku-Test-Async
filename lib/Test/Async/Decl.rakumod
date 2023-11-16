@@ -1,80 +1,5 @@
 use v6;
 
-=begin pod
-=NAME
-
-C<Test::Async::Decl> - declarations for writing new bundles
-
-=SYNOPSIS
-
-    use Test::Async::Decl;
-
-    unit test-bundle MyBundle;
-
-    method my-tool(...) is test-tool(:name<mytool>, :!skippable, :!readify) {
-        ...
-    }
-
-=DESCRIPTION
-
-This module exports declarations needed to write custom bundles for C<Test::Async> framework.
-
-=head2 C<test-bundle>
-
-Declares a bundle role backed by
-L<C<Test::Async::Metamodel::BundleHOW>|Metamodel/BundleHOW.md>
-metaclass.
-
-=head2 C<test-reporter>
-
-Declares a bundle role wishing to act as a reporter. Backed by
-L<C<Test::Async::Metamodel::ReporterHOW>|Metamodel/ReporterHOW.md>
-metaclass. The bundle also consumes
-L<C<Test::Async::Reporter>|Reporter.md>
-role.
-
-=head2 C<test-hub>
-
-This kind of package creates a hub class which is backed by
-L<C<Test::Async::Metamodel::HubHOW>|Metamodel/HubHOW.md>
-metaclass. Barely useful for a third-party developer.
-
-=head2 C<&trait_mod:<is>(Method:D \meth, :$test-tool!)>
-
-This trait is used to declare a method in a bundle as a test tool:
-
-    method foo(...) is test-tool {
-        ...
-    }
-
-The method is then exported to user as C<&foo> routine. Internally the method is getting wrapped into a code which
-does necessary preparations for the tool to act as expected. See
-L<C<Test::Async::Metamodel::BundleClassHOW>|Metamodel/BundleClassHOW.md>
-for more details.
-
-The following named parameters are accepted by the trait:
-
-=item C<tool-name> aka C<name>
-=item C<skippable> aka C<skip>
-=item C<readify>
-=item C<wrappable> aka C<wrap>
-
-They correspond to same-named attributes of
-L<C<Test::Async::TestTool>|TestTool.md>.
-By default C<skippable>, C<readify>, and C<wrappable> are set to I<True>. Thus it rather makes sense to negate them, as
-shown in the L<#SYNOPSIS>.
-
-=head1 SEE ALSO
-
-L<C<Test::Async::Manual>|Manual.md>,
-L<C<Test::Async::Metamodel::BundleHOW>|Metamodel/BundleHOW.md>,
-L<C<Test::Async::Metamodel::BundleClassHOW>|Metamodel/BundleClassHOW.md>,
-L<C<Test::Async::Metamodel::HubHOW>|Metamodel/HubHOW.md>,
-L<C<Test::Async::Metamodel::ReporterHOW>|Metamodel/ReporterHOW.md>
-
-=AUTHOR Vadim Belman <vrurg@cpan.org>
-
-=end pod
 
 use nqp;
 use Test::Async::Metamodel::HubHOW;
@@ -82,14 +7,15 @@ use Test::Async::Metamodel::BundleHOW;
 use Test::Async::Metamodel::ReporterHOW;
 use Test::Async::TestTool;
 
-multi trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
+my constant %aliases = :skip<skippable>, :wrap<wrappable>, :name<tool-name>, :anchor<anchoring>;
+
+multi sub trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
     my %p = tool-name => meth.name, :readify, :skippable, :wrappable, :!anchoring;
     if $test-tool ~~ Str:D {
         %p<tool-name> = $test-tool;
     }
     elsif $test-tool ~~ Positional | Iterable | Associative {
         my %tt = |$test-tool;
-        my %aliases = :skip<skippable>, :wrap<wrappable>, :name<tool-name>, :anchor<anchoring>;
         for %tt.keys -> $param {
             if $param ~~ any(<name readify skip skippable wrap wrappable anchor anchoring>) {
                 %p{%aliases{$param} // $param} = %tt{$param};
@@ -105,7 +31,7 @@ multi trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
     }
 }
 
-sub EXPORT {
+sub EXPORT is raw {
     use NQPHLL:from<NQP>;
     my role TestAsyncGrammar {
         token package_declarator:sym<test-hub> {

@@ -1,20 +1,6 @@
 use v6;
 use Test::Async::Decl;
 
-=begin pod
-=NAME
-
-C<Test::Async::Reporter::TAP> - TAP reporter bundle
-
-=DESCRIPTION
-
-Maps events into TAP output.
-
-The class is implementation detail. In addition to methods required by
-L<C<Test::Async::Reporter>|../Reporter.md>,
-also defines C<TAP-str-from-ev>.
-
-=end pod
 
 unit test-reporter Test::Async::Reporter::TAP;
 

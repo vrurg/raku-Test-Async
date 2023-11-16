@@ -1,0 +1,86 @@
+=begin pod
+=head1 NAME
+
+C<Test::Async::Event> – collection of standard events
+
+=head1 SYNOPSIS
+
+=begin code :lang<raku>
+use Test::Async::Event;
+
+test-bundle MyBundle {
+    method foo(Str:D $message) is test-tool {
+        self.send-test: Event::Ok, :$message
+    }
+}
+=end code
+
+=head1 DESCRIPTION
+
+General information about C<Test::Async> event management can be found in
+L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>.
+
+Events are objects of classes derived from C<Event> class. This module provides support for C<Test::Async> core. In
+general, all event classes can be conventionally split into the following groups:
+
+=item I<informative> – events signalling about some state changes. Like, for example, suite termination.
+=item I<reporting> - events bearing a message to be reported to user.
+=item I<commands> – those which tell the core to perform an action.
+=item I<tests> – outcomes of individual test tools.
+
+=head2 Class C<Event>
+
+The base event class.
+
+=head3 Attributes
+
+=item C<$.origin> – event originating object. Defaults to the current test suite object.
+=item C<Int:D $.id> – event id, a sequential number.
+=item C<Instant:D $.time> – the moment when event object was created.
+
+=head3 Methods
+
+=item C<Profile> – returns a L<C<Map>|https://docs.raku.org/type/Map> suitable for passing to an event constructor. The method collects all changed public attributes of an object.
+=item C<gist>, C<Str> – stringify event object for reporting.
+
+=head1 EVENT SUBCLASSES
+
+=item L<C<Test::Async::Event::BailOut>|rakudoc:Test::Async::Event::BailOut>
+=item L<C<Test::Async::Event::Command>|rakudoc:Test::Async::Event::Command>
+=item L<C<Test::Async::Event::Diag>|rakudoc:Test::Async::Event::Diag>
+=item L<C<Test::Async::Event::DoneTesting>|rakudoc:Test::Async::Event::DoneTesting>
+=item L<C<Test::Async::Event::JobsAwaited>|rakudoc:Test::Async::Event::JobsAwaited>
+=item L<C<Test::Async::Event::NotOk>|rakudoc:Test::Async::Event::NotOk>
+=item L<C<Test::Async::Event::Ok>|rakudoc:Test::Async::Event::Ok>
+=item L<C<Test::Async::Event::Plan>|rakudoc:Test::Async::Event::Plan>
+=item L<C<Test::Async::Event::Report>|rakudoc:Test::Async::Event::Report>
+=item L<C<Test::Async::Event::Skip>|rakudoc:Test::Async::Event::Skip>
+=item L<C<Test::Async::Event::StageTransition>|rakudoc:Test::Async::Event::StageTransition>
+=item L<C<Test::Async::Event::Telemetry>|rakudoc:Test::Async::Event::Telemetry>
+=item L<C<Test::Async::Event::Terminate>|rakudoc:Test::Async::Event::Terminate>
+=item L<C<Test::Async::Event::Test>|rakudoc:Test::Async::Event::Test>
+
+=head2 Command event classes C<Event::Cmd::*>
+
+A bundle of events used internally for commands. See L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
+and possibly other modules. The set of command events is not standartized and subject for changes.
+
+=head1 SEE ALSO
+
+=item L<C<Test::Async::Manual>|rakudoc:Test::Async::Manual>
+=item L<C<Test::Async::Aggregator>|rakudoc:Test::Async::Aggregator>
+=item L<C<Test::Async::Hub>|rakudoc:Test::Async::Hub>
+=item L<C<INDEX>|rakudoc:..::INDEX>
+
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
+=end pod
+

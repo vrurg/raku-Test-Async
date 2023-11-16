@@ -1,58 +1,25 @@
 use v6;
-use Test::Async::Hub;
-use Test::Async::Utils;
 
-=begin pod
-=head1 NAME
-
-C<Test::Async> - base module of the framework
-
-=head1 SYNOPSIS
-
-    use Test::Async;
-    plan 1;
-    pass "Hello World!";
-    done-testing;
-
-=head1 DESCRIPTION
-
-The module setups testing evironment for a test suite. It is intended to be used in a script implementing the suite but
-is not recommended for a module. See
-L<C<Test::Async::CookBook>|Async/CookBook.md>
-for more details.
-
-=head2 Exports
-
-The module re-exports all symbols found in a test bundle C<EXPORT::DEFAULT> package.
-
-Also exports:
-
-=head3 C<test-suite>
-
-Return the test suite which is actual for the current context. The suite is looked up either in C<$*TEST-SUITE> or
-via C<Test::Async::Hub> C<top-suite> method.
-
-=head3 Test Tools
-
-The module exports all test tools it finds in the top suite object. See
-L<C<Test::Async::Manual>|Async/Manual.md>
-for more details.
-
-=head1 SEE ALSO
-
-L<C<Test::Async::Manual>|Async/Manual.md>,
-L<C<Test::Async::CookBook>|Async/CookBook.md>,
-L<C<Test::Async::Base>|Async/Base.md>
-
-=AUTHOR Vadim Belman <vrurg@cpan.org>
-
-=end pod
 
 module Test::Async:ver($?DISTRIBUTION.meta<ver>):api($?DISTRIBUTION.meta<api>):auth($?DISTRIBUTION.meta<auth>) {
     our sub META6 { $?DISTRIBUTION.meta }
 }
 
-our sub EXPORT(*@b) {
+use Test::Async::Hub;
+use Test::Async::Utils;
+use nqp;
+
+multi sub trait_mod:<is>(Routine:D \routine, :test-tool(:$test-assertion)!) is export {
+    my $wrappee := nqp::getattr(routine, Code, '$!do');
+    my &wrapper := my sub (|args) is hidden-from-backtrace is raw {
+        $wrappee := nextcallee() if IS-NEWDISP-COMPILER;
+        ($*TEST-SUITE // Test::Async::Hub.top-suite).anchor: { $wrappee(|args) }
+    }
+    &wrapper.set_name(routine.name ~ ":<test-tool-wrapper>");
+    routine.wrap(&wrapper);
+}
+
+sub EXPORT(*@b) is raw {
     my @bundles = (Test::Async::Hub.HOW.bundles, @b).flat;
     @bundles = (<Base>) unless @bundles;
     my $has-reporter;

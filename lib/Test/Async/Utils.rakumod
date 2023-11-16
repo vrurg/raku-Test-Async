@@ -1,47 +1,14 @@
 use v6;
 
-=begin pod
-=NAME
-
-C<Test::Async::Utils> - C<Test::Async> utilities
-
-=head1 EXPORTED ENUMS
-
-=head2 C<TestMode>
-
-Suite mode of operation:
-
-=item C<TMSequential> - all child suites are invoked sequentially as appear in the code
-=item C<TMAsync> – child suites are invoked asynchronously as appear in the code
-=item C<TMRandom> - child suites are invoked in random order after the suite code is done
-
-=head2 C<TestStage>
-
-Suite lifecycle stages: C<TSInitializing>, C<TSInProgress>, C<TSFinishing>, C<TSFinished>, C<TSDismissed>.
-
-=head2 C<TestResult>
-
-Test outcome codes: C<TRPassed>, C<TRFailed>, C<TRSkipped>
-
-=head1 EXPORTED ROUTINES
-
-=head2 C<test-result(Bool $cond, :$fail, :$success --> Test::Async::Result)>
-
-Creates a L<C<Test::Async::Result>|Result.md>
-object using the provided parameters. C<$fail> and C<$success> are shortcut names for corresponding C<-profile>
-attributes of C<Test::Async::Result> class.
-
-=head2 C<stringify(Mu \obj --> Str:D)>
-
-Tries to stringify the C<obj> in the most appropriate way. Use it to unify the look of test comments.
-
-=AUTHOR Vadim Belman <vrurg@cpan.org>
-
-=end pod
 
 unit module Test::Async::Utils;
 use nqp;
 use Test::Async::Result;
+
+constant IS-NEWDISP-COMPILER is export = do {
+    .version >= v2021.09.228.gdd.2.b.274.fd && .backend eq 'moar' given $*RAKU.compiler
+};
+
 
 enum TestMode   is export <TMAsync TMSequential TMRandom>;
 enum TestStage  is export «TSInitializing TSInProgress TSFinishing TSFinished TSDismissed TSFatality»;
@@ -54,7 +21,7 @@ class ToolCallerCtx is export {
 
     has CallFrame:D $.frame is required;
     has CALLER-CTX $.stash is required;
-    # If anchored then for any nested too call locate-tool-caller will return the anchored location.
+    # If anchored then for any nested call locate-tool-caller will return the anchored location.
     has Bool:D $.anchored = False;
 }
 

@@ -3,7 +3,7 @@ use Test::Async;
 
 plan 2;
 
-my @default-args = '-I' ~ $?FILE.IO.parent(2).add('lib'), '-MTest::Async';
+my @default-args = '-I' ~ $?FILE.IO.parent(2), '-MTest::Async';
 
 is-run q:to/CODE/,
            class X::DieFast is Exception { method message { "right now" } };

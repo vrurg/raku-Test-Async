@@ -1,22 +1,25 @@
-Class `Event::Command`
-======================
+# Class `Test::Async::Event::Command`
 
-Is [`Event`](../Event.md)
+Is [`Test::Async::Event`](../Event.md)
 
 Base class of commanding events. [`Test::Async::Hub`](../Hub.md) handles them specially.
 
-Attributes
-----------
+## Attributes
 
-  * [`Capture:D`](https://docs.raku.org/type/Capture) `$.args` – command arguments
+  - [`Capture:D`](https://docs.raku.org/type/Capture) `$.args` – command arguments
 
-SEE ALSO
-========
+  - [`INDEX`](../../../../../INDEX.md)
 
-[`Test::Async::Event`](../Event.md)
+# SEE ALSO
 
-AUTHOR
-======
+  - [`Test::Async::Event`](../Event.md)
 
-Vadim Belman <vrurg@cpan.org>
+# COPYRIGHT
 
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+# LICENSE
+
+Artistic License 2.0
+
+See the [*LICENSE*](../../../../../LICENSE) file in this distribution.

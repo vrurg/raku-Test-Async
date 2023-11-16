@@ -1,15 +1,25 @@
-
 =begin pod
-=head1 Class C<Event::Diag>
+=head1 Class C<Test::Async::Event::Diag>
 
-Is L<C<Event::Report>|Report.md>.
+Is L<C<Test::Async::Event::Report>|rakudoc:Test::Async::Event::Report>.
 
 Carries a diagnostics message. See C<diag> in
-L<C<Test::Async::Base>|../Base.md>.
+L<C<Test::Async::Base>|rakudoc:Test::Async::Base>.
 
 =head1 SEE ALSO
 
-L<C<Test::Async::Event>|../Event.md>
+=item L<C<Test::Async::Event>|rakudoc:Test::Async::Event>
+=item L<C<INDEX>|rakudoc:..::INDEX>
 
-=AUTHOR Vadim Belman <vrurg@cpan.org>
+=head1 COPYRIGHT
+
+(c) 2020-2023, Vadim Belman <vrurg@cpan.org>
+
+=head1 LICENSE
+
+Artistic License 2.0
+
+See the L<I<LICENSE>|file:LICENSE> file in this distribution.
+
 =end pod
+
