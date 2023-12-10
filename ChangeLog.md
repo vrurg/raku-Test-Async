@@ -1,6 +1,10 @@
 # CHANGELOG
 
   - **v0.1.17**
+    
+      - Take care of exceptions that throw on their own when reported
+    
+      - Fix a test that was freezing if `$RAKUDO_MAX_THREADS` environment variable is set to a too low value
 
   - **v0.1.16**
     

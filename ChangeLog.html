@@ -388,6 +388,11 @@ li > .pod-block-code { margin-top: 16px; }
     <div class="pod-body">
     <h1 id="CHANGELOG"><a class="u" href="#___top" title="go to top of document">CHANGELOG</a></h1>
 <ul><li><p><strong>v0.1.17</strong></p>
+<ul><li><p>Take care of exceptions that throw on their own when reported</p>
+</li>
+<li><p>Fix a test that was freezing if <code>$RAKUDO_MAX_THREADS</code> environment variable is set to a too low value</p>
+</li>
+</ul>
 </li>
 <li><p><strong>v0.1.16</strong></p>
 <ul><li><p>Fix <code>cmp-deeply</code> for nominalizables</p>
