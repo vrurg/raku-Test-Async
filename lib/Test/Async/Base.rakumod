@@ -777,10 +777,13 @@ multi method subtest( Callable:D \subtests,
         }
         # When reacting to a fatal termination TODO and flunk statuses must be ignored because they must only be
         # respected for non-passing test, not for dying ones.
-        $subtest.send: Event::Diag,  message => "===SORRY!=== Subtest died with "
-                                                              ~ $exception.^name ~ ":\n"
-                                                              ~ ($exception.message ~ "\n"
-                                                              ~ $exception.backtrace).indent(2);
+        my $ex-message := try { $exception.message };
+        $subtest.send:
+            Event::Diag,
+            message => "===SORRY!=== Subtest died with "
+                        ~ $exception.^name ~ ":\n"
+                        ~ ( ($ex-message // "*** can't produce message ***") ~ "\n"
+                            ~ ($ex-message ?? $exception.backtrace !! $exception.backtrace.full) ).indent(2);
         $subtest.sync-events;
         send-proclaim($subtest, False, %());
         True

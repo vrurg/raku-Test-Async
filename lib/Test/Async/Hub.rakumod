@@ -624,19 +624,37 @@ method fatality(Int:D $!exit-code = 255, Exception :$exception) {
     }
 }
 
-method x-sorry(Exception:D $ex, :$comment) {
-    note "===SORRY!=== Suite #" ~ $.id ~ " '" ~ $.message ~ "', ", $.suite-caller.frame.gist, ":\n"
-        ~ ($ex ~~ Test::Async::X::Base
-                ?? ("thrown by suite #"
-                    ~ $ex.suite.id
-                    ~ " '"
-                    ~ $ex.suite.message
-                    ~ "', "
-                    ~ $ex.suite.suite-caller.frame.gist
-                    ~ "\n").indent(2)
-                !! "")
-        ~ ($comment ?? ($comment ~ "\n").indent(2) !! "")
-        ~ ("[" ~ $ex.^name ~ "] " ~ $ex.message ~ "\n" ~ $ex.backtrace).indent(4)
+method x-sorry(Exception:D $ex, :$comment --> Nil) {
+    my $succeed = try {
+        note "===SORRY!=== Suite #" ~ $.id ~ " '" ~ $.message ~ "', ", $.suite-caller.frame.gist, ":\n"
+            ~ ($ex ~~ Test::Async::X::Base
+                    ?? ("thrown by suite #"
+                        ~ $ex.suite.id
+                        ~ " '"
+                        ~ $ex.suite.message
+                        ~ "', "
+                        ~ $ex.suite.suite-caller.frame.gist
+                        ~ "\n").indent(2)
+                    !! "")
+            ~ ($comment ?? ($comment ~ "\n").indent(2) !! "")
+            ~ ("[" ~ $ex.^name ~ "] " ~ $ex.message ~ "\n" ~ $ex.backtrace).indent(4)
+    };
+    unless $succeed {
+        with $! -> $sec {
+            note "===FAIL!=== ", $sec.^name, " was thrown while reporting ", $ex.^name, ": ",
+                (try { $sec.message } // "*** can't produce a message for the secondary exception ***"), "\n",
+                (
+                    ("The original exception message: " ~ (try { $ex.message } // "*** can't produce the message ***")),
+                    ("The original backtrace:\n" ~ $ex.backtrace.Str.indent(2))
+                ).join("\n").indent(2), "\n",
+                $sec.backtrace.full.Str;
+        }
+        else {
+            note "===FAIL!=== Can't report exception ", $ex.^name,
+                (try { ': "' ~ $ex.message ~ '"'  } // ""), ", original backtrace:\n",
+                .backtrace.Str.indent(4);
+        }
+    }
 }
 
 # Implementation detail, for use with a wrapper script I use for parallelized testing.
