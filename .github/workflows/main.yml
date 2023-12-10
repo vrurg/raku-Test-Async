@@ -34,7 +34,7 @@ jobs:
           - os: windows-latest
             rakudo-version: "2020.12"
       fail-fast: false
-    uses: vrurg/raku-build-tools/.github/workflows/default-test-workflow.yml@workflow-v1
+    uses: vrurg/raku-build-tools/.github/workflows/default-test-workflow.yml@workflow-v2
     with:
       os: ${{ matrix.os }}
       rakudo-version: ${{ matrix.rakudo-version }}
