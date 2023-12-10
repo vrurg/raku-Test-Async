@@ -2,6 +2,16 @@ use v6;
 use Test::Async <When Base>;
 use Test::Async::X;
 
+my constant MIN-THREADS = 32;
+BEGIN {
+    with %*ENV<RAKUDO_MAX_THREADS> -> Int:D() $env-max {
+        if $env-max < MIN-THREADS {
+            %*ENV<RAKUDO_MAX_THREADS> = MIN-THREADS;
+            $*SCHEDULER = ThreadPoolScheduler.new: max_threads => MIN-THREADS;
+        }
+    }
+}
+
 plan 5, :parallel;
 
 # Delete and set environment variables to build the testing environment.
