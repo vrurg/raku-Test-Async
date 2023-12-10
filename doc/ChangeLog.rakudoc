@@ -3,6 +3,11 @@
 =head1 CHANGELOG
 
 =begin item
+B<v0.1.18>
+
+=end item
+
+=begin item
 B<v0.1.17>
 
 =item Take care of exceptions that throw on their own when reported

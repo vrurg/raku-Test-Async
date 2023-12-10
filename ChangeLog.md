@@ -1,5 +1,7 @@
 # CHANGELOG
 
+  - **v0.1.18**
+
   - **v0.1.17**
     
       - Take care of exceptions that throw on their own when reported
