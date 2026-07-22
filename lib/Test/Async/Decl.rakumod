@@ -33,7 +33,64 @@ multi sub trait_mod:<is>(Method:D \meth, :$test-tool!) is export {
 
 sub EXPORT is raw {
     use NQPHLL:from<NQP>;
+
+    # The `unit test-hub|test-bundle|test-reporter` declarators for the
+    # RakuAST grammar. `test-hub` gets its own declarator HOW; `test-bundle`
+    # and `test-reporter` reuse the `role` declarator with its HOW swapped
+    # for the declaration, restored in `set_package`.
     my role TestAsyncGrammar {
+        token package-declarator:sym<test-hub> {
+            <sym><.kok> <package-def('test-hub')>
+            <.set_braid_from(self)>
+        }
+        token package-declarator:sym<test-bundle> {
+            :my $*TEST-BUNDLE-TYPE;
+            :my $*TEST-RESTORE-PACKAGE := True;
+            <sym><.kok>
+            { $*LANG.set_how('role', Test::Async::Metamodel::BundleHOW); }
+            <package-def('role')>
+            <.set_braid_from(self)>
+        }
+        token package-declarator:sym<test-reporter> {
+            :my $*TEST-BUNDLE-TYPE;
+            :my $*TEST-RESTORE-PACKAGE := True;
+            <sym><.kok>
+            { $*LANG.set_how('role', Test::Async::Metamodel::ReporterHOW); }
+            <package-def('role')>
+            <.set_braid_from(self)>
+        }
+        method set_package(|) {
+            if $*TEST-RESTORE-PACKAGE {
+                $*LANG.set_how('role', Metamodel::ParametricRoleHOW);
+                $*TEST-RESTORE-PACKAGE := False;
+            }
+            nextsame
+        }
+    }
+
+    my role TestAsyncActions {
+        # `$<package-def>` in Raku-authored actions would compile to a Raku
+        # postcircumfix on the bare grammar cursor, which has no candidate;
+        # reach the capture through nqp instead.
+        sub pkgdef(Mu $/) {
+            nqp::atkey(nqp::findmethod($/, 'hash')($/), 'package-def')
+        }
+
+        method package-declarator:sym<test-hub>(Mu $/) {
+            self.attach: $/, pkgdef($/).ast;
+        }
+        method package-declarator:sym<test-bundle>(Mu $/) {
+            self.attach: $/, pkgdef($/).ast;
+        }
+        method package-declarator:sym<test-reporter>(Mu $/) {
+            self.attach: $/, pkgdef($/).ast;
+        }
+    }
+
+    # Everything in this block targets the legacy (pre-RakuAST) grammar and
+    # can be removed once RakuAST is the only frontend: delete the two
+    # `*-Legacy` roles and the legacy arm of the activation below.
+    my role TestAsyncGrammar-Legacy {
         token package_declarator:sym<test-hub> {
             :my $*OUTERPACKAGE := self.package;
             :my $*PKGDECL := 'test-hub';
@@ -63,9 +120,6 @@ sub EXPORT is raw {
             <package_def>
             <.set_braid_from(self)>
         }
-
-        # set_package is been called right after a package is created. At this point we don't need to override role's
-        # HOW anymore.
         method set_package(|) {
             if $*TEST-RESTORE-PACKAGE {
                 $*LANG.set_how('role', Metamodel::ParametricRoleHOW);
@@ -75,7 +129,7 @@ sub EXPORT is raw {
         }
     }
 
-    my role TestAsyncActions {
+    my role TestAsyncActions-Legacy {
         sub mkey ( Mu $/, Str:D $key ) {
             nqp::atkey(nqp::findmethod($/, 'hash')($/), $key)
         }
@@ -108,12 +162,17 @@ sub EXPORT is raw {
         }
     }
 
-    unless $*LANG.^does( TestAsyncGrammar ) {
+    # $*R, the RakuAST resolver, is present only while the RakuAST frontend
+    # compiles. The legacy frontend has $*W instead.
+    my $rakuast := $*R.defined;
+    my \Grammar := $rakuast ?? TestAsyncGrammar         !! TestAsyncGrammar-Legacy;
+    my \Actions := $rakuast ?? TestAsyncActions         !! TestAsyncActions-Legacy;
+    unless $*LANG.^does(Grammar) {
         $*LANG.set_how('test-hub', Test::Async::Metamodel::HubHOW);
         $ = $*LANG.define_slang(
             'MAIN',
-            $*LANG.HOW.mixin($*LANG.WHAT,TestAsyncGrammar),
-            $*LANG.actions.^mixin(TestAsyncActions)
+            $*LANG.HOW.mixin($*LANG.WHAT, Grammar),
+            $*LANG.actions.^mixin(Actions)
         );
     }
 
