@@ -28,6 +28,11 @@ sub EXPORT(*@b) is raw {
     for @bundles.grep(Str) {
         my $bundle = .index('::') ?? $_ !! 'Test::Async::' ~ $_;
         require ::($bundle);
+        # Enter the freshly-loaded bundle into the hub's registry. On the
+        # legacy frontend the bundle's own load-time ENTER phaser has already
+        # done this and register-bundle dedups; the RakuAST frontend emits no
+        # such phaser, so this is where a precompiled bundle gets registered.
+        Test::Async::Hub.HOW.register-bundle(::($bundle));
         if (::<EXPORT>:exists) && (::("EXPORT").WHO<DEFAULT>:exists) {
             @bundle_exports.append: ::("EXPORT").WHO<DEFAULT>.WHO.pairs;
         }
@@ -39,7 +44,8 @@ sub EXPORT(*@b) is raw {
         }
     }
     unless $has-reporter {
-        require ::('Test::Async::Reporter::TAP')
+        require ::('Test::Async::Reporter::TAP');
+        Test::Async::Hub.HOW.register-bundle(::('Test::Async::Reporter::TAP'));
     }
     Map.new(
         |@bundle_exports,
