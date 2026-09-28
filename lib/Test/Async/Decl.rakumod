@@ -76,13 +76,41 @@ sub EXPORT is raw {
             nqp::atkey(nqp::findmethod($/, 'hash')($/), 'package-def')
         }
 
+        # Node classes are looked up by name so the module still compiles on
+        # releases without `use experimental :rakuast`.
+        sub ast(Str:D $name) { ::("RakuAST::$name") }
+
+        # Registers the bundle with the hub when its compunit loads, like the
+        # ENTER phaser the legacy actions inject.
+        sub add-registration(Mu $package) {
+            my $init := ast('StatementPrefix::Phaser::Init').new(
+                ast('Statement::Expression').new(
+                    expression => ast('ApplyPostfix').new(
+                        operand => ast('Literal').from-value(Test::Async::Metamodel::HubHOW),
+                        postfix => ast('Call::Method').new(
+                            name => ast('Name').from-identifier('register-bundle'),
+                            args => ast('ArgList').new(
+                                ast('Literal').from-value($package.meta-object)
+                            )
+                        )
+                    )
+                )
+            );
+            my $statement := ast('Statement::Expression').new(expression => $init);
+            $statement.IMPL-BEGIN($*R, $*CU.context);
+            # Prepended, since the last statement of a role body is its result.
+            $package.body.body.statement-list.unshift-statement($statement);
+        }
+
         method package-declarator:sym<test-hub>(Mu $/) {
             self.attach: $/, pkgdef($/).ast;
         }
         method package-declarator:sym<test-bundle>(Mu $/) {
+            add-registration(pkgdef($/).ast);
             self.attach: $/, pkgdef($/).ast;
         }
         method package-declarator:sym<test-reporter>(Mu $/) {
+            add-registration(pkgdef($/).ast);
             self.attach: $/, pkgdef($/).ast;
         }
     }
