@@ -22,12 +22,11 @@ subtest "Flunking" => {
 
 subtest "Contextual" => {
     plan 3;
-    my $bar = pi;
-    { # The inner block is needed to prevent $bar from being lowered away by optimizer.
-        is $bar, pi, "control test";
-        eval-lives-ok q<$bar *= 2>, "evaling test sees a local variable";
-        is $bar, pi * 2, "eval changed the local variable";
-    }
+    # The tool reaches this through CALLER, which requires is dynamic.
+    my $bar is dynamic = pi;
+    is $bar, pi, "control test";
+    eval-lives-ok q<$bar *= 2>, "evaling test sees a local variable";
+    is $bar, pi * 2, "eval changed the local variable";
 }
 
 done-testing;
